@@ -1,9 +1,12 @@
+import { Scene, GameObjects, Display } from "phaser"
+const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
+const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager.js";
 
-export default class TextInput extends Phaser.GameObjects.Container {
+export default class TextInput extends GameObjects.Container {
     /**
     * Clase que permite crear una caja de texto donde poder escribir
-    * @param {Phaser.Scene} scene - escena a la que pertenece
+    * @param {Scene} scene - escena a la que pertenece
     * @param {Number} x - posicion x
     * @param {Number} y - posicion y
     * @param {Number} scale - escala del objeto
@@ -89,9 +92,9 @@ export default class TextInput extends Phaser.GameObjects.Container {
             paused: true
         });
 
-        let nCol = Phaser.Display.Color.HexStringToColor('#ffffff');
-        let pCol = Phaser.Display.Color.GetColor(pressedColor.R, pressedColor.G, pressedColor.B);
-        pCol = Phaser.Display.Color.IntegerToRGB(pCol);
+        let nCol = HexStringToColor('#ffffff');
+        let pCol = GetColor(pressedColor.R, pressedColor.G, pressedColor.B);
+        pCol = IntegerToRGB(pCol);
 
         // Se cambia el color de la caja al pasar el raton
         this.fillImg.on('pointerover', () => {
@@ -101,8 +104,8 @@ export default class TextInput extends Phaser.GameObjects.Container {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(nCol, pCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(nCol, pCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.fillImg.setTint(colInt);
                 },
                 duration: 50,
@@ -118,8 +121,8 @@ export default class TextInput extends Phaser.GameObjects.Container {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(pCol, nCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(pCol, nCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.fillImg.setTint(colInt);
                 },
                 duration: 50,
@@ -148,8 +151,8 @@ export default class TextInput extends Phaser.GameObjects.Container {
                     to: 100,
                     onUpdate: (tween) => {
                         const value = tween.getValue();
-                        let col = Phaser.Display.Color.Interpolate.ColorWithColor(nCol, pCol, 100, value);
-                        let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                        let col = ColorWithColor(nCol, pCol, 100, value);
+                        let colInt = GetColor(col.r, col.g, col.b);
                         this.fillImg.setTint(colInt);
                     },
                     duration: 50,
@@ -157,7 +160,7 @@ export default class TextInput extends Phaser.GameObjects.Container {
                     yoyo: true
                 });
 
-                if (IS_TOUCH && this.hiddenInput) {
+                if (isTouch && this.hiddenInput) {
                     // Aparece el teclado en pantalla
                     this.hiddenInput.focus();
                 }
@@ -176,10 +179,10 @@ export default class TextInput extends Phaser.GameObjects.Container {
 
         this.setScale(scale);
 
-        if(!writeLocked) {
+        if (!writeLocked) {
             this.typeWithOnScreenKeyboard();
             this.typeWithKeyboard();
-            
+
             // Pantalla tactil (se usa el teclado virtual)
             window.addEventListener('touchstart', () => {
                 this.hiddenInput.value = this.currentText;
@@ -201,7 +204,7 @@ export default class TextInput extends Phaser.GameObjects.Container {
      */
     typeWithKeyboard() {
         this.scene.input.keyboard.on('keydown', (event) => {
-            if (!IS_TOUCH) {
+            if (!isTouch) {
                 // Si se esta escribiendo en la caja, se van procesando las letras que se pulsan en el teclado
                 if (this.isEnteringName) {
                     let hasChanged = false;
@@ -247,7 +250,7 @@ export default class TextInput extends Phaser.GameObjects.Container {
         document.body.appendChild(this.hiddenInput);
 
         this.hiddenInput.addEventListener('input', (event) => {
-            if (IS_TOUCH) {
+            if (isTouch) {
                 // El valor escrito en la caja de input del DOM escribe en la de la clase
                 this.currentText = event.target.value;
                 this.adjustTextToBox();
@@ -291,7 +294,7 @@ export default class TextInput extends Phaser.GameObjects.Container {
             if (this.isEnteringName) {
                 this.deactiveBox();
 
-                if (IS_TOUCH && this.hiddenInput) {
+                if (isTouch && this.hiddenInput) {
                     // Desaparece el teclado en pantalla
                     this.hiddenInput.blur();
                 }

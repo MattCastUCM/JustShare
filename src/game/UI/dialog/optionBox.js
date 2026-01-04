@@ -1,10 +1,11 @@
+import { Scene } from "phaser";
 import DialogObject from './dialogObject.js';
 
 export default class OptionBox extends DialogObject {
     /**
     * Caja de texto para la opcion multiple
     * @extends DialogObject
-    * @param {Phaser.Scene} scene - escena a la que pertenece
+    * @param {Scene} scene - escena a la que pertenece
     * @param {Number} index - indice de la opcion
     * @param {Number} numOpts - numero total de elecciones
     * @param {String} text - texto de la opcion

@@ -1,3 +1,4 @@
+import { Image } from "phaser";
 import MessagesScreen from "./messagesScreen.js";
 
 export default class Phone extends Phaser.GameObjects.Container {
@@ -52,7 +53,7 @@ export default class Phone extends Phaser.GameObjects.Container {
 
     /**
      * Anade al boton la animacion y la funcion a la que debe llamar
-     * @param {Phaser.Image} button - imagen que animar
+     * @param {Image} button - imagen que animar
      * @param {Function} onClick - funcion a la que llama el boton al pulsarlo
      */
     animateButton(button, onClick) {

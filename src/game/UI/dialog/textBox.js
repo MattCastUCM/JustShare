@@ -1,10 +1,11 @@
+import { Scene } from "phaser";
 import DialogObject from "./dialogObject.js";
 
 export default class TextBox extends DialogObject {
     /**
     * Caja de texto para los dialogos
     * @extends DialogObject
-    * @param {Phaser.Scene} scene - escena a la que pertenece
+    * @param {Scene} scene - escena a la que pertenece
     */
     constructor(scene, dialogManager) {
         super(scene);
@@ -16,9 +17,7 @@ export default class TextBox extends DialogObject {
         // Imagen de la caja
         this.box = scene.add.image(this.scene.CANVAS_WIDTH / 2, this.scene.CANVAS_HEIGHT - this.PADDING, 'textbox').setOrigin(0.5, 1);
         // this.box = scene.add.image(this.scene.CANVAS_WIDTH / 2, this.scene.CANVAS_HEIGHT - this.PADDING, 'dialogs', 'textbox').setOrigin(0.5, 1);
-        
-        // TEST
-        // 847 = this.scene.CANVAS_WIDTH 
+
         this.box.visible = true;
 
         this.box.setInteractive({ useHandCursor: true });
@@ -39,18 +38,18 @@ export default class TextBox extends DialogObject {
         // this.graphics = scene.add.graphics();
         // this.graphics.fillStyle('black', 0.9);
         // this.graphics.fillRect(this.scene.CANVAS_WIDTH / 2 - this.WIDTH / 2, this.TEXT_Y, this.WIDTH, this.HEIGHT);
-        
-        
+
+
         // Indica si el texto de la caja esta centrado o no
         this.centered = false;
-        
+
         // Configuracion por defecto del texto de la caja
         this.defaultNormalTextConfig = { ...scene.gameManager.textConfig };
         this.defaultNormalTextConfig.fontFamily = 'roboto-regular';
         this.defaultNormalTextConfig.fontSize = 35 + 'px';
         this.defaultNormalTextConfig.color = '#000000';
         this.defaultNormalTextConfig.lineSpacing = 10;
-        
+
         // Inicialmente la configuracion del texto de la caja es la de por defecto
         this.normalTextConfig = { ...this.defaultNormalTextConfig };
 
@@ -140,7 +139,7 @@ export default class TextBox extends DialogObject {
             y = this.box.y - this.box.displayHeight / 2.25;
             width = (this.scene.CANVAS_WIDTH - this.PADDING * 2) / 1.30;
         }
-        
+
         this.normalTextConfig.wordWrap = {
             width: width,
             useAdvancedWrap: true
@@ -176,7 +175,7 @@ export default class TextBox extends DialogObject {
         return (this.currText.getBounds().height > this.HEIGHT);
     }
 
-    
+
     // Anima el texto para que vaya apareciendo caracter a caracter
     animateText() {
         if (this.canWrite) {
@@ -218,12 +217,12 @@ export default class TextBox extends DialogObject {
             this.canWrite = false;
 
             this.box.disableInteractive();
-                super.activate(true, [this.box, this.currText, this.nameText], () => {
-                    setTimeout(() => {
-                        this.box.setInteractive({ useHandCursor: true });
-                        this.canWrite = true;
-                    }, 200);
-                }, 0);
+            super.activate(true, [this.box, this.currText, this.nameText], () => {
+                setTimeout(() => {
+                    this.box.setInteractive({ useHandCursor: true });
+                    this.canWrite = true;
+                }, 200);
+            }, 0);
         }
         // Si se va a desactivar y es visible, desaparece con animacion
         else if (!active && isVisible) {

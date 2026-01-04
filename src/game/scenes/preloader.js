@@ -1,13 +1,14 @@
+import { Scene } from "phaser";
 import GameManager from '../managers/gameManager.js';
 
-export default class BootScene extends Phaser.Scene {
+export default class Preloader extends Scene {
     /**
-    * Escena inicial en la que se cargan todos los recursos
-    * @extends Phaser.Scene
+    * Escena en la que se cargan todos los recursos
+    * @extends Scene
     */
     constructor() {
         super({
-            key: 'BootScene',
+            key: 'Preloader',
             // Se carga el plugin i18next
             pack: {
                 files: [{
@@ -20,100 +21,6 @@ export default class BootScene extends Phaser.Scene {
                 }]
             }
         });
-    }
-
-    createLoadingBar() {
-        let width = this.cameras.main.width;
-        let height = this.cameras.main.height;
-
-        // Fondo escalado en cuanto al canvas
-        let bg = this.add.image(width / 2, height / 2, 'loadscreen');
-        let scale = width / bg.width;
-        bg.setScale(scale);
-
-        let progressBox = this.add.graphics();
-        let progressBar = this.add.graphics();
-
-        const BAR_W = width * 0.6;
-        const BAR_H = 70;
-        const BAR_OFFSET = 40;
-        const FILL_OFFSET = 20;
-        const TEXT_OFFSET = 70;
-        let bgCol = 0x9c9edf;
-        let fillCol = 0x7274b3;
-        let borderCol = 0x000000;
-        let borderThickness = 2;
-        let radius = Math.min(BAR_W, BAR_H) * 0.25;
-
-        progressBox.fillStyle(bgCol, 1).fillRoundedRect(width / 2 - BAR_W / 2, height / 2 - BAR_H / 2 - BAR_OFFSET, BAR_W, BAR_H, radius)
-            .lineStyle(borderThickness, borderCol, 1).strokeRoundedRect(width / 2 - BAR_W / 2, height / 2 - BAR_H / 2 - BAR_OFFSET, BAR_W, BAR_H, radius)
-
-        let textStyle = {
-            fontFamily: 'roboto-regular',
-            fontSize: '30px',
-            fill: '#000000',
-            fontStyle: 'bold'
-        }
-        // Texto de la palabra cargando
-        let loadingText = this.make.text({
-            x: width / 2,
-            y: height / 2 - TEXT_OFFSET - BAR_OFFSET,
-            text: 'Loading...',
-            style: textStyle
-        });
-        loadingText.setOrigin(0.5, 0.5);
-
-        // Texto con el porcentaje de los assets cargados
-        textStyle.fontSize = '20px';
-        textStyle.fill = '#ffffff';
-        let percentText = this.make.text({
-            x: width / 2,
-            y: height / 2 - BAR_OFFSET,
-            text: '0%',
-            style: textStyle
-        });
-        percentText.setOrigin(0.5, 0.5);
-
-        // Texto para el nombre de los archivos
-        textStyle.fill = '#000000';
-        let assetText = this.make.text({
-            x: width / 2,
-            y: height / 2 + TEXT_OFFSET - BAR_OFFSET,
-            text: '',
-            style: textStyle
-        });
-        assetText.setOrigin(0.5, 0.5);
-
-        // Se va actualizando la barra de progreso y el texto con el porcentaje
-        this.load.on('progress', function (value) {
-            percentText.setText(parseInt(value * 100) + '%');
-
-            progressBar.clear();
-            progressBar.fillStyle(fillCol, 1);
-            progressBar.fillRoundedRect(width / 2 - (BAR_W - FILL_OFFSET) / 2, height / 2 - (BAR_H - FILL_OFFSET) / 2 - BAR_OFFSET, (BAR_W - FILL_OFFSET) * value, BAR_H - FILL_OFFSET, radius);
-        });
-
-        // Cuando carga un archivo, muestra el nombre del archivo debajo de la barra
-        this.load.on('fileprogress', function (file) {
-            // console.log(file.key);
-            assetText.setText('Loading asset: ' + file.key);
-        });
-
-        // Cuando se termina de cargar todo, se borran los elementos de la barra
-        this.load.once('complete', function () {
-            progressBar.destroy();
-            progressBox.destroy();
-            loadingText.destroy();
-            percentText.destroy();
-            assetText.destroy();
-            bg.destroy();
-        });
-    }
-
-    loadLoadingBarAssets() {
-        this.load.setPath('assets/computer');
-
-        this.load.image('loadscreen', 'loadscreen.png');
     }
 
     loadUIAssets() {
@@ -171,7 +78,6 @@ export default class BootScene extends Phaser.Scene {
 
     loadFlags() {
         this.load.setPath('assets/UI/flags');
-
     }
 
     loadAvatars() {
@@ -338,9 +244,95 @@ export default class BootScene extends Phaser.Scene {
         this.load.setPath('assets/UI/creditsScene');
     }
 
-    loadRestAssets() {
-        this.createLoadingBar();
+    init() {
+        let width = this.cameras.main.width;
+        let height = this.cameras.main.height;
 
+        // Fondo escalado en cuanto al canvas
+        let bg = this.add.image(width / 2, height / 2, 'loadscreen');
+        let scale = width / bg.width;
+        bg.setScale(scale);
+
+        let progressBox = this.add.graphics();
+        let progressBar = this.add.graphics();
+
+        const BAR_W = width * 0.6;
+        const BAR_H = 70;
+        const BAR_OFFSET = 40;
+        const FILL_OFFSET = 20;
+        const TEXT_OFFSET = 70;
+        let bgCol = 0x9c9edf;
+        let fillCol = 0x7274b3;
+        let borderCol = 0x000000;
+        let borderThickness = 2;
+        let radius = Math.min(BAR_W, BAR_H) * 0.25;
+
+        progressBox.fillStyle(bgCol, 1).fillRoundedRect(width / 2 - BAR_W / 2, height / 2 - BAR_H / 2 - BAR_OFFSET, BAR_W, BAR_H, radius)
+            .lineStyle(borderThickness, borderCol, 1).strokeRoundedRect(width / 2 - BAR_W / 2, height / 2 - BAR_H / 2 - BAR_OFFSET, BAR_W, BAR_H, radius)
+
+        let textStyle = {
+            fontFamily: 'roboto-regular',
+            fontSize: '30px',
+            fill: '#000000',
+            fontStyle: 'bold'
+        }
+        // Texto de la palabra cargando
+        let loadingText = this.make.text({
+            x: width / 2,
+            y: height / 2 - TEXT_OFFSET - BAR_OFFSET,
+            text: 'Loading...',
+            style: textStyle
+        });
+        loadingText.setOrigin(0.5, 0.5);
+
+        // Texto con el porcentaje de los assets cargados
+        textStyle.fontSize = '20px';
+        textStyle.fill = '#ffffff';
+        let percentText = this.make.text({
+            x: width / 2,
+            y: height / 2 - BAR_OFFSET,
+            text: '0%',
+            style: textStyle
+        });
+        percentText.setOrigin(0.5, 0.5);
+
+        // Texto para el nombre de los archivos
+        textStyle.fill = '#000000';
+        let assetText = this.make.text({
+            x: width / 2,
+            y: height / 2 + TEXT_OFFSET - BAR_OFFSET,
+            text: '',
+            style: textStyle
+        });
+        assetText.setOrigin(0.5, 0.5);
+
+        // Se va actualizando la barra de progreso y el texto con el porcentaje
+        this.load.on('progress', function (value) {
+            percentText.setText(parseInt(value * 100) + '%');
+
+            progressBar.clear();
+            progressBar.fillStyle(fillCol, 1);
+            progressBar.fillRoundedRect(width / 2 - (BAR_W - FILL_OFFSET) / 2, height / 2 - (BAR_H - FILL_OFFSET) / 2 - BAR_OFFSET, (BAR_W - FILL_OFFSET) * value, BAR_H - FILL_OFFSET, radius);
+        });
+
+        // Cuando carga un archivo, muestra el nombre del archivo debajo de la barra
+        this.load.on('fileprogress', function (file) {
+            // console.log(file.key);
+            assetText.setText('Loading asset: ' + file.key);
+        });
+
+        // Cuando se termina de cargar todo, se borran los elementos de la barra
+        this.load.once('complete', function () {
+            progressBar.destroy();
+            progressBox.destroy();
+            loadingText.destroy();
+            percentText.destroy();
+            assetText.destroy();
+            bg.destroy();
+        });
+    }
+
+    preload() {
         // Son tanto archivos de dialogos como namespaces del plugin i18next
         // Ruta archivo dialogo --> structure/test/dialog.json
         // Id archivo dialogo --> dialog
@@ -385,6 +377,7 @@ export default class BootScene extends Phaser.Scene {
 
             "test"
         ]
+
         // Solo son namespaces del plugin i18next
         // Namespace --> test\\dialog.json
         let onlyNamespaces = [
@@ -415,37 +408,15 @@ export default class BootScene extends Phaser.Scene {
         this.loadPhotos();
         this.loadCreditsSceneAssets();
 
-
-        this.load.setPath('assets');
-
         this.loadi18next(dialogsAndNamespaces, onlyNamespaces);
-
-        // Indicar a LoaderPlugin que hay que cargar los assets que se encuentran en la cola
-        // Nota: despues del preload este metodo se llama automaticamente, pero si se quieren cargar assets en otra parte hay que llamarlo manualmente
-        this.load.start();
-
-        this.load.once('complete', () => {
-            this.events.emit('start');
-        });
-    }
-
-    preload() {
-        this.loadLoadingBarAssets();
-
-        // Nota: aunque este metodo se encuentra en el preload, verdaderamente se ejecuta en la etapa de create
-        this.load.once('complete', () => {
-            this.loadRestAssets();
-        });
     }
 
     create() {
-        this.events.once('start', () => {
-            let gameManager = GameManager.create(this);
+        let gameManager = GameManager.create(this);
 
-            // TEST
-            // gameManager.startTestScene();
+        // TEST
+        // gameManager.startTestScene();
 
-            gameManager.startTitleScene();
-        })
+        gameManager.startTitleScene();
     }
 }

@@ -1,9 +1,12 @@
+import { Scene, GameObjects, Display } from "phaser"
+const { GetColor, IntegerToRGB } = Display.Color;
+const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager.js";
 
-export default class Button extends Phaser.GameObjects.Container {
+export default class Button extends GameObjects.Container {
     /**
     * Clase que permite crear un boton personalizable con animaciones para las diferentes interacciones
-    * @param {Phaser.Scene} scene - escena a la que pertenece
+    * @param {Scene} scene - escena a la que pertenece
     * @param {Number} x - posicion x
     * @param {Number} y - posicion y
     * @param {Number} scale - escala del objeto
@@ -32,14 +35,14 @@ export default class Button extends Phaser.GameObjects.Container {
             this.fillImg = this.scene.add.image(0, 0, fill);
         }
 
-        this.nCol = Phaser.Display.Color.GetColor(normalCol.R, normalCol.G, normalCol.B);
-        this.nCol = Phaser.Display.Color.IntegerToRGB(this.nCol);
-        this.hCol = Phaser.Display.Color.GetColor(highlightedCol.R, highlightedCol.G, highlightedCol.B);
-        this.hCol = Phaser.Display.Color.IntegerToRGB(this.hCol);
-        this.pCol = Phaser.Display.Color.GetColor(pressedCol.R, pressedCol.G, pressedCol.B);
-        this.pCol = Phaser.Display.Color.IntegerToRGB(this.pCol);
+        this.nCol = GetColor(normalCol.R, normalCol.G, normalCol.B);
+        this.nCol = IntegerToRGB(this.nCol);
+        this.hCol = GetColor(highlightedCol.R, highlightedCol.G, highlightedCol.B);
+        this.hCol = IntegerToRGB(this.hCol);
+        this.pCol = GetColor(pressedCol.R, pressedCol.G, pressedCol.B);
+        this.pCol = IntegerToRGB(this.pCol);
 
-        this.fillImg.setTint(Phaser.Display.Color.GetColor(this.nCol.r, this.nCol.g, this.nCol.b));
+        this.fillImg.setTint(GetColor(this.nCol.r, this.nCol.g, this.nCol.b));
 
         this.hitArea = null;
         if (hitArea) {
@@ -65,8 +68,8 @@ export default class Button extends Phaser.GameObjects.Container {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.nCol, this.hCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(this.nCol, this.hCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.fillImg.setTint(colInt);
                 },
                 duration: TINT_FADE_TIME,
@@ -81,8 +84,8 @@ export default class Button extends Phaser.GameObjects.Container {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.hCol, this.nCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(this.hCol, this.nCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.fillImg.setTint(colInt);
                 },
                 duration: TINT_FADE_TIME,
@@ -98,8 +101,8 @@ export default class Button extends Phaser.GameObjects.Container {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.hCol, this.pCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(this.hCol, this.pCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.fillImg.setTint(colInt);
                 },
                 duration: TINT_FADE_TIME,
@@ -108,7 +111,7 @@ export default class Button extends Phaser.GameObjects.Container {
             });
             down.on('complete', () => {
                 this.fillImg.setInteractive({ useHandCursor: true });
-                if(!gameManager.isInFadeAnimation()) {
+                if (!gameManager.isInFadeAnimation()) {
                     onClick();
                 }
             });
@@ -148,6 +151,6 @@ export default class Button extends Phaser.GameObjects.Container {
     }
 
     reset() {
-        this.fillImg.setTint(Phaser.Display.Color.GetColor(this.nCol.r, this.nCol.g, this.nCol.b));
+        this.fillImg.setTint(GetColor(this.nCol.r, this.nCol.g, this.nCol.b));
     }
 }

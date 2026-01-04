@@ -1,12 +1,13 @@
+import { Scene } from "phaser";
 import GameManager from "./gameManager.js";
 import DialogManager from "./dialogManager.js";
 import PhoneManager from "./phoneManager.js";
 
- export default class UIManager extends Phaser.Scene {
+export default class UIManager extends Scene {
     /**
     * Gestor de la interfaz. Contiene el PhoneManager y el DialogManager.
     * Tambien se encarga de la creacion de textos
-    * @extends Phaser.Scene
+    * @extends Scene
     */
     constructor(scene) {
         super({ key: 'UIManager' });
@@ -25,18 +26,18 @@ import PhoneManager from "./phoneManager.js";
         this.topLid.setDepth(100).setScrollFactor(0);
         this.botLid = this.add.rectangle(0, this.CANVAS_HEIGHT / 2, this.CANVAS_WIDTH, this.CANVAS_HEIGHT / 2, 0x000, 1).setOrigin(0, 0);
         this.botLid.setDepth(100).setScrollFactor(0);
-        
+
         this.topLid.setInteractive();
         this.botLid.setInteractive();
 
         this.moveLids(true);
-        this.lidAnim = null; 
+        this.lidAnim = null;
     }
 
     // Animacion de abrir los ojos
     openEyes(onComplete) {
         this.phoneManager.togglePhone(false);
-        
+
         this.moveLids(false);
         let speed = 1000;
         let lastTopPos = this.topLid.y;
@@ -152,12 +153,12 @@ import PhoneManager from "./phoneManager.js";
     // vuelve a reproducir la animacion de abrir los ojos
     closeEyes(onComplete) {
         this.phoneManager.togglePhone(false);
-        
+
         this.moveLids(true);
         let speed = 2000;
         let lastTopPos = this.topLid.y;
         let lastBotPos = this.botLid.y;
-        
+
         this.lidAnim = this.tweens.add({
             targets: [this.topLid],
             y: { from: lastTopPos, to: 0 },
@@ -170,7 +171,7 @@ import PhoneManager from "./phoneManager.js";
             duration: speed,
             repeat: 0,
         });
-        
+
         this.lidAnim.on('complete', () => {
             if (onComplete !== null && typeof onComplete === 'function') {
                 onComplete();

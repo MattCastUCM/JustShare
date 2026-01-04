@@ -1,8 +1,6 @@
 import EventDispatcher from "../eventDispatcher.js";
 import BaseScene from "../scenes/gameLoop/baseScene.js";
 import { generateTrackerFromURL } from "../tracker/index.js";
-
-// TEST
 import Tracker from "../tracker/tracker.js";
 import LRS from "../tracker/lrs.js";
 import { BasicAuthentication } from "../tracker/authentication.js";
@@ -30,7 +28,7 @@ export default class GameManager {
             throw new Error('GameManager is a Singleton class!');
         }
 
-        this.initializeTracker();
+        // this.initializeTracker();
 
         // Se necesita una escena para poder acceder al ScenePlugin y cambiar de escena
         // Por lo tanto, se aprovecha para mantener la escena actual
@@ -221,6 +219,7 @@ export default class GameManager {
 
             // Se inicia y actualiza la escena actual
             this.currentScene.scene.run(scene, params);
+
             this.currentScene = this.currentScene.scene.get(scene);
 
             // Se anade la escena a las escenas que estan ejecutandose

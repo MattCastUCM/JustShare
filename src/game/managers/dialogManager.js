@@ -1,3 +1,4 @@
+import { Scene } from "phaser";
 import TextBox from '../UI/dialog/textBox.js';
 import OptionBox from '../UI/dialog/optionBox.js';
 import GameManager from './gameManager.js';
@@ -62,7 +63,7 @@ export default class DialogManager {
 
     /**
     * Metodo que se llama cuando se llama al changeScene de una escena 
-    * @param {Phaser.Scene} scene - escena a la que se va a pasar
+    * @param {Scene} scene - escena a la que se va a pasar
     */
     changeScene(scene) {
         // Desactiva la caja de texto y las opciones (por si acaso)

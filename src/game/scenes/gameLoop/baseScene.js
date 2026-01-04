@@ -1,7 +1,8 @@
+import { Scene } from "phaser";
 import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode } from '../../UI/dialog/dialogNode.js';
 import GameManager from '../../managers/gameManager.js';
 
-export default class BaseScene extends Phaser.Scene {
+export default class BaseScene extends Scene {
     /**
      * Escena base para las escenas del juego. Guarda parametros como las dimensiones 
      * del canvas o los managers y posiciones de los retratos de los personajes 
@@ -51,7 +52,7 @@ export default class BaseScene extends Phaser.Scene {
         this.playerName = this.gameManager.getUserInfo().name;
         this.context = this.gameManager.getUserInfo().gender;
         this.harasser = this.gameManager.getUserInfo().harasser;
-        
+
         // Se anaden funciones adicionales a las que se llamara al crear y reactivar
         // Se tiene que suscribir el onCreate al evento create porque la escena base
         // es la que se encarga de cambiar los portraits del DialogManager, por lo que
@@ -107,7 +108,7 @@ export default class BaseScene extends Phaser.Scene {
     readNodes(file, namespace, objectName, getObjs) {
         let nodesMap = new Map();
         let root = this.readAllNodes("root", file, namespace, objectName, getObjs, nodesMap);
-        
+
         // Recorre todos los nodos guardados en el mapa
         nodesMap.forEach((node) => {
             // Recorre el array de nodos siguientes leyendo sus ids
@@ -253,9 +254,9 @@ export default class BaseScene extends Phaser.Scene {
             // Obtiene la id del personaje y coge su nombre del archivo de nombres localizados
             let character = fileObj[id].character;
             node.character = character;
-            node.name = this.gameManager.translate(fileObj[id].character, { 
-                ns: "names", 
-                returnObjects: getObjs 
+            node.name = this.gameManager.translate(fileObj[id].character, {
+                ns: "names",
+                returnObjects: getObjs
             });
 
             // Obtiene si el texto esta centrado o no
@@ -265,11 +266,11 @@ export default class BaseScene extends Phaser.Scene {
 
             // Obtiene los fragmentos del dialogo
             let texts = [];
-            let textTranslation = this.gameManager.translate(translationId, { 
-                ns: namespace, 
-                name: this.playerName, 
+            let textTranslation = this.gameManager.translate(translationId, {
+                ns: namespace,
+                name: this.playerName,
                 context: this.context,
-                returnObjects: getObjs 
+                returnObjects: getObjs
             });
 
             // Si el texto no esta dividido en fragmentos, se guarda directamente en el array de textos
@@ -313,10 +314,11 @@ export default class BaseScene extends Phaser.Scene {
             node = new ChoiceNode();
 
             // Se obtienen las opciones del archivo de textos traducidos
-            let texts = this.gameManager.translate(translationId, { 
-                ns: namespace, name: this.playerName, 
-                context: this.context, 
-                returnObjects: getObjs });
+            let texts = this.gameManager.translate(translationId, {
+                ns: namespace, name: this.playerName,
+                context: this.context,
+                returnObjects: getObjs
+            });
 
             for (let i = 0; i < fileObj[id].choices.length; i++) {
                 let repeat = false;
@@ -388,14 +390,15 @@ export default class BaseScene extends Phaser.Scene {
             node = new ChatNode();
 
             // Obtiene el texto del archivo de textos traducidos y lo guarda
-            let text = this.gameManager.translate(translationId + ".text", { 
-                ns: namespace, 
-                name: this.playerName, 
-                context: this.context, 
-                returnObjects: getObjs });
+            let text = this.gameManager.translate(translationId + ".text", {
+                ns: namespace,
+                name: this.playerName,
+                context: this.context,
+                returnObjects: getObjs
+            });
 
             node.text = text;
-            
+
             // Obtiene el nombre del personaje del archivo de nombres localizados
             // En el caso de que se trate del jugador, obtiene su nombre
             let character = fileObj[id].character;
@@ -405,17 +408,17 @@ export default class BaseScene extends Phaser.Scene {
                 node.phone = phone
             }
 
-            node.name = ""    
+            node.name = ""
             node.character = character;
-            
-            if(node.character != "") {
+
+            if (node.character != "") {
                 if (node.phone) {
                     if (character === "player") {
                         node.name = this.gameManager.getUserInfo().name;
                     }
                     else {
-                        node.name = this.gameManager.translate(fileObj[id].character, { 
-                            ns: "names" 
+                        node.name = this.gameManager.translate(fileObj[id].character, {
+                            ns: "names"
                         });
                     }
                 }
@@ -424,7 +427,7 @@ export default class BaseScene extends Phaser.Scene {
                         node.name = this.computer.getUsername()
                     }
                     else {
-                        node.name = this.gameManager.translate(character, { 
+                        node.name = this.gameManager.translate(character, {
                             ns: "computer\\usernames",
                         });
                     }
@@ -435,7 +438,7 @@ export default class BaseScene extends Phaser.Scene {
             // Guarda el chat en el que tiene que ir la respuesta y el retardo con el que se envia
             if (node.phone) {
                 node.chat = this.gameManager.translate("textMessages" + "." + fileObj[id].chat, {
-                    ns: "deviceInfo" 
+                    ns: "deviceInfo"
                 });
             }
 
@@ -454,22 +457,23 @@ export default class BaseScene extends Phaser.Scene {
         else if (type === "commentary") {
             node = new CommentaryNode();
 
-            let text = this.gameManager.translate(translationId + ".text", { 
-                ns: namespace, 
-                name: this.playerName, 
-                context: this.context, 
-                returnObjects: getObjs });
+            let text = this.gameManager.translate(translationId + ".text", {
+                ns: namespace,
+                name: this.playerName,
+                context: this.context,
+                returnObjects: getObjs
+            });
 
             node.text = text;
 
             node.character = fileObj[id].character;
 
-            if(node.character == 'player') {
+            if (node.character == 'player') {
                 node.name = this.computer.getUsername()
                 node.pfp = 'unknownPfp'
             }
-            else {    
-                node.name = this.gameManager.translate(node.character, { 
+            else {
+                node.name = this.gameManager.translate(node.character, {
                     ns: "computer\\usernames",
                 });
 
@@ -633,7 +637,7 @@ export default class BaseScene extends Phaser.Scene {
         let button = this.add.image(0, 0, img).setOrigin(1, 0).setScale(scale);
         button.setPosition(x, y);
         button.setInteractive({ useHandCursor: true });
-       
+
         // Se reproduce la animacion de aparecer
         this.tweens.add({
             targets: button,
@@ -667,7 +671,7 @@ export default class BaseScene extends Phaser.Scene {
             }
 
         });
-        
+
         // Se reproduce la animacion de encogerse y agrandarse
         let originalScale = button.scale;
         this.tweens.add({

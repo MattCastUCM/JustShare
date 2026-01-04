@@ -1,9 +1,11 @@
+import { Scene } from "phaser";
+
 export default class DialogObject {
     /**
     * Clase base para los elementos de dialogo, con metodos 
     * para activar/desactivar el objeto y la configuracion por
     * defecto para el texto de los elementos de dialogo 
-    * @param {Phaser.Scene} scene - escena a la que pertenece
+    * @param {Scene} scene - escena a la que pertenece
     */
     constructor(scene) {
         this.scene = scene;
@@ -22,9 +24,9 @@ export default class DialogObject {
     * @param {Function} onComplete - funcion a la que llamar cuando acabe la animacion
     * @param {Number} delay - tiempo en ms que tarda en llamarse a onComplete
     */
-    activate(active, objects, onComplete = { }, delay = 0) {
+    activate(active, objects, onComplete = {}, delay = 0) {
         let fade;
-        
+
         // Si se va a activar
         if (active) {
             // Fuerza las opacidades de todos los objetos a 0
@@ -65,8 +67,6 @@ export default class DialogObject {
                     onComplete();
                 }, delay);
             });
-
         }
-
     }
 }
