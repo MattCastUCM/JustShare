@@ -1,6 +1,5 @@
-
-import BaseScene from './baseScene.js';
-import Portrait from '../../UI/dialog/portrait.js';
+import BaseScene from './baseScene';
+import Portrait from '../../UI/dialog/portrait';
 
 export default class TestScene extends BaseScene {
     /**

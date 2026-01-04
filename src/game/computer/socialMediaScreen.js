@@ -1,7 +1,7 @@
-import VerticalListView from '../UI/listView/verticalListView.js';
-import DualPost from './dualPost.js';
-import BaseScreen from './baseScreen.js'
-import DirectChat from './directChat.js';
+import VerticalListView from '../UI/listView/verticalListView';
+import DualPost from './dualPost';
+import BaseScreen from './baseScreen'
+import DirectChat from './directChat';
 
 export default class SocialMediaScreen extends BaseScreen {
     constructor(scene) {

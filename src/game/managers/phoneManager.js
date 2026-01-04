@@ -1,5 +1,5 @@
-import GameManager from './gameManager.js';
-import Phone from '../UI/phone/phone.js';
+import GameManager from './gameManager';
+import Phone from '../UI/phone/phone';
 
 export default class PhoneManager {
     /**

@@ -1,5 +1,5 @@
-import BaseScene from '../baseScene.js';
-import Portrait from '../../../UI/dialog/portrait.js';
+import BaseScene from '../baseScene';
+import Portrait from '../../../UI/dialog/portrait';
 
 // Ya no es el garaje, pero se mantiene el nombre de la escena 
 export default class Scene4Garage extends BaseScene {

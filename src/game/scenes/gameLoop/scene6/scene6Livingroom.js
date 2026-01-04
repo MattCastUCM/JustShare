@@ -1,5 +1,5 @@
-import BaseScene from '../baseScene.js';
-import Portrait from '../../../UI/dialog/portrait.js';
+import BaseScene from '../baseScene';
+import Portrait from '../../../UI/dialog/portrait';
 
 export default class Scene6Livingroom extends BaseScene {
     /**
@@ -59,7 +59,6 @@ export default class Scene6Livingroom extends BaseScene {
 
         // Al producirse, se crean los elementos interactuables de la escena
         this.dispatcher.add("endConversation", this, () => {
-            // PEDRO
             this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
             let chat = this.phoneManager.phone.chats.get(this.chatName);
             chat.disableInteractive()

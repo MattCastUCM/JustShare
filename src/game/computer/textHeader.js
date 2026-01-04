@@ -1,4 +1,6 @@
-export default class TextHeader extends Phaser.GameObjects.Container {
+import { GameObjects } from "phaser"
+
+export default class TextHeader extends GameObjects.Container {
     constructor(socialMediaScreen, width, pfp, username, caption, scale = 1) {
         super(socialMediaScreen.scene, 0, 0)
 
@@ -10,9 +12,9 @@ export default class TextHeader extends Phaser.GameObjects.Container {
         const caption_OFFSET_Y = 10
 
         this.profilePicture = this.createProfilePicture(0, 0, pfp)
-        
-        this.name = this.createName(this.profilePicture.displayWidth + NAME_OFFSET_X, this.profilePicture.y, username, [0, 0.5]) 
-        
+
+        this.name = this.createName(this.profilePicture.displayWidth + NAME_OFFSET_X, this.profilePicture.y, username, [0, 0.5])
+
         this.caption = this.createCaption(this.name.x, this.name.y + this.name.displayHeight / 2 + caption_OFFSET_Y, width, caption)
 
         this.setScale(scale)
@@ -51,7 +53,7 @@ export default class TextHeader extends Phaser.GameObjects.Container {
         style.fontSize = '23px';
         style.wordWrap = {
             width: width,
-            useAdvancedWrap: true 
+            useAdvancedWrap: true
         }
 
         let text = this.scene.add.text(0, 0, caption, style);
@@ -65,7 +67,7 @@ export default class TextHeader extends Phaser.GameObjects.Container {
         container.bringToTop(text)
 
         let debug = this.scene.sys.game.debug;
-        if(debug.enable) {
+        if (debug.enable) {
             let debugRect = this.scene.add.rectangle(rect.x, rect.y, rect.width, rect.height, debug.color);
             debugRect.alpha = 0.5
             debugRect.setOrigin(rect.originX, rect.originY);

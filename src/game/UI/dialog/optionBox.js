@@ -1,5 +1,7 @@
-import { Scene } from "phaser";
-import DialogObject from './dialogObject.js';
+import { Scene, Display } from "phaser";
+const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
+const { ColorWithColor } = Display.Color.Interpolate;
+import DialogObject from './dialogObject';
 
 export default class OptionBox extends DialogObject {
     /**
@@ -18,7 +20,7 @@ export default class OptionBox extends DialogObject {
         this.box = scene.add.image(this.scene.CANVAS_WIDTH / 2, 0, 'optionBox').setOrigin(0.5, 0);
         let scale = this.scene.CANVAS_WIDTH / (this.box.width + padding);
         this.box.setScale(scale);
-        
+
         this.box.y = this.scene.CANVAS_HEIGHT - (this.box.displayHeight * numOpts) + (this.box.displayHeight * index);
 
         // Configuracion del texto de la caja
@@ -38,8 +40,8 @@ export default class OptionBox extends DialogObject {
         // Configuracion de las animaciones
         let tintFadeTime = 50;
 
-        let noTint = Phaser.Display.Color.HexStringToColor('#ffffff');
-        let pointerOverColor = Phaser.Display.Color.HexStringToColor('#d9d9d9');
+        let noTint = HexStringToColor('#ffffff');
+        let pointerOverColor = HexStringToColor('#d9d9d9');
 
         // Hace fade del color de la caja al pasar o quitar el raton por encima
         this.box.on('pointerover', () => {
@@ -49,8 +51,8 @@ export default class OptionBox extends DialogObject {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(noTint, pointerOverColor, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(noTint, pointerOverColor, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.box.setTint(colInt);
                 },
                 duration: tintFadeTime,
@@ -64,8 +66,8 @@ export default class OptionBox extends DialogObject {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(pointerOverColor, noTint, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(pointerOverColor, noTint, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.box.setTint(colInt);
                 },
                 duration: tintFadeTime,
@@ -83,8 +85,8 @@ export default class OptionBox extends DialogObject {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(pointerOverColor, noTint, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(pointerOverColor, noTint, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.box.setTint(colInt);
                 },
                 duration: tintFadeTime,

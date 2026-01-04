@@ -5,26 +5,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="/fonts.css" />
 
     <title>JustShare</title>
 </head>
 
 <body>
-    <!-- Precargar las fuentes para asegurar que ya estan cargadas se usen en Phaser.
-     Las fuentes pueden tardar un tiempo en cargarse y si se usan antes, no se van a encontrar.
-     Por lo tanto, se usan en una etiqueta invisible para que HTML las traiga y asegurar que
-     ya estan cargadas cuando se usan en Phaser -->
-    <div style="font-family:roboto-regular; position:absolute; left:-1000px; visibility:hidden;">.</div>
-    <div style="font-family:corpid; position:absolute; left:-1000px; visibility:hidden;">.</div>
-    <div style="font-family:corpid-black; position:absolute; left:-1000px; visibility:hidden;">.</div>
-
-    <!-- Contenedor del juego -->
-    <div id="game-container">
+    <div id="game">
         <script type="module" src="/src/main.js"></script>
     </div>
 </body>

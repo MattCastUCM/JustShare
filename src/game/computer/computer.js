@@ -1,6 +1,6 @@
-import ComputerBaseScene from "./computerBaseScene.js"
-import LoginScreen from "./loginScreen.js"
-import SocialMediaScreen from "./socialMediaScreen.js";
+import ComputerBaseScene from "./computerBaseScene"
+import LoginScreen from "./loginScreen"
+import SocialMediaScreen from "./socialMediaScreen";
 
 export default class Computer extends ComputerBaseScene {
     constructor() {

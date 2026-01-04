@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import DialogObject from "./dialogObject.js";
+import DialogObject from "./dialogObject";
 
 export default class TextBox extends DialogObject {
     /**

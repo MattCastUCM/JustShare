@@ -1,7 +1,7 @@
 import { Scene, GameObjects, Display } from "phaser"
 const { GetColor, IntegerToRGB } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
-import GameManager from "../managers/gameManager.js";
+import GameManager from "../managers/gameManager";
 
 export default class Button extends GameObjects.Container {
     /**

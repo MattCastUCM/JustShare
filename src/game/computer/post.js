@@ -1,6 +1,7 @@
-import TextHeader from "./textHeader.js";
+import { GameObjects } from "phaser";
+import TextHeader from "./textHeader";
 
-export default class Post extends Phaser.GameObjects.Container {
+export default class Post extends GameObjects.Container {
     constructor(socialMediaScreen, x, y, pfp, username, caption, picture, width, messageIcon, likes = 0) {
         super(socialMediaScreen.scene, x, y)
 

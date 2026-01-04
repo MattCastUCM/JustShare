@@ -1,4 +1,4 @@
-import BaseScreen from "./baseScreen.js";
+import BaseScreen from "./baseScreen";
 
 export default class LoginScreen extends BaseScreen {
     constructor(scene) {

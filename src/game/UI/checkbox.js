@@ -1,9 +1,12 @@
-import GameManager from "../managers/gameManager.js";
+import { Scene, GameObjects, Display } from "phaser";
+const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
+const { ColorWithColor } = Display.Color.Interpolate
+import GameManager from "../managers/gameManager";
 
-export default class CheckBox extends Phaser.GameObjects.Container {
+export default class CheckBox extends GameObjects.Container {
     /**
     * Clase que permite crear una checkbox o radiobutons si se unen varias checkboxes en un grupo
-    * @param {Phaser.Scene} scene - escena a la que pertenece
+    * @param {Scene} scene - escena a la que pertenece
     * @param {Number} x - posicion x
     * @param {Number} y - posicion y
     * @param {Number} scale - escala del objeto
@@ -25,9 +28,9 @@ export default class CheckBox extends Phaser.GameObjects.Container {
         // Si es distinto de null pertenece a algun grupo y funciona como un radio button
         this.group = null;
 
-        this.nCol = Phaser.Display.Color.HexStringToColor('#ffffff');
-        this.pCol = Phaser.Display.Color.GetColor(pressedColor.R, pressedColor.G, pressedColor.B);
-        this.pCol = Phaser.Display.Color.IntegerToRGB(this.pCol);
+        this.nCol = HexStringToColor('#ffffff');
+        this.pCol = GetColor(pressedColor.R, pressedColor.G, pressedColor.B);
+        this.pCol = IntegerToRGB(this.pCol);
 
         this.fillImg = this.scene.add.image(0, 0, fill);
         this.add(this.fillImg);
@@ -63,8 +66,8 @@ export default class CheckBox extends Phaser.GameObjects.Container {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.nCol, this.pCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(this.nCol, this.pCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.fillImg.setTint(colInt);
                 },
                 duration: 80,

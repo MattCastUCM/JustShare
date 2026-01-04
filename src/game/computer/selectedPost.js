@@ -1,5 +1,5 @@
-import Post from "./post.js";
-import VerticalListView from "../UI/listView/verticalListView.js";
+import Post from "./post";
+import VerticalListView from "../UI/listView/verticalListView";
 
 export default class SelectedPost extends Post {
     constructor(socialMediaScreen, x, y, pfp, username, caption, picture, width, zoneBottomY, sendCommentOnClick, likes = 0) {

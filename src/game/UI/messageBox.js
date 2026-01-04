@@ -1,8 +1,10 @@
-export default class MessageBox extends Phaser.GameObjects.Container {
+import { GameObjects, Scene } from "phaser";
+
+export default class MessageBox extends GameObjects.Container {
     /**
      * Contenedor para las burbujas de mensajes
-     * @extends Phaser.GameObjects.Container
-     * @param {Phaser.Scene} scene - escena a la que pertenece (UIManager)
+     * @extends GameObjects.Container
+     * @param {Scene} scene - escena a la que pertenece (UIManager)
      * @param {String} text - texto a escribir en el mensaje
      * @param {String} character - personaje que escribe el mensaje
      * @param {Number} type - tipo de mensaje (0 = mensaje de chat, 1 = comentario de la red social)
@@ -39,13 +41,13 @@ export default class MessageBox extends Phaser.GameObjects.Container {
                 rightWidth = 65;
                 bottomHeight = 36;
             }
-            
+
             if (character != null && name != "") {
                 heightMultiplier = 3.5;
             }
             charName = name;
         }
-        
+
         // Configuracion de texto para la el texto del mensaje
         let textConfig = { ...scene.gameManager.textConfig };
         textConfig.fontFamily = 'roboto-regular';
@@ -84,7 +86,7 @@ export default class MessageBox extends Phaser.GameObjects.Container {
         if (isPhoto) {
             let IMG_SIZE = 300;
             let boxSize = IMG_SIZE + TEXT_PADDING;
-            
+
             box = scene.add.nineslice(
                 0, 0, img, "", boxSize, boxSize, leftWidth, rightWidth, topHeight, bottomHeight
             ).setOrigin(0.5, 0.5);
@@ -104,7 +106,7 @@ export default class MessageBox extends Phaser.GameObjects.Container {
                 0, 0, img, "", boxWidth, text.displayHeight + TEXT_PADDING * heightMultiplier, leftWidth, rightWidth, topHeight, bottomHeight
             ).setOrigin(0.5, 0.5);
         }
-        
+
 
         // Mueve la burbuja a la izquierda o a la derecha dependiendo de quien es la burbuja de texto
         if (type === 0 && character === "player") {

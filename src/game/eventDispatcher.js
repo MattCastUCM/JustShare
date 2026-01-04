@@ -1,3 +1,5 @@
+import { Events } from "phaser";
+
 let instance = null;
 
 export default class EventDispatcher {
@@ -16,7 +18,7 @@ export default class EventDispatcher {
         }
 
         // Emisor de eventos
-        this.emitter = new Phaser.Events.EventEmitter();
+        this.emitter = new Events.EventEmitter();
         // Mapas para conseguir un mejor manejo de los eventos y poder eliminar los eventos segun propietario
 
         // EVENTOS TEMPORALES

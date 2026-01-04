@@ -1,4 +1,7 @@
-export default class VerticalListView extends Phaser.GameObjects.Container {
+import { Scene, Geom, Math, GameObjects } from "phaser"
+const { Point, Rectangle } = Geom
+
+export default class VerticalListView extends GameObjects.Container {
     /**
      * Clase que permite crear una lista con elementos scrolleables. Se puede incluir cualquier
      * tipo de elementos renderizable, incluso otra propia listview
@@ -8,7 +11,7 @@ export default class VerticalListView extends Phaser.GameObjects.Container {
      * - Si se quiere que uno de los elementos sea interactuable hay que usar un hitListElement para el area de colision
      * - Llamar a init() despues de haber creado la listview y haber metido los items iniciales. 
      *      Si hay listviews anidadas con llamar al init() de la mayor es suficente
-     * @param {Phaser.scene} scene 
+     * @param {Scene} scene 
      * @param {Number} x 
      * @param {Number} y 
      * @param {Number} scale 
@@ -113,7 +116,7 @@ export default class VerticalListView extends Phaser.GameObjects.Container {
         // Deslizamiento con inercia una vez acabado el drag
         this.isBeingDragged = false;
         this.movingSpeed = 0;
-        this.lastSavedPosition = new Phaser.Geom.Point(this.itemsCont.x, this.itemsCont.y);
+        this.lastSavedPosition = new Point(this.itemsCont.x, this.itemsCont.y);
         this.friction = 0.99;
         this.speedMul = 0.7;
         this.minDistance = 1.8;
@@ -190,7 +193,7 @@ export default class VerticalListView extends Phaser.GameObjects.Container {
         let posX = matrix.tx - this.boundedZone.width / 2 * matrix.scaleX;
         let posY = matrix.ty - this.boundedZone.height / 2 * matrix.scaleY;
         // el offset en y es para ponerlo en origen(0.5, 0)
-        return new Phaser.Geom.Rectangle(posX, posY + (this.boundedZone.height * matrix.scaleY) / 2,
+        return new Rectangle(posX, posY + (this.boundedZone.height * matrix.scaleY) / 2,
             this.boundedZone.width * matrix.scaleX, this.boundedZone.height * matrix.scaleY);
     }
 
@@ -393,7 +396,7 @@ export default class VerticalListView extends Phaser.GameObjects.Container {
             }
             else {
                 // Distancia del ultimo drag
-                let distance = Phaser.Math.Distance.Between(this.lastSavedPosition.x, this.lastSavedPosition.y,
+                let distance = Math.Distance.Between(this.lastSavedPosition.x, this.lastSavedPosition.y,
                     this.itemsCont.x, this.itemsCont.y);
                 // si el drag ha sido de mas de cierta distancia, se desliza
                 if (distance > this.minDistance) {

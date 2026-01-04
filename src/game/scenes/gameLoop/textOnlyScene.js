@@ -1,4 +1,4 @@
-import BaseScene from './baseScene.js';
+import BaseScene from './baseScene';
 
 export default class TextOnlyScene extends BaseScene {
     /**

@@ -1,7 +1,7 @@
-import { Image } from "phaser";
-import MessagesScreen from "./messagesScreen.js";
+import { Image, GameObjects } from "phaser";
+import MessagesScreen from "./messagesScreen";
 
-export default class Phone extends Phaser.GameObjects.Container {
+export default class Phone extends GameObjects.Container {
     constructor(scene, phoneManager) {
         super(scene, 0, 0);
         this.scene = scene;

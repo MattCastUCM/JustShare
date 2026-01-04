@@ -1,9 +1,9 @@
-import { Scene } from "phaser";
+import { Scene, GameObjects } from "phaser";
 
-export default class BaseScreen extends Phaser.GameObjects.Container {
+export default class BaseScreen extends GameObjects.Container {
     /**
      * Pantalla base para las distintas pantallas del telefono
-     * @extends Phaser.GameObjects.Container
+     * @extends GameObjects.Container
      * @param {Scene} scene - escena a la que pertenece (UIManager)
      * @param {Phone} phone - telefono
      * @param {String} bgImage - id de la imagen de fondo

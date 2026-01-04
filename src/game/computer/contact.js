@@ -1,6 +1,7 @@
-import ListViewHit from "../UI/listView/listViewHit.js"
+import { GameObjects } from "phaser"
+import ListViewHit from "../UI/listView/listViewHit"
 
-export default class Contact extends Phaser.GameObjects.Container {
+export default class Contact extends GameObjects.Container {
     constructor(socialMediaScreen, pfp, username, width, height, onClick) {
         super(socialMediaScreen.scene, 0, 0)
 

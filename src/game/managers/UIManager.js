@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
-import GameManager from "./gameManager.js";
-import DialogManager from "./dialogManager.js";
-import PhoneManager from "./phoneManager.js";
+import GameManager from "./gameManager";
+import DialogManager from "./dialogManager";
+import PhoneManager from "./phoneManager";
 
 export default class UIManager extends Scene {
     /**
