@@ -1,4 +1,4 @@
-import ComputerBaseScene from '../../computer/computerBaseScene.js';
+import ComputerBaseScene from '../../computer/computerBaseScene';
 
 export default class CreditsScene extends ComputerBaseScene {
     constructor() {

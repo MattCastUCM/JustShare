@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import GameManager from '../managers/gameManager.js';
+import GameManager from '../managers/gameManager';
 
 export default class Preloader extends Scene {
     /**

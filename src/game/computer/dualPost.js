@@ -1,5 +1,5 @@
-import SelectedPost from "./selectedPost.js"
-import FeedPost from "./feedPost.js"
+import SelectedPost from "./selectedPost"
+import FeedPost from "./feedPost"
 
 export default class DualPost {
     constructor(socialMediaScreen, x, y, pfp, username, caption, picture, width, zoneBottomY) {

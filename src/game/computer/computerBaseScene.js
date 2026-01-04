@@ -1,12 +1,16 @@
-import BaseScene from '../scenes/gameLoop/baseScene.js';
-import Button from '../UI/button.js'
-import TextInput from '../UI/textInput.js'
+import { Scene, Display, Geom } from "phaser";
+const { GetColor, IntegerToRGB } = Display.Color;
+const { ColorWithColor } = Display.Color.Interpolate;
+const { Rectangle } = Geom
+import BaseScene from '../scenes/gameLoop/baseScene';
+import Button from '../UI/button'
+import TextInput from '../UI/textInput'
 
 export default class ComputerBaseScene extends BaseScene {
     constructor(name) {
         super(name, null);
     }
-    
+
     create(params) {
         super.create(params)
 
@@ -28,7 +32,7 @@ export default class ComputerBaseScene extends BaseScene {
         }
 
         this.colors = {}
-        
+
         const HEX = "hex"
         const RGB = "rgb"
 
@@ -39,7 +43,7 @@ export default class ComputerBaseScene extends BaseScene {
             this.colors[key][HEX]["get0x"] = value.replace('#', '0x')
             this.colors[key][RGB] = this.gameManager.hexToRgb(value)
         }
-                
+
         this.style = { ...this.gameManager.textConfig };
         this.style.fontFamily = this.fontFamilies.normal
         this.style.fontSize = '50px';
@@ -48,7 +52,7 @@ export default class ComputerBaseScene extends BaseScene {
 
     createPowerIcon(onClick) {
         const POS_X = 265;
-        const POS_Y = 760;        
+        const POS_Y = 760;
         const SCALE = 0.13;
 
         let powerIcon = this.add.image(POS_X, POS_Y, 'powerIcon');
@@ -76,7 +80,7 @@ export default class ComputerBaseScene extends BaseScene {
 
     translate(transId, options) {
         let namespaceObj = { ns: this.namespace }
-        let optionsAux = { ...namespaceObj, ...options}
+        let optionsAux = { ...namespaceObj, ...options }
 
         return this.gameManager.translate(transId, optionsAux)
     }
@@ -84,7 +88,7 @@ export default class ComputerBaseScene extends BaseScene {
     translateWithNamespace(transId, namespace, options) {
         namespace = namespace.replace(/\//g, '\\');
         let namespaceObj = { ns: namespace }
-        let optionsAux = { ...namespaceObj, ...options}
+        let optionsAux = { ...namespaceObj, ...options }
 
         return this.gameManager.translate(transId, optionsAux)
     }
@@ -127,21 +131,21 @@ export default class ComputerBaseScene extends BaseScene {
 
     createButton(x, y, transId, onClick, scale = 1) {
         const FIGURE = this.gameManager.textBox
-        
+
         let translation = this.translate(transId)
 
         let button = new Button(this, x, y, scale, onClick,
-            FIGURE.fill.name, 
+            FIGURE.fill.name,
             this.colors.blue1.rgb, this.colors.blue2.rgb, this.colors.blue3.rgb,
-            translation, 
-            { font: this.fontFamilies.normal, size: 54, style: 'bold', color: this.colors.white.hex.getNumberSign }, 
+            translation,
+            { font: this.fontFamilies.normal, size: 54, style: 'bold', color: this.colors.white.hex.getNumberSign },
             FIGURE.edge.name,
             {
                 // La textura generada con el objeto grafico es un pelin mas grande que el dibujo en si. Por lo tanto,
                 // si la caja de colision por defecto es un pelin mas grande. Es por eso que se pasa una que se ajuste
                 // a las medidas reales
-                area: new Phaser.Geom.Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
-                callback: Phaser.Geom.Rectangle.Contains
+                area: new Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
+                callback: Rectangle.Contains
             }
         );
 
@@ -153,25 +157,25 @@ export default class ComputerBaseScene extends BaseScene {
     createTextInput(x, y, transId, scale = 1, writeLocked = false) {
         const TEXT_INPUT_OFFSET = 23;
         const FIGURE = this.gameManager.inputBox
-        
+
         let translation = this.translate(transId)
 
         let textInput = new TextInput(this, x, y, scale, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb,
             FIGURE.fill.name, FIGURE.edge.name, this.fontFamilies.normal,
             {
-                area: new Phaser.Geom.Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
-                callback: Phaser.Geom.Rectangle.Contains
+                area: new Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
+                callback: Rectangle.Contains
             }, writeLocked);
 
         // Propiedades
         textInput.setSize(FIGURE.width, FIGURE.height)
-        
+
         return textInput;
     }
 
     createTextInputWithSideText(x, y, transId, scale = 1, writeLocked = false) {
         const TEXT_OFFSET_X = -10;
-        
+
         let container = this.add.container(x, y);
 
         // Texto a la izquierda
@@ -182,7 +186,7 @@ export default class ComputerBaseScene extends BaseScene {
         container.add(textInput)
 
         container.setScale(scale)
-        
+
         // Propiedaes
         container.setSize(textInput.width * scale, textInput.height * scale)
         container.textInput = textInput
@@ -207,7 +211,7 @@ export default class ComputerBaseScene extends BaseScene {
                 duration: 0,
                 repeat: 0,
             });
-            }
+        }
         );
 
         hitTarget.on('pointerout', () => {
@@ -236,20 +240,20 @@ export default class ComputerBaseScene extends BaseScene {
         });
     }
 
-    turnIntoButtonColorAnim(animTarget, hitTarget, onClick, 
+    turnIntoButtonColorAnim(animTarget, hitTarget, onClick,
         nCol = this.colors.white.rgb, hCol = this.colors.grey0.rgb, pCol = this.colors.grey1.rgb) {
         const TINT_FADE_DURATION = 25;
 
-        nCol = Phaser.Display.Color.GetColor(nCol.R, nCol.G, nCol.B);
-        nCol = Phaser.Display.Color.IntegerToRGB(nCol);
+        nCol = GetColor(nCol.R, nCol.G, nCol.B);
+        nCol = IntegerToRGB(nCol);
 
-        hCol = Phaser.Display.Color.GetColor(hCol.R, hCol.G, hCol.B);
-        hCol = Phaser.Display.Color.IntegerToRGB(hCol);
+        hCol = GetColor(hCol.R, hCol.G, hCol.B);
+        hCol = IntegerToRGB(hCol);
 
-        pCol = Phaser.Display.Color.GetColor(pCol.R, pCol.G, pCol.B);
-        pCol = Phaser.Display.Color.IntegerToRGB(pCol);
+        pCol = GetColor(pCol.R, pCol.G, pCol.B);
+        pCol = IntegerToRGB(pCol);
 
-        animTarget.setTint(Phaser.Display.Color.GetColor(nCol.r, nCol.g, nCol.b));
+        animTarget.setTint(GetColor(nCol.r, nCol.g, nCol.b));
 
         hitTarget.setInteractive({ useHandCursor: true });
 
@@ -260,8 +264,8 @@ export default class ComputerBaseScene extends BaseScene {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(nCol, hCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(nCol, hCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     animTarget.setTint(colInt);
                 },
                 duration: TINT_FADE_DURATION,
@@ -276,8 +280,8 @@ export default class ComputerBaseScene extends BaseScene {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(hCol, nCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(hCol, nCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     animTarget.setTint(colInt);
                 },
                 duration: TINT_FADE_DURATION,
@@ -293,8 +297,8 @@ export default class ComputerBaseScene extends BaseScene {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(hCol, pCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(hCol, pCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     animTarget.setTint(colInt);
                 },
                 duration: TINT_FADE_DURATION,
@@ -308,19 +312,19 @@ export default class ComputerBaseScene extends BaseScene {
         });
     }
 
-    turnIntoButtonInteractionAnim(animTarget, hitTarget, onClick, 
-        nCol = this.colors.white.rgb, hCol = this.colors.grey0.rgb, pCol = this.colors.grey1.rgb) {        
-            
-        nCol = Phaser.Display.Color.GetColor(nCol.R, nCol.G, nCol.B);
-        nCol = Phaser.Display.Color.IntegerToRGB(nCol);
-        
-        hCol = Phaser.Display.Color.GetColor(hCol.R, hCol.G, hCol.B);
-        hCol = Phaser.Display.Color.IntegerToRGB(hCol);
-        
-        pCol = Phaser.Display.Color.GetColor(pCol.R, pCol.G, pCol.B);
-        pCol = Phaser.Display.Color.IntegerToRGB(pCol);
-        
-        animTarget.setTint(Phaser.Display.Color.GetColor(nCol.r, nCol.g, nCol.b));
+    turnIntoButtonInteractionAnim(animTarget, hitTarget, onClick,
+        nCol = this.colors.white.rgb, hCol = this.colors.grey0.rgb, pCol = this.colors.grey1.rgb) {
+
+        nCol = GetColor(nCol.R, nCol.G, nCol.B);
+        nCol = IntegerToRGB(nCol);
+
+        hCol = GetColor(hCol.R, hCol.G, hCol.B);
+        hCol = IntegerToRGB(hCol);
+
+        pCol = GetColor(pCol.R, pCol.G, pCol.B);
+        pCol = IntegerToRGB(pCol);
+
+        animTarget.setTint(GetColor(nCol.r, nCol.g, nCol.b));
 
         const TINT_FADE_DURATION = 25;
         hitTarget.on('pointerover', () => {
@@ -330,8 +334,8 @@ export default class ComputerBaseScene extends BaseScene {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(nCol, hCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(nCol, hCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     animTarget.setTint(colInt);
                 },
                 duration: TINT_FADE_DURATION,
@@ -346,8 +350,8 @@ export default class ComputerBaseScene extends BaseScene {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(hCol, pCol, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(hCol, pCol, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     animTarget.setTint(colInt);
                 },
                 duration: TINT_FADE_DURATION,
@@ -355,7 +359,7 @@ export default class ComputerBaseScene extends BaseScene {
                 yoyo: true,
             });
             anim.on('complete', () => {
-                animTarget.setTint(Phaser.Display.Color.GetColor(nCol.r, nCol.g, nCol.b));
+                animTarget.setTint(GetColor(nCol.r, nCol.g, nCol.b));
                 onClick();
             });
         });
@@ -372,8 +376,8 @@ export default class ComputerBaseScene extends BaseScene {
             to: 100,
             onUpdate: (tween) => {
                 const value = tween.getValue();
-                let col = Phaser.Display.Color.Interpolate.ColorWithColor(hCol, nCol, 100, value);
-                let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                let col = ColorWithColor(hCol, nCol, 100, value);
+                let colInt = GetColor(col.r, col.g, col.b);
                 animTarget.setTint(colInt);
             },
             duration: DURATION,
@@ -397,7 +401,7 @@ export default class ComputerBaseScene extends BaseScene {
 
         // Propiedades
         hitTarget.interactionAnim = interactionAnim
-        hitTarget.restartInteractionAnim = function() {
+        hitTarget.restartInteractionAnim = function () {
             this.interactionAnim.restart()
             this.setInteractive({ useHandCursor: true });
         }
@@ -411,7 +415,7 @@ export default class ComputerBaseScene extends BaseScene {
         let translation = this.translate(transId, transParams)
 
         // Si esta invisible
-        if(target.alpha <= 0) {
+        if (target.alpha <= 0) {
             // Se cambia
             target.setText(translation)
 
@@ -426,7 +430,7 @@ export default class ComputerBaseScene extends BaseScene {
         // Si esta visible
         else {
             // Si el nuevo texto es diferente
-            if(target.text != translation) {
+            if (target.text != translation) {
                 // Fade out
                 let fadeOut = this.tweens.add({
                     targets: target,
@@ -450,7 +454,7 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     makeTextAppear(target, duration) {
-        if(target.alpha <= 0) {
+        if (target.alpha <= 0) {
             this.tweens.add({
                 targets: target,
                 alpha: 1,
@@ -461,7 +465,7 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     makeTextDisappear(target, duration) {
-        if(target.alpha > 0) {
+        if (target.alpha > 0) {
             this.tweens.add({
                 targets: target,
                 alpha: 0,

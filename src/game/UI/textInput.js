@@ -1,7 +1,8 @@
 import { Scene, GameObjects, Display } from "phaser"
 const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
-import GameManager from "../managers/gameManager.js";
+import GameManager from "../managers/gameManager";
+import { isTouchInput } from "../../inputDetection"
 
 export default class TextInput extends GameObjects.Container {
     /**
@@ -160,7 +161,7 @@ export default class TextInput extends GameObjects.Container {
                     yoyo: true
                 });
 
-                if (isTouch && this.hiddenInput) {
+                if (isTouchInput && this.hiddenInput) {
                     // Aparece el teclado en pantalla
                     this.hiddenInput.focus();
                 }
@@ -204,7 +205,7 @@ export default class TextInput extends GameObjects.Container {
      */
     typeWithKeyboard() {
         this.scene.input.keyboard.on('keydown', (event) => {
-            if (!isTouch) {
+            if (!isTouchInput) {
                 // Si se esta escribiendo en la caja, se van procesando las letras que se pulsan en el teclado
                 if (this.isEnteringName) {
                     let hasChanged = false;
@@ -250,7 +251,7 @@ export default class TextInput extends GameObjects.Container {
         document.body.appendChild(this.hiddenInput);
 
         this.hiddenInput.addEventListener('input', (event) => {
-            if (isTouch) {
+            if (isTouchInput) {
                 // El valor escrito en la caja de input del DOM escribe en la de la clase
                 this.currentText = event.target.value;
                 this.adjustTextToBox();
@@ -294,7 +295,7 @@ export default class TextInput extends GameObjects.Container {
             if (this.isEnteringName) {
                 this.deactiveBox();
 
-                if (isTouch && this.hiddenInput) {
+                if (isTouchInput && this.hiddenInput) {
                     // Desaparece el teclado en pantalla
                     this.hiddenInput.blur();
                 }

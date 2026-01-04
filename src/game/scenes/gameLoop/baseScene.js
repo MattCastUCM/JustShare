@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
-import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode } from '../../UI/dialog/dialogNode.js';
-import GameManager from '../../managers/gameManager.js';
+import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode } from '../../UI/dialog/dialogNode';
+import GameManager from '../../managers/gameManager';
 
 export default class BaseScene extends Scene {
     /**

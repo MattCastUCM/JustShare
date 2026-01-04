@@ -1,6 +1,9 @@
-import BaseScreen from "./baseScreen.js";
-import VerticalListView from "../listView/verticalListView.js";
-import MessageBox from "../messageBox.js";
+import { Scene, Display } from "phaser";
+const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
+const { ColorWithColor } = Display.Color.Interpolate
+import BaseScreen from "./baseScreen";
+import VerticalListView from "../listView/verticalListView";
+import MessageBox from "../messageBox";
 
 export default class ChatScreen extends BaseScreen {
     /**
@@ -8,7 +11,7 @@ export default class ChatScreen extends BaseScreen {
      * el numero de notificaciones del telefono en base a las
      * notificaciones que haya en el chat
      * @extends BaseScreen
-     * @param {Phaser.Scene} scene - escena a la que pertenece (UIManager)
+     * @param {Scene} scene - escena a la que pertenece (UIManager)
      * @param {Phone} phone - telefono
      * @param {BaseScreen} prevScreen - pantalla anterior
      * @param {String} name - nombre del contacto
@@ -23,8 +26,8 @@ export default class ChatScreen extends BaseScreen {
 
         // Configuracion de las animaciones
         this.tintFadeTime = 50;
-        this.noTint = Phaser.Display.Color.HexStringToColor('#ffffff');
-        this.pointerOverColor = Phaser.Display.Color.HexStringToColor('#9c9edf');
+        this.noTint = HexStringToColor('#ffffff');
+        this.pointerOverColor = HexStringToColor('#9c9edf');
 
         // Crea la caja de respuesta y el boton de volver hacia atras y los guarda
         // en las variables this.textBox y this.returnButton respectivamente
@@ -98,8 +101,8 @@ export default class ChatScreen extends BaseScreen {
                     to: 100,
                     onUpdate: (tween) => {
                         const value = tween.getValue();
-                        let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.noTint, this.pointerOverColor, 100, value);
-                        let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                        let col = ColorWithColor(this.noTint, this.pointerOverColor, 100, value);
+                        let colInt = GetColor(col.r, col.g, col.b);
                         this.textBox.setTint(colInt);
                     },
                     duration: this.tintFadeTime,
@@ -116,8 +119,8 @@ export default class ChatScreen extends BaseScreen {
                     to: 100,
                     onUpdate: (tween) => {
                         const value = tween.getValue();
-                        let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.pointerOverColor, this.noTint, 100, value);
-                        let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                        let col = ColorWithColor(this.pointerOverColor, this.noTint, 100, value);
+                        let colInt = GetColor(col.r, col.g, col.b);
                         this.textBox.setTint(colInt);
                     },
                     duration: this.tintFadeTime,
@@ -147,8 +150,8 @@ export default class ChatScreen extends BaseScreen {
                         to: 100,
                         onUpdate: (tween) => {
                             const value = tween.getValue();
-                            let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.noTint, this.pointerOverColor, 100, value);
-                            let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                            let col = ColorWithColor(this.noTint, this.pointerOverColor, 100, value);
+                            let colInt = GetColor(col.r, col.g, col.b);
                             this.textBox.setTint(colInt);
                         },
                         duration: this.tintFadeTime,
@@ -248,8 +251,8 @@ export default class ChatScreen extends BaseScreen {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(this.noTint, this.pointerOverColor, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(this.noTint, this.pointerOverColor, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     this.textBox.setTint(colInt);
                 },
                 duration: this.tintFadeTime * 15,

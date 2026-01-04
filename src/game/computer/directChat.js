@@ -1,5 +1,5 @@
-import Contact from "./contact.js"
-import Chat from "./chat.js"
+import Contact from "./contact"
+import Chat from "./chat"
 
 export default class DirectChat {
     constructor(socialMediaScreen, x, y, pfp, username, feedDims, dmZoneDims) {
@@ -14,7 +14,6 @@ export default class DirectChat {
             // TODO: TRACKER EVENT
             // console.log("Pulsar boton de responder:", this.name);
             // this.scene.gameManager.sendItemInteraction("pcAnswerButton");
-
 
             // TRACKER EVENT
             // console.log("Responder mensaje respondible:", this.name);

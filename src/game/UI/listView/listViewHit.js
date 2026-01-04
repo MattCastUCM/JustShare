@@ -1,11 +1,14 @@
-export default class ListViewHit extends Phaser.GameObjects.Zone {
+import { Scene, GameObjects, Geom } from "phaser"
+const { Rectangle, Intersects } = Geom
+
+export default class ListViewHit extends GameObjects.Zone {
     /**
      * Collide que se puede usar en los elementos que se colocan en una listview
      * Se trata como un objeto aparte y no se hace dentro del propio objeto para que
      * sea mas sencillo manipularlo y modificarlo
      * Nota: se hace en posiciones globales
      * Importante: se tiene que colocar en la escena y no dentro de ningun otro elemento
-     * @param {Phaser.scene} scene
+     * @param {Scene} scene
      * @param {Object} renderObject - origen(0.5, 0)
      */
     constructor(scene, renderObject) {
@@ -36,7 +39,7 @@ export default class ListViewHit extends Phaser.GameObjects.Zone {
         let x = matrix.tx - this.base.width / 2 * matrix.scaleX;
         let y = matrix.ty - this.base.height / 2 * matrix.scaleY;
         // el offset en y es para ponerlo origen(0.5, 0)
-        return new Phaser.Geom.Rectangle(x, y + (this.base.height * matrix.scaleY) / 2,
+        return new Rectangle(x, y + (this.base.height * matrix.scaleY) / 2,
             this.base.width * matrix.scaleX, this.base.height * matrix.scaleY);
     }
 
@@ -63,14 +66,14 @@ export default class ListViewHit extends Phaser.GameObjects.Zone {
         if (boundingRects.length > 0) {
             let rect = this.getBoundingRect();
 
-            let intersection = new Phaser.Geom.Rectangle();
+            let intersection = new Rectangle();
 
             // interseccion entre el rectangulo restante y los limites de cada uno de los listviews a los que pertenece
             boundingRects.forEach((boundingRect) => {
-                Phaser.Geom.Intersects.GetRectangleIntersection(rect, boundingRect, intersection);
+                Intersects.GetRectangleIntersection(rect, boundingRect, intersection);
                 rect = intersection;
 
-                intersection = new Phaser.Geom.Rectangle();
+                intersection = new Rectangle();
             });
 
             // Se reajusta la zona de acuerdo a la interseccion

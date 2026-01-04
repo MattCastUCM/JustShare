@@ -1,5 +1,5 @@
-import Post from "./post.js";
-import ListViewHit from "../UI/listView/listViewHit.js";
+import Post from "./post";
+import ListViewHit from "../UI/listView/listViewHit";
 
 export default class FeedPost extends Post {
     constructor(socialMediaScreen, pfp, username, caption, picture, width, likes = 0) {

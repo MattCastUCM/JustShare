@@ -3,15 +3,14 @@ body {
     padding: 0;
     overflow: hidden;
 }
+
 #game {
     width: 100%;
     height: 100vh;
     overflow: hidden;
 }
 
-/*
-Fuentes que se usan en Phaser
-*/
+/* Fuentes que se usan en Phaser */
 @font-face {
     font-family: "roboto-regular";
     src: url('fonts/Roboto-Regular.ttf');

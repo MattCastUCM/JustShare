@@ -1,7 +1,8 @@
-import VerticalListView from "../UI/listView/verticalListView.js"
-import MessageBox from "../UI/messageBox.js"
+import { GameObjects } from "phaser"
+import VerticalListView from "../UI/listView/verticalListView"
+import MessageBox from "../UI/messageBox"
 
-export default class Chat extends Phaser.GameObjects.Container {
+export default class Chat extends GameObjects.Container {
     constructor(socialMediaScreen, x, y, pfp, username, width, height, sendDMOnClick) {
         super(socialMediaScreen.scene, 0, 0)
 
@@ -15,7 +16,7 @@ export default class Chat extends Phaser.GameObjects.Container {
 
         this.bottomBar = this.createBottomBar(x, y + height - BAR_OFFSET_Y, sendDMOnClick)
 
-        this.listView = this.createChat(x, topBar.y + topBar.bar.displayHeight, width, 
+        this.listView = this.createChat(x, topBar.y + topBar.bar.displayHeight, width,
             height - BAR_OFFSET_Y * 2 - topBar.bar.displayHeight - this.bottomBar.displayHeight)
 
         this.visible = false;
@@ -24,7 +25,7 @@ export default class Chat extends Phaser.GameObjects.Container {
     createChat(x, y, width, height) {
         const PADDING = -40
         const END_PADDING = 15
-        
+
         let listView = new VerticalListView(this.scene, x, y,
             1, PADDING, { width: width, height: height }, null, false, END_PADDING, true);
         this.add(listView)
@@ -47,7 +48,7 @@ export default class Chat extends Phaser.GameObjects.Container {
         const PROFILE_OFFSET_X = 10
         const PROFILE_SCALE = 0.63
 
-        let profile = this.socialMediaScreen.createImageWithSideText(-bar.displayWidth / 2 + PROFILE_OFFSET_X, 
+        let profile = this.socialMediaScreen.createImageWithSideText(-bar.displayWidth / 2 + PROFILE_OFFSET_X,
             bar.displayHeight / 2, pfp, username, PROFILE_SCALE)
         profile.x += profile.width / 2
         container.add(profile)
@@ -65,7 +66,7 @@ export default class Chat extends Phaser.GameObjects.Container {
         let bar = this.scene.add.image(x, y, 'sendDirectMessage')
         bar.setOrigin(0.5, 1)
 
-        this.scene.turnIntoButtonInteractionAnim(bar, bar, sendDMOnClick, this.scene.colors.white.rgb, this.scene.colors.blue0.rgb, 
+        this.scene.turnIntoButtonInteractionAnim(bar, bar, sendDMOnClick, this.scene.colors.white.rgb, this.scene.colors.blue0.rgb,
             this.scene.colors.blue1.rgb)
 
         this.add(bar)

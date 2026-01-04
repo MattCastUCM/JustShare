@@ -1,10 +1,12 @@
-import EventDispatcher from "../eventDispatcher.js";
-import BaseScene from "../scenes/gameLoop/baseScene.js";
-import { generateTrackerFromURL } from "../tracker/index.js";
-import Tracker from "../tracker/tracker.js";
-import LRS from "../tracker/lrs.js";
-import { BasicAuthentication } from "../tracker/authentication.js";
-import { AccountActor } from "../tracker/statement/actor.js";
+import { Cameras } from "phaser";
+const { FADE_OUT_COMPLETE } = Cameras.Scene2D.Events
+import EventDispatcher from "../eventDispatcher";
+import BaseScene from "../scenes/gameLoop/baseScene";
+import { generateTrackerFromURL } from "../tracker/index";
+import Tracker from "../tracker/tracker";
+import LRS from "../tracker/lrs";
+import { BasicAuthentication } from "../tracker/authentication";
+import { AccountActor } from "../tracker/statement/actor";
 
 // Variable de nivel de modulo
 // - Se puede acceder desde cualquier parte del modulo, pero no es visible
@@ -205,7 +207,7 @@ export default class GameManager {
         // console.log("Saliendo de", this.currentScene.scene.key);
 
         // Cuando acaba el fade out de la escena actual se cambia a la siguiente
-        this.currentScene.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.currentScene.cameras.main.once(FADE_OUT_COMPLETE, (cam, effect) => {
             // Si no se puede volver a la escena anterior, se detienen todas las
             // escenas que ya estaban creadas porque ya no van a hacer falta 
             if (!canReturn) {
@@ -251,7 +253,7 @@ export default class GameManager {
         this.fading = true;
 
         // Cuando acaba el fade out de la escena actual se cambia a la siguiente
-        this.currentScene.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.currentScene.cameras.main.once(FADE_OUT_COMPLETE, (cam, effect) => {
 
             this.UIManager.phoneManager.activatePhoneIcon(false);
             this.currentScene.scene.sleep()
@@ -279,7 +281,7 @@ export default class GameManager {
         this.fading = true;
 
         // Cuando acaba el fade out de la escena actual se cambia a la siguiente
-        this.computer.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.computer.cameras.main.once(FADE_OUT_COMPLETE, (cam, effect) => {
 
             this.computer.scene.sleep()
             this.currentScene.scene.wake(this.currentScene.scene.key)

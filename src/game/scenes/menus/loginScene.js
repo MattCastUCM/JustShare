@@ -1,7 +1,7 @@
 
-import ComputerBaseScene from '../../computer/computerBaseScene.js';
-import RadioButtonGroup from '../../UI/radioButtonGroup.js'
-import CheckBox from '../../UI/checkbox.js'
+import ComputerBaseScene from '../../computer/computerBaseScene';
+import RadioButtonGroup from '../../UI/radioButtonGroup';
+import CheckBox from '../../UI/checkbox';
 
 export default class LoginScene extends ComputerBaseScene {
     constructor() {
@@ -40,7 +40,6 @@ export default class LoginScene extends ComputerBaseScene {
 
         let acceptButton = this.createButton(0, sexualityContainer.y + sexualityContainer.height + OFFSET_Y * 1.5, 'acceptButton', () => {
             // TRACKER EVENT
-            // console.log("Boton de login");
             this.gameManager.sendItemInteraction("loginButton");
 
             let errors = this.checkErrors(nameContainer, genderContainer, sexualityContainer);
@@ -190,33 +189,6 @@ export default class LoginScene extends ComputerBaseScene {
         return container
     }
 
-    // createGenderIcon(x, y, sprite, areaParams) {
-    //     const ICON_SCALE_PADDING = 20;
-    //     const FIGURE = this.gameManager.roundedSquare
-
-    //     let container = this.add.container(x, y)
-
-    //     let edge = this.add.image(0, 0, FIGURE.edge.name);
-    //     container.add(edge);
-
-    //     let icon = this.add.image(0, 0, sprite);
-    //     let iconScale = (edge.width - ICON_SCALE_PADDING * 2) / icon.width
-    //     icon.setScale(iconScale);
-    //     container.add(icon);
-
-    //     // Hay que modificar el area de colision de la checkbox para que sea los iconos
-    //     let w = FIGURE.width / areaParams.scale - FIGURE.offset / areaParams.scale;
-    //     let h = FIGURE.height / areaParams.scale - FIGURE.offset / areaParams.scale;
-    //     let rectangle = new Phaser.Geom.Rectangle(0, 0, w, h);
-    //     // Inicialmente el centro del checkbox y del icono coinciden
-    //     // Entonces, sabiendo eso, se coloca el centro del area de colision en esa posicion y luego, se mueve respecto a como
-    //     // este la checkbox desplazada de su centro
-    //     rectangle.centerX = FIGURE.width / 2 + FIGURE.offset - areaParams.offsetX / areaParams.scale;
-    //     rectangle.centerY = FIGURE.height / 2 + FIGURE.offset - areaParams.offsetY / areaParams.scale;
-
-    //     return [container, rectangle, FIGURE]
-    // }
-
     createGenderIcon(x, y, sprite) {
         const ICON_SCALE_PADDING = 20;
         const FIGURE = this.gameManager.roundedSquare
@@ -246,7 +218,6 @@ export default class LoginScene extends ComputerBaseScene {
             scale: 0.3
         }
 
-        // let [iconContainer, rectangle, iconFigure] = this.createGenderIcon(0, 0, sprite, params)
         let iconContainer = this.createGenderIcon(0, 0, sprite, params)
         container.add(iconContainer)
 

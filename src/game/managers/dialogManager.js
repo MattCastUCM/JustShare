@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
-import TextBox from '../UI/dialog/textBox.js';
-import OptionBox from '../UI/dialog/optionBox.js';
-import GameManager from './gameManager.js';
+import TextBox from '../UI/dialog/textBox';
+import OptionBox from '../UI/dialog/optionBox';
+import GameManager from './gameManager';
 
 /*
 PARA ARREGLAR NODOS DE EVENTO SI SE sALTAN LOS DIALOGOS:

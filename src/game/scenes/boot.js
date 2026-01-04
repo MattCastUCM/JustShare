@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import WebFont from "webfontloader";
 
 export default class Boot extends Scene {
     /**
@@ -15,6 +16,19 @@ export default class Boot extends Scene {
     }
 
     create() {
-        this.scene.start("Preloader")
+        const fontFamilies = ["roboto-regular", "corpid", "corpid-black"]
+
+        WebFont.load({
+            custom: {
+                families: fontFamilies
+            },
+            active: () => {
+                this.scene.start("Preloader");
+            },
+            inactive: () => {
+                console.error("Error loading fonts.");
+                this.scene.start("Preloader");
+            }
+        });
     }
 }

@@ -1,5 +1,8 @@
-import BaseScreen from "./baseScreen.js";
-import ChatScreen from "./chatScreen.js";
+import { Display } from "phaser";
+const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
+const { ColorWithColor } = Display.Color.Interpolate
+import BaseScreen from "./baseScreen";
+import ChatScreen from "./chatScreen";
 
 export default class MessagesScreen extends BaseScreen {
     constructor(scene, phone, prevScreen) {
@@ -50,8 +53,8 @@ export default class MessagesScreen extends BaseScreen {
 
         // Configuracion de las animaciones
         let tintFadeTime = 50;
-        let noTint = Phaser.Display.Color.HexStringToColor('#ffffff');
-        let pointerOverColor = Phaser.Display.Color.HexStringToColor('#c9c9c9');
+        let noTint = HexStringToColor('#ffffff');
+        let pointerOverColor = HexStringToColor('#c9c9c9');
 
         // Hace fade del color de la caja al pasar o quitar el raton por encima
         button.on('pointerover', () => {
@@ -61,8 +64,8 @@ export default class MessagesScreen extends BaseScreen {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(noTint, pointerOverColor, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(noTint, pointerOverColor, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     button.setTint(colInt);
                 },
                 duration: tintFadeTime,
@@ -76,8 +79,8 @@ export default class MessagesScreen extends BaseScreen {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(pointerOverColor, noTint, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(pointerOverColor, noTint, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     button.setTint(colInt);
                 },
                 duration: tintFadeTime,
@@ -93,8 +96,8 @@ export default class MessagesScreen extends BaseScreen {
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = Phaser.Display.Color.Interpolate.ColorWithColor(noTint, pointerOverColor, 100, value);
-                    let colInt = Phaser.Display.Color.GetColor(col.r, col.g, col.b);
+                    let col = ColorWithColor(noTint, pointerOverColor, 100, value);
+                    let colInt = GetColor(col.r, col.g, col.b);
                     button.setTint(colInt);
                 },
                 yoyo: true,
