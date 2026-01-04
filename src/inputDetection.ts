@@ -1,6 +1,6 @@
 let isTouch: boolean = false
 
-export const isTouchInput = (): boolean => isTouch;
+export const isTouchInput = () => isTouch;
 
 export function initInputDetection(selector: string) {
     focusGameElement(selector);
@@ -12,9 +12,9 @@ function focusGameElement(selector: string) {
     element?.focus();
 }
 
-function registerInputListeners(): void {
-    const setTouch = (): void => { isTouch = true; };
-    const setMouse = (): void => { isTouch = false; };
+function registerInputListeners() {
+    const setTouch = () => { isTouch = true; };
+    const setMouse = () => { isTouch = false; };
 
     window.addEventListener("touchstart", setTouch, { passive: true });
     window.addEventListener("mousedown", setMouse);
