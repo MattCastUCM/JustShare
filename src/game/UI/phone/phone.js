@@ -130,7 +130,11 @@ export default class Phone extends GameObjects.Container {
 
             // TRACKER EVENT
             // console.log("Cerrando telefono");
-            this.scene.gameManager.sendItemInteraction("phone", {
+            // this.scene.gameManager.sendItemInteraction("phone", {
+            //     "Closing": true,
+            //     "Method": "PhoneReturnButton"
+            // });
+            this.scene.trackerManager.sendItemInteraction("phone", {
                 "Closing": true,
                 "Method": "PhoneReturnButton"
             });
@@ -141,7 +145,8 @@ export default class Phone extends GameObjects.Container {
 
             // TRACKER EVENT
             // console.log("Salir del chat:", this.name);
-            this.scene.gameManager.sendExitChat(fromChatButton);
+            // this.scene.gameManager.sendExitChat(fromChatButton);
+            this.scene.trackerManager.sendExitChat(fromChatButton);
         }
     }
 

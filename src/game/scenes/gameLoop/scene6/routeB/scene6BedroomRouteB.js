@@ -118,7 +118,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
                 this.portraits.set("mom", momPortrait);
 
                 let node = null;
-                if (this.gameManager.getValue("explained")) {
+                if (this.gameManager.blackboard.has("explained")) {
                     node = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "interruptionExplained", true);
                 }
                 else {
@@ -135,10 +135,10 @@ export default class Scene6BedroomRouteB extends BaseScene {
                 fadeOutTime: 1000,
                 text: this.gameManager.translate("scene6.routeBPoliceStation", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene6PoliceStationRouteB");
+                    this.sceneManager.changeScene("Scene6PoliceStationRouteB");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

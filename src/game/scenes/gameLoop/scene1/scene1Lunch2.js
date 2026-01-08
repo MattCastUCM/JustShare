@@ -51,7 +51,7 @@ export default class Scene1Lunch2 extends BaseScene {
             }, false, "exitDoor");
 
             super.createInteractiveElement(1140, 380, "enter", 0.4, () => {
-                this.gameManager.changeScene("Scene1Bedroom2", null, true);
+                this.sceneManager.changeScene("Scene1Bedroom2", {}, true);
             }, false, "bedroomDoor");
         });
     }

@@ -1,10 +1,10 @@
 import { Scene, Display, Geom } from "phaser";
 const { GetColor, IntegerToRGB } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate;
-const { Rectangle } = Geom
 import BaseScene from '../scenes/gameLoop/baseScene';
 import Button from '../UI/button'
 import TextInput from '../UI/textInput'
+import { hexToRgb, inputBox, textBox } from "../utils/graphics";
 
 export default class ComputerBaseScene extends BaseScene {
     constructor(name) {
@@ -39,9 +39,9 @@ export default class ComputerBaseScene extends BaseScene {
         for (const [key, value] of Object.entries(colorsAux)) {
             this.colors[key] = {}
             this.colors[key][HEX] = {}
-            this.colors[key][HEX]['getNumberSign'] = value
-            this.colors[key][HEX]["get0x"] = value.replace('#', '0x')
-            this.colors[key][RGB] = this.gameManager.hexToRgb(value)
+            this.colors[key][HEX]['getNumberSign'] = value;
+            this.colors[key][HEX]["get0x"] = value.replace('#', '0x');
+            this.colors[key][RGB] = hexToRgb(value);
         }
 
         this.style = { ...this.gameManager.textConfig };
@@ -130,7 +130,7 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     createButton(x, y, transId, onClick, scale = 1) {
-        const FIGURE = this.gameManager.textBox
+        const FIGURE = textBox
 
         let translation = this.translate(transId)
 
@@ -144,8 +144,8 @@ export default class ComputerBaseScene extends BaseScene {
                 // La textura generada con el objeto grafico es un pelin mas grande que el dibujo en si. Por lo tanto,
                 // si la caja de colision por defecto es un pelin mas grande. Es por eso que se pasa una que se ajuste
                 // a las medidas reales
-                area: new Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
-                callback: Rectangle.Contains
+                area: new Geom.Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
+                callback: Geom.Rectangle.Contains
             }
         );
 
@@ -156,15 +156,15 @@ export default class ComputerBaseScene extends BaseScene {
 
     createTextInput(x, y, transId, scale = 1, writeLocked = false) {
         const TEXT_INPUT_OFFSET = 23;
-        const FIGURE = this.gameManager.inputBox
+        const FIGURE = inputBox
 
         let translation = this.translate(transId)
 
         let textInput = new TextInput(this, x, y, scale, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb,
             FIGURE.fill.name, FIGURE.edge.name, this.fontFamilies.normal,
             {
-                area: new Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
-                callback: Rectangle.Contains
+                area: new Geom.Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
+                callback: Geom.Rectangle.Contains
             }, writeLocked);
 
         // Propiedades

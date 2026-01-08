@@ -1,5 +1,4 @@
 import { Scene, Geom, Math, GameObjects } from "phaser"
-const { Point, Rectangle } = Geom
 
 export default class VerticalListView extends GameObjects.Container {
     /**
@@ -116,7 +115,7 @@ export default class VerticalListView extends GameObjects.Container {
         // Deslizamiento con inercia una vez acabado el drag
         this.isBeingDragged = false;
         this.movingSpeed = 0;
-        this.lastSavedPosition = new Point(this.itemsCont.x, this.itemsCont.y);
+        this.lastSavedPosition = new Geom.Point(this.itemsCont.x, this.itemsCont.y);
         this.friction = 0.99;
         this.speedMul = 0.7;
         this.minDistance = 1.8;
@@ -193,7 +192,7 @@ export default class VerticalListView extends GameObjects.Container {
         let posX = matrix.tx - this.boundedZone.width / 2 * matrix.scaleX;
         let posY = matrix.ty - this.boundedZone.height / 2 * matrix.scaleY;
         // el offset en y es para ponerlo en origen(0.5, 0)
-        return new Rectangle(posX, posY + (this.boundedZone.height * matrix.scaleY) / 2,
+        return new Geom.Rectangle(posX, posY + (this.boundedZone.height * matrix.scaleY) / 2,
             this.boundedZone.width * matrix.scaleX, this.boundedZone.height * matrix.scaleY);
     }
 

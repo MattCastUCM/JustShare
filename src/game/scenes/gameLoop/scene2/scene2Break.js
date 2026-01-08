@@ -55,10 +55,10 @@ export default class Scene2Break extends BaseScene {
             let params = {
                 text: this.gameManager.translate("scene2.classEnd", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene2Bedroom");
+                    this.sceneManager.changeScene("Scene2Bedroom");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

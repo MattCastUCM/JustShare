@@ -53,8 +53,8 @@ export default class Scene6BedroomRouteA1 extends BaseScene {
                 // se cambia a la escena de transicion y luego a la escena de la comida del dia siguiente
                 setTimeout(() => {
                     // Si se va por la ruta A (quedar con el acosador)
-                    if (this.gameManager.getValue("routeA")) {
-                        this.gameManager.changeScene("Scene6BedroomRouteA2");
+                    if (this.gameManager.blackboard.has("routeA")) {
+                        this.sceneManager.changeScene("Scene6BedroomRouteA2");
                     }
                     // Si se va por la ruta B (no quedar con el)
                     else {
@@ -62,10 +62,10 @@ export default class Scene6BedroomRouteA1 extends BaseScene {
                             text: this.gameManager.translate("scene6.routeBStart", { ns: "transitions", returnObjects: true }),
                             onComplete: () => {
                                 this.UIManager.moveLids(true);
-                                this.gameManager.changeScene("Scene6LunchRouteB");
+                                this.sceneManager.changeScene("Scene6LunchRouteB");
                             },
                         };
-                        this.gameManager.changeScene("TextOnlyScene", params);
+                        this.sceneManager.changeScene("TextOnlyScene", params);
                     }
                 }, 1000);
             });

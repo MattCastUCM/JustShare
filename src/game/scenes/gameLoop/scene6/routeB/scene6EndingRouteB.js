@@ -76,17 +76,18 @@ export default class Scene6EndingRouteB extends BaseScene {
                         text: this.gameManager.translate("scene7.start", { ns: "transitions", returnObjects: true }),
                         onComplete: () => {
                             this.UIManager.moveLids(true);
-                            this.gameManager.changeScene("Scene7Bedroom");
+                            this.sceneManager.changeScene("Scene7Bedroom");
                         },
                     };
                     // TRACKER EVENT
                     // console.log("Fin del dia 6");
-                    this.gameManager.sendGameProgress();
+                    // this.gameManager.sendGameProgress();
+                    this.trackerManager.sendGameProgress();
 
                     // TODO: DISCARDED TRACKER EVENT
                     // console.log("Inicio del dia 7");
                 
-                    this.gameManager.changeScene("TextOnlyScene", params);
+                    this.sceneManager.changeScene("TextOnlyScene", params);
                 }, 1000);
             });
         });

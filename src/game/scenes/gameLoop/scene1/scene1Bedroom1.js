@@ -130,10 +130,10 @@ export default class Scene1Bedroom1 extends BaseScene {
                         text: this.gameManager.translate("scene1.nextDay", { ns: "transitions", returnObjects: true }),
                         onComplete: () => {
                             this.UIManager.moveLids(true);
-                            this.gameManager.changeScene("Scene1Lunch2");
+                            this.sceneManager.changeScene("Scene1Lunch2");
                         },
                     };
-                    this.gameManager.changeScene("TextOnlyScene", params);
+                    this.sceneManager.changeScene("TextOnlyScene", params);
                 }, 1000);
             });
         });

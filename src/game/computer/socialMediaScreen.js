@@ -50,7 +50,8 @@ export default class SocialMediaScreen extends BaseScreen {
         this.createMenu(() => {
             // TRACKER EVENT
             // console.log("Pulsar boton de inicio");
-            this.scene.gameManager.sendItemInteraction("homeButton");
+            // this.scene.gameManager.sendItemInteraction("homeButton");
+            this.scene.trackerManager.sendItemInteraction("homeButton");
 
             this.reset()
         })
@@ -105,7 +106,8 @@ export default class SocialMediaScreen extends BaseScreen {
 
             // TRACKER EVENT
             // console.log("Pulsar boton de compartir");
-            this.scene.gameManager.sendItemInteraction("shareButton");
+            // this.scene.gameManager.sendItemInteraction("shareButton");
+            this.scene.trackerManager.sendItemInteraction("shareButton");
 
         }, BUTTON_SCALE)
         button.y -= button.height / 2

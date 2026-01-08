@@ -55,12 +55,12 @@ export default class Scene6Bedroom extends BaseScene {
                     let params = {};
 
                     // Si se va por la ruta A (seguir enviando fotos)
-                    if (this.gameManager.getValue("routeA")) {
+                    if (this.gameManager.blackboard.has("routeA")) {
                         params = {
                             text: this.gameManager.translate("scene6.routeAStart", { ns: "transitions", returnObjects: true }),
                             onComplete: () => {
                                 this.UIManager.moveLids(true);
-                                this.gameManager.changeScene("Scene6BedroomRouteA1");
+                                this.sceneManager.changeScene("Scene6BedroomRouteA1");
                             },
                         };
 
@@ -71,12 +71,12 @@ export default class Scene6Bedroom extends BaseScene {
                             text: this.gameManager.translate("scene6.routeBStart", { ns: "transitions", returnObjects: true }),
                             onComplete: () => {
                                 this.UIManager.moveLids(true);
-                                this.gameManager.changeScene("Scene6LunchRouteB");
+                                this.sceneManager.changeScene("Scene6LunchRouteB");
                             },
                         };
                     }
 
-                    this.gameManager.changeScene("TextOnlyScene", params);
+                    this.sceneManager.changeScene("TextOnlyScene", params);
                 }, 1000);
             });
         });

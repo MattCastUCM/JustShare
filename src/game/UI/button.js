@@ -111,9 +111,7 @@ export default class Button extends GameObjects.Container {
             });
             down.on('complete', () => {
                 this.fillImg.setInteractive({ useHandCursor: true });
-                if (!gameManager.isInFadeAnimation()) {
-                    onClick();
-                }
+                onClick();
             });
         });
 

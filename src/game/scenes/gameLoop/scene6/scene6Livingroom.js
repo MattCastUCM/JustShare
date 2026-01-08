@@ -72,7 +72,7 @@ export default class Scene6Livingroom extends BaseScene {
             }, false, "exitDoor");
 
             super.createInteractiveElement(1140, 380, "enter", 0.4, () => {
-                this.gameManager.changeScene("Scene6Bedroom", null, true);
+                this.sceneManager.changeScene("Scene6Bedroom", {}, true);
             }, false, "bedroomDoor");
         });
     }

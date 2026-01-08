@@ -56,17 +56,18 @@ export default class Scene5Bedroom extends BaseScene {
                         text: this.gameManager.translate("scene6.startWeek", { ns: "transitions", returnObjects: true }),
                         onComplete: () => {
                             this.UIManager.moveLids(true);
-                            this.gameManager.changeScene("Scene6Livingroom");
+                            this.sceneManager.changeScene("Scene6Livingroom");
                         },
                     };
                     // TRACKER EVENT
                     // console.log("Fin del dia 5");
-                    this.gameManager.sendGameProgress();
+                    // this.gameManager.sendGameProgress();
+                    this.trackerManager.sendGameProgress();
 
                     // TODO: DISCARDED TRACKER EVENT
                     // console.log("Inicio del dia 6");
                 
-                    this.gameManager.changeScene("TextOnlyScene", params);
+                    this.sceneManager.changeScene("TextOnlyScene", params);
                 }, 1000);
             });
         });

@@ -23,8 +23,4 @@ export default class BaseScreen extends GameObjects.Container {
     init() {
         this.scene.setNamespace(this.NAMESPACE_PREFIX + this.screenName)
     }
-
-    reset() {
-
-    }
 }

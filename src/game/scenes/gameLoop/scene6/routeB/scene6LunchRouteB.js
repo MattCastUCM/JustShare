@@ -60,10 +60,10 @@ export default class Scene6LunchRouteB extends BaseScene {
             let params = {
                 text: this.gameManager.translate("scene6.routeBAfterLunch", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene6BedroomRouteB");
+                    this.sceneManager.changeScene("Scene6BedroomRouteB");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

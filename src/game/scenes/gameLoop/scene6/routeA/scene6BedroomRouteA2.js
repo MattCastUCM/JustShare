@@ -42,8 +42,8 @@ export default class Scene6BedroomRouteA2 extends BaseScene {
         this.dispatcher.add("spawnInteractions", this, () => {
             // Armario
             super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
-                if (this.gameManager.getValue("endedLunch")) {
-                    this.gameManager.setValue("prepared", true)
+                if (this.gameManager.blackboard.has("endedLunch")) {
+                    this.gameManager.blackboard.set("prepared", true)
                 }
                 this.dialogManager.setNode(closetNode, []);
             }, false, "closet");
@@ -60,7 +60,7 @@ export default class Scene6BedroomRouteA2 extends BaseScene {
 
             // Puerta
             super.createInteractiveElement(120, this.CANVAS_HEIGHT - 120, "exit", 0.4, () => {
-                this.gameManager.changeScene("Scene6LunchRouteA", null, true);
+                this.sceneManager.changeScene("Scene6LunchRouteA", {}, true);
             }, false, "livingroomDoor");
         });
 

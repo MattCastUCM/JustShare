@@ -51,10 +51,10 @@ export default class Scene6PoliceStationRouteB extends BaseScene {
                 fadeOutTime: 1000,
                 text: this.gameManager.translate("scene6.routeBEnd", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene6EndingRouteB");
+                    this.sceneManager.changeScene("Scene6EndingRouteB");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

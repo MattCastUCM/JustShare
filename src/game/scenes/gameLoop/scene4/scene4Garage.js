@@ -87,10 +87,10 @@ export default class Scene4Garage extends BaseScene {
             let params = {
                 text: this.gameManager.translate("scene4.partyEnd", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene4Bedroom");
+                    this.sceneManager.changeScene("Scene4Bedroom");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

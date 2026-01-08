@@ -48,11 +48,11 @@ export default class Scene6LunchRouteA extends BaseScene {
             let params = {
                 text: this.gameManager.translate("scene6.routeALunch", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene6LunchRouteA", null, true);
+                    this.sceneManager.changeScene("Scene6LunchRouteA", {}, true);
                     this.endLunch();
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params, true);
+            this.sceneManager.changeScene("TextOnlyScene", params, true);
         });
 
         // Se crean los elementos interactuables
@@ -63,7 +63,7 @@ export default class Scene6LunchRouteA extends BaseScene {
             // Puerta a la calle
             let doorIcon = super.createInteractiveElement(890, 380, "pointer", 0.3, () => {
                 // Si no esta preparado, se muestra un dialogo avisando de esto
-                if (this.gameManager.getValue("prepared")) {
+                if (this.gameManager.blackboard.has("prepared")) {
                     this.dialogManager.setNode(doorNodePrepared, [dadPortrait, momPortrait]);
                     doorIcon.destroy();
                 }
@@ -76,7 +76,7 @@ export default class Scene6LunchRouteA extends BaseScene {
 
             // Puerta a la habitacion
             super.createInteractiveElement(1140, 380, "enter", 0.4, () => {
-                this.gameManager.changeScene("Scene6BedroomRouteA2", null, true);
+                this.sceneManager.changeScene("Scene6BedroomRouteA2", {}, true);
             }, false, "bedroomDoor");
         }
 
@@ -86,10 +86,10 @@ export default class Scene6LunchRouteA extends BaseScene {
                 text: this.gameManager.translate("scene6.routeAWalking", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
                     this.UIManager.moveLids(true);
-                    this.gameManager.changeScene("Scene6PortalRouteA");
+                    this.sceneManager.changeScene("Scene6PortalRouteA");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

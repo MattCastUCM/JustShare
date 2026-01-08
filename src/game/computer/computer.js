@@ -30,7 +30,8 @@ export default class Computer extends ComputerBaseScene {
 
             // TRACKER EVENT
             // console.log("Salir del ordenador");
-            this.gameManager.sendItemInteraction("powerOffButton");
+            // this.gameManager.sendItemInteraction("powerOffButton");
+            this.trackerManager.sendItemInteraction("powerOffButton")
         });
 
         this.changeToMainScreen()
@@ -41,7 +42,8 @@ export default class Computer extends ComputerBaseScene {
 
             // TRACKER EVENT
             // console.log("Pulsar en la pantalla del ordenador");
-            this.gameManager.sendComputerScreenClick(pointer.x, pointer.y);
+            // this.gameManager.sendComputerScreenClick(pointer.x, pointer.y);
+            this.trackerManager.sendComputerScreenClick(pointer.x, pointer.y);
         });
     }
 

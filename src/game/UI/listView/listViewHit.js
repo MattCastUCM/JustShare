@@ -1,5 +1,4 @@
 import { Scene, GameObjects, Geom } from "phaser"
-const { Rectangle, Intersects } = Geom
 
 export default class ListViewHit extends GameObjects.Zone {
     /**
@@ -39,7 +38,7 @@ export default class ListViewHit extends GameObjects.Zone {
         let x = matrix.tx - this.base.width / 2 * matrix.scaleX;
         let y = matrix.ty - this.base.height / 2 * matrix.scaleY;
         // el offset en y es para ponerlo origen(0.5, 0)
-        return new Rectangle(x, y + (this.base.height * matrix.scaleY) / 2,
+        return new Geom.Rectangle(x, y + (this.base.height * matrix.scaleY) / 2,
             this.base.width * matrix.scaleX, this.base.height * matrix.scaleY);
     }
 
@@ -66,14 +65,14 @@ export default class ListViewHit extends GameObjects.Zone {
         if (boundingRects.length > 0) {
             let rect = this.getBoundingRect();
 
-            let intersection = new Rectangle();
+            let intersection = new Geom.Rectangle();
 
             // interseccion entre el rectangulo restante y los limites de cada uno de los listviews a los que pertenece
             boundingRects.forEach((boundingRect) => {
-                Intersects.GetRectangleIntersection(rect, boundingRect, intersection);
+                Geom.Intersects.GetRectangleIntersection(rect, boundingRect, intersection);
                 rect = intersection;
 
-                intersection = new Rectangle();
+                intersection = new Geom.Rectangle();
             });
 
             // Se reajusta la zona de acuerdo a la interseccion

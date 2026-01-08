@@ -1,6 +1,9 @@
 import { Scene } from "phaser";
 import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode } from '../../UI/dialog/dialogNode';
 import GameManager from '../../managers/gameManager';
+import SceneManager from "../../managers/sceneManager";
+import EventDispatcher from "../../eventDispatcher";
+import TrackerManager from "../../managers/trackerManager";
 
 export default class BaseScene extends Scene {
     /**
@@ -25,8 +28,11 @@ export default class BaseScene extends Scene {
         this.UIManager = this.gameManager.UIManager;
         this.dialogManager = this.UIManager.dialogManager;
         this.phoneManager = this.UIManager.phoneManager;
-        this.dispatcher = this.gameManager.dispatcher;
         this.computer = this.gameManager.computer
+        
+        this.dispatcher = EventDispatcher.getInstance();
+        this.sceneManager = SceneManager.getInstance();
+        this.trackerManager = TrackerManager.getInstance();
 
         // Obtiene el plugin de i18n del GameManager
         this.i18next = this.gameManager.i18next;
@@ -82,6 +88,9 @@ export default class BaseScene extends Scene {
      */
     onWake(params) {
         this.initialSetup(params);
+        if (params.onWake) {
+            params.onWake();
+        }
     }
 
     // Metodo que se encarga de limpiar los eventos del dispatcher y de eliminar los retratos del UIManager
@@ -219,16 +228,16 @@ export default class BaseScene extends Scene {
                     // Si no se ha definido si la variable es global o si se ha definido que si lo es,
                     // la guarda en el gameManager con su valor por defecto (si no se ha guardado antes)
                     if (obj.global === undefined || obj.global === true) {
-                        if (!this.gameManager.hasValue(varName)) {
-                            this.gameManager.setValue(varName, defaultValue);
+                        if (!this.gameManager.blackboard.has(varName)) {
+                            this.gameManager.blackboard.set(varName, defaultValue);
                         }
                     }
                     // Si no, la guarda en la blackboard de la escena con su valor por defecto
                     // (si no se ha guardado antes) e indica que la blackboard en la que comprobar
                     // la variable es la de esta escena
                     else {
-                        if (!this.gameManager.hasValue(varName, this.blackboard)) {
-                            this.gameManager.setValue(varName, defaultValue, this.blackboard);
+                        if (!this.blackboard.has(varName)) {
+                            this.blackboard.set(varName, defaultValue);
                         }
                         condition.blackboard = this.blackboard;
                     }
@@ -662,12 +671,13 @@ export default class BaseScene extends Scene {
                 });
             }
             // Si es valida, se ejecuta la funcion onClick
-            if (onClick !== null && typeof onClick === 'function' && !this.gameManager.isInFadeAnimation() && this.UIManager.lidAnim == null) {
+            if (onClick !== null && typeof onClick === 'function' && this.UIManager.lidAnim == null) {
                 onClick();
 
                 // TRACKER EVENT
                 // console.log("Interactuando con", itemName);
-                this.gameManager.sendItemInteraction(itemName, npc);
+                // this.gameManager.sendItemInteraction(itemName, npc);
+                this.trackerManager.sendItemInteraction(itemName, npc);
             }
 
         });

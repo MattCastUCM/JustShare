@@ -1,5 +1,7 @@
 import GameManager from './gameManager';
 import Phone from '../UI/phone/phone';
+import EventDispatcher from '../eventDispatcher';
+import TrackerManager from './trackerManager';
 
 export default class PhoneManager {
     /**
@@ -10,7 +12,8 @@ export default class PhoneManager {
         this.scene = scene;
         this.gameManager = GameManager.getInstance();
         this.i18next = this.gameManager.i18next;
-        this.dispatcher = this.gameManager.dispatcher;
+        this.dispatcher = EventDispatcher.getInstance();
+        this.trackerManager = TrackerManager.getInstance();
 
         // Anade el telefono 
         this.phone = new Phone(scene, this);
@@ -29,7 +32,11 @@ export default class PhoneManager {
             this.togglePhone(false);
             // TRACKER EVENT
             // console.log("Cerrando telefono");
-            this.gameManager.sendItemInteraction("phone", {
+            // this.gameManager.sendItemInteraction("phone", {
+            //     "Closing": true,
+            //     "Method": "BlankArea"
+            // });
+            this.trackerManager.sendItemInteraction("phone", {
                 "Closing": true,
                 "Method": "BlankArea"
             });
@@ -85,7 +92,11 @@ export default class PhoneManager {
                 if (this.phone.visible) {
                     // TRACKER EVENT
                     // console.log("Cerrando telefono");
-                    this.gameManager.sendItemInteraction("phone", {
+                    // this.gameManager.sendItemInteraction("phone", {
+                    //     "Closing": true,
+                    //     "Method": "PhoneIcon"
+                    // });
+                    this.trackerManager.sendItemInteraction("phone", {
                         "Closing": true,
                         "Method": "PhoneIcon"
                     });
@@ -93,7 +104,8 @@ export default class PhoneManager {
                 else {
                     // TRACKER EVENT
                     // console.log("Abriendo telefono");
-                    this.gameManager.sendItemInteraction("phone", { "Closing": false });
+                    // this.gameManager.sendItemInteraction("phone", { "Closing": false });
+                    this.trackerManager.sendItemInteraction("phone", { "Closing": false });
                 }
 
                 this.togglePhone();

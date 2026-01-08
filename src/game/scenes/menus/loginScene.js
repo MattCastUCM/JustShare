@@ -2,6 +2,7 @@
 import ComputerBaseScene from '../../computer/computerBaseScene';
 import RadioButtonGroup from '../../UI/radioButtonGroup';
 import CheckBox from '../../UI/checkbox';
+import { roundedSquare, widerRoundedSquare } from '../../utils/graphics';
 
 export default class LoginScene extends ComputerBaseScene {
     constructor() {
@@ -15,7 +16,7 @@ export default class LoginScene extends ComputerBaseScene {
         this.setNamespace('menus/loginScene')
 
         this.createPowerIcon(() => {
-            this.gameManager.changeScene("TitleScene");
+            this.sceneManager.changeScene("TitleScene");
         })
 
         const X = this.CANVAS_WIDTH / 3;
@@ -40,7 +41,8 @@ export default class LoginScene extends ComputerBaseScene {
 
         let acceptButton = this.createButton(0, sexualityContainer.y + sexualityContainer.height + OFFSET_Y * 1.5, 'acceptButton', () => {
             // TRACKER EVENT
-            this.gameManager.sendItemInteraction("loginButton");
+            // this.gameManager.sendItemInteraction("loginButton");
+            this.trackerManager.sendItemInteraction("loginButton");
 
             let errors = this.checkErrors(nameContainer, genderContainer, sexualityContainer);
             if (!errors) {
@@ -191,7 +193,7 @@ export default class LoginScene extends ComputerBaseScene {
 
     createGenderIcon(x, y, sprite) {
         const ICON_SCALE_PADDING = 20;
-        const FIGURE = this.gameManager.roundedSquare
+        const FIGURE = roundedSquare
 
         let container = this.add.container(x, y)
 
@@ -211,7 +213,7 @@ export default class LoginScene extends ComputerBaseScene {
         // Contenedor principal
         let container = this.add.container(x, y);
 
-        const FIGURE = this.gameManager.widerRoundedSquare
+        const FIGURE = widerRoundedSquare
         let params = {
             offsetX: -50,
             offsetY: -50,

@@ -2,6 +2,8 @@ import { Scene } from "phaser";
 import TextBox from '../UI/dialog/textBox';
 import OptionBox from '../UI/dialog/optionBox';
 import GameManager from './gameManager';
+import EventDispatcher from "../eventDispatcher";
+import SceneManager from "./sceneManager";
 
 /*
 PARA ARREGLAR NODOS DE EVENTO SI SE sALTAN LOS DIALOGOS:
@@ -21,7 +23,8 @@ export default class DialogManager {
         this.scene = scene;
 
         this.gameManager = GameManager.getInstance();
-        this.dispatcher = this.gameManager.dispatcher;
+        this.dispatcher = EventDispatcher.getInstance();
+        this.sceneManager = SceneManager.getInstance();
 
         this.textbox = null;                // Instancia de la caja de dialogo
         this.lastCharacter = "";            // Ultimo personaje que hablo
@@ -96,8 +99,8 @@ export default class DialogManager {
 
     /**
     * Cambia el texto de la caja
-    * @param {String} text - texto a escribir
-    * @param {Boolean} animate - si se va a animar el texto o no
+    * @param {string} text - texto a escribir
+    * @param {boolean} animate - si se va a animar el texto o no
     */
     setText(dialogInfo, animate) {
         this.textbox.setText(dialogInfo, animate);
@@ -175,7 +178,7 @@ export default class DialogManager {
     /**
      * Procesa el nodo de condicion que se le pase como parametro
      * @param {DialogNode} node - Nodo a procesar 
-     * @returns {Number} - indice del siguiente nodo
+     * @returns {number} - indice del siguiente nodo
      */
     processConditionNode(node) {
         let conditionMet = false;
@@ -195,7 +198,8 @@ export default class DialogManager {
 
                 // Busca el valor de la variable en la blackboard indicada. 
                 // Si no es valida, buscara por defecto en el gameManager
-                let variableValue = this.gameManager.getValue(variable, node.conditions[i][j].blackboard);
+                // let variableValue = this.gameManager.getValue(variable, node.conditions[i][j].blackboard);
+                let variableValue = node.conditions[i][j].blackboard.get(variable);
                 // console.log(variable + " " + variableValue);
 
                 if (operator === "equal") {
@@ -248,7 +252,8 @@ export default class DialogManager {
                     blackboard = evt.blackboard;
                 }
                 if (evt.variable && evt.value !== undefined) {
-                    this.gameManager.setValue(evt.variable, evt.value, blackboard);
+                    blackboard.set(evt.variable, evt.value);
+                    // this.gameManager.setValue(evt.variable, evt.value, blackboard);
                 }
             }, delay);
         }
@@ -293,7 +298,8 @@ export default class DialogManager {
                 else {
                     // TRACKER EVENT
                     // console.log("Inicio de dialogo:", this.currNode.dialogs[this.currNode.currDialog].text);
-                    this.gameManager.sendDialogStarted(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
+                    // this.gameManager.sendDialogStarted(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
+                    this.trackerManager.sendDialogStarted(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
 
                     // Funcion a ejecutar para mostrar la caja. Actualiza el retrato y el texto y activa la caja
                     let showBox = () => {
@@ -365,7 +371,8 @@ export default class DialogManager {
             else {
                 // TRACKER EVENT
                 // console.log("Fin de dialogo:", this.currNode.dialogs[this.currNode.currDialog].text);
-                this.gameManager.sendDialogEnded(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
+                // this.gameManager.sendDialogEnded(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
+                this.trackerManager.sendDialogEnded(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
 
                 // Actualiza el dialogo que se esta mostrando del nodo actual
                 this.currNode.currDialog++;
@@ -373,8 +380,8 @@ export default class DialogManager {
                 if (this.currNode.currDialog < this.currNode.dialogs.length) {
                     // TRACKER EVENT
                     // console.log("Inicio de dialogo:", this.currNode.dialogs[this.currNode.currDialog].text);
-                    this.gameManager.sendDialogStarted(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
-
+                    // this.gameManager.sendDialogStarted(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
+                    this.trackerManager.sendDialogStarted(this.currNode.fullId, this.currNode.dialogs[this.currNode.currDialog]);
 
                     this.setText(this.currNode.dialogs[this.currNode.currDialog], true);
                 }
@@ -426,9 +433,9 @@ export default class DialogManager {
 
     /**
     * Activa/desactiva las cajas de opcion multiple
-    * @param {Boolean} active - si se van a activar o no las opciones
+    * @param {boolean} active - si se van a activar o no las opciones
     * @param {Function} onComplete - funcion a la que llamar cuando acabe la animacion
-    * @param {Number} delay - tiempo en ms que tarda en llamarse a onComplete
+    * @param {number} delay - tiempo en ms que tarda en llamarse a onComplete
     */
     activateOptions(active, onComplete = {}, delay = 0, instant = false) {
         // Dependiendo de si es instantaneo o no, se ocultan las opciones con animacion o sin ella. 
@@ -455,12 +462,13 @@ export default class DialogManager {
 
     /**
     * Elige la opcion sobre la que se ha hecho click (llamado desde la instancia correspondiente de OptionBox)
-    * @param {Number} index - indice elegido
+    * @param {number} index - indice elegido
     */
     selectOption(index) {
         // TRACKER EVENT
         // console.log("Opcion seleccionada:", this.currNode.choices[index].text);
-        this.gameManager.sendChoiceSelected(this.currNode.fullId, this.currNode.choices[index].text);
+        // this.gameManager.sendChoiceSelected(this.currNode.fullId, this.currNode.choices[index].text);
+        this.trackerManager.sendChoiceSelected(this.currNode.fullId, this.currNode.choices[index].text);
 
         // Desactiva las opciones
         this.activateOptions(false);

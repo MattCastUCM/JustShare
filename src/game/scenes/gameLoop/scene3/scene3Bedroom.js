@@ -52,7 +52,7 @@ export default class Scene3Bedroom extends BaseScene {
                     text: this.gameManager.translate("scene4.party", { ns: "transitions", returnObjects: true }),
                     onComplete: () => {
                         this.phoneManager.phone.chats.get(this.chatName).returnButton.setInteractive();
-                        this.gameManager.changeScene("Scene4Frontyard");
+                        this.sceneManager.changeScene("Scene4Frontyard");
                     },
                 };
                 this.phoneManager.togglePhone(false);
@@ -62,12 +62,13 @@ export default class Scene3Bedroom extends BaseScene {
 
                 // TRACKER EVENT
                 // console.log("Fin del dia 3");
-                this.gameManager.sendGameProgress();
+                // this.gameManager.sendGameProgress();
+                this.trackerManager.sendGameProgress();
 
                 // TODO: DISCARDED TRACKER EVENT
                 // console.log("Inicio del dia 4");
 
-                this.gameManager.changeScene("TextOnlyScene", params);
+                this.sceneManager.changeScene("TextOnlyScene", params);
             }, 3000);
         });
     }

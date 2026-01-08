@@ -14,10 +14,12 @@ export default class DirectChat {
             // TODO: TRACKER EVENT
             // console.log("Pulsar boton de responder:", this.name);
             // this.scene.gameManager.sendItemInteraction("pcAnswerButton");
+            this.scene.trackerManager.sendItemInteraction("pcAnswerButton");
 
             // TRACKER EVENT
             // console.log("Responder mensaje respondible:", this.name);
-            this.scene.gameManager.sendAnsweredChat(this.currNode.fullId, this.name);
+            // this.scene.gameManager.sendAnsweredChat(this.currNode.fullId, this.name);
+            this.scene.trackerManager.sendAnsweredChat(this.currNode.fullId, this.name);
 
             // Si es un mensaje de chat, lo procesa
             if (this.currNode.type === "chatMessage") {
@@ -47,7 +49,8 @@ export default class DirectChat {
 
                 // TRACKER EVENT
                 // console.log("Entrar al chat:", username);
-                this.scene.gameManager.sendEnterChat(username);
+                // this.scene.gameManager.sendEnterChat(username);
+                this.scene.trackerManager.sendEnterChat(username);
             }
         })
 
@@ -73,6 +76,7 @@ export default class DirectChat {
             // TODO: DISCARDED TRACKER EVENT
             // console.log("Salir del chat:", this.name);
             // this.scene.gameManager.sendExitChat(true);
+            // this.scene.trackerManager.sendExitChat(true);
 
             this.wasVisible = false;
         }
@@ -127,7 +131,8 @@ export default class DirectChat {
 
                 // TRACKER EVENT
                 // console.log("Mensaje respondible en chat:", this.name);
-                this.scene.gameManager.sendCanAnswerChat(this.currNode.fullId, this.name);
+                // this.scene.gameManager.sendCanAnswerChat(this.currNode.fullId, this.name);
+                this.scene.trackerManager.sendCanAnswerChat(this.currNode.fullId, this.name);
             }
             else {
                 this.chat.restartChatAnim()
@@ -135,7 +140,8 @@ export default class DirectChat {
 
                 // TRACKER EVENT
                 // console.log("Mensaje respondible en chat:", this.name);
-                this.scene.gameManager.sendCanAnswerChat(this.currNode.fullId, this.name);
+                // this.scene.gameManager.sendCanAnswerChat(this.currNode.fullId, this.name);
+                this.scene.trackerManager.sendCanAnswerChat(this.currNode.fullId, this.name);
             }
         }
         else {

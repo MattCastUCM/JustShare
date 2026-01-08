@@ -12,7 +12,7 @@ export default class CreditsScene extends ComputerBaseScene {
         this.setNamespace('menus/creditsScene')
 
         this.createPowerIcon(() => {
-            this.gameManager.changeScene("TitleScene");
+            this.sceneManager.changeScene("TitleScene");
         })
 
         const TITLE_OFFSET_Y = 60

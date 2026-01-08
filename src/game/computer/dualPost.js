@@ -27,7 +27,8 @@ export default class DualPost {
         this.selected.setMessageIconOnClick(() => {
             // TRACKER EVENT
             // console.log("Salir de una publicacion");
-            this.scene.gameManager.sendItemInteraction("commentButton", { "Closing": true });
+            // this.scene.gameManager.sendItemInteraction("commentButton", { "Closing": true });
+            this.scene.trackerManager.sendItemInteraction("commentButton", { "Closing": true });
 
             this.showSelectedPost(false)
         })
@@ -38,7 +39,8 @@ export default class DualPost {
         this.feed.setMessageIconOnClick(() => {
             // TRACKER EVENT
             // console.log("Entrar a una publicacion");
-            this.scene.gameManager.sendItemInteraction("commentButton", { "Closing": false });
+            // this.scene.gameManager.sendItemInteraction("commentButton", { "Closing": false });
+            this.scene.trackerManager.sendItemInteraction("commentButton", { "Closing": false });
 
             this.showSelectedPost(true)
         })
@@ -59,12 +61,14 @@ export default class DualPost {
         if (this.selected.heartContainer.icon.texture.key === "heartIconFilled") {
             // TRACKER EVENT
             // console.log("Dar like");
-            this.scene.gameManager.sendItemInteraction("likeButton", { "Liked": true });
+            // this.scene.gameManager.sendItemInteraction("likeButton", { "Liked": true });
+            this.scene.trackerManager.sendItemInteraction("likeButton", { "Liked": true });
         }
         else {
             // TRACKER EVENT
             // console.log("Quitar like");
-            this.scene.gameManager.sendItemInteraction("likeButton", { "Liked": false });
+            // this.scene.gameManager.sendItemInteraction("likeButton", { "Liked": false });
+            this.scene.trackerManager.sendItemInteraction("likeButton", { "Liked": true });
         }
     }
 

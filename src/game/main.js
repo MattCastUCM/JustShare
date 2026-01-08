@@ -37,16 +37,16 @@ import Scene5Bedroom from "./scenes/gameLoop/scene5/scene5Bedroom";
 // Escena 6
 import Scene6Livingroom from "./scenes/gameLoop/scene6/scene6Livingroom";
 import Scene6Bedroom from "./scenes/gameLoop/scene6/scene6Bedroom";
-    import Scene6BedroomRouteA1 from "./scenes/gameLoop/scene6/routeA/scene6BedroomRouteA1";
-    import scene6BedroomRouteA2 from "./scenes/gameLoop/scene6/routeA/scene6BedroomRouteA2";
-    import Scene6LunchRouteA from "./scenes/gameLoop/scene6/routeA/scene6LunchRouteA";
-    import Scene6PortalRouteA from "./scenes/gameLoop/scene6/routeA/scene6PortalRouteA";
-    import Scene6EndingRouteA from "./scenes/gameLoop/scene6/routeA/scene6EndingRouteA";
+import Scene6BedroomRouteA1 from "./scenes/gameLoop/scene6/routeA/scene6BedroomRouteA1";
+import scene6BedroomRouteA2 from "./scenes/gameLoop/scene6/routeA/scene6BedroomRouteA2";
+import Scene6LunchRouteA from "./scenes/gameLoop/scene6/routeA/scene6LunchRouteA";
+import Scene6PortalRouteA from "./scenes/gameLoop/scene6/routeA/scene6PortalRouteA";
+import Scene6EndingRouteA from "./scenes/gameLoop/scene6/routeA/scene6EndingRouteA";
 
-    import Scene6LunchRouteB from "./scenes/gameLoop/scene6/routeB/scene6LunchRouteB";
-    import Scene6BedroomRouteB from "./scenes/gameLoop/scene6/routeB/scene6BedroomRouteB";
-    import Scene6PoliceStationRouteB from "./scenes/gameLoop/scene6/routeB/scene6PoliceStationRouteB";
-    import Scene6EndingRouteB from "./scenes/gameLoop/scene6/routeB/scene6EndingRouteB";
+import Scene6LunchRouteB from "./scenes/gameLoop/scene6/routeB/scene6LunchRouteB";
+import Scene6BedroomRouteB from "./scenes/gameLoop/scene6/routeB/scene6BedroomRouteB";
+import Scene6PoliceStationRouteB from "./scenes/gameLoop/scene6/routeB/scene6PoliceStationRouteB";
+import Scene6EndingRouteB from "./scenes/gameLoop/scene6/routeB/scene6EndingRouteB";
 
 // Escena 7
 import Scene7Bedroom from "./scenes/gameLoop/scene7/scene7Bedroom";
@@ -59,11 +59,8 @@ import TitleScene from "./scenes/menus/titleScene";
 import LoginScene from "./scenes/menus/loginScene";
 import CreditsScene from "./scenes/menus/creditsScene";
 
-// // Ordenador
+// Ordenador
 import Computer from "./computer/computer";
-
-// // TrackerScene
-// import TrackerScene from "./tracker/trackerScene";
 
 const max_w = 1600, max_h = 900, min_w = 320, min_h = 240;
 const config = {
@@ -75,8 +72,6 @@ const config = {
     type: AUTO,
     // Nota: el orden de las escenas es relevante, y las que se encuentren antes en el array se renderizaran por debajo de las siguientes
     scene: [
-        // TrackerScene,
-
         // Carga de assets
         Boot,
         Preloader,
@@ -88,7 +83,7 @@ const config = {
         Scene1Classroom, Scene1Break, Scene1Lunch1, Scene1Bedroom1, Scene1Lunch2, Scene1Bedroom2,
         // Escena 2
         Scene2Break, Scene2Bedroom,
-        // Escena 3{}
+        // Escena 3
         Scene3Break, Scene3Bedroom,
         // Escena 4
         Scene4Frontyard, Scene4Backyard, Scene4Garage, Scene4Bedroom,

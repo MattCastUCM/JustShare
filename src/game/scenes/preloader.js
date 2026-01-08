@@ -1,5 +1,7 @@
 import { Scene } from "phaser";
-import GameManager from '../managers/gameManager';
+import GameManager from "../managers/gameManager";
+import SceneManager from "../managers/sceneManager";
+import TrackerManager from "../managers/trackerManager";
 
 export default class Preloader extends Scene {
     /**
@@ -412,10 +414,13 @@ export default class Preloader extends Scene {
     }
 
     create() {
-        let gameManager = GameManager.create(this);
+        let sceneManager = SceneManager.getInstance();
+        let gameManager = GameManager.getInstance();
+        let trackerManager = TrackerManager.getInstance();
 
-        // TEST
-        // gameManager.startTestScene();
+        sceneManager.init(this);
+        gameManager.init(this);
+        trackerManager.init();
 
         gameManager.startTitleScene();
     }

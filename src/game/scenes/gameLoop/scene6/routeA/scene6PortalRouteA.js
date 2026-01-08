@@ -50,7 +50,7 @@ export default class Scene6PortalRouteA extends BaseScene {
             let params = {
                 fadeOutTime: 1000,
             };
-            this.gameManager.changeScene("Scene6EndingRouteA", params);
+            this.sceneManager.changeScene("Scene6EndingRouteA", params);
         });
     }
     

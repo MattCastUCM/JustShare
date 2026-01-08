@@ -45,7 +45,7 @@ export default class Scene5Livingroom extends BaseScene {
             }, false, "exitDoor");
             
             super.createInteractiveElement(1140, 380, "enter", 0.4, () => {
-                this.gameManager.changeScene("Scene5Bedroom", null, true);
+                this.sceneManager.changeScene("Scene5Bedroom", {}, true);
             }, false, "bedroomDoor");
         });
     }

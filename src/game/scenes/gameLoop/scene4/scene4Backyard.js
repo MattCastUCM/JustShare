@@ -45,7 +45,7 @@ export default class Scene4Backyard extends BaseScene {
         // Al producirse, hace aparecer el icono de cambiar de escenario
         this.dispatcher.add("endConversation", this, () => {
             super.createInteractiveElement(130, 770, "exit", 0.4, () => {
-                this.gameManager.changeScene("Scene4Garage");
+                this.sceneManager.changeScene("Scene4Garage");
             }, true, "enterDoor");
         });
     }

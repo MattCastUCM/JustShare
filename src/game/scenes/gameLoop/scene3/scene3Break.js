@@ -80,15 +80,27 @@ export default class Scene3Break extends BaseScene {
 
         // TRACKER EVENT
         // console.log("Responder al telefono");   
+        // this.dispatcher.add("msg1Sent", this, () => {
+        //     this.gameManager.sendAnswerFriend(0);
+        // });
+        // this.dispatcher.add("msg2Sent", this, () => {
+        //     this.gameManager.sendAnswerFriend(1);
+
+        // });
+        // this.dispatcher.add("msg3Sent", this, () => {
+        //     this.gameManager.sendAnswerFriend(2);
+
+        // });
+
         this.dispatcher.add("msg1Sent", this, () => {
-            this.gameManager.sendAnswerFriend(0);
+            this.trackerManager.sendAnswerFriend(0);
         });
         this.dispatcher.add("msg2Sent", this, () => {
-            this.gameManager.sendAnswerFriend(1);
+            this.trackerManager.sendAnswerFriend(1);
 
         });
         this.dispatcher.add("msg3Sent", this, () => {
-            this.gameManager.sendAnswerFriend(2);
+            this.trackerManager.sendAnswerFriend(2);
 
         });
 
@@ -113,10 +125,10 @@ export default class Scene3Break extends BaseScene {
             let params = {
                 text: this.gameManager.translate("scene3.classEnd", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene3Bedroom");
+                    this.sceneManager.changeScene("Scene3Bedroom");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

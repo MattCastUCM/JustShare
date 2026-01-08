@@ -51,10 +51,10 @@ export default class Scene1Classroom extends BaseScene {
             let params = {
                 text: this.gameManager.translate("scene1.break", { ns: "transitions", returnObjects: true }),
                 onComplete: () => {
-                    this.gameManager.changeScene("Scene1Break", null);
+                    this.sceneManager.changeScene("Scene1Break");
                 },
             };
-            this.gameManager.changeScene("TextOnlyScene", params);
+            this.sceneManager.changeScene("TextOnlyScene", params);
         });
     }
 

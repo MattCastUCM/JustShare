@@ -71,7 +71,7 @@ export default class Scene1Lunch1 extends BaseScene {
             let bedroomNode = super.readNodes(nodes, "scene1\\scene1Lunch1", "unanswered", true);
             super.createInteractiveElement(1140, 380, "enter", 0.4, () => {
                 if (msgAnswered) {
-                    this.gameManager.changeScene("Scene1Bedroom1", null, true);
+                    this.sceneManager.changeScene("Scene1Bedroom1", {}, true);
                 }
                 else {
                     this.dialogManager.setNode(bedroomNode, []);
