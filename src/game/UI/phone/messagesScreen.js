@@ -3,13 +3,14 @@ const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
 import BaseScreen from "./baseScreen";
 import ChatScreen from "./chatScreen";
+import { TEXT_CONFIG } from "../../utils/graphics";
 
 export default class MessagesScreen extends BaseScreen {
     constructor(scene, phone, prevScreen) {
         super(scene, phone, 'messageListBg', prevScreen);
 
         // Configuracion de texto para la el texto de ll titulo
-        let textConfig = { ...scene.gameManager.textConfig };
+        let textConfig = { ...TEXT_CONFIG };
         textConfig.fontFamily = 'roboto-regular';
         textConfig.fontStyle = 'bold';
         textConfig.fontSize = 30 + 'px';

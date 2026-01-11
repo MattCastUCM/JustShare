@@ -2,6 +2,7 @@ import GameManager from './gameManager';
 import Phone from '../UI/phone/phone';
 import EventDispatcher from '../eventDispatcher';
 import TrackerManager from './trackerManager';
+import { TEXT_CONFIG } from '../utils/graphics';
 
 export default class PhoneManager {
     /**
@@ -157,7 +158,7 @@ export default class PhoneManager {
         edgeImg = this.scene.add.circle(0, 0, radius + borderThickness, borderColor);
 
         // Configuracion de texto para las notificaciones
-        let notifTextConfig = { ...this.scene.gameManager.textConfig };
+        let notifTextConfig = { ...TEXT_CONFIG };
         notifTextConfig.fontFamily = 'roboto-regular';
         notifTextConfig.fontSize = 55 + 'px';
         notifTextConfig.fontStyle = 'bold';

@@ -36,7 +36,6 @@ export default class Computer extends ComputerBaseScene {
 
         this.changeToMainScreen()
 
-
         this.input.on('pointerdown', (pointer) => {
             // console.log(pointer.x, pointer.y);
 

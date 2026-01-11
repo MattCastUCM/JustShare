@@ -2,6 +2,7 @@ import { Scene, GameObjects, Display } from "phaser"
 const { GetColor, IntegerToRGB } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
+import { TEXT_CONFIG } from "../utils/graphics";
 
 export default class Button extends GameObjects.Container {
     /**
@@ -17,10 +18,8 @@ export default class Button extends GameObjects.Container {
     * @param {Color} pressedCol - color RGB del boton cuando se clica en el
     * @param {Text} text - texto que se escribe en el boton (opcional)
     * @param {Object} fontParams - distintos parametros (tipografia, tam, estilo, color) para personalizar el texto anterior (opcional)
-    * @param {String} edge - sprite que se usa para el borde (opcional)
-    * @param {String} hitArea - cambiar el area de colision (opcional)
     */
-    constructor(scene, x, y, scale, onClick, fill, normalCol, highlightedCol, pressedCol, text, fontParams, edge, hitArea) {
+    constructor(scene, x, y, scale, onClick, fill, normalCol, highlightedCol, pressedCol, text, fontParams) {
         super(scene, x, y);
         this.scene.add.existing(this);
 
@@ -43,15 +42,7 @@ export default class Button extends GameObjects.Container {
         this.pCol = IntegerToRGB(this.pCol);
 
         this.fillImg.setTint(GetColor(this.nCol.r, this.nCol.g, this.nCol.b));
-
-        this.hitArea = null;
-        if (hitArea) {
-            this.hitArea = hitArea;
-            this.fillImg.setInteractive(hitArea.area, hitArea.callback, { useHandCursor: true });
-        }
-        else {
-            this.fillImg.setInteractive({ useHandCursor: true });
-        }
+        this.fillImg.setInteractive({ useHandCursor: true });
 
         // Dibujar el area de colision
         let debug = this.scene.sys.game.debug;
@@ -117,13 +108,8 @@ export default class Button extends GameObjects.Container {
 
         this.add(this.fillImg);
 
-        if (edge) {
-            let edgeImg = this.scene.add.image(0, 0, edge);
-            this.add(edgeImg);
-        }
-
         if (text) {
-            let style = { ...gameManager.textConfig };
+            let style = { ...TEXT_CONFIG };
             style.fontFamily = fontParams.font;
             style.fontSize = fontParams.size + 'px';
             style.fontStyle = fontParams.style;
@@ -135,6 +121,9 @@ export default class Button extends GameObjects.Container {
         }
 
         this.setScale(scale);
+
+        const dims = this.getBounds();
+        this.setSize(dims.width, dims.height);
     }
 
     setHitArea(hitArea) {

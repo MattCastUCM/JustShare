@@ -1,3 +1,4 @@
+import { TEXT_CONFIG } from '../../utils/graphics';
 import BaseScene from './baseScene';
 
 export default class TextOnlyScene extends BaseScene {
@@ -42,7 +43,7 @@ export default class TextOnlyScene extends BaseScene {
 
         // Configuracion de texto
         let fontSize = 100;
-        let textConfig = { ...this.gameManager.textConfig };
+        let textConfig = { ...TEXT_CONFIG };
         textConfig.fontFamily = 'roboto-regular';
         textConfig.fontSize = fontSize + 'px';
         textConfig.align = 'center';

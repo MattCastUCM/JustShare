@@ -128,7 +128,7 @@ const StartGame = (parent) => {
     const game = new Game({ ...config, parent });
 
     game.debug = {
-        enable: false,
+        enable: true,
         color: '0x00ff00'
     }
     return game

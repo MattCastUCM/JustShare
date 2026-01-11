@@ -1,4 +1,5 @@
 import { GameObjects, Scene } from "phaser";
+import { TEXT_CONFIG } from "../utils/graphics";
 
 export default class MessageBox extends GameObjects.Container {
     /**
@@ -49,7 +50,7 @@ export default class MessageBox extends GameObjects.Container {
         }
 
         // Configuracion de texto para la el texto del mensaje
-        let textConfig = { ...scene.gameManager.textConfig };
+        let textConfig = { ...TEXT_CONFIG };
         textConfig.fontFamily = 'roboto-regular';
         textConfig.fontStyle = 'bold';
         textConfig.fontSize = 18 + 'px';

@@ -2,6 +2,7 @@ import { Scene, GameObjects, Display } from "phaser";
 const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
+import { TEXT_CONFIG } from "../utils/graphics";
 
 export default class CheckBox extends GameObjects.Container {
     /**
@@ -13,9 +14,8 @@ export default class CheckBox extends GameObjects.Container {
     * @param {Color} tickColor - color hexadecimal del tick
     * @param {Color} pressedCol - color RGB de la checkbox que se utiliza en la animacion cuando se clica en ella
     * @param {String} fill - sprite que se usa para el relleno
-    * @param {String} edge - sprite que se usa para el borde (opcional)
     */
-    constructor(scene, x, y, scale, tickColor, pressedColor, fill, edge) {
+    constructor(scene, x, y, scale, tickColor, pressedColor, fill) {
         super(scene, x, y);
 
         this.scene.add.existing(this);
@@ -36,12 +36,7 @@ export default class CheckBox extends GameObjects.Container {
         this.add(this.fillImg);
         this.addHitArea(this.fillImg)
 
-        if (edge) {
-            let edgeImg = this.scene.add.image(0, 0, edge);
-            this.add(edgeImg);
-        }
-
-        let style = { ...gameManager.textConfig };
+        let style = { ...TEXT_CONFIG };
         style.fontSize = '75px';
         style.fontStyle = 'bold';
         style.color = tickColor;

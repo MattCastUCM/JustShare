@@ -1,4 +1,18 @@
-import { Scene, GameObjects } from "phaser";
+import { Scene } from "phaser";
+
+// Configuracion de texto por defecto
+export const TEXT_CONFIG = {
+    fontFamily: 'Arial',        // Fuente (tiene que estar precargada en el html o el css)
+    fontSize: '25px',        // Tamano de la fuente del dialogo
+    fontStyle: 'normal',        // Estilo de la fuente
+    backgroundColor: null,      // Color del fondo del texto
+    color: '#ffffff',           // Color del texto
+    stroke: '#000000',          // Color del borde del texto
+    strokeThickness: 0,         // Grosor del borde del texto 
+    align: 'left',              // Alineacion del texto ('left', 'center', 'right', 'justify')
+    wordWrap: null,
+    padding: null               // Separacion con el fondo (en el caso de que haya fondo)
+}
 
 export function componentToHex(component: number) {
     // Se convierte en un numero de base 16, en string
@@ -37,127 +51,33 @@ export function hexToRgb(hex: string): RGB | null {
     return null;
 }
 
-interface BoxFill {
-    name: string;
-    color: number;
-}
-
-interface BoxEdge {
-    name: string;
-    color: number;
-    width: number;
-}
-
-interface BoxParams {
-    fill: BoxFill;
-    edge: BoxEdge;
-    width: number;
-    height: number;
-    arc: number;
-    offset: number;
-}
-
 /**
- * Sirve para crear una forma primitva usando el objeto grafico creado anteriormente
- * Se van a crear tanto la parte interior como el borde de la forma
- * IMPORTANTE:
- * - La forma primitva no se puede crear pegada a uno de los bordes de la pantalla porque sino hay ciertos detalles que se pierden
- * - La textura generada a partir de la forma primitiva no puede ser exactamente del mismo detalle que la forma porque sino hay
- *      ciertos detalles que se pierden.
- * Por los motivos nombrados arriba se utiliza un pequeño offset. Sin embargo, esto va a provocar que la caja de colision
- * textura sea un poquito mas grande que la textura en si
- * Nota: a la hora de crear una forma primitiva con un objeto grafico, el (0, 0) esta arriba a la izquierda
- */
-function generateBox(graphics: GameObjects.Graphics, params: BoxParams) {
-    // Parte interior
-    graphics.fillStyle(params.fill.color, 1);
-    graphics.fillRoundedRect(params.offset, params.offset, params.width, params.height, params.arc);
-    graphics.generateTexture(params.fill.name, params.width + params.offset * 2, params.height + params.offset * 2);
-    graphics.clear();
+* Crea una textura a partir de un rectangulo con las caracteristicas indicadas
+* @param {Scene} scene - escena con acceso a las texturas existentes
+* @param {string} textureId - id de la textura que se creara para el rectangulo. Si no se especifica, se reutilizara la del primer rectangulo sin id que se cree
+* @param {number} width - ancho del rectangulo
+* @param {number} height - alto del rectangulo
+* @param {number} fillColor - valor hex del color por defecto del rectangulo (opcional)
+* @param {Number} fillAlpha - alpha del rectangulo [0-1] (opcional) 
+* @param {number} borderThickness - ancho del borde del rectangulo (opcional)
+* @param {number} borderColor - valor hex del color por defecto del borde (opcional)
+* @param {number} borderAlpha - alpha del borde [0-1] (opcional)
+* @param {number} radiusPercentage - valor en porcentaje del radio de los bordes [0-100] (opcional)
+*/
+export function createRectTexture(scene: Scene, textureId: string, width: number, height: number, fillColor: number = 0xffffff, fillAlpha: number = 1, borderThickness: number = 5, borderColor: number = 0x000000, borderAlpha: number = 1, radiusPercentage: number = 0) {
+    if (!scene.textures.exists(textureId)) {
+        // Se crea el rectangulo con el borde
+        let graphics = scene.add.graphics();
+        graphics.fillStyle(fillColor, fillAlpha);
+        graphics.lineStyle(borderThickness, borderColor, borderAlpha);
 
-    // Borde
-    graphics.lineStyle(params.edge.width, params.edge.color, 1);
-    graphics.strokeRoundedRect(params.offset, params.offset, params.width, params.height, params.arc);
-    graphics.generateTexture(params.edge.name, params.width + params.offset * 2, params.height + params.offset * 2);
-    graphics.clear();
-}
+        // Se calcula el radio y se rellenan el rectangulo y el borde redondeados
+        let radius = Math.min(width, height) * (radiusPercentage / 100);
+        graphics.fillRoundedRect(borderThickness, borderThickness, width, height, radius);
+        graphics.strokeRoundedRect(borderThickness, borderThickness, width, height, radius);
 
-const OFFSET = 10
-
-// Se crea un rectangulo con bordes redondeados que sirve para una caja de texto
-export const textBox : BoxParams = {
-    fill: {
-        name: "fillTextBox",
-        color: 0xffffff
-    },
-    edge: {
-        name: "edgeTextBox",
-        color: 0x000000,
-        width: 2.5
-    },
-    width: 345,
-    height: 105,
-    arc: 15,
-    offset: OFFSET
-}
-
-// Se crea un rectangulo alargado con bordes redondeados que sirve para una caja donde introducir input
-export const inputBox : BoxParams = {
-    fill: {
-        name: "fillInputBox",
-        color: 0xffffff
-    },
-    edge: {
-        name: "edgeInputBox",
-        color: 0x000000,
-        width: 2.5
-    },
-    width: 335,
-    height: 90,
-    arc: 15,
-    offset: OFFSET
-}
-
-// Se crea un cuadrado con bordes redondeados
-export const roundedSquare : BoxParams = {
-    fill: {
-        name: 'fillSquare',
-        color: 0xffffff
-    },
-    edge: {
-        name: "edgeSquare",
-        color: 0x000000,
-        width: 2.5
-    },
-    width: 100,
-    height: 100,
-    arc: 10,
-    offset: OFFSET
-}
-
-export const widerRoundedSquare = structuredClone(roundedSquare);
-widerRoundedSquare.fill.name = "fillWiderSquare"
-widerRoundedSquare.edge.name = "edgeWiderSqaure"
-widerRoundedSquare.edge.width = 5
-
-/**
- * Se utiliza para generar las diferentes texturas que se van a usar en los menus y poder
- * tener un sencillo acceso a los diferentes parametros de cada una (nombre, tam...)
- */
-export function generateTextures(scene: Scene) {
-    // Se crea un objeto grafico, que sirve para formas primitivas (resulta muy util para dibujar elementos con bordes redondeados)
-    // Ademas, si el objeto grafico no va a modificar durante el tiempo es recomendable convertirlo en una textura y usarla
-    // para mejorar el rendimiento
-    let graphics = scene.add.graphics();
-
-    generateBox(graphics, textBox);
-
-    generateBox(graphics, inputBox);
-
-    generateBox(graphics, roundedSquare);
-
-    // Se crea un cuadrado con bordes redondeados
-    generateBox(graphics, widerRoundedSquare);
-
-    graphics.destroy();
+        // Se crea la textura a utilizar para el fondo
+        graphics.generateTexture(textureId, width + borderThickness * 2, height + borderThickness * 2);
+        graphics.destroy();
+    }
 }

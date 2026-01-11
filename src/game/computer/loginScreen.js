@@ -1,3 +1,4 @@
+import { createRectTexture } from "../utils/graphics";
 import BaseScreen from "./baseScreen";
 
 export default class LoginScreen extends BaseScreen {
@@ -14,16 +15,21 @@ export default class LoginScreen extends BaseScreen {
         let container = this.scene.add.container(X, Y)
         this.add(container)
 
-        let nameInput = this.scene.createTextInputWithSideText(OFFSET_X, 0, "usernameInput", 1, true)
+        const textInputSprite = "loginScreenInput"
+        createRectTexture(this.scene, textInputSprite, 335, 90, 0xffffff, 1, 2.5, 0x000000, 1, 20)
+
+        let nameInput = this.scene.createTextInputWithSideText(OFFSET_X, 0, textInputSprite, "usernameInput", 1, true)
         nameInput.textInput.addText(this.username);
         container.add(nameInput);
 
-        let passwordInput = this.scene.createTextInputWithSideText(nameInput.x, nameInput.y + nameInput.height + OFFSET_Y, 
-            "passwordInput", 1, true)
+        let passwordInput = this.scene.createTextInputWithSideText(nameInput.x, nameInput.y + nameInput.height + OFFSET_Y, textInputSprite, "passwordInput", 1, true)
         passwordInput.textInput.addText("**********");
         container.add(passwordInput);
 
-        let loginButton = this.createButton(40, passwordInput.y + passwordInput.height + OFFSET_Y * 2.5, "loginButton", () => {
+        const loginButtonSprite = "loginScreenButton"
+        createRectTexture(this.scene, loginButtonSprite, 345, 105, 0xffffff, 1, 2.5, 0x000000, 1, 14)
+        
+        let loginButton = this.createButton(40, passwordInput.y + passwordInput.height + OFFSET_Y * 2.5, loginButtonSprite, "loginButton", () => {
             this.scene.changeToMainScreen()
         }, 0.85)
         container.add(loginButton)
@@ -31,8 +37,8 @@ export default class LoginScreen extends BaseScreen {
         container.setScale(SCALE)
     }
 
-    createButton(x, y, transId, onClick, scale = 1) {
-        let button = this.scene.createButton(x, y, transId, onClick, scale)
+    createButton(x, y, sprite, transId, onClick, scale = 1) {
+        let button = this.scene.createButton(x, y, sprite, transId, onClick, scale)
 
         let buttonImg = button.fillImg
 

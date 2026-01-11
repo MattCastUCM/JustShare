@@ -1,11 +1,8 @@
 import { Cameras } from "phaser";
 const { FADE_OUT_COMPLETE } = Cameras.Scene2D.Events
-
 import EventDispatcher from "../eventDispatcher";
-
 import BaseScene from "../scenes/gameLoop/baseScene";
 import SceneManager from "./sceneManager";
-import { generateTextures } from "../utils/graphics";
 import TrackerManager from "./trackerManager";
 
 export default class GameManager {
@@ -33,25 +30,10 @@ export default class GameManager {
             gender: null,
             harasser: null
         };
-
-        // Configuracion de texto por defecto
-        this.textConfig = {
-            fontFamily: 'Arial',        // Fuente (tiene que estar precargada en el html o el css)
-            fontSize: '25px',        // Tamano de la fuente del dialogo
-            fontStyle: 'normal',        // Estilo de la fuente
-            backgroundColor: null,      // Color del fondo del texto
-            color: '#ffffff',           // Color del texto
-            stroke: '#000000',          // Color del borde del texto
-            strokeThickness: 0,         // Grosor del borde del texto 
-            align: 'left',              // Alineacion del texto ('left', 'center', 'right', 'justify')
-            wordWrap: null,
-            padding: null               // Separacion con el fondo (en el caso de que haya fondo)
-        }
     }
 
     init(scene) {
         this.i18next = scene.plugins.get('rextexttranslationplugin');
-        generateTextures(scene);
 
         this.sceneManager = SceneManager.getInstance();
         this.trackerManager = TrackerManager.getInstance();

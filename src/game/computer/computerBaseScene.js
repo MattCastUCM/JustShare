@@ -4,7 +4,7 @@ const { ColorWithColor } = Display.Color.Interpolate;
 import BaseScene from '../scenes/gameLoop/baseScene';
 import Button from '../UI/button'
 import TextInput from '../UI/textInput'
-import { hexToRgb, inputBox, textBox } from "../utils/graphics";
+import { createRectTexture, hexToRgb, TEXT_CONFIG } from "../utils/graphics";
 
 export default class ComputerBaseScene extends BaseScene {
     constructor(name) {
@@ -44,7 +44,7 @@ export default class ComputerBaseScene extends BaseScene {
             this.colors[key][RGB] = hexToRgb(value);
         }
 
-        this.style = { ...this.gameManager.textConfig };
+        this.style = { ...TEXT_CONFIG };
         this.style.fontFamily = this.fontFamilies.normal
         this.style.fontSize = '50px';
         this.style.color = this.colors.black.hex.getNumberSign
@@ -129,51 +129,30 @@ export default class ComputerBaseScene extends BaseScene {
         container.add(sideText);
     }
 
-    createButton(x, y, transId, onClick, scale = 1) {
-        const FIGURE = textBox
-
+    createButton(x, y, sprite, transId, onClick, scale = 1) {
         let translation = this.translate(transId)
 
         let button = new Button(this, x, y, scale, onClick,
-            FIGURE.fill.name,
+            sprite,
             this.colors.blue1.rgb, this.colors.blue2.rgb, this.colors.blue3.rgb,
             translation,
             { font: this.fontFamilies.normal, size: 54, style: 'bold', color: this.colors.white.hex.getNumberSign },
-            FIGURE.edge.name,
-            {
-                // La textura generada con el objeto grafico es un pelin mas grande que el dibujo en si. Por lo tanto,
-                // si la caja de colision por defecto es un pelin mas grande. Es por eso que se pasa una que se ajuste
-                // a las medidas reales
-                area: new Geom.Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
-                callback: Geom.Rectangle.Contains
-            }
         );
-
-        button.setSize(FIGURE.width * scale, FIGURE.height * scale)
 
         return button
     }
 
-    createTextInput(x, y, transId, scale = 1, writeLocked = false) {
+    createTextInput(x, y, sprite, transId, scale = 1, writeLocked = false) {
         const TEXT_INPUT_OFFSET = 23;
-        const FIGURE = inputBox
 
         let translation = this.translate(transId)
 
-        let textInput = new TextInput(this, x, y, scale, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb,
-            FIGURE.fill.name, FIGURE.edge.name, this.fontFamilies.normal,
-            {
-                area: new Geom.Rectangle(FIGURE.offset, FIGURE.offset, FIGURE.width, FIGURE.height),
-                callback: Geom.Rectangle.Contains
-            }, writeLocked);
-
-        // Propiedades
-        textInput.setSize(FIGURE.width, FIGURE.height)
+        let textInput = new TextInput(this, x, y, scale, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb, sprite, this.fontFamilies.normal, writeLocked);
 
         return textInput;
     }
 
-    createTextInputWithSideText(x, y, transId, scale = 1, writeLocked = false) {
+    createTextInputWithSideText(x, y, sprite, transId, scale = 1, writeLocked = false) {
         const TEXT_OFFSET_X = -10;
 
         let container = this.add.container(x, y);
@@ -182,7 +161,7 @@ export default class ComputerBaseScene extends BaseScene {
         this.addSideText(container, TEXT_OFFSET_X, transId)
 
         // Text input
-        let textInput = this.createTextInput(0, 0, transId, 1, writeLocked)
+        let textInput = this.createTextInput(0, 0, sprite, transId, 1, writeLocked)
         container.add(textInput)
 
         container.setScale(scale)

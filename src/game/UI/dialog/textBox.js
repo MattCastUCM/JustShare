@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
 import DialogObject from "./dialogObject";
+import { TEXT_CONFIG } from "../../utils/graphics";
 
 export default class TextBox extends DialogObject {
     /**
@@ -44,7 +45,7 @@ export default class TextBox extends DialogObject {
         this.centered = false;
 
         // Configuracion por defecto del texto de la caja
-        this.defaultNormalTextConfig = { ...scene.gameManager.textConfig };
+        this.defaultNormalTextConfig = { ...TEXT_CONFIG };
         this.defaultNormalTextConfig.fontFamily = 'roboto-regular';
         this.defaultNormalTextConfig.fontSize = 35 + 'px';
         this.defaultNormalTextConfig.color = '#000000';
@@ -54,7 +55,7 @@ export default class TextBox extends DialogObject {
         this.normalTextConfig = { ...this.defaultNormalTextConfig };
 
         // Configuracion por defecto del texto del nombre
-        this.defaultNameTextConfig = { ...scene.gameManager.textConfig };
+        this.defaultNameTextConfig = { ...TEXT_CONFIG };
         this.defaultNameTextConfig.fontFamily = 'roboto-regular';
         this.defaultNameTextConfig.fontStyle = 'bold';
         this.defaultNameTextConfig.fontSize = 35 + 'px';

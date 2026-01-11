@@ -3,6 +3,7 @@ const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
 import { isTouchInput } from "../../inputDetection"
+import { TEXT_CONFIG } from "../utils/graphics";
 
 export default class TextInput extends GameObjects.Container {
     /**
@@ -15,11 +16,9 @@ export default class TextInput extends GameObjects.Container {
     * @param {Number} offset - punto a partir del cual se comienza a escribir el texto para que todo este bien ajustado
     * @param {Color} pressedCol - color RGB al que se cambia cuando se produce la animacion de comenzar a escribir en la caja
     * @param {String} fill - sprite que se usa para el relleno
-    * @param {String} edge - sprite que se usa para el borde (opcional)
     * @param {String} font - tipografia (opcional). En caso de que no se especifique ninguna, se usa 'Arial'
-    * @param {String} hitArea - cambiar el area de colision para que corresponda con el del relleno del boton (opcional)
     */
-    constructor(scene, x, y, scale, defaultText, offset, pressedColor, fill, edge, font, hitArea, writeLocked = false) {
+    constructor(scene, x, y, scale, defaultText, offset, pressedColor, fill, font, writeLocked = false) {
         super(scene, x, y);
 
         this.scene.add.existing(this);
@@ -30,12 +29,7 @@ export default class TextInput extends GameObjects.Container {
         // Es la parte interactuable
         this.fillImg = this.scene.add.image(0, 0, fill);
         this.fillImg.setOrigin(0, 0.5);
-        if (hitArea) {
-            this.fillImg.setInteractive(hitArea.area, hitArea.callback, { useHandCursor: true });
-        }
-        else {
-            this.fillImg.setInteractive({ useHandCursor: true });
-        }
+        this.fillImg.setInteractive({ useHandCursor: true });
 
         let debug = this.scene.sys.game.debug;
         if (debug.enable) {
@@ -43,18 +37,12 @@ export default class TextInput extends GameObjects.Container {
         }
         this.add(this.fillImg);
 
-        if (edge) {
-            let edgeImg = this.scene.add.image(0, 0, edge);
-            edgeImg.setOrigin(0, 0.5);
-            this.add(edgeImg);
-        }
-
         // Configuracion del estilo del texto que se escribe
         if (!font) {
             font = 'Arial';
         }
 
-        let style = { ...gameManager.textConfig };
+        let style = { ...TEXT_CONFIG };
         style.fontFamily = font;
         style.fontSize = '42px';
         style.color = '#000000';
@@ -198,6 +186,8 @@ export default class TextInput extends GameObjects.Container {
             this.hiddenInput = null;
         }
 
+        const dims = this.getBounds();
+        this.setSize(dims.width, dims.height);
     }
 
     /**

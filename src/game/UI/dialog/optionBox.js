@@ -2,6 +2,7 @@ import { Scene, Display } from "phaser";
 const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate;
 import DialogObject from './dialogObject';
+import { TEXT_CONFIG } from "../../utils/graphics";
 
 export default class OptionBox extends DialogObject {
     /**
@@ -24,7 +25,7 @@ export default class OptionBox extends DialogObject {
         this.box.y = this.scene.CANVAS_HEIGHT - (this.box.displayHeight * numOpts) + (this.box.displayHeight * index);
 
         // Configuracion del texto de la caja
-        this.textConfig = { ...scene.gameManager.textConfig };
+        this.textConfig = { ...TEXT_CONFIG };
         this.textConfig.fontFamily = 'roboto-regular';
         this.textConfig.fontSize = 35 + 'px';
         this.textConfig.color = '#000000';

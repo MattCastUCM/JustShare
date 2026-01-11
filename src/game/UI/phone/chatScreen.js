@@ -4,6 +4,7 @@ const { ColorWithColor } = Display.Color.Interpolate
 import BaseScreen from "./baseScreen";
 import VerticalListView from "../listView/verticalListView";
 import MessageBox from "../messageBox";
+import { TEXT_CONFIG } from "../../utils/graphics";
 
 export default class ChatScreen extends BaseScreen {
     /**
@@ -35,7 +36,7 @@ export default class ChatScreen extends BaseScreen {
         this.createReturnButton();
 
         // Configuracion de texto para la el texto del titulo
-        let textConfig = { ...scene.gameManager.textConfig };
+        let textConfig = { ...TEXT_CONFIG };
         textConfig.fontFamily = 'roboto-regular';
         textConfig.color = '#000';
         textConfig.fontStyle = 'bold';

@@ -2,6 +2,7 @@ import VerticalListView from '../UI/listView/verticalListView';
 import DualPost from './dualPost';
 import BaseScreen from './baseScreen'
 import DirectChat from './directChat';
+import { createRectTexture } from '../utils/graphics';
 
 export default class SocialMediaScreen extends BaseScreen {
     constructor(scene) {
@@ -101,7 +102,10 @@ export default class SocialMediaScreen extends BaseScreen {
         let generalNodes = this.scene.cache.json.get(generalDialogsId);
         let noPostNode = this.scene.readNodes(generalNodes, generalDialogsId, "post", true);
 
-        let button = this.scene.createButton(profile.x, this.TASK_BAR_TOP_Y - BUTTON_OFFSET_Y, "shareButton", () => {
+        const buttonSprite = "shareButton"
+        createRectTexture(this.scene, buttonSprite, 345, 105, 0xffffff, 1, 2.5, 0x000000, 1, 14)
+
+        let button = this.scene.createButton(profile.x, this.TASK_BAR_TOP_Y - BUTTON_OFFSET_Y, buttonSprite, "shareButton", () => {
             this.scene.dialogManager.setNode(noPostNode, [])
 
             // TRACKER EVENT
