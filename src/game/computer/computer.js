@@ -34,7 +34,7 @@ export default class Computer extends ComputerBaseScene {
             this.trackerManager.sendItemInteraction("powerOffButton")
         });
 
-        this.changeToMainScreen()
+        // this.changeToMainScreen()
 
         this.input.on('pointerdown', (pointer) => {
             // console.log(pointer.x, pointer.y);

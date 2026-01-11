@@ -2,7 +2,7 @@
 import ComputerBaseScene from '../../computer/computerBaseScene';
 import RadioButtonGroup from '../../UI/radioButtonGroup';
 import CheckBox from '../../UI/checkbox';
-import { createRectTexture } from '../../utils/graphics';
+import { createRectTexture, TEXT_CONFIG } from '../../utils/graphics';
 
 export default class LoginScene extends ComputerBaseScene {
     constructor() {
@@ -31,22 +31,41 @@ export default class LoginScene extends ComputerBaseScene {
         const nameInputSprite = "nameInput"
         createRectTexture(this, nameInputSprite, 335, 90, 0xffffff, 1, 2.5, 0x000000, 1, 20)
 
-        let nameContainer = this.createTextInputWithSideText(0, 0, nameInputSprite, "nameInput");
+        const nameInputStyle = { ...TEXT_CONFIG };
+        nameInputStyle.fontFamily = this.fontFamilies.normal;
+        nameInputStyle.fontSize = '42px';
+        nameInputStyle.color = '#000000';
+
+        let nameContainer = this.createTextInputWithSideText(0, 0, nameInputSprite, "nameInput", nameInputStyle);
         container.add(nameContainer);
 
-        const loginBoxSprite = "loginBox"
-        createRectTexture(this, loginBoxSprite, 100, 100, 0xffffff, 1, 5, 0x000000, 1, 10)
+        const tickStyle = { ...TEXT_CONFIG };
+        tickStyle.fontSize = '23px';
+        tickStyle.fontStyle = 'bold';
+        tickStyle.color = this.style.color;
 
-        let genderContainer = this.createGenderOptions(OFFSET_X, nameContainer.height + OFFSET_Y, loginBoxSprite, loginBoxSprite, "genderBoxes", "invalidGender", true);
+        const checkBoxSprite = "checkBox"
+        createRectTexture(this, checkBoxSprite, 30, 30, 0xffffff, 1, 2.5, 0x000000, 1, 10)
+
+        const genderBoxSprite = "genderBox"
+        createRectTexture(this, genderBoxSprite, 100, 100, 0xffffff, 1, 5, 0x000000, 1, 10)
+
+        let genderContainer = this.createGenderOptions(OFFSET_X, nameContainer.height + OFFSET_Y, checkBoxSprite, genderBoxSprite, "genderBoxes", "invalidGender", tickStyle, true);
         container.add(genderContainer);
 
-        let sexualityContainer = this.createGenderOptions(OFFSET_X, genderContainer.y + genderContainer.height + OFFSET_Y, loginBoxSprite, loginBoxSprite, "sexualityBoxes", "invalidSexuality", false);
+        let sexualityContainer = this.createGenderOptions(OFFSET_X, genderContainer.y + genderContainer.height + OFFSET_Y, checkBoxSprite, genderBoxSprite, "sexualityBoxes", "invalidSexuality", tickStyle, false);
         container.add(sexualityContainer);
 
         const acceptButtonSprite = "acceptButton"
-        createRectTexture(this, acceptButtonSprite, 345, 105, 0xffffff, 1, 2.5, 0x000000, 1, 14)
+        createRectTexture(this, acceptButtonSprite, 276, 84, 0xffffff, 1, 2.5, 0x000000, 1, 14)
 
-        let acceptButton = this.createButton(0, sexualityContainer.y + sexualityContainer.height + OFFSET_Y * 1.5, acceptButtonSprite, 'acceptButton', () => {
+        const acceptButtonStyle = { ...TEXT_CONFIG };
+        acceptButtonStyle.fontFamily = this.fontFamilies.normal;
+        acceptButtonStyle.fontSize = '43px';
+        acceptButtonStyle.fontStyle = 'bold';
+        acceptButtonStyle.color = this.colors.white.hex.getNumberSign;
+
+        const acceptButton = this.createButton(0, sexualityContainer.y + sexualityContainer.height + OFFSET_Y * 1.5, acceptButtonSprite, 'acceptButton', () => {
             // TRACKER EVENT
             // this.gameManager.sendItemInteraction("loginButton");
             this.trackerManager.sendItemInteraction("loginButton");
@@ -55,7 +74,7 @@ export default class LoginScene extends ComputerBaseScene {
             if (!errors) {
                 this.startGame(nameContainer, genderContainer, sexualityContainer)
             }
-        }, 0.8);
+        }, acceptButtonStyle);
         container.add(acceptButton);
 
         container.setScale(SCALE);
@@ -146,10 +165,10 @@ export default class LoginScene extends ComputerBaseScene {
         return errorText
     }
 
-    createTextInputWithSideText(x, y, sprite, transId) {
+    createTextInputWithSideText(x, y, sprite, transId, style) {
         const ERROR_OFFSET_X = 30;
 
-        let container = super.createTextInputWithSideText(x, y, sprite, transId, 1)
+        let container = super.createTextInputWithSideText(x, y, sprite, transId, style)
 
         // Texto de error a la derecha
         let errorText = this.addErrorText(container, container.x + container.width + ERROR_OFFSET_X)
@@ -160,7 +179,7 @@ export default class LoginScene extends ComputerBaseScene {
         return container
     }
 
-    createGenderOptions(x, y, checkBoxSprite, genderBoxSprite, transId, errorTransId, isRadioGroup = true) {
+    createGenderOptions(x, y, checkBoxSprite, genderBoxSprite, transId, errorTransId, tickStyle, isRadioGroup) {
         const TEXT_OFFSET_X = -80;
         const CHECKBOX_OFFSET_X = 30
         const ERROR_OFFSET_X = 15;
@@ -169,11 +188,11 @@ export default class LoginScene extends ComputerBaseScene {
 
         // Texto a la izquierda
         this.addSideText(container, TEXT_OFFSET_X, transId)
-        
+
         // Cajas genero
-        let manBox = this.createGenderCheckbox(0, 0, checkBoxSprite, 'manIcon', genderBoxSprite);
+        let manBox = this.createGenderCheckbox(0, 0, checkBoxSprite, 'manIcon', genderBoxSprite, tickStyle);
         container.add(manBox);
-        let womanBox = this.createGenderCheckbox(manBox.x + manBox.width + CHECKBOX_OFFSET_X, 0, checkBoxSprite, 'womanIcon', genderBoxSprite);
+        let womanBox = this.createGenderCheckbox(manBox.x + manBox.width + CHECKBOX_OFFSET_X, 0, checkBoxSprite, 'womanIcon', genderBoxSprite, tickStyle);
         container.add(womanBox);
 
         // Texto de error a la derecha
@@ -200,7 +219,7 @@ export default class LoginScene extends ComputerBaseScene {
 
     createGenderIcon(x, y, genderSprite, genderBoxSprite) {
         const ICON_SCALE_PADDING = 20;
-        
+
         let container = this.add.container(x, y)
 
         let edge = this.add.image(0, 0, genderBoxSprite);
@@ -217,21 +236,19 @@ export default class LoginScene extends ComputerBaseScene {
         return container
     }
 
-    createGenderCheckbox(x, y, checkboxSprite, genderSprite, genderBoxSprite) {
+    createGenderCheckbox(x, y, checkboxSprite, genderSprite, genderBoxSprite, tickStyle) {
         // Contenedor principal
         let container = this.add.container(x, y);
 
-        let params = {
+        const PARAMS = {
             offsetX: -50,
             offsetY: -50,
-            scale: 0.3
         }
 
         let iconContainer = this.createGenderIcon(0, 0, genderSprite, genderBoxSprite)
         container.add(iconContainer)
 
-        let checkBox = new CheckBox(this, params.offsetX, params.offsetY, params.scale, this.style.color,
-            this.colors.blue0.rgb, checkboxSprite)
+        let checkBox = new CheckBox(this, PARAMS.offsetX, PARAMS.offsetY, this.colors.blue0.rgb, checkboxSprite, tickStyle)
         checkBox.addHitArea(iconContainer)
 
         container.add(checkBox);

@@ -2,7 +2,7 @@ import VerticalListView from '../UI/listView/verticalListView';
 import DualPost from './dualPost';
 import BaseScreen from './baseScreen'
 import DirectChat from './directChat';
-import { createRectTexture } from '../utils/graphics';
+import { createRectTexture, TEXT_CONFIG } from '../utils/graphics';
 
 export default class SocialMediaScreen extends BaseScreen {
     constructor(scene) {
@@ -94,7 +94,7 @@ export default class SocialMediaScreen extends BaseScreen {
         let diffWidth = optionsIcon.width - homeIcon.icon.width
         homeIcon.icon.x -= diffWidth / 2
 
-        const BUTTON_SCALE = 0.48
+        // const BUTTON_SCALE = 0.48
         const BUTTON_OFFSET_Y = 80
 
         // Boton para subir un post
@@ -103,9 +103,15 @@ export default class SocialMediaScreen extends BaseScreen {
         let noPostNode = this.scene.readNodes(generalNodes, generalDialogsId, "post", true);
 
         const buttonSprite = "shareButton"
-        createRectTexture(this.scene, buttonSprite, 345, 105, 0xffffff, 1, 2.5, 0x000000, 1, 14)
+        createRectTexture(this.scene, buttonSprite, 166, 50, 0xffffff, 1, 2.5, 0x000000, 1, 14)
 
-        let button = this.scene.createButton(profile.x, this.TASK_BAR_TOP_Y - BUTTON_OFFSET_Y, buttonSprite, "shareButton", () => {
+        const buttonStyle = { ...TEXT_CONFIG };
+        buttonStyle.fontFamily = this.scene.fontFamilies.normal;
+        buttonStyle.fontSize = '26px';
+        buttonStyle.fontStyle = 'bold';
+        buttonStyle.color = this.scene.colors.white.hex.getNumberSign;
+
+        const button = this.scene.createButton(profile.x, this.TASK_BAR_TOP_Y - BUTTON_OFFSET_Y, buttonSprite, "shareButton", () => {
             this.scene.dialogManager.setNode(noPostNode, [])
 
             // TRACKER EVENT
@@ -113,7 +119,7 @@ export default class SocialMediaScreen extends BaseScreen {
             // this.scene.gameManager.sendItemInteraction("shareButton");
             this.scene.trackerManager.sendItemInteraction("shareButton");
 
-        }, BUTTON_SCALE)
+        }, buttonStyle)
         button.y -= button.height / 2
         this.add(button)
     }

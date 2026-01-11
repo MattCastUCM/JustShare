@@ -8,18 +8,17 @@ export default class Button extends GameObjects.Container {
     /**
     * Clase que permite crear un boton personalizable con animaciones para las diferentes interacciones
     * @param {Scene} scene - escena a la que pertenece
-    * @param {Number} x - posicion x
-    * @param {Number} y - posicion y
-    * @param {Number} scale - escala del objeto
+    * @param {number} x - posicion x
+    * @param {number} y - posicion y
     * @param {Function} onClick - funcion que se ejecuta cuando se clica en el boton
-    * @param {String} fill - sprite que se usa para el relleno
+    * @param {string} fill - sprite que se usa para el relleno
     * @param {Color} normalCol - color RGB del boton cuando no se esta interactuando con el
     * @param {Color} highlightedCol - color RGB cuando se pasa el puntero por encima
     * @param {Color} pressedCol - color RGB del boton cuando se clica en el
-    * @param {Text} text - texto que se escribe en el boton (opcional)
-    * @param {Object} fontParams - distintos parametros (tipografia, tam, estilo, color) para personalizar el texto anterior (opcional)
+    * @param {string} text - texto que se escribe en el boton (opcional)
+    * @param {Object} fontParams - distintos parametros (tipografia, tam, estilo, color) para personalizar el texto anterior
     */
-    constructor(scene, x, y, scale, onClick, fill, normalCol, highlightedCol, pressedCol, text, fontParams) {
+    constructor(scene, x, y, onClick, fill, normalCol, highlightedCol, pressedCol, text = "", style = {}) {
         super(scene, x, y);
         this.scene.add.existing(this);
 
@@ -108,19 +107,9 @@ export default class Button extends GameObjects.Container {
 
         this.add(this.fillImg);
 
-        if (text) {
-            let style = { ...TEXT_CONFIG };
-            style.fontFamily = fontParams.font;
-            style.fontSize = fontParams.size + 'px';
-            style.fontStyle = fontParams.style;
-            style.color = fontParams.color;
-
-            let buttonText = this.scene.add.text(0, 0, text, style);
-            buttonText.setOrigin(0.5);
-            this.add(buttonText);
-        }
-
-        this.setScale(scale);
+        let buttonText = this.scene.add.text(0, 0, text, style);
+        buttonText.setOrigin(0.5);
+        this.add(buttonText);
 
         const dims = this.getBounds();
         this.setSize(dims.width, dims.height);

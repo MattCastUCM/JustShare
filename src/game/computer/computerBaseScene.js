@@ -129,30 +129,25 @@ export default class ComputerBaseScene extends BaseScene {
         container.add(sideText);
     }
 
-    createButton(x, y, sprite, transId, onClick, scale = 1) {
-        let translation = this.translate(transId)
+    createButton(x, y, sprite, transId, onClick, style) {
+        const translation = this.translate(transId);
 
-        let button = new Button(this, x, y, scale, onClick,
-            sprite,
-            this.colors.blue1.rgb, this.colors.blue2.rgb, this.colors.blue3.rgb,
-            translation,
-            { font: this.fontFamilies.normal, size: 54, style: 'bold', color: this.colors.white.hex.getNumberSign },
-        );
+        let button = new Button(this, x, y, onClick, sprite, this.colors.blue1.rgb, this.colors.blue2.rgb, this.colors.blue3.rgb, translation, style);
 
-        return button
+        return button;
     }
 
-    createTextInput(x, y, sprite, transId, scale = 1, writeLocked = false) {
+    createTextInput(x, y, sprite, transId, style, writeLocked = false) {
         const TEXT_INPUT_OFFSET = 23;
 
-        let translation = this.translate(transId)
+        let translation = this.translate(transId);
 
-        let textInput = new TextInput(this, x, y, scale, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb, sprite, this.fontFamilies.normal, writeLocked);
+        let textInput = new TextInput(this, x, y, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb, sprite, style, writeLocked);
 
         return textInput;
     }
 
-    createTextInputWithSideText(x, y, sprite, transId, scale = 1, writeLocked = false) {
+    createTextInputWithSideText(x, y, sprite, transId, style, writeLocked = false) {
         const TEXT_OFFSET_X = -10;
 
         let container = this.add.container(x, y);
@@ -161,13 +156,11 @@ export default class ComputerBaseScene extends BaseScene {
         this.addSideText(container, TEXT_OFFSET_X, transId)
 
         // Text input
-        let textInput = this.createTextInput(0, 0, sprite, transId, 1, writeLocked)
+        let textInput = this.createTextInput(0, 0, sprite, transId, style, writeLocked)
         container.add(textInput)
 
-        container.setScale(scale)
-
         // Propiedaes
-        container.setSize(textInput.width * scale, textInput.height * scale)
+        container.setSize(textInput.width, textInput.height)
         container.textInput = textInput
 
         return container

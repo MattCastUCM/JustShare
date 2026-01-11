@@ -8,14 +8,12 @@ export default class CheckBox extends GameObjects.Container {
     /**
     * Clase que permite crear una checkbox o radiobutons si se unen varias checkboxes en un grupo
     * @param {Scene} scene - escena a la que pertenece
-    * @param {Number} x - posicion x
-    * @param {Number} y - posicion y
-    * @param {Number} scale - escala del objeto
-    * @param {Color} tickColor - color hexadecimal del tick
+    * @param {number} x - posicion x
+    * @param {number} y - posicion y
     * @param {Color} pressedCol - color RGB de la checkbox que se utiliza en la animacion cuando se clica en ella
-    * @param {String} fill - sprite que se usa para el relleno
+    * @param {string} fill - sprite que se usa para el relleno
     */
-    constructor(scene, x, y, scale, tickColor, pressedColor, fill) {
+    constructor(scene, x, y, pressedColor, fill, style = {}) {
         super(scene, x, y);
 
         this.scene.add.existing(this);
@@ -36,14 +34,8 @@ export default class CheckBox extends GameObjects.Container {
         this.add(this.fillImg);
         this.addHitArea(this.fillImg)
 
-        let style = { ...TEXT_CONFIG };
-        style.fontSize = '75px';
-        style.fontStyle = 'bold';
-        style.color = tickColor;
         this.tickText = this.scene.add.text(0, 0, '✓', style).setOrigin(0.5).setVisible(false);
         this.add(this.tickText);
-
-        this.setScale(scale);
     }
 
     addHitArea(hitArea) {

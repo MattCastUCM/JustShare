@@ -9,16 +9,15 @@ export default class TextInput extends GameObjects.Container {
     /**
     * Clase que permite crear una caja de texto donde poder escribir
     * @param {Scene} scene - escena a la que pertenece
-    * @param {Number} x - posicion x
-    * @param {Number} y - posicion y
-    * @param {Number} scale - escala del objeto
-    * @param {String} defaultText - texto por defecto que aparece en la caja si no se ha escrito nada aun
-    * @param {Number} offset - punto a partir del cual se comienza a escribir el texto para que todo este bien ajustado
+    * @param {number} x - posicion x
+    * @param {number} y - posicion y
+    * @param {string} defaultText - texto por defecto que aparece en la caja si no se ha escrito nada aun
+    * @param {number} offset - punto a partir del cual se comienza a escribir el texto para que todo este bien ajustado
     * @param {Color} pressedCol - color RGB al que se cambia cuando se produce la animacion de comenzar a escribir en la caja
-    * @param {String} fill - sprite que se usa para el relleno
-    * @param {String} font - tipografia (opcional). En caso de que no se especifique ninguna, se usa 'Arial'
+    * @param {string} fill - sprite que se usa para el relleno
+    * @param {string} style - tipografia (opcional)
     */
-    constructor(scene, x, y, scale, defaultText, offset, pressedColor, fill, font, writeLocked = false) {
+    constructor(scene, x, y, defaultText, offset, pressedColor, fill, style = {}, writeLocked = false) {
         super(scene, x, y);
 
         this.scene.add.existing(this);
@@ -36,16 +35,6 @@ export default class TextInput extends GameObjects.Container {
             this.scene.input.enableDebug(this.fillImg, debug.color);
         }
         this.add(this.fillImg);
-
-        // Configuracion del estilo del texto que se escribe
-        if (!font) {
-            font = 'Arial';
-        }
-
-        let style = { ...TEXT_CONFIG };
-        style.fontFamily = font;
-        style.fontSize = '42px';
-        style.color = '#000000';
 
         this.offset = offset;
 
@@ -165,8 +154,6 @@ export default class TextInput extends GameObjects.Container {
 
             }
         })
-
-        this.setScale(scale);
 
         if (!writeLocked) {
             this.typeWithOnScreenKeyboard();
