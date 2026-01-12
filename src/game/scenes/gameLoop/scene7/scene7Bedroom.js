@@ -32,16 +32,16 @@ export default class Scene7Bedroom extends BaseScene {
 
 
         // Laura
-        let chatName = this.gameManager.translate("textMessages.chat1", { ns: "deviceInfo", returnObjects: true });
+        let chatName = this.translatorManager.translate("textMessages.chat1", "deviceInfo");
         this.phoneManager.phone.addChat(chatName, "lauraPfp");
         let phoneNode = super.readNodes(nodes, "scene7\\scene7Bedroom", "lauraChat", true);
         this.phoneManager.phone.setChatNode(chatName, phoneNode);
-        
+
         // Quitar notificaciones de los mensajes anteriores
         this.dispatcher.add("endLauraChatReconstruction", this, () => {
             this.phoneManager.phone.toChatScreen(chatName);
 
-            chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+            chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "harasserPfp");
             phoneNode = super.readNodes(nodes, "scene7\\scene7Bedroom", "phone", true);
             this.dialogManager.setNode(phoneNode, []);
@@ -59,10 +59,10 @@ export default class Scene7Bedroom extends BaseScene {
 
         this.dispatcher.add("chatEnded", this, () => {
             this.dialogManager.textbox.activate(false);
-            let chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+            let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
             this.phoneManager.phone.chats.get(chatName).returnButton.setInteractive();
 
-            chatName = this.gameManager.translate("textMessages.chat3", { ns: "deviceInfo", returnObjects: true });
+            chatName = this.translatorManager.translate("textMessages.chat3", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "dadPfp");
 
             let phoneNode = super.readNodes(nodes, "scene7\\scene7Bedroom", "callButton", true);
@@ -93,13 +93,13 @@ export default class Scene7Bedroom extends BaseScene {
         this.dispatcher.add("end", this, () => {
             let params = {
                 fadeOutTime: 1000,
-                text: this.gameManager.translate("scene7.end", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene7.end", "transitions"),
                 onComplete: () => {
                     // TRACKER EVENT
                     // console.log("Fin de partida");
                     // this.gameManager.sendEndGame();
                     this.trackerManager.sendGameProgress();
-                    
+
                     this.gameManager.startTitleScene();
                 },
             };

@@ -1,4 +1,4 @@
-import { generateUUID } from "../utils.js";
+import { generateUUID } from "../utils";
 
 export default class TrackerEvent {
     constructor({ actor, verb, object, result, context }) {

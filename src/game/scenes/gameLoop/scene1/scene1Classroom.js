@@ -30,11 +30,11 @@ export default class Scene1Classroom extends BaseScene {
         lauraPortrait.setFlipX(true);
         this.portraits.set("laura", lauraPortrait);
 
-        
+
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene1Classroom');
         let node = super.readNodes(nodes, "scene1\\scene1Classroom", "part1", true);
-        
+
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
             this.dialogManager.setNode(node, [teacherPortrait]);
@@ -49,7 +49,7 @@ export default class Scene1Classroom extends BaseScene {
         // Al producirse, se cambiaa la escena de transicion y luego a la escena del comedor
         this.dispatcher.add("startBreak", this, () => {
             let params = {
-                text: this.gameManager.translate("scene1.break", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene1.break", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene1Break");
                 },

@@ -25,11 +25,11 @@ export default class Scene4Backyard extends BaseScene {
         lauraPortrait.setFlipX(true);
         this.portraits.set("laura", lauraPortrait);
 
-        
+
         // Lee el archivo de nodos
         this.nodes = this.cache.json.get('scene4Backyard');
-        
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         this.phoneManager.phone.addChat(this.chatName, "harasserPfp");
 
 
@@ -41,7 +41,7 @@ export default class Scene4Backyard extends BaseScene {
                 this.dialogManager.setNode(null, []);
             }, 1);
         });
-        
+
         // Al producirse, hace aparecer el icono de cambiar de escenario
         this.dispatcher.add("endConversation", this, () => {
             super.createInteractiveElement(130, 770, "exit", 0.4, () => {
@@ -65,7 +65,7 @@ export default class Scene4Backyard extends BaseScene {
             this.dialogManager.setNode(nodeClassmate2, []);
             this.interactedClassmates++;
         }, true, "classmate", true);
-        
+
         let nodeClassmate3 = super.readNodes(this.nodes, "scene4\\scene4Backyard", "classmate3", true);
         super.createInteractiveElement(270, 420, "pointer", 0.3, () => {
             this.dialogManager.setNode(nodeClassmate3, []);
@@ -89,7 +89,7 @@ export default class Scene4Backyard extends BaseScene {
         if (this.interactedClassmates >= 4) {
             let node = super.readNodes(this.nodes, "scene4\\scene4Backyard", "mainConversation", true);
             setTimeout(() => {
-                this.dialogManager.setNode(node, [this.portraits.get("laura")]); 
+                this.dialogManager.setNode(node, [this.portraits.get("laura")]);
             }, 500);
         }
     }

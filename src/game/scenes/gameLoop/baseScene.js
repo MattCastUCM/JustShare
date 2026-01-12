@@ -2,8 +2,9 @@ import { Scene } from "phaser";
 import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode } from '../../UI/dialog/dialogNode';
 import GameManager from '../../managers/gameManager';
 import SceneManager from "../../managers/sceneManager";
-import EventDispatcher from "../../eventDispatcher";
 import TrackerManager from "../../managers/trackerManager";
+import EventDispatcher from "../../managers/eventDispatcher";
+import TranslatorManager from "../../managers/translatorManager";
 
 export default class BaseScene extends Scene {
     /**
@@ -29,13 +30,11 @@ export default class BaseScene extends Scene {
         this.dialogManager = this.UIManager.dialogManager;
         this.phoneManager = this.UIManager.phoneManager;
         this.computer = this.gameManager.computer
-        
+
         this.dispatcher = EventDispatcher.getInstance();
         this.sceneManager = SceneManager.getInstance();
         this.trackerManager = TrackerManager.getInstance();
-
-        // Obtiene el plugin de i18n del GameManager
-        this.i18next = this.gameManager.i18next;
+        this.translatorManager = TranslatorManager.getInstance();
 
         // Crea el mapa para los retratos de los personajes
         this.portraits = new Map();
@@ -56,7 +55,7 @@ export default class BaseScene extends Scene {
         this.scale = 1;
 
         this.playerName = this.gameManager.getUserInfo().name;
-        this.context = this.gameManager.getUserInfo().gender;
+        this.context = this.gameManager.getUserInfo().player;
         this.harasser = this.gameManager.getUserInfo().harasser;
 
         // Se anaden funciones adicionales a las que se llamara al crear y reactivar
@@ -263,8 +262,7 @@ export default class BaseScene extends Scene {
             // Obtiene la id del personaje y coge su nombre del archivo de nombres localizados
             let character = fileObj[id].character;
             node.character = character;
-            node.name = this.gameManager.translate(fileObj[id].character, {
-                ns: "names",
+            node.name = this.translatorManager.translate(fileObj[id].character, "names", {
                 returnObjects: getObjs
             });
 
@@ -275,8 +273,7 @@ export default class BaseScene extends Scene {
 
             // Obtiene los fragmentos del dialogo
             let texts = [];
-            let textTranslation = this.gameManager.translate(translationId, {
-                ns: namespace,
+            let textTranslation = this.translatorManager.translate(translationId, namespace, {
                 name: this.playerName,
                 context: this.context,
                 returnObjects: getObjs
@@ -323,8 +320,8 @@ export default class BaseScene extends Scene {
             node = new ChoiceNode();
 
             // Se obtienen las opciones del archivo de textos traducidos
-            let texts = this.gameManager.translate(translationId, {
-                ns: namespace, name: this.playerName,
+            let texts = this.translatorManager.translate(translationId, namespace, {
+                name: this.playerName,
                 context: this.context,
                 returnObjects: getObjs
             });
@@ -399,8 +396,7 @@ export default class BaseScene extends Scene {
             node = new ChatNode();
 
             // Obtiene el texto del archivo de textos traducidos y lo guarda
-            let text = this.gameManager.translate(translationId + ".text", {
-                ns: namespace,
+            let text = this.translatorManager.translate(translationId + ".text", namespace, {
                 name: this.playerName,
                 context: this.context,
                 returnObjects: getObjs
@@ -426,9 +422,7 @@ export default class BaseScene extends Scene {
                         node.name = this.gameManager.getUserInfo().name;
                     }
                     else {
-                        node.name = this.gameManager.translate(fileObj[id].character, {
-                            ns: "names"
-                        });
+                        node.name = this.translatorManager.translate(fileObj[id].character, "names");
                     }
                 }
                 else {
@@ -436,9 +430,7 @@ export default class BaseScene extends Scene {
                         node.name = this.computer.getUsername()
                     }
                     else {
-                        node.name = this.gameManager.translate(character, {
-                            ns: "computer\\usernames",
-                        });
+                        node.name = this.translatorManager.translate(character, "computer\\usernames");
                     }
                 }
             }
@@ -446,9 +438,7 @@ export default class BaseScene extends Scene {
             node.chat = fileObj[id].chat
             // Guarda el chat en el que tiene que ir la respuesta y el retardo con el que se envia
             if (node.phone) {
-                node.chat = this.gameManager.translate("textMessages" + "." + fileObj[id].chat, {
-                    ns: "deviceInfo"
-                });
+                node.chat = this.translatorManager.translate("textMessages" + "." + fileObj[id].chat, "deviceInfo");
             }
 
             if (fileObj[id].replyDelay) {
@@ -466,8 +456,7 @@ export default class BaseScene extends Scene {
         else if (type === "commentary") {
             node = new CommentaryNode();
 
-            let text = this.gameManager.translate(translationId + ".text", {
-                ns: namespace,
+            let text = this.translatorManager.translate(translationId + ".text", namespace, {
                 name: this.playerName,
                 context: this.context,
                 returnObjects: getObjs
@@ -482,9 +471,7 @@ export default class BaseScene extends Scene {
                 node.pfp = 'unknownPfp'
             }
             else {
-                node.name = this.gameManager.translate(node.character, {
-                    ns: "computer\\usernames",
-                });
+                node.name = this.translatorManager.translate(node.character, "computer\\usernames");
 
                 let pfpsFile = this.cache.json.get('profilePictures');
                 node.pfp = pfpsFile[node.character]

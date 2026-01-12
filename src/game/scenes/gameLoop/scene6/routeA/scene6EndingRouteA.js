@@ -12,14 +12,14 @@ export default class Scene6EndingRouteA extends BaseScene {
     create(params) {
         super.create(params)
 
-        
+
         // Lee el archivo de nodos
         this.nodes = this.cache.json.get('scene6EndingRouteA');
 
-        
+
         // Al producirse, se cambian los dialogos de la cama y el armario
         this.dispatcher.add("addMomChat", this, () => {
-            let chatName = this.gameManager.translate("textMessages.chat4", { ns: "deviceInfo", returnObjects: true });
+            let chatName = this.translatorManager.translate("textMessages.chat4", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "momPfp");
             let phoneNode = super.readNodes(this.nodes, "scene6\\routeA\\scene6EndingRouteA", "mom", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
@@ -35,7 +35,7 @@ export default class Scene6EndingRouteA extends BaseScene {
             setTimeout(() => {
                 let params = {
                     fadeOutTime: 1000,
-                    text: this.gameManager.translate("scene7.start", { ns: "transitions", returnObjects: true }),
+                    text: this.translatorManager.translate("scene7.start", "transitions"),
                     onComplete: () => {
                         this.UIManager.moveLids(true);
                         this.sceneManager.changeScene("Scene7Bedroom");
@@ -48,7 +48,7 @@ export default class Scene6EndingRouteA extends BaseScene {
 
                 // TODO: DISCARDED TRACKER EVENT
                 // console.log("Inicio del dia 7");
-                
+
                 this.sceneManager.changeScene("TextOnlyScene", params);
             }, 1000);
         });
@@ -63,7 +63,7 @@ export default class Scene6EndingRouteA extends BaseScene {
             this.phoneManager.phone.returnButton.disableInteractive();
 
             setTimeout(() => {
-                let chatName = this.gameManager.translate("textMessages.chat3", { ns: "deviceInfo", returnObjects: true });
+                let chatName = this.translatorManager.translate("textMessages.chat3", "deviceInfo");
                 this.phoneManager.phone.addChat(chatName, "dadPfp");
                 let phoneNode = super.readNodes(this.nodes, "scene6\\routeA\\scene6EndingRouteA", "dad", true);
                 this.phoneManager.phone.setChatNode(chatName, phoneNode);

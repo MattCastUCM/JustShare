@@ -22,7 +22,7 @@ export default class Scene6Bedroom extends BaseScene {
         let nodes = this.cache.json.get('scene6Bedroom');
         let generalNodes = this.cache.json.get('generalDialogs');
 
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         let phoneNode = super.readNodes(nodes, "scene6\\scene6Bedroom", "phone", true);
         this.dialogManager.setNode(phoneNode, []);
 
@@ -57,7 +57,7 @@ export default class Scene6Bedroom extends BaseScene {
                     // Si se va por la ruta A (seguir enviando fotos)
                     if (this.gameManager.blackboard.has("routeA")) {
                         params = {
-                            text: this.gameManager.translate("scene6.routeAStart", { ns: "transitions", returnObjects: true }),
+                            text: this.translatorManager.translate("scene6.routeAStart", "transitions"),
                             onComplete: () => {
                                 this.UIManager.moveLids(true);
                                 this.sceneManager.changeScene("Scene6BedroomRouteA1");
@@ -68,7 +68,7 @@ export default class Scene6Bedroom extends BaseScene {
                     // Si se va por la ruta B (negarse a enviar mas)
                     else {
                         params = {
-                            text: this.gameManager.translate("scene6.routeBStart", { ns: "transitions", returnObjects: true }),
+                            text: this.translatorManager.translate("scene6.routeBStart", "transitions"),
                             onComplete: () => {
                                 this.UIManager.moveLids(true);
                                 this.sceneManager.changeScene("Scene6LunchRouteB");

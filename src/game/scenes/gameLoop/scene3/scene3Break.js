@@ -28,7 +28,7 @@ export default class Scene3Break extends BaseScene {
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene3Break');
         let node = super.readNodes(nodes, "scene3\\scene3Break", "conversation1", true);
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
 
 
         // Callback que al llamarse cambiara el nodo de dialogo
@@ -36,7 +36,7 @@ export default class Scene3Break extends BaseScene {
             this.dialogManager.setNode(node, [lauraPortrait]);
         }
 
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         let phoneNode = super.readNodes(nodes, "scene3\\scene3Break", "fill", true);
         this.dialogManager.setNode(phoneNode, []);
 
@@ -123,7 +123,7 @@ export default class Scene3Break extends BaseScene {
             this.phoneManager.phone.returnButton.setInteractive();
 
             let params = {
-                text: this.gameManager.translate("scene3.classEnd", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene3.classEnd", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene3Bedroom");
                 },

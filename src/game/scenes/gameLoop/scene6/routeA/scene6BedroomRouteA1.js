@@ -16,13 +16,13 @@ export default class Scene6BedroomRouteA1 extends BaseScene {
         let bg = this.add.image(0, 0, 'bedroomNightBg').setOrigin(0, 0);
         this.scale = this.CANVAS_HEIGHT / bg.height;
         bg.setScale(this.scale);
-        
-        
+
+
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6BedroomRouteA1');
         let generalNodes = this.cache.json.get('generalDialogs');
 
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         let phoneNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA1", "phone", true);
         this.dialogManager.setNode(phoneNode, []);
 
@@ -32,20 +32,20 @@ export default class Scene6BedroomRouteA1 extends BaseScene {
         super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
             this.dialogManager.setNode(closetNode, []);
         }, false, "closet");
-        
+
         // Cama
         let bedNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA1", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
-        
+
 
         // Al producirse, se cambian los dialogos de la cama y el armario
         this.dispatcher.add("chatEnded", this, () => {
             bedNode = super.readNodes(generalNodes, "generalDialogs", "bed", true);
             closetNode = super.readNodes(generalNodes, "generalDialogs", "closetNight", true);
         });
-        
+
         // Al producirse, se hace la animacion de cerrar los ojos
         this.dispatcher.add("sleep", this, () => {
             this.UIManager.closeEyes(() => {
@@ -59,7 +59,7 @@ export default class Scene6BedroomRouteA1 extends BaseScene {
                     // Si se va por la ruta B (no quedar con el)
                     else {
                         let params = {
-                            text: this.gameManager.translate("scene6.routeBStart", { ns: "transitions", returnObjects: true }),
+                            text: this.translatorManager.translate("scene6.routeBStart", "transitions"),
                             onComplete: () => {
                                 this.UIManager.moveLids(true);
                                 this.sceneManager.changeScene("Scene6LunchRouteB");

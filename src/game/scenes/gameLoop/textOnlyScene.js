@@ -113,7 +113,7 @@ export default class TextOnlyScene extends BaseScene {
         fontSize = 20;
         textConfig.fontSize = fontSize + 'px';
         textConfig.align = 'right';
-        let info = this.gameManager.translate("info", { ns: "transitions", returnObjects: true });
+        let info = this.translatorManager.translate("info", "transitions");
         let infoText = this.add.text(this.CANVAS_WIDTH, this.CANVAS_HEIGHT, info, textConfig).setOrigin(0.5, 0.5);
         infoText.x = this.CANVAS_WIDTH - infoText.displayWidth / 2 - 20
         infoText.y = this.CANVAS_HEIGHT - infoText.displayHeight / 2 - 20

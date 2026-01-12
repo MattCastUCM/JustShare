@@ -1,4 +1,4 @@
-import { makeRequest } from "./utils.js"
+import { makeRequest } from "./utils"
 
 class Authentication {
     async initAuth() { }

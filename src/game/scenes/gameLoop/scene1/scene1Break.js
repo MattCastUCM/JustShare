@@ -25,7 +25,7 @@ export default class Scene1Break extends BaseScene {
         lauraPortrait.setFlipX(true);
         this.portraits.set("laura", lauraPortrait);
 
-        
+
         // Lee el archivo de nodos
         this.nodes = this.cache.json.get('scene1Break');
 
@@ -36,7 +36,7 @@ export default class Scene1Break extends BaseScene {
         // Al producirse, se cambia a la escena de transicion y luego a la escena del salon
         this.dispatcher.add("endBreak", this, () => {
             let params = {
-                text: this.gameManager.translate("scene1.classEnd", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene1.classEnd", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene1Lunch1");
                 },
@@ -61,7 +61,7 @@ export default class Scene1Break extends BaseScene {
             this.dialogManager.setNode(nodeTable2, []);
             this.interactedTables++;
         }, true, "table");
-        
+
         let nodeTable3 = super.readNodes(this.nodes, "scene1\\scene1Break", "tables3", true);
         super.createInteractiveElement(1300, 520, "pointer", 0.4, () => {
             this.dialogManager.setNode(nodeTable3, []);
@@ -82,7 +82,7 @@ export default class Scene1Break extends BaseScene {
         if (this.interactedTables >= 3) {
             let node = super.readNodes(this.nodes, "scene1\\scene1Break", "mainConversation", true);
             setTimeout(() => {
-                this.dialogManager.setNode(node, [this.portraits.get("laura")]); 
+                this.dialogManager.setNode(node, [this.portraits.get("laura")]);
             }, 500);
         }
     }

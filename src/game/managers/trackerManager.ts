@@ -5,12 +5,27 @@ import { BasicAuthentication } from "../tracker/authentication";
 import { AccountActor } from "../tracker/statement/actor";
 import GameManager from "./gameManager";
 import SceneManager from "./sceneManager";
+import TrackerEvent from "../tracker/statement/trackerEvent";
+import { UserInfo } from "../../types";
+import { Singleton } from "../utils/singleton";
 
-export default class TrackerManager {
-    constructor() {
-        if (TrackerManager.instance) {
-            throw new Error("TrackerManager is a singleton. Use TrackerManager.getInstance() instead.")
-        }
+export default class TrackerManager extends Singleton {
+    private trackerInitialized: boolean;
+    private gameCompleted: boolean;
+    private tracker: Tracker;
+    private accesible: any;
+    private alternative: any;
+    private completable: any;
+    private gameObject: any;
+
+    private sceneManager: SceneManager;
+    private gameManager: GameManager;
+
+    private day: number;
+    private TOTAL_DAYS: number = 7;
+
+    public constructor() {
+        super();
 
         this.trackerInitialized = false;
         this.gameCompleted = false;
@@ -26,7 +41,7 @@ export default class TrackerManager {
                         import.meta.env.VITE_LRS_AUTH_USERNAME,
                         import.meta.env.VITE_LRS_AUTH_PASSWORD
                     ),
-                    serializer: (statement, version) => statement.serializeToXApi(version)
+                    serializer: (statement: TrackerEvent, version: string) => statement.serializeToXApi(version)
                 }),
                 new AccountActor("http://example.com", "TestActor")
             );
@@ -38,24 +53,14 @@ export default class TrackerManager {
         this.gameObject = this.tracker.gameObject;
 
         this.trackerInitialized = this.tracker !== null && this.accesible !== null && this.alternative !== null && this.completable !== null && this.gameObject !== null;
-
-        this.sceneManager = null;
-        this.gameManager = null;
     }
 
-    init() {
+    public init() {
         this.sceneManager = SceneManager.getInstance();
         this.gameManager = GameManager.getInstance();
     }
 
-    static getInstance() {
-        if (!TrackerManager.instance) {
-            TrackerManager.instance = new TrackerManager();
-        }
-        return TrackerManager.instance;
-    }
-
-    sendEnterScene(scene, params) {
+    sendEnterScene(scene: string, params: { text?: string }) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let type = this.accesible.types.area;
 
@@ -73,7 +78,7 @@ export default class TrackerManager {
         }
     }
 
-    sendEnterChat(chatName) {
+    sendEnterChat(chatName: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let evt = this.accesible.accessed(this.accesible.types.screen, "EnterChat");
             evt.result.setExtension("Chat", chatName);
@@ -81,7 +86,7 @@ export default class TrackerManager {
         }
     }
 
-    sendExitChat(fromChatButton = true) {
+    sendExitChat(fromChatButton: boolean = true) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let method = "ChatReturnButton";
             if (!fromChatButton) {
@@ -95,13 +100,13 @@ export default class TrackerManager {
         }
     }
 
-    sendStartGame(userInfo) {
+    sendStartGame(userInfo: UserInfo) {
         this.day = 1;
         this.TOTAL_DAYS = 7.0;
 
         if (this.trackerInitialized && !this.gameCompleted) {
             let evt = this.completable.initialized(this.completable.types.seriousGame, "GameStart");
-            evt.result.setExtension("Gender", userInfo.gender);
+            evt.result.setExtension("Gender", userInfo.player);
             evt.result.setExtension("Sexuality", userInfo.sexuality);
 
             this.tracker.addEvent(evt);
@@ -141,7 +146,7 @@ export default class TrackerManager {
         }
     }
 
-    sendItemInteraction(objectName, extensions = null, npc = false) {
+    sendItemInteraction(objectName: string, extensions: Record<string, any> = {}, npc: boolean = false) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let type = this.gameObject.types.gameObject;
             if (npc) {
@@ -161,7 +166,7 @@ export default class TrackerManager {
         }
     }
 
-    sendComputerScreenClick(x, y) {
+    sendComputerScreenClick(x: number, y: number) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let evt = this.gameObject.interacted(this.gameObject.types.item, "ComputerScreenClick");
             evt.result.setExtension("PointerX", x);
@@ -171,9 +176,9 @@ export default class TrackerManager {
     }
 
 
-    sendDialogStarted(nodeId, dialogText) {
+    sendDialogStarted(nodeId: string, dialogText: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
-            let scene = this.sceneManager.getCurrentScene().key;
+            let scene = this.sceneManager.getCurrentScene().scene.key;
 
             let evt = this.completable.initialized(this.completable.types.storyNode, "DialogStart");
             evt.result.setExtension("Node", scene + "." + nodeId);
@@ -181,9 +186,9 @@ export default class TrackerManager {
             this.tracker.addEvent(evt);
         }
     }
-    sendDialogEnded(nodeId, dialogText) {
+    sendDialogEnded(nodeId: string, dialogText: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
-            let scene = this.sceneManager.getCurrentScene().key;
+            let scene = this.sceneManager.getCurrentScene().scene.key;
 
             let evt = this.completable.completed(this.completable.types.storyNode, "DialogEnd", 1, true, true);
             evt.result.setExtension("Node", scene + "." + nodeId);
@@ -192,9 +197,9 @@ export default class TrackerManager {
         }
     }
 
-    sendChoiceSelected(nodeId, choiceText) {
+    sendChoiceSelected(nodeId: string, choiceText: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
-            let scene = this.sceneManager.getCurrentScene().key;
+            let scene = this.sceneManager.getCurrentScene().scene.key;
 
             let evt = this.alternative.selected(this.alternative.types.dialogTree, "OptionSelect", " ");
             evt.result.setExtension("Node", scene + "." + nodeId);
@@ -204,7 +209,7 @@ export default class TrackerManager {
         }
     }
 
-    sendAnswerFriend(timesListened) {
+    sendAnswerFriend(timesListened: number) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let evt = this.alternative.selected(this.alternative.types.dialogTree, "Day3BreakConversation", " ");
             evt.result.setExtension("TimesListened", timesListened);
@@ -213,7 +218,7 @@ export default class TrackerManager {
         }
     }
 
-    sendNotificationReceived(chat) {
+    sendNotificationReceived(chat: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let evt = this.completable.initialized(this.completable.types.quest, "NotificationReceived");
             evt.result.setExtension("Chat", chat);
@@ -222,7 +227,7 @@ export default class TrackerManager {
         }
     }
 
-    sendNotificationsCleared(chat) {
+    sendNotificationsCleared(chat: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let evt = this.completable.completed(this.completable.types.quest, "NotificationSeen", 1, true, true);
             evt.result.setExtension("Chat", chat);
@@ -231,9 +236,9 @@ export default class TrackerManager {
         }
     }
 
-    sendCanAnswerChat(nodeId, chat) {
+    sendCanAnswerChat(nodeId: string, chat: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
-            let scene = this.sceneManager.getCurrentScene().key;
+            let scene = this.sceneManager.getCurrentScene().scene.key;
 
             let evt = this.completable.initialized(this.completable.types.quest, "CanAnswerChat");
             evt.result.setExtension("Node", scene + "." + nodeId);
@@ -243,9 +248,9 @@ export default class TrackerManager {
         }
     }
 
-    sendAnsweredChat(nodeId, chat) {
+    sendAnsweredChat(nodeId: string, chat: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
-            let scene = this.sceneManager.getCurrentScene().key;
+            let scene = this.sceneManager.getCurrentScene().scene.key;
 
             let evt = this.completable.completed(this.completable.types.quest, "AnswerChat", 1, true, true);
             evt.result.setExtension("Node", scene + "." + nodeId);

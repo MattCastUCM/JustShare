@@ -1,4 +1,6 @@
 import { Scene, GameObjects } from "phaser";
+import GameManager from "../../managers/gameManager";
+import TranslatorManager from "../../managers/translatorManager";
 
 export default class BaseScreen extends GameObjects.Container {
     /**
@@ -14,9 +16,9 @@ export default class BaseScreen extends GameObjects.Container {
         this.scene = scene;
         this.phone = phone;
 
-        this.gameManager = scene.gameManager;
-        this.i18next = this.gameManager.i18next;
-
+        this.gameManager = GameManager.getInstance();
+        this.translatorManager = TranslatorManager.getInstance();
+        
         this.prevScreen = prevScreen;
 
         this.BG_X = scene.CANVAS_WIDTH / 2;

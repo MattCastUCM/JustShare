@@ -78,19 +78,13 @@ export default class ComputerBaseScene extends BaseScene {
         this.namespace = namespace.replace(/\//g, '\\');
     }
 
-    translate(transId, options) {
-        let namespaceObj = { ns: this.namespace }
-        let optionsAux = { ...namespaceObj, ...options }
-
-        return this.gameManager.translate(transId, optionsAux)
+    translate(transId, options = {}) {
+        return this.translatorManager.translate(transId, this.namespace, options)
     }
 
-    translateWithNamespace(transId, namespace, options) {
+    translateWithNamespace(transId, namespace, options = {}) {
         namespace = namespace.replace(/\//g, '\\');
-        let namespaceObj = { ns: namespace }
-        let optionsAux = { ...namespaceObj, ...options }
-
-        return this.gameManager.translate(transId, optionsAux)
+        return this.translatorManager.translate(transId, namespace, options)
     }
 
     clamp(value, min, max) {
@@ -383,8 +377,8 @@ export default class ComputerBaseScene extends BaseScene {
     ////// Metodos para animar texto //////
     //////////////////////////////////////
 
-    changeText(target, duration, transId, transParams) {
-        let translation = this.translate(transId, transParams)
+    changeText(target, duration, transId, options) {
+        let translation = this.translate(transId, options)
 
         // Si esta invisible
         if (target.alpha <= 0) {

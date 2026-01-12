@@ -18,7 +18,7 @@ export default class Scene6LunchRouteA extends BaseScene {
         this.scale = this.CANVAS_HEIGHT / bg.height;
         bg.setScale(this.scale);
 
-        
+
         // Retrato del padre
         let dadTr = this.portraitTr;
         dadTr.x = this.CANVAS_WIDTH / 2 + this.CANVAS_WIDTH / 5;
@@ -27,7 +27,7 @@ export default class Scene6LunchRouteA extends BaseScene {
 
         // Retrato de la madre
         let momTr = this.portraitTr;
-        momTr.x =  this.CANVAS_WIDTH / 2 - this.CANVAS_WIDTH / 5;
+        momTr.x = this.CANVAS_WIDTH / 2 - this.CANVAS_WIDTH / 5;
         let momPortrait = new Portrait(this, "mom", momTr, "mom")
         momPortrait.setFlipX(true);
         this.portraits.set("mom", momPortrait);
@@ -36,7 +36,7 @@ export default class Scene6LunchRouteA extends BaseScene {
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6LunchRouteA');
         let node = super.readNodes(nodes, "scene6\\routeA\\scene6LunchRouteA", "main", true);
-        
+
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
             this.dialogManager.setNode(node, [dadPortrait, momPortrait]);
@@ -46,7 +46,7 @@ export default class Scene6LunchRouteA extends BaseScene {
         // Al producirse, cambia a la escena de transicion y vuelve a la misma escena
         this.dispatcher.add("endLunch", this, () => {
             let params = {
-                text: this.gameManager.translate("scene6.routeALunch", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene6.routeALunch", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene6LunchRouteA", {}, true);
                     this.endLunch();
@@ -59,7 +59,7 @@ export default class Scene6LunchRouteA extends BaseScene {
         this.endLunch = () => {
             let doorNodePrepared = super.readNodes(nodes, "scene6\\routeA\\scene6LunchRouteA", "doorPrepared", true);
             let doorNodeUnprepared = super.readNodes(nodes, "scene6\\routeA\\scene6LunchRouteA", "doorUnprepared", true);
-            
+
             // Puerta a la calle
             let doorIcon = super.createInteractiveElement(890, 380, "pointer", 0.3, () => {
                 // Si no esta preparado, se muestra un dialogo avisando de esto
@@ -83,7 +83,7 @@ export default class Scene6LunchRouteA extends BaseScene {
         // Al producirse, cambia a la escena de la calle
         this.dispatcher.add("exitHome", this, () => {
             let params = {
-                text: this.gameManager.translate("scene6.routeAWalking", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene6.routeAWalking", "transitions"),
                 onComplete: () => {
                     this.UIManager.moveLids(true);
                     this.sceneManager.changeScene("Scene6PortalRouteA");
@@ -99,5 +99,5 @@ export default class Scene6LunchRouteA extends BaseScene {
             this.setNode();
         }, 500);
     }
-    
+
 }

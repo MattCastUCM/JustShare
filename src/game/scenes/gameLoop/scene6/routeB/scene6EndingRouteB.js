@@ -27,12 +27,12 @@ export default class Scene6EndingRouteB extends BaseScene {
 
         // Retrato de la madre
         let momTr = this.portraitTr;
-        momTr.x =  this.CANVAS_WIDTH / 2 - this.CANVAS_WIDTH / 5;
+        momTr.x = this.CANVAS_WIDTH / 2 - this.CANVAS_WIDTH / 5;
         let momPortrait = new Portrait(this, "mom", momTr, "mom")
         momPortrait.setFlipX(true);
         this.portraits.set("mom", momPortrait);
 
-        
+
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6EndingRouteB');
         let node = super.readNodes(nodes, "scene6\\routeB\\scene6EndingRouteB", "main", true);
@@ -41,8 +41,8 @@ export default class Scene6EndingRouteB extends BaseScene {
         this.setNode = () => {
             this.dialogManager.setNode(node, [momPortrait, dadPortrait]);
         }
-        
-        
+
+
         this.dispatcher.add("end", this, () => {
             setTimeout(() => {
                 // Armario
@@ -73,7 +73,7 @@ export default class Scene6EndingRouteB extends BaseScene {
                 // se cambia a la escena de transicion y luego a la escena final
                 setTimeout(() => {
                     let params = {
-                        text: this.gameManager.translate("scene7.start", { ns: "transitions", returnObjects: true }),
+                        text: this.translatorManager.translate("scene7.start", "transitions"),
                         onComplete: () => {
                             this.UIManager.moveLids(true);
                             this.sceneManager.changeScene("Scene7Bedroom");
@@ -86,7 +86,7 @@ export default class Scene6EndingRouteB extends BaseScene {
 
                     // TODO: DISCARDED TRACKER EVENT
                     // console.log("Inicio del dia 7");
-                
+
                     this.sceneManager.changeScene("TextOnlyScene", params);
                 }, 1000);
             });
@@ -99,5 +99,5 @@ export default class Scene6EndingRouteB extends BaseScene {
             this.setNode();
         }, 500);
     }
-    
+
 }

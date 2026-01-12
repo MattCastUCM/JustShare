@@ -1,12 +1,12 @@
-import Accesible from "./interfaces/accessible.js"
-import Alternative from "./interfaces/alternative.js"
-import Completable from "./interfaces/completable.js";
-import GameObject from "./interfaces/gameObject.js";
-import TrackerEvent from "./statement/trackerEvent.js";
-import Verb from './statement/verb.js'
-import Object from "./statement/object.js";
-import Context from "./statement/context.js";
-import Result from "./statement/result.js";
+import Accesible from "./interfaces/accessible"
+import Alternative from "./interfaces/alternative"
+import Completable from "./interfaces/completable";
+import GameObject from "./interfaces/gameObject";
+import TrackerEvent from "./statement/trackerEvent";
+import Verb from './statement/verb'
+import Object from "./statement/object";
+import Context from "./statement/context";
+import Result from "./statement/result";
 
 export default class Tracker {
     constructor(lrs, actor, batchLength = 100, batchTimeout = 180000) {

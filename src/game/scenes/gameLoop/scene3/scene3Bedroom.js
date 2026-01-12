@@ -17,16 +17,16 @@ export default class Scene3Bedroom extends BaseScene {
         this.scale = this.CANVAS_HEIGHT / bg.height;
         bg.setScale(this.scale);
 
-        
+
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene3Bedroom');
-        
+
         let node = super.readNodes(nodes, "scene3\\scene3Bedroom", "main", true);
 
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         let phoneNode = super.readNodes(nodes, "scene3\\scene3Bedroom", "fill", true);
         this.dialogManager.setNode(phoneNode, []);
-        
+
         this.phoneManager.togglePhone(true, 0, () => {
             // Quitar notificaciones de los mensajes anteriores
             this.phoneManager.phone.chats.get(this.chatName).returnButton.disableInteractive();
@@ -38,18 +38,18 @@ export default class Scene3Bedroom extends BaseScene {
         this.phoneManager.bgBlock.disableInteractive();
         this.phoneManager.phone.returnButton.disableInteractive();
         this.phoneManager.icon.disableInteractive();
-        
 
-        let chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+
+        let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         this.phoneManager.phone.addChat(chatName, "harasserPfp");
-        
+
         // Al producirse, se pasa a la siguiente escena
         this.dispatcher.add("endConversation", this, () => {
 
             setTimeout(() => {
                 let params = {
                     fadeOutTime: 1000,
-                    text: this.gameManager.translate("scene4.party", { ns: "transitions", returnObjects: true }),
+                    text: this.translatorManager.translate("scene4.party", "transitions"),
                     onComplete: () => {
                         this.phoneManager.phone.chats.get(this.chatName).returnButton.setInteractive();
                         this.sceneManager.changeScene("Scene4Frontyard");
@@ -75,7 +75,7 @@ export default class Scene3Bedroom extends BaseScene {
 
 
     onCreate() {
-        
+
     }
 
 }

@@ -2,12 +2,11 @@ import { Scene, Cameras } from "phaser"
 const { FADE_OUT_COMPLETE } = Cameras.Scene2D.Events
 import BaseScene from "../scenes/gameLoop/baseScene"
 import TrackerManager from "./trackerManager";
+import { Singleton } from "../utils/singleton";
 
-export default class SceneManager {
-    private static instance: SceneManager
-
-    private static readonly FADE_OUT_TIME: number = 200;
-    private static readonly FADE_IN_TIME: number = 200
+export default class SceneManager extends Singleton {
+    private FADE_OUT_TIME: number = 200;
+    private FADE_IN_TIME: number = 200
 
     private currentScene: Scene
 
@@ -19,25 +18,19 @@ export default class SceneManager {
 
     private trackerManager: TrackerManager
 
-    private constructor() {
+    public constructor() {
+        super();
+
         this.runningScenes = new Set<Scene>();
         this.parallelScenes = new Set<Scene>();
         this.persistentScenes = new Set<Scene>();
-        
+
         this.fading = false;
     }
 
     public init(scene: Scene) {
         this.currentScene = scene
         this.trackerManager = TrackerManager.getInstance();
-    }
-
-    public static getInstance() {
-        if (!SceneManager.instance) {
-            SceneManager.instance = new SceneManager();
-        }
-
-        return SceneManager.instance;
     }
 
     private clearScenes(scenes: Set<Scene>) {
@@ -83,7 +76,7 @@ export default class SceneManager {
     }
 
     public getCurrentScene() {
-        return this.currentScene
+        return this.currentScene;
     }
 
     /**
@@ -96,13 +89,13 @@ export default class SceneManager {
     /**
      * Metodo para cambiar de escena
      * @param {string} sceneKey - key de la escena a la que se va a pasar
-     * @param {Object} params - informacion que pasar a la escena (opcional)
+     * @param {Record<string, any>} params - informacion que pasar a la escena (opcional)
      * @param {boolean} canReturn - true si se puede regresar a la escena anterior, false en caso contrario
      */
     public changeScene(sceneKey: string, params: Record<string, any> = {}, canReturn: boolean = false) {
         // Reproduce un fade out al cambiar de escena
-        let fadeOutTime = SceneManager.FADE_OUT_TIME;
-        let fadeIntime = SceneManager.FADE_IN_TIME;
+        let fadeOutTime = this.FADE_OUT_TIME;
+        let fadeIntime = this.FADE_IN_TIME;
 
         if (params.fadeOutTime != null) {
             fadeOutTime = params.fadeOutTime;

@@ -81,32 +81,37 @@ export default class LoginScene extends ComputerBaseScene {
     }
 
     startGame(nameContainer, genderContainer, sexualityContainer) {
-        let gender = genderContainer.group.getIndexSelButton() === 0 ? "male" : "female";
+        const gender = genderContainer.group.getIndexSelButton() === 0 ? "male" : "female";
+
+        const likesMen = sexualityContainer.manBox.checkBox.checked;
+        const likesWomen = sexualityContainer.womanBox.checkBox.checked;
+
         let sexuality = "heterosexual";
         let harasserGender = "female"
 
-        if (sexualityContainer.manBox.checkBox.checked && sexualityContainer.womanBox.checkBox.checked) {
+        if (likesMen && likesWomen) {
             sexuality = "bisexual";
-            harasserGender = this.getRandomInt(0, 1) === 0 ? "male" : "female"
+            harasserGender = this.getRandomInt(0, 1) === 0 ? "male" : "female";
         }
-        else if (sexualityContainer.manBox.checkBox.checked) {
+        else if (likesMen) {
+            harasserGender = "male";
             if (gender === "male") {
                 sexuality = "homosexual";
             }
-
-            harasserGender = "male"
         }
-        else if (sexualityContainer.womanBox.checkBox.checked && gender === "female") {
-            sexuality = "homosexual"
+        else if (likesWomen && gender === "female") {
+            sexuality = "homosexual";
         }
 
-        let userInfo = {
+        const userInfo = {
             name: nameContainer.textInput.getText(),
-            gender: gender,
-            sexuality: sexuality,
-            harasser: harasserGender
+            player: gender,
+            harasser: harasserGender,
+            sexuality: sexuality
         }
         this.gameManager.startGame(userInfo);
+        this.translatorManager.setGenderContext("player", gender);
+        this.translatorManager.setGenderContext("harasser", harasserGender)
     }
 
     checkErrors(nameContainer, genderContainer, sexualityContainer) {

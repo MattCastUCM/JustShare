@@ -23,7 +23,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
         let nodes = this.cache.json.get('scene6BedroomRouteB');
         let generalNodes = this.cache.json.get('generalDialogs');
 
-        let chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         this.phoneManager.phone.addChat(chatName, "harasserPfp");
         let phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "harasserChat", true);
         this.dialogManager.setNode(phoneNode, []);
@@ -46,7 +46,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
 
 
         this.dispatcher.add("harasserChatEnded", this, () => {
-            chatName = this.gameManager.translate("textMessages.chat5", { ns: "deviceInfo", returnObjects: true });
+            chatName = this.translatorManager.translate("textMessages.chat5", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "unknownPfp");
             phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "chat2", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
@@ -55,14 +55,14 @@ export default class Scene6BedroomRouteB extends BaseScene {
         });
 
         this.dispatcher.add("chat2Ended", this, () => {
-            chatName = this.gameManager.translate("textMessages.chat6", { ns: "deviceInfo", returnObjects: true });
+            chatName = this.translatorManager.translate("textMessages.chat6", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "unknownPfp");
             phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "chat3", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
         });
 
         this.dispatcher.add("chat3Ended", this, () => {
-            chatName = this.gameManager.translate("textMessages.chat1", { ns: "deviceInfo", returnObjects: true });
+            chatName = this.translatorManager.translate("textMessages.chat1", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "lauraPfp");
             phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "lauraChat", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
@@ -71,7 +71,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
 
         // Ordenador        
         let photo = 'playerPhoto5Male'
-        if (this.gameManager.getUserInfo().gender == "female") {
+        if (this.gameManager.getUserInfo().player == "female") {
             photo = 'playerPhoto5Female'
         }
         this.computer.socialMediaScreen.addPost("harasserPost", "harasser", photo)
@@ -133,7 +133,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
         this.dispatcher.add("end", this, () => {
             let params = {
                 fadeOutTime: 1000,
-                text: this.gameManager.translate("scene6.routeBPoliceStation", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene6.routeBPoliceStation", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene6PoliceStationRouteB");
                 },

@@ -18,16 +18,16 @@ export default class Scene6PoliceStationRouteB extends BaseScene {
         this.scale = this.CANVAS_HEIGHT / bg.height;
         bg.setScale(this.scale);
 
-        
+
         // Retrato del padre
         let dadTr = this.portraitTr;
         dadTr.x = this.CANVAS_WIDTH / 2 + this.CANVAS_WIDTH / 5;
         let dadPortrait = new Portrait(this, "dad", dadTr, "dad");
         this.portraits.set("dad", dadPortrait);
-        
+
         // Retrato del agente
         let officerTr = this.portraitTr;
-        officerTr.x =  this.CANVAS_WIDTH / 2 - this.CANVAS_WIDTH / 5;
+        officerTr.x = this.CANVAS_WIDTH / 2 - this.CANVAS_WIDTH / 5;
         officerTr.y += 100;
         officerTr.scale *= 1.15;
         let officerPortrait = new Portrait(this, "officer", officerTr, "officer")
@@ -45,11 +45,11 @@ export default class Scene6PoliceStationRouteB extends BaseScene {
             this.dialogManager.setNode(node, [dadPortrait, officerPortrait]);
         }
 
-        
+
         this.dispatcher.add("end", this, () => {
             let params = {
                 fadeOutTime: 1000,
-                text: this.gameManager.translate("scene6.routeBEnd", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene6.routeBEnd", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene6EndingRouteB");
                 },
@@ -64,5 +64,5 @@ export default class Scene6PoliceStationRouteB extends BaseScene {
             this.setNode();
         }, 500);
     }
-    
+
 }

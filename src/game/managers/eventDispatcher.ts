@@ -1,73 +1,65 @@
 import { Events } from "phaser";
+import { Singleton } from "../utils/singleton";
 
-let instance = null;
+type EventName = string;
+type Owner = object;
+type EventFn = (...args: any[]) => void;
 
-export default class EventDispatcher {
+export default class EventDispatcher extends Singleton {
     /**
     * Clase para tratar los mensajes sin tener en cuenta el ambito puesto que es un Singleton
     * De este modo cualquier objeto puede acceder a ella y emitir un mensaje y otro que se 
     * encuentre en otro lugar distinto puede suscribirse sin preocuparse del ambito
     */
-    constructor() {
-        // Patron singleton
-        if (instance === null) {
-            instance = this;
-        }
-        else {
-            throw new Error('EventDispatcher is a Singleton class!');
-        }
+
+    private emitter: Events.EventEmitter;
+
+    // EVENTOS TEMPORALES
+    // evento -> propietarios
+    private eventsMap: Map<EventName, Set<Owner>>;
+
+    // propietario -> evento -> funciones
+    private ownersMap: Map<Owner, Map<EventName, Set<EventFn>>>;
+
+    // EVENTOS PERMANENTES
+    private ownersPermanentMap: Map<Owner, Map<EventName, Set<EventFn>>>;
+
+    public constructor() {
+        super();
 
         // Emisor de eventos
         this.emitter = new Events.EventEmitter();
-        // Mapas para conseguir un mejor manejo de los eventos y poder eliminar los eventos segun propietario
 
-        // EVENTOS TEMPORALES
-        // Se usa para poder borrar por evento facilmente
-        // Estructura: evento-propietario -> map<string, set<object>>
         this.eventsMap = new Map();
-        // Se usa para poder borrar por propietario facilmente
-        // Estructura: propietario-evento-funciones -> map<object, map<string, set<fn>>>
         this.ownersMap = new Map();
-
-        // EVENTOS PERMANENTES
-        // Guardar eventos permanentemente
-        // Estructura: propietario-evento-funciones -> map<object, map<string, set<fn>>>
         this.ownersPermanentMap = new Map();
-    }
-
-    // metodo para generar y coger la instancia
-    static getInstance() {
-        if (instance === null) {
-            instance = new EventDispatcher();
-        }
-        return instance;
     }
 
     /**
     * Metodo para emitir un evento
-    * @param {String} event - nombre del evento
-    * @param {Object} obj - objeto que reciben los objetos suscritos al evento (opcional)
+    * @param {EventName} event - nombre del evento
+    * @param {Owner} obj - objeto que reciben los objetos suscritos al evento (opcional)
     */
-    dispatch(event, obj) {
+    public dispatch(event: EventName, obj: Owner) {
         this.emitter.emit(event, obj);
     }
 
     /**
      * Metodo para comprobar si un evento TEMPORAL o PERMANENTE ya existe
-     * @param {String} event - nombre del evento 
-     * @param {Object} owner - objeto que se suscribe al evento
-     * @param {Function} fn - funcion que se ejecuta al producirse el evento
+     * @param {EventName} event - nombre del evento 
+     * @param {Owner} owner - objeto que se suscribe al evento
+     * @param {EventFn} fn - funcion que se ejecuta al producirse el evento
      * @param {Map} ownersMap - mapa de propietarios en el que buscar el evento (TEMPORAL O PERMANENTE)
      */
-    alreadyExists(event, owner, fn, ownersMap) {
+    private alreadyExists(event: EventName, owner: Owner, fn: EventFn, ownersMap: Map<Owner, Map<EventName, Set<EventFn>>>) {
         // Existe el propietario...
         if (ownersMap.has(owner)) {
             // El propietario esta suscrito a ese evento...
             let ownerAux = ownersMap.get(owner);
-            if (ownerAux.has(event)) {
+            if (ownerAux && ownerAux.has(event)) {
                 // El propietario tiene esa funcion suscrita a ese evento...
                 let eventAux = ownerAux.get(event);
-                if (eventAux.has(fn)) {
+                if (eventAux && eventAux.has(fn)) {
                     // Entonces, ya existe esa suscripcion
                     return true;
                 }
@@ -78,14 +70,13 @@ export default class EventDispatcher {
 
 
     /**
-    * PUBLICO
     * Metodo para suscribir un objeto a un evento TEMPORAL o PERMANENTE
-    * @param {String} event - nombre del evento
-    * @param {Object} owner - objeto que se suscribe al evento (contexto/scope)
-    * @param {Fn} fn - funcion que se ejecuta cuando se produce el evento
-    * @param {Boolean} permanent - indica si la suscripcion es permanente (true) o temporal (false)
+    * @param {EventName} event - nombre del evento
+    * @param {Owner} owner - objeto que se suscribe al evento (contexto/scope)
+    * @param {EventFn} fn - funcion que se ejecuta cuando se produce el evento
+    * @param {boolean} permanent - indica si la suscripcion es permanente (true) o temporal (false)
     */
-    add(event, owner, fn, permanent) {
+    public add(event: EventName, owner: Owner, fn: EventFn, permanent: boolean) {
         let exists = false;
 
         // Si no existe como permanente...
@@ -125,11 +116,11 @@ export default class EventDispatcher {
 
     /**
      * Metodo para almacenar en los mapas un evento TEMPORAL
-     * @param {String} event - nombre del evento 
-     * @param {Object} owner - objeto que se suscribe al evento
-     * @param {Function} fn - funcion que se ejecuta al producirse el evento
+     * @param {EventName} event - nombre del evento 
+     * @param {Owner} owner - objeto que se suscribe al evento
+     * @param {EventFn} fn - funcion que se ejecuta al producirse el evento
      */
-    addAsTemporary(event, owner, fn) {
+    private addAsTemporary(event: EventName, owner: Owner, fn: EventFn) {
         // EVENTOS
         if (!this.eventsMap.has(event)) {
             // El evento no existe...
@@ -137,7 +128,7 @@ export default class EventDispatcher {
             this.eventsMap.set(event, new Set());
         }
         let eventAux = this.eventsMap.get(event);
-        if (!eventAux.has(owner)) {
+        if (eventAux && !eventAux.has(owner)) {
             // El evento no tiene registrado a ese propietario...
             // Se anade ese propietario al evento en el mapa de eventos
             eventAux.add(owner);
@@ -149,22 +140,22 @@ export default class EventDispatcher {
 
     /**
      * Metodo para almacenar en los mapas un evento PERMANENTE
-     * @param {String} event - nombre del evento 
-     * @param {Object} owner - objeto que se suscribe al evento
-     * @param {Function} fn - funcion que se ejecuta al producirse el evento
+     * @param {EventName} event - nombre del evento 
+     * @param {Owner} owner - objeto que se suscribe al evento
+     * @param {EventFn} fn - funcion que se ejecuta al producirse el evento
      */
-    addAsPermanent(event, owner, fn) {
+    private addAsPermanent(event: EventName, owner: Owner, fn: EventFn) {
         this.addToOwnersMap(event, owner, fn, this.ownersPermanentMap);
     }
 
     /**
      * Metodo para almacenar un evento en el mapa de propietarios
-     * @param {String} event - nombre del evento 
-     * @param {Object} owner - objeto que se suscribe al evento
-     * @param {Function} fn - funcion que se ejecuta al producirse el evento
+     * @param {EventName} event - nombre del evento 
+     * @param {Owner} owner - objeto que se suscribe al evento
+     * @param {EventFn} fn - funcion que se ejecuta al producirse el evento
      * @param {Map} ownersMap - mapa de propietarios en el que se va a guardar el evento
      */
-    addToOwnersMap(event, owner, fn, ownersMap) {
+    private addToOwnersMap(event: EventName, owner: Owner, fn: EventFn, ownersMap: Map<Owner, Map<EventName, Set<EventFn>>>) {
         // PROPIETARIOS
         if (!ownersMap.has(owner)) {
             // El propietario no existe...
@@ -172,43 +163,43 @@ export default class EventDispatcher {
             ownersMap.set(owner, new Map());
         }
         let ownerAux = ownersMap.get(owner);
-        if (!ownerAux.has(event)) {
-            // El propietario no esta suscrito a ese evento...
-            // Se crea el evento para ese propietario en el mapa de propietarios correspondiente
-            ownerAux.set(event, new Set());
+        if (ownerAux) {
+            if (!ownerAux.has(event)) {
+                // El propietario no esta suscrito a ese evento...
+                // Se crea el evento para ese propietario en el mapa de propietarios correspondiente
+                ownerAux.set(event, new Set());
+            }
+            let ownerEventAux = ownerAux.get(event);
+            // Se anade la funcion de ese evento para ese propietario en el mapa de propietarios correspondiente
+            // Nota: si se ha llegado a este punto esta funcion no esta registrada porque si lo estuviera habria salido que ya existe esa suscripcion
+            ownerEventAux?.add(fn);
         }
-        let ownerEventAux = ownerAux.get(event);
-        // Se anade la funcion de ese evento para ese propietario en el mapa de propietarios correspondiente
-        // Nota: si se ha llegado a este punto esta funcion no esta registrada porque si lo estuviera habria salido que ya existe esa suscripcion
-        ownerEventAux.add(fn);
     }
 
     /**
-    * PUBLICO
     * Metodo para suscribir un objeto a un evento una sola vez
-    * @param {String} event - nombre del evento
-    * @param {Object} owner - objeto que se suscribe al event (contexto)
-    * @param {Fn} fn - funcion que se ejecuta cuando se produce el evento
+    * @param {EventName} event - nombre del evento
+    * @param {Owner} owner - objeto que se suscribe al event (contexto)
+    * @param {EventFn} fn - funcion que se ejecuta cuando se produce el evento
     */
-    addOnce(event, owner, fn) {
+    public addOnce(event: EventName, owner: Owner, fn: EventFn) {
         this.emitter.once(event, fn, owner);
     }
 
     /**
-     * PUBLICO
-     * @param {String} event - nombre del evento 
-     * @param {String} owner - objeto suscrito al evento 
-     * @param {Function} fn - funcion que ejecuta al producirse el evento
+     * @param {EventName} event - nombre del evento 
+     * @param {Owner} owner - objeto suscrito al evento 
+     * @param {EventFn} fn - funcion que ejecuta al producirse el evento
      */
-    deepRemove(event, owner, fn) {
+    public deepRemove(event: EventName, owner: Owner, fn: EventFn) {
         // Si existe el propietario... 
         if (this.ownersMap.has(owner)) {
-            let ownersAux = this.ownersMap.get(owner);
+            let events = this.ownersMap.get(owner);
             // Si existe el evento...
-            if (ownersAux.has(event)) {
-                let ownerEventAux = ownersAux.get(event);
+            if (events && events.has(event)) {
+                let ownerEventAux = events.get(event);
                 // Si existe la funcion...
-                if (ownerEventAux.has(fn)) {
+                if (ownerEventAux && ownerEventAux.has(fn)) {
                     // Se desuscribe la funcion del evento que corresponde a cierto propietario
                     ownerEventAux.delete(fn);
 
@@ -219,17 +210,17 @@ export default class EventDispatcher {
     }
 
     /**
-    * PUBLICO
     * Metodo para desuscribir a todos los objetos de un evento concreto TEMPORAL
-    * @param {String} event - nombre del evento
+    * @param {EventName} event - nombre del evento
     */
-    removeByEvent(event) {
+    public removeByEvent(event: EventName) {
         // Existe el evento...
         if (this.eventsMap.has(event)) {
             let owners = this.eventsMap.get(event);
             // Se actualiza el mapa de propietarios
-            owners.forEach(owner => {
-                this.ownersMap.get(owner).delete(event);
+            owners?.forEach(owner => {
+                let events = this.ownersMap.get(owner)
+                events?.delete(event);
             });
 
             // Se elimina el evento
@@ -241,19 +232,19 @@ export default class EventDispatcher {
     }
 
     /**
-    * PUBLICO
     * Metodo para desuscribir a un objeto de todos sus eventos TEMPORALES
-    * @param {Object} owner - objeto suscrito al evento
+    * @param {Owner} owner - objeto suscrito al evento
     */
-    removeByOwner(owner) {
+    public removeByOwner(owner: Owner) {
         // Si existe el propietario...
         if (this.ownersMap.has(owner)) {
             // Se obtienen todos los eventos del propietario (map)
             let events = this.ownersMap.get(owner);
             // Se recorre cada evento
-            events.forEach((functions, eventName) => {
+            events?.forEach((functions, eventName) => {
                 // Se elimina el propietario de ese evento en el mapa de eventos
-                this.eventsMap.get(eventName).delete(owner);
+                let eventAux = this.eventsMap.get(eventName)
+                eventAux?.delete(owner);
 
                 // Se desuscribe el propietario de cada evento por cada funcion que tenga suscrita
                 // (no es lo habitual, pero podria darse el caso que un
@@ -269,29 +260,31 @@ export default class EventDispatcher {
     }
 
     /**
-    * PUBLICO
     * Metodo para desuscribir a un objeto de un evento concreto TEMPORAL
-    * @param {String} event - nombre del evento
-    * @param {Object} owner - objeto suscrito al evento
+    * @param {EventName} event - nombre del evento
+    * @param {Owner} owner - objeto suscrito al evento
     */
-    remove(event, owner) {
+    public remove(event: EventName, owner: Owner) {
         // Existe el evento...
         if (this.eventsMap.has(event)) {
             // Existe el propietario...
             let eventAux = this.eventsMap.get(event);
-            if (eventAux.has(owner)) {
+            if (eventAux && eventAux.has(owner)) {
                 // Se actualiza el mapa de eventos
                 eventAux.delete(owner);
 
                 // Se desuscriben todas las funciones del propietarios que estan suscritas a ese evento
                 // (a partir del mapa de propietarios)
-                let ownerEventAux = this.ownersMap.get(owner).get(event);
-                ownerEventAux.forEach(fn => {
-                    this.emitter.off(event, fn, owner);
-                });
+                let events = this.ownersMap.get(owner)
+                if (events) {
+                    let ownerEventAux = events.get(event);
+                    ownerEventAux?.forEach(fn => {
+                        this.emitter.off(event, fn, owner);
+                    });
 
-                // Se actualiza el mapa de propietarios
-                this.ownersMap.get(owner).delete(event);
+                    // Se actualiza el mapa de propietarios
+                    events.delete(event);
+                }
             }
         }
     }
@@ -301,7 +294,7 @@ export default class EventDispatcher {
     * Nota: si no hay comunicacion entre escenas, es recomendable llamarlo por cada
     * cambio de escenas para mejorar el rendimiento
     */
-    removeAll() {
+    public removeAll() {
         this.emitter.shutdown();
         this.eventsMap.clear();
         this.ownersMap.clear();

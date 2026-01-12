@@ -37,11 +37,11 @@ export default class Scene6Livingroom extends BaseScene {
         let node = super.readNodes(nodes, "scene6\\scene6Livingroom", "main", true);
         let phoneNode = super.readNodes(nodes, "scene6\\scene6Livingroom", "phone", true);
 
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         this.phoneManager.icon.disableInteractive();
         this.phoneManager.phone.setChatNode(this.chatName, phoneNode);
 
-        
+
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
             this.dialogManager.setNode(node, [momPortrait, dadPortrait]);
@@ -59,7 +59,7 @@ export default class Scene6Livingroom extends BaseScene {
 
         // Al producirse, se crean los elementos interactuables de la escena
         this.dispatcher.add("endConversation", this, () => {
-            this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+            this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
             let chat = this.phoneManager.phone.chats.get(this.chatName);
             chat.disableInteractive()
 

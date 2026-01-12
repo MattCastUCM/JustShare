@@ -37,7 +37,7 @@ export default class Scene4Garage extends BaseScene {
         let nodes = this.cache.json.get('scene4Garage');
         let node = super.readNodes(nodes, "scene4\\scene4Garage", "gifts", true);
 
-        let chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
 
 
         // Callback que al llamarse cambiara el nodo de dialogo
@@ -45,14 +45,14 @@ export default class Scene4Garage extends BaseScene {
             this.dialogManager.setNode(node, [paulaPortrait]);
         }
 
-                
+
         // Al producirse, se recibe un mensaje en el movil
         this.dispatcher.add("receiveMsg", this, () => {
             setTimeout(() => {
                 this.dialogManager.processNode();
             }, 1);
         });
-        
+
         // Al producirse, se hace que se pueda contestar al movil
         this.dispatcher.add("endGifts", this, () => {
             setTimeout(() => {
@@ -68,7 +68,7 @@ export default class Scene4Garage extends BaseScene {
                 this.dialogManager.setNode(node, [paulaPortrait]);
             }, true, "photo");
         });
-        
+
         // Al producirse, se recibe un mensaje en el movil
         this.dispatcher.add("endPhoto", this, () => {
             let phoneNode = super.readNodes(nodes, "scene4\\scene4Garage", "phone2", true);
@@ -85,7 +85,7 @@ export default class Scene4Garage extends BaseScene {
         // Al producirse, se cambia a la escena de transicion y luego a la escena del salon
         this.dispatcher.add("endInterruption", this, () => {
             let params = {
-                text: this.gameManager.translate("scene4.partyEnd", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene4.partyEnd", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene4Bedroom");
                 },

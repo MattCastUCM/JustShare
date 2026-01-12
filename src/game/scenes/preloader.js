@@ -2,6 +2,9 @@ import { Scene } from "phaser";
 import GameManager from "../managers/gameManager";
 import SceneManager from "../managers/sceneManager";
 import TrackerManager from "../managers/trackerManager";
+import TranslatorManager from "../managers/translatorManager";
+import i18next from "i18next";
+import Backend from 'i18next-http-backend';
 
 export default class Preloader extends Scene {
     /**
@@ -9,20 +12,7 @@ export default class Preloader extends Scene {
     * @extends Scene
     */
     constructor() {
-        super({
-            key: 'Preloader',
-            // Se carga el plugin i18next
-            pack: {
-                files: [{
-                    type: 'plugin',
-                    key: 'rextexttranslationplugin',
-                    url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rextexttranslationplugin.min.js',
-                    start: true,
-                    // Add text-translation plugin to `scene.translation`
-                    mapping: 'translation'
-                }]
-            }
-        });
+        super('Preloader');
     }
 
     loadUIAssets() {
@@ -100,38 +90,35 @@ export default class Preloader extends Scene {
             namespaces[i] = namespaces[i].replace(/\//g, '\\');
         }
 
-        // i18next es un framework de internalizacion ampiamente usado en javascript
-        // PAGINA DONDE DESCARGARLO -> https://rexrainbow.github.io/phaser3-rex-notes/docs/site/i18next/
-        // DOCUMENTACION OFICIAL -> https://www.i18next.com/
-
-        // Se inicializa el plugin
         // Inicialmente solo se carga el idioma inicial y los de respaldo
         // Luego, conforme se usan tambien se cargan el resto
-        this.plugins.get('rextexttranslationplugin').initI18Next(this, {
-            // Idioma inicial
-            lng: 'es',
-            // en caso de que no se encuentra una key en otro idioma se comprueba en los siguientes en orden
-            fallbackLng: 'es',
-            // Idiomas permitidos
-            // Sin esta propiedad a la hora de buscar las traducciones se podria buscar
-            // en cualquier idioma (aunque no existiese)
-            supportedLngs: ['es'],
-            // IMPORTANTE: hay que precargar los namespaces de todos los idiomas porque sino a la hora
-            // de usar un namespace por primera vez no le da tiempo a encontrar la traduccion
-            // y termina usando la del idioma de respaldo
-            preload: ['es'],
-            // Namespaces que se cargan para cada uno de los idiomas
-            ns: namespaces,
-            // Mostrar informacion de ayuda por consola
-            debug: false,
-            // Cargar las traducciones de un servidor especificado en vez de ponerlas directamente
-            backend: {
-                // La ruta desde donde cargamos las traducciones
-                // {{lng}} --> nombre carpeta de cada uno de los idiomas
-                // {{ns}} --> nombre carpeta de cada uno de los namespaces
-                loadPath: 'localization/{{lng}}/{{ns}}.json'
-            }
-        })
+        i18next
+            .use(Backend)
+            .init({
+                // Idioma inicial
+                lng: 'es',
+                // en caso de que no se encuentra una key en otro idioma se comprueba en los siguientes en orden
+                fallbackLng: 'es',
+                // Idiomas permitidos
+                // Sin esta propiedad a la hora de buscar las traducciones se podria buscar
+                // en cualquier idioma (aunque no existiese)
+                supportedLngs: ['es'],
+                // IMPORTANTE: hay que precargar los namespaces de todos los idiomas porque sino a la hora
+                // de usar un namespace por primera vez no le da tiempo a encontrar la traduccion
+                // y termina usando la del idioma de respaldo
+                preload: ['es'],
+                // Namespaces que se cargan para cada uno de los idiomas
+                ns: namespaces,
+                // Mostrar informacion de ayuda por consola
+                debug: false,
+                // Cargar las traducciones de un servidor especificado en vez de ponerlas directamente
+                backend: {
+                    // La ruta desde donde cargamos las traducciones
+                    // {{lng}} --> nombre carpeta de cada uno de los idiomas
+                    // {{ns}} --> nombre carpeta de cada uno de los namespaces
+                    loadPath: 'localization/{{lng}}/{{ns}}.json'
+                }
+            })
     }
 
     loadDialogs(dialogsAndNamespaces) {
@@ -417,9 +404,10 @@ export default class Preloader extends Scene {
         let sceneManager = SceneManager.getInstance();
         let gameManager = GameManager.getInstance();
         let trackerManager = TrackerManager.getInstance();
+        let translatorManager = TranslatorManager.getInstance();
 
         sceneManager.init(this);
-        gameManager.init(this);
+        gameManager.init();
         trackerManager.init();
 
         gameManager.startTitleScene();

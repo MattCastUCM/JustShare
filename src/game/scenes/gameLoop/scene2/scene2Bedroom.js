@@ -16,8 +16,8 @@ export default class Scene2Bedroom extends BaseScene {
         let bg = this.add.image(0, 0, 'bedroomNightBg').setOrigin(0, 0);
         this.scale = this.CANVAS_HEIGHT / bg.height;
         bg.setScale(this.scale);
-        
-        
+
+
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene2Bedroom');
         let generalNodes = this.cache.json.get('generalDialogs');
@@ -27,20 +27,20 @@ export default class Scene2Bedroom extends BaseScene {
         super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
             this.dialogManager.setNode(closetNode, []);
         }, false, "closet");
-        
+
         // Cama
         let bedNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
-        
+
         // Ordenador
         this.computer.socialMediaScreen.addDirectChat("harasser")
         let pcNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "computer", true);
         this.dialogManager.setNode(pcNode, [])
 
         let canUseComputer = true
-        
+
         super.createInteractiveElement(1390, 400, "pointer", 0.3, () => {
             if (canUseComputer) {
                 this.gameManager.switchToComputer()
@@ -49,7 +49,7 @@ export default class Scene2Bedroom extends BaseScene {
                 this.dialogManager.setNode(pcNode, [])
             }
         }, false, "computer");
-        
+
 
         // Al producirse, aparece el icono del telefono y se recibe un mensaje
         this.dispatcher.add("endConversation", this, () => {
@@ -58,16 +58,16 @@ export default class Scene2Bedroom extends BaseScene {
 
             bedNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "bedUnanswered", true);
 
-            let chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+            let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
             let phoneNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "phone", true);
             this.phoneManager.phone.addChat(chatName, "harasserPfp");
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
 
             this.dialogManager.setNode(null, []);
         })
-        
+
         // Al producirse, se cambian los nodos de la cama y el armario
-        this.dispatcher.add("chatEnded", this, () =>{
+        this.dispatcher.add("chatEnded", this, () => {
             pcNode = super.readNodes(generalNodes, "generalDialogs", "computerNight", true);
             bedNode = super.readNodes(generalNodes, "generalDialogs", "bed", true);
             closetNode = super.readNodes(generalNodes, "generalDialogs", "closetNight", true);
@@ -80,7 +80,7 @@ export default class Scene2Bedroom extends BaseScene {
                 // se cambia a la escena de transicion y luego a la escena del recreo del dia siguiente
                 setTimeout(() => {
                     let params = {
-                        text: this.gameManager.translate("scene3.startWeek", { ns: "transitions", returnObjects: true }),
+                        text: this.translatorManager.translate("scene3.startWeek", "transitions"),
                         onComplete: () => {
                             this.UIManager.moveLids(true);
                             this.sceneManager.changeScene("Scene3Break");
@@ -100,5 +100,5 @@ export default class Scene2Bedroom extends BaseScene {
         });
     }
 
-    
+
 }

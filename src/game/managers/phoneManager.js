@@ -1,6 +1,6 @@
 import GameManager from './gameManager';
 import Phone from '../UI/phone/phone';
-import EventDispatcher from '../eventDispatcher';
+import EventDispatcher from './eventDispatcher';
 import TrackerManager from './trackerManager';
 import { TEXT_CONFIG } from '../utils/graphics';
 
@@ -12,7 +12,6 @@ export default class PhoneManager {
     constructor(scene) {
         this.scene = scene;
         this.gameManager = GameManager.getInstance();
-        this.i18next = this.gameManager.i18next;
         this.dispatcher = EventDispatcher.getInstance();
         this.trackerManager = TrackerManager.getInstance();
 

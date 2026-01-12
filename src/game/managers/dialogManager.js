@@ -2,8 +2,9 @@ import { Scene } from "phaser";
 import TextBox from '../UI/dialog/textBox';
 import OptionBox from '../UI/dialog/optionBox';
 import GameManager from './gameManager';
-import EventDispatcher from "../eventDispatcher";
+import EventDispatcher from "./eventDispatcher";
 import SceneManager from "./sceneManager";
+import TrackerManager from "./trackerManager";
 
 /*
 PARA ARREGLAR NODOS DE EVENTO SI SE sALTAN LOS DIALOGOS:
@@ -25,6 +26,7 @@ export default class DialogManager {
         this.gameManager = GameManager.getInstance();
         this.dispatcher = EventDispatcher.getInstance();
         this.sceneManager = SceneManager.getInstance();
+        this.trackerManager = TrackerManager.getInstance();
 
         this.textbox = null;                // Instancia de la caja de dialogo
         this.lastCharacter = "";            // Ultimo personaje que hablo

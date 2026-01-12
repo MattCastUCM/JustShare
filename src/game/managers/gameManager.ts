@@ -1,0 +1,115 @@
+import SceneManager from "./sceneManager";
+import TrackerManager from "./trackerManager";
+import TranslatorManager from "./translatorManager";
+import Computer from "../computer/computer";
+import UIManager from "./UIManager";
+import { UserInfo } from "../../types";
+import { Singleton } from "../utils/singleton";
+
+export default class GameManager extends Singleton {
+    private sceneManager: SceneManager;
+    private trackerManager: TrackerManager;
+    private translatorManager: TranslatorManager;
+
+    // Blackboard de variables de todo el juego
+    public blackboard: Map<string, any>;
+
+    // Escena de la UI
+    public UIManager: UIManager
+
+    // Escena del ordenador
+    private computer: Computer;
+    private sceneBeforeComputer: string;
+
+    // Informacion del usuario
+    private userInfo: UserInfo;
+
+    public constructor() {
+        super();
+
+        // Blackboard de variables de todo el juego
+        this.blackboard = new Map();
+        this.userInfo = {
+            name: "",
+            player: "male",
+            sexuality: "heterosexual",
+            harasser: "male"
+        }
+    }
+
+    public init() {
+        this.sceneManager = SceneManager.getInstance();
+        this.trackerManager = TrackerManager.getInstance();
+        this.translatorManager = TranslatorManager.getInstance();
+    }
+
+    private resetGame() {
+        this.blackboard.clear();
+
+        this.sceneManager.clearParallelScenes();
+        this.sceneManager.clearPersistentScenes();
+
+        let UIsceneName = 'UIManager';
+        this.sceneManager.runInParallel(UIsceneName);
+        this.UIManager = this.sceneManager.getScene(UIsceneName) as UIManager;
+    }
+
+    public startTitleScene() {
+        this.resetGame()
+
+        this.sceneManager.changeScene("TitleScene");
+    }
+
+    public startGame(userInfo: UserInfo) {
+        this.userInfo = userInfo;
+
+        let computerSceneName = 'Computer';
+        this.sceneManager.addPersistentScene(computerSceneName);
+        this.computer = this.sceneManager.getScene(computerSceneName) as Computer;
+
+        // Pasa a la escena inicial con los parametros text y onComplete
+        let params: Record<string, any> = {
+            text: this.translatorManager.translate("scene1.classroom", "transitions"),
+            onComplete: () => {
+                this.UIManager.phoneManager?.activatePhoneIcon(false);
+                this.sceneManager.changeScene("Scene1Classroom");
+                // this.UIManager.phoneManager?.activatePhoneIcon(true);
+                // this.sceneManager.changeScene("Scene1Bedroom1")
+            },
+        };
+        this.sceneManager.changeScene("TextOnlyScene", params)
+
+        // TRACKER EVENT
+        // console.log("Inicio del dia 1");
+        // this.sendStartGame();
+        this.trackerManager.sendStartGame(userInfo);
+    }
+
+    public switchToComputer() {
+        this.sceneBeforeComputer = this.sceneManager.getCurrentScene().scene.key;
+        let params = {
+            onWake: () => {
+                this.UIManager.phoneManager?.activatePhoneIcon(false);
+            }
+        };
+        this.sceneManager.changeScene("Computer", params, true)
+    }
+
+    public leaveComputer() {
+        let params = {
+            onWake: () => {
+                this.UIManager.phoneManager?.activatePhoneIcon(true);
+            }
+        };
+        this.sceneManager.changeScene(this.sceneBeforeComputer, params, true);
+
+    }
+
+    public getUserInfo() {
+        return this.userInfo;
+    }
+
+    public getComputer() {
+        return this.computer;
+    }
+}

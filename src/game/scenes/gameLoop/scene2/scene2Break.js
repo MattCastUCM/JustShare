@@ -31,11 +31,11 @@ export default class Scene2Break extends BaseScene {
         let paulaPortrait = new Portrait(this, "paula", paulaTr, "paula")
         this.portraits.set("paula", paulaPortrait);
 
-        
+
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene2Break');
         let node = super.readNodes(nodes, "scene2\\scene2Break", "part1", true);
-        
+
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
             this.dialogManager.setNode(node, [lauraPortrait]);
@@ -49,11 +49,11 @@ export default class Scene2Break extends BaseScene {
             node = super.readNodes(nodes, "scene2\\scene2Break", "part2", true);
             this.dialogManager.setNode(node, [lauraPortrait, paulaPortrait]);
         });
-    
+
         // Al producirse, se cambia a la escena de transicion y luego a la de la habitacion
         this.dispatcher.add("endBreak", this, () => {
             let params = {
-                text: this.gameManager.translate("scene2.classEnd", { ns: "transitions", returnObjects: true }),
+                text: this.translatorManager.translate("scene2.classEnd", "transitions"),
                 onComplete: () => {
                     this.sceneManager.changeScene("Scene2Bedroom");
                 },

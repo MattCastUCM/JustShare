@@ -127,7 +127,7 @@ export default class Scene1Bedroom1 extends BaseScene {
                 // se cambia a la escena de transicion y luego a la escena del comedor del dia siguiente
                 setTimeout(() => {
                     let params = {
-                        text: this.gameManager.translate("scene1.nextDay", { ns: "transitions", returnObjects: true }),
+                        text: this.translatorManager.translate("scene1.nextDay", "transitions"),
                         onComplete: () => {
                             this.UIManager.moveLids(true);
                             this.sceneManager.changeScene("Scene1Lunch2");

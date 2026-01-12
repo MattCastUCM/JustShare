@@ -16,13 +16,13 @@ export default class Scene4Bedroom extends BaseScene {
         let bg = this.add.image(0, 0, 'bedroomNightBg').setOrigin(0, 0);
         this.scale = this.CANVAS_HEIGHT / bg.height;
         bg.setScale(this.scale);
-        
+
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene4Bedroom');
         let generalNodes = this.cache.json.get('generalDialogs');
 
-        this.chatName = this.gameManager.translate("textMessages.chat2", { ns: "deviceInfo", returnObjects: true });
+        this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
 
 
         // Armario
@@ -30,19 +30,19 @@ export default class Scene4Bedroom extends BaseScene {
         super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
             this.dialogManager.setNode(closetNode, []);
         }, false, "closet");
-        
+
         // Cama
         let bedNode = super.readNodes(nodes, "scene4\\scene4Bedroom", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
-        
+
         let phoneNode = super.readNodes(nodes, "scene4\\scene4Bedroom", "phone", true);
         this.phoneManager.phone.setChatNode(this.chatName, phoneNode);
 
-        
+
         // // Al producirse, se cambia el nodo de la cama
-        this.dispatcher.add("chatEnded", this, () =>{
+        this.dispatcher.add("chatEnded", this, () => {
             bedNode = super.readNodes(generalNodes, "generalDialogs", "bed", true);
             closetNode = super.readNodes(generalNodes, "generalDialogs", "closetNight", true);
         });
@@ -54,7 +54,7 @@ export default class Scene4Bedroom extends BaseScene {
                 // se cambia a la escena de transicion y luego a la escena del salon del dia siguiente
                 setTimeout(() => {
                     let params = {
-                        text: this.gameManager.translate("scene5.startWeek", { ns: "transitions", returnObjects: true }),
+                        text: this.translatorManager.translate("scene5.startWeek", "transitions"),
                         onComplete: () => {
                             this.UIManager.moveLids(true);
                             this.sceneManager.changeScene("Scene5Livingroom");
@@ -67,12 +67,12 @@ export default class Scene4Bedroom extends BaseScene {
 
                     // TODO: DISCARDED TRACKER EVENT
                     // console.log("Inicio del dia 5");
-                
+
                     this.sceneManager.changeScene("TextOnlyScene", params);
                 }, 1000);
             });
         });
     }
-    
-    
+
+
 }

@@ -17,7 +17,7 @@ export default class MessagesScreen extends BaseScreen {
         textConfig.color = '#000';
 
         // Se coge el texto del archivo de traducciones y se pone en pantalla 
-        let text = this.gameManager.translate("textMessages.title", { ns: "deviceInfo" });
+        let text = this.translatorManager.translate("textMessages.title", "deviceInfo");
         let titleText = this.scene.add.text(this.BG_X, this.BG_Y * 0.225, text, textConfig).setOrigin(0.5, 0.5);
 
         this.chatNum = 0;
