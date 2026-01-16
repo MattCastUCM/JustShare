@@ -4,12 +4,13 @@ import TranslatorManager from "./translatorManager";
 import Computer from "../computer/computer";
 import UIManager from "./UIManager";
 import { UserInfo } from "../../types";
-import { Singleton } from "../utils/singleton";
 
-export default class GameManager extends Singleton {
+export default class GameManager {
     private sceneManager: SceneManager;
     private trackerManager: TrackerManager;
     private translatorManager: TranslatorManager;
+
+    private static instance: GameManager;
 
     // Blackboard de variables de todo el juego
     public blackboard: Map<string, any>;
@@ -24,9 +25,7 @@ export default class GameManager extends Singleton {
     // Informacion del usuario
     private userInfo: UserInfo;
 
-    public constructor() {
-        super();
-
+    protected constructor() {
         // Blackboard de variables de todo el juego
         this.blackboard = new Map();
         this.userInfo = {
@@ -41,6 +40,11 @@ export default class GameManager extends Singleton {
         this.sceneManager = SceneManager.getInstance();
         this.trackerManager = TrackerManager.getInstance();
         this.translatorManager = TranslatorManager.getInstance();
+    }
+
+    public static getInstance() {
+        GameManager.instance = GameManager.instance ?? new GameManager();
+        return GameManager.instance;
     }
 
     private resetGame() {

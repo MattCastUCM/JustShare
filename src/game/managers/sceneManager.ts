@@ -2,11 +2,12 @@ import { Scene, Cameras } from "phaser"
 const { FADE_OUT_COMPLETE } = Cameras.Scene2D.Events
 import BaseScene from "../scenes/gameLoop/baseScene"
 import TrackerManager from "./trackerManager";
-import { Singleton } from "../utils/singleton";
 
-export default class SceneManager extends Singleton {
+export default class SceneManager {
     private FADE_OUT_TIME: number = 200;
     private FADE_IN_TIME: number = 200
+    
+    private static instance: SceneManager;
 
     private currentScene: Scene
 
@@ -18,9 +19,7 @@ export default class SceneManager extends Singleton {
 
     private trackerManager: TrackerManager
 
-    public constructor() {
-        super();
-
+    protected constructor() {
         this.runningScenes = new Set<Scene>();
         this.parallelScenes = new Set<Scene>();
         this.persistentScenes = new Set<Scene>();
@@ -31,6 +30,11 @@ export default class SceneManager extends Singleton {
     public init(scene: Scene) {
         this.currentScene = scene
         this.trackerManager = TrackerManager.getInstance();
+    }
+
+    public static getInstance() {
+        SceneManager.instance = SceneManager.instance ?? new SceneManager();
+        return SceneManager.instance;
     }
 
     private clearScenes(scenes: Set<Scene>) {

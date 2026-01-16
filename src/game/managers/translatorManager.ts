@@ -1,19 +1,23 @@
 import { Gender } from "../../types";
-import { Singleton } from "../utils/singleton";
 import i18next from "i18next";
 
-export default class TranslatorManager extends Singleton {
+export default class TranslatorManager {
+    private static instance: TranslatorManager;
+
     private genderMap: Map<string, string>;
     private defaultOptions: Record<string, any>
 
     public constructor() {
-        super();
-
         this.genderMap = new Map();
 
         this.defaultOptions = {
             returnObjects: true
         }
+    }
+
+    public static getInstance() {
+        TranslatorManager.instance = TranslatorManager.instance ?? new TranslatorManager();
+        return TranslatorManager.instance;
     }
 
     public setDefaultOption(key: string, value: any) {
@@ -36,7 +40,7 @@ export default class TranslatorManager extends Singleton {
     /**
      * Obtiene el texto traducido
      * @param {string} translationId - id completa del nodo en el que mirar
-     * @param {Object} options - parametros que pasarle a i18n
+     * @param {Record<string, any>} options - parametros que pasarle a i18n
      */
     public translate(translationId: string, namespace: string, options: Record<string, any> = {}) {
         const resolvedOptions = {

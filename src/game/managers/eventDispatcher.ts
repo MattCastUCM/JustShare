@@ -1,16 +1,17 @@
 import { Events } from "phaser";
-import { Singleton } from "../utils/singleton";
 
 type EventName = string;
 type Owner = object;
 type EventFn = (...args: any[]) => void;
 
-export default class EventDispatcher extends Singleton {
+export default class EventDispatcher {
     /**
     * Clase para tratar los mensajes sin tener en cuenta el ambito puesto que es un Singleton
     * De este modo cualquier objeto puede acceder a ella y emitir un mensaje y otro que se 
     * encuentre en otro lugar distinto puede suscribirse sin preocuparse del ambito
     */
+
+    private static instance: EventDispatcher;
 
     private emitter: Events.EventEmitter;
 
@@ -25,14 +26,17 @@ export default class EventDispatcher extends Singleton {
     private ownersPermanentMap: Map<Owner, Map<EventName, Set<EventFn>>>;
 
     public constructor() {
-        super();
-
         // Emisor de eventos
         this.emitter = new Events.EventEmitter();
 
         this.eventsMap = new Map();
         this.ownersMap = new Map();
         this.ownersPermanentMap = new Map();
+    }
+
+    public static getInstance() {
+        EventDispatcher.instance = EventDispatcher.instance ?? new EventDispatcher();
+        return EventDispatcher.instance;
     }
 
     /**

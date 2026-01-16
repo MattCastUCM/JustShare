@@ -7,9 +7,10 @@ import GameManager from "./gameManager";
 import SceneManager from "./sceneManager";
 import TrackerEvent from "../tracker/statement/trackerEvent";
 import { UserInfo } from "../../types";
-import { Singleton } from "../utils/singleton";
 
-export default class TrackerManager extends Singleton {
+export default class TrackerManager {
+    private static instance: TrackerManager;
+
     private trackerInitialized: boolean;
     private gameCompleted: boolean;
     private tracker: Tracker;
@@ -25,8 +26,6 @@ export default class TrackerManager extends Singleton {
     private TOTAL_DAYS: number = 7;
 
     public constructor() {
-        super();
-
         this.trackerInitialized = false;
         this.gameCompleted = false;
 
@@ -58,6 +57,11 @@ export default class TrackerManager extends Singleton {
     public init() {
         this.sceneManager = SceneManager.getInstance();
         this.gameManager = GameManager.getInstance();
+    }
+
+    public static getInstance() {
+        TrackerManager.instance = TrackerManager.instance ?? new TrackerManager();
+        return TrackerManager.instance;
     }
 
     sendEnterScene(scene: string, params: { text?: string }) {
