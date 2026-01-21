@@ -6,7 +6,7 @@ import { AccountActor } from "../tracker/statement/actor";
 import GameManager from "./gameManager";
 import SceneManager from "./sceneManager";
 import TrackerEvent from "../tracker/statement/trackerEvent";
-import { UserInfo } from "../../types";
+import { UserInfo } from "../../types/misc";
 
 export default class TrackerManager {
     private static instance: TrackerManager;
