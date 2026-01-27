@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 dependencies = [
     "autocorrect>=2.6.1",
     "cachetools>=6.2.4",
+    "fastapi[standard]>=0.128.0",
     "gensim>=4.4.0",
     "langchain-ollama>=1.0.1",
     "loguru>=0.7.3",

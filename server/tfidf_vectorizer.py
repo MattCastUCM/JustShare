@@ -2,6 +2,7 @@ from collections import Counter
 import numpy as np
 from math_utils import euclidean_normalization
 from collections.abc import Callable
+from typing import Literal
 
 class TfIdfVectorizer:
     tokenizer: Callable[[list[str]], list[list[str]]]
@@ -10,8 +11,9 @@ class TfIdfVectorizer:
     fitted: bool
     corpus_tokens: list[list[str]]
     use_idf: bool
+    norm: Literal["l2"] | None
 
-    def __init__(self, tokenizer: Callable[[list[str]], list[list[str]]], use_idf: bool = True):
+    def __init__(self, tokenizer: Callable[[list[str]], list[list[str]]], use_idf: bool = True, norm: Literal["l2"] | None = "l2"):
         self.tokenizer = tokenizer
         self.fitted = False
         self.use_idf = use_idf
@@ -77,7 +79,9 @@ class TfIdfVectorizer:
             tf = self.calculate_term_frequency(tokens)
             result.append(tf * self.idf)
         result = np.array(result)
-        result = euclidean_normalization(result)
+
+        if self.norm == "l2":
+            result = euclidean_normalization(result)
 
         return result
 

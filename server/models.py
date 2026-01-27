@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 from tfidf_vectorizer import TfIdfVectorizer
 from weighted_word2vec import WeightedWord2Vec
-from typing import Optional
+from typing import Optional, Literal
 import numpy as np
 
 class JaccardIndex(BaseModel):
@@ -33,8 +33,8 @@ class Corpus(BaseModel):
     word2vec: Optional[Word2VecIndex] = None
 
 class CorpusRequest(BaseModel):
-    id: str
     texts: list[str]
 
 class SimilarityRequest(BaseModel):
     text: str
+    method: Literal["jaccard", "tfidf", "embeddings", "word2vec"]

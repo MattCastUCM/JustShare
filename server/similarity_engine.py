@@ -3,7 +3,7 @@ from preprocessing import TextPreprocessor
 from tfidf_vectorizer import TfIdfVectorizer
 import numpy as np
 from similarity import jaccard_similarity, cosine_similarity
-from models import Corpus, CorpusRequest, SimilarityRequest, JaccardIndex, TfIdfIndex, EmbeddingIndex, Word2VecIndex
+from models import Corpus, JaccardIndex, TfIdfIndex, EmbeddingIndex, Word2VecIndex
 from cachetools import LRUCache
 from misc import get_embedding_model
 from gensim.models import KeyedVectors
@@ -29,14 +29,13 @@ class SimilarityEngine:
     def preprocess_batch(self, texts: list[str]) -> list[list[str]]:
         return [self.text_preprocessor.preprocess(text, max_n=self.max_n) for text in texts]
 
-    def create_corpus(self, request: CorpusRequest):
-        if request.id not in self.corpora:
-            self.corpora[request.id] = Corpus(
-                id=request.id,
-                texts=request.texts
-            )
+    def create_corpus(self, id: str, texts: list[str]):
+        self.corpora[id] = Corpus(
+            id=id,
+            texts=texts
+        )
 
-    def similarity_jaccard(self, corpus_id: str, request: SimilarityRequest):
+    def similarity_jaccard(self, corpus_id: str, text: str):
         corpus = self.corpora.get(corpus_id)
         if corpus is None:
             raise ValueError("Corpus not found.")
@@ -48,7 +47,7 @@ class SimilarityEngine:
             )
 
         tokens = self.text_preprocessor.preprocess(
-            request.text,
+            text,
             max_n = self.max_n
         )
 
@@ -60,7 +59,7 @@ class SimilarityEngine:
             "best_text": corpus.texts[best_idx]
         }
     
-    def similarity_tf_idf(self, corpus_id: str, request: SimilarityRequest):
+    def similarity_tf_idf(self, corpus_id: str, text: str):
         corpus = self.corpora.get(corpus_id)
         if corpus is None:
             raise ValueError("Corpus not found.")
@@ -75,7 +74,7 @@ class SimilarityEngine:
                 vectors=vectors
             )
 
-        vector = corpus.tfidf.model.transform([request.text])
+        vector = corpus.tfidf.model.transform([text])
         scores = cosine_similarity(corpus.tfidf.vectors, vector)
 
         best_idx = scores.argmax()
@@ -85,7 +84,7 @@ class SimilarityEngine:
             "best_text": corpus.texts[best_idx]
         }
     
-    async def similarity_embeddings(self, corpus_id: str, request: SimilarityRequest):
+    async def similarity_embeddings(self, corpus_id: str, text: str):
         corpus = self.corpora.get(corpus_id)
         if corpus is None:
             raise ValueError("Corpus not found.")
@@ -97,7 +96,7 @@ class SimilarityEngine:
                 vectors = embeddings
             )
 
-        vector = await self.embedding_model.aembed_query(request.text)
+        vector = await self.embedding_model.aembed_query(text)
         scores = cosine_similarity(corpus.embeddings.vectors, vector)
 
         best_idx = scores.argmax()
@@ -107,7 +106,7 @@ class SimilarityEngine:
             "best_text": corpus.texts[best_idx]
         }
     
-    def similarity_word2vec(self, corpus_id: str, request: SimilarityRequest):
+    def similarity_word2vec(self, corpus_id: str, text: str):
         corpus = self.corpora.get(corpus_id)
         if corpus is None:
             raise ValueError("Corpus not found.")
@@ -120,7 +119,7 @@ class SimilarityEngine:
                 vectors = vectors
             )
 
-        vector = corpus.word2vec.model.transform([request.text])
+        vector = corpus.word2vec.model.transform([text])
         scores = cosine_similarity(corpus.word2vec.vectors, vector)
 
         best_idx = scores.argmax()
