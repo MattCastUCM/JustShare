@@ -1,27 +1,35 @@
-from langchain_ollama import OllamaEmbeddings
-from langchain_core.embeddings import Embeddings
-from preprocessing import TextPreprocessor
 
-def get_embedding_model(model: str, temperature: float = 0.8) -> Embeddings: 
-    embeddings = OllamaEmbeddings(
-        model=model,
-        validate_model_on_init=True,
-        num_gpu=-1,
-        temperature=temperature
-    )
-    return embeddings
+from models import CorpusRequest, SimilarityRequest
+from dotenv import load_dotenv
+import asyncio
 
-def main():
-    # embedddings = get_embedding_model("qwen3-embedding:4b")
-    corpus = [
+load_dotenv()
+
+from similarity_engine import SimilarityEngine
+
+async def main():
+    similarity_engine = SimilarityEngine()
+
+    texts = [
+        "Gracias, si necesito algo ya te voy a decir.",
         "Igualmente, encantado de conocerte *sonríes*.",
-        "Gracias, si necesito algo ya te iré diciendo.",
-        "... Ah, sí, hola."
+        "... Ah, sí, holaaaa."
     ]
-    text_preprocessor = TextPreprocessor(2, "spanish")
-    normalized_text = text_preprocessor.preprocess_with_ngrams("¡¡¡¡Hola, te quiero mucho, eres muy guapa, favoríto!")
-    print(normalized_text)
-    return
+    text = "mira, me caes fatal, vete a la mierda absoluta"
+    similarity_engine.create_corpus(
+        CorpusRequest(
+            id = "1",
+            texts=texts
+        )
+    )
+    best_match = similarity_engine.similarity_word2vec(
+        "1", SimilarityRequest(
+            text=text,
+        )
+    )
+    print(best_match)
+
 
 if __name__ == "__main__":
-    main()
+    # _ = main()
+    asyncio.run(main())

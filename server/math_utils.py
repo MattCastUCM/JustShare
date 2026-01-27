@@ -17,11 +17,8 @@ def get_intersection(list1: list[T], list2: list[T]):
     set2 = set(list2)
     return [item for item in list1 if item in set2]
 
-def euclidean_distance(vector: np.ndarray):
-    return np.linalg.norm(vector, ord=2)
-
-def manhattan_distance(vector: np.ndarray):
-    return np.linalg.norm(vector, ord=1)
-
-def euclidean_normalization(vector: np.ndarray):
-    return vector / euclidean_distance(vector)
+def euclidean_normalization(vectors: np.ndarray):
+    vectors = np.atleast_2d(np.asarray(vectors))
+    norms = np.linalg.norm(vectors, axis=1, keepdims=True)
+    norms[norms <= 0] = 1
+    return vectors / norms
