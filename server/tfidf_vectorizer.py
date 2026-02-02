@@ -5,18 +5,11 @@ from collections.abc import Callable
 from typing import Literal
 
 class TfIdfVectorizer:
-    tokenizer: Callable[[list[str]], list[list[str]]]
-    vocab: dict[str, int]
-    idf: np.ndarray
-    fitted: bool
-    corpus_tokens: list[list[str]]
-    use_idf: bool
-    norm: Literal["l2"] | None
-
     def __init__(self, tokenizer: Callable[[list[str]], list[list[str]]], use_idf: bool = True, norm: Literal["l2"] | None = "l2"):
         self.tokenizer = tokenizer
         self.fitted = False
         self.use_idf = use_idf
+        self.norm = norm
 
     def calculate_term_frequency(self, tokens: list[str]):
         tf = np.zeros(len(self.vocab))
