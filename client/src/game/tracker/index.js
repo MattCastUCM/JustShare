@@ -2,7 +2,7 @@ import Tracker from './tracker'
 import LRS from './lrs';
 import { AccountActor } from './statement/actor';
 import { OAuth2 } from './authentication';
-import { ms } from "ms";
+// import { ms } from "ms";
 
 export function generateTrackerFromURL() {
     let urlParams = new URLSearchParams(window.location.search);
@@ -25,7 +25,7 @@ export function generateTrackerFromURL() {
 
         // batchLength = urlParams.get('batch_length');
         // batchTimeout = urlParams.get('batch_timeout');
-        batchTimeout = ms(batchTimeout)
+        // batchTimeout = ms(batchTimeout)
 
         backupUri = urlParams.get('backup_uri');
         // backupType = urlParams.get('backup_type');

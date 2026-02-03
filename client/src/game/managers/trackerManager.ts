@@ -37,8 +37,8 @@ export default class TrackerManager {
                 new LRS({
                     baseUrl: import.meta.env.VITE_LRS_BASE_URL,
                     authScheme: new BasicAuthentication(
-                        import.meta.env.VITE_LRS_AUTH_USERNAME,
-                        import.meta.env.VITE_LRS_AUTH_PASSWORD
+                        import.meta.env.VITE_LRS_USERNAME,
+                        import.meta.env.VITE_LRS_PASSWORD
                     ),
                     serializer: (statement: TrackerEvent, version: string) => statement.serializeToXApi(version)
                 }),

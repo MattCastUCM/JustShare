@@ -7,6 +7,7 @@ from settings import get_settings
 import nltk
 from load_models import get_embedding_model, get_word2vec_models, get_trained_pipelines
 from similarity_engine import SimilarityEngine
+from fastapi.middleware.cors import CORSMiddleware
 
 def create_similarity_engine(max_n: int):
 	nltk.download("punkt", quiet=True)
@@ -35,6 +36,19 @@ async def lifespan(app: FastAPI):
 	}
 
 app = FastAPI(title="Inference Server", lifespan=lifespan)
+
+origins = [
+	"http://localhost:8080"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(router)
 
 async def main():
@@ -72,5 +86,5 @@ async def main():
 
 
 if __name__ == "__main__":
-	# uvicorn.run(app, host="0.0.0.0", port=8000)
-	asyncio.run(main())
+	uvicorn.run(app, host="0.0.0.0", port=8000)
+	# asyncio.run(main())
