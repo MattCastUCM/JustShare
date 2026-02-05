@@ -261,6 +261,17 @@ export default class DialogManager {
         }
     }
 
+    async checkSimilarity(corpus, text, method) {
+        let promise = new Promise(resolve => setTimeout(resolve, 1000));
+        await promise;
+
+        return {
+            "index": 6,
+            "score": 0.42857142857142855,
+            "text": "Encantado de conocerte también."
+        };
+    }
+
     // Procesa el nodo actual dependiendo de su tipo
     processNode() {
         // Si el nodo actual es valido
@@ -288,6 +299,9 @@ export default class DialogManager {
 
                 this.createOptions(this.currNode.choices);
                 this.activateOptions(true);
+            }
+            else if (this.currNode.type === "similarity") {
+
             }
             else if (this.currNode.type === "text") {
                 // Si el nodo no tiene texto, se lo salta y pasa al siguiente nodo

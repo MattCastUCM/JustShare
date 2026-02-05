@@ -1,6 +1,6 @@
-from schemas import SimilarityRequest, SimilarityResponse
+from app.schemas.similarity import SimilarityRequest, SimilarityResponse
 from fastapi import APIRouter, Request, HTTPException
-from similarity_engine import SimilarityEngine
+from app.services.similarity_engine import SimilarityEngine
 from typing import cast
 from fastapi.concurrency import run_in_threadpool
 

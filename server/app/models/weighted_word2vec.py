@@ -1,7 +1,7 @@
-from tfidf_vectorizer import TfIdfVectorizer
-from preprocessing import TextPreprocessor, Token
+from app.models.tfidf_vectorizer import TfIdfVectorizer
+from app.models.preprocessing import TextPreprocessor, Token
 import numpy as np
-from math_utils import euclidean_normalization
+from app.utils.math_utils import euclidean_normalization
 from gensim.models import KeyedVectors
 from abc import ABC, abstractmethod
 from spacy.language import Language

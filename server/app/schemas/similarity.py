@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Literal
-from settings import get_settings
+from app.core.settings import get_settings
 
 class SimilarityRequest(BaseModel):
     corpus: list[str] = Field(..., min_length=1)

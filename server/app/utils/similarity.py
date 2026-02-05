@@ -1,4 +1,4 @@
-from math_utils import get_intersection, get_union
+from app.utils.math_utils import get_intersection, get_union
 import numpy as np
 import numpy.typing as npt
 from loguru import logger

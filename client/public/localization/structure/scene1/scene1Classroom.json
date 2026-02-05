@@ -11,27 +11,56 @@
                 {
                     "appearLaura": {
                         "delay": 1500
-                     }
+                    }
                 }
             ]
-        }    
+        }
     },
-
     "part2": {
         "root": {
             "type": "text",
             "character": "laura",
-            "next": "thanks"
+            "next": "thanks2"
         },
         "thanks": {
             "type": "choice",
             "choices": [
-                { "next": "friendly" },
-                { "next": "neutral" },
-                { "next": "shy" }
+                {
+                    "next": "friendly"
+                },
+                {
+                    "next": "neutral"
+                },
+                {
+                    "next": "shy"
+                }
             ]
         },
-
+        "thanks2": {
+            "type": "similarity",
+            "method": "jaccard",
+            "threshold": 0.3,
+            "character": "player",
+            "choices": [
+                {
+                    "next": "friendly"
+                },
+                {
+                    "next": "neutral"
+                },
+                {
+                    "next": "shy"
+                }
+            ],
+            "default": {
+                "next": "default"
+            }
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "thanks2"
+        },
         "friendly": {
             "type": "text",
             "character": "laura",
@@ -47,17 +76,15 @@
             "character": "laura",
             "next": "break"
         },
-        
         "break": {
             "type": "event",
             "events": [
                 {
-                    "startBreak": { 
+                    "startBreak": {
                         "delay": 500
                     }
                 }
             ]
         }
     }
-
 }

@@ -4,8 +4,7 @@ from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 from nltk.tokenize import TweetTokenizer
 from autocorrect import Speller
-from language_code import get_language_code
-import spacy
+from app.utils.language_name import get_language_name
 from spacy.tokens import Doc
 from pydantic import BaseModel
 from typing import Callable
@@ -24,10 +23,10 @@ class TextPreprocessor:
     MIN_NGRAM_SIZE = 2
 
     def __init__(self, language: str, spacy_models: dict[str, Language]):
-        self.stopwords = set(stopwords.words(language))
-        self.stemmer = SnowballStemmer(language)
+        self.stopwords = set(stopwords.words(get_language_name(language)))
+        self.stemmer = SnowballStemmer(get_language_name(language))
         self.tokenizer = TweetTokenizer(reduce_len=True)
-        self.speller = Speller(get_language_code(language))
+        self.speller = Speller(language)
         self.nlp = spacy_models.get(language)
 
     # --------------------

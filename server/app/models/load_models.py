@@ -1,10 +1,10 @@
 from langchain_ollama import OllamaEmbeddings
 from gensim.models import KeyedVectors
-from settings import get_settings
-import os
+from app.core.settings import get_settings
 from loguru import logger
 import spacy
 from spacy.language import Language
+import os
 
 def get_embedding_model(model: str, temperature: float = 0.8) -> OllamaEmbeddings: 
     settings = get_settings()

@@ -1,12 +1,12 @@
 from contextlib import asynccontextmanager
 import asyncio
 from fastapi import FastAPI
-from routers import router
+from app.routers.inference import router
 import uvicorn
-from settings import get_settings
+from app.core.settings import get_settings
 import nltk
-from load_models import get_embedding_model, get_word2vec_models, get_trained_pipelines
-from similarity_engine import SimilarityEngine
+from app.models.load_models import get_embedding_model, get_word2vec_models, get_trained_pipelines
+from app.services.similarity_engine import SimilarityEngine
 from fastapi.middleware.cors import CORSMiddleware
 
 def create_similarity_engine(max_n: int):
@@ -14,7 +14,7 @@ def create_similarity_engine(max_n: int):
 	nltk.download("stopwords", quiet=True)
 
 	settings = get_settings()
-
+	
 	embedding_model = get_embedding_model(settings.embedding_model)
 	word2vec_models = get_word2vec_models(settings.languages)
 	spacy_models = get_trained_pipelines(settings.languages)
@@ -80,11 +80,11 @@ async def main():
 	best_match = similarity_engine.similarity_word2vec(
 		corpus=texts, 
 		text=text,
-		language="spanish"
+		language="es"
 	)
 	print(best_match)
 
 
 if __name__ == "__main__":
-	uvicorn.run(app, host="0.0.0.0", port=8000)
-	# asyncio.run(main())
+	# uvicorn.run(app, host="0.0.0.0", port=8000)
+	asyncio.run(main())

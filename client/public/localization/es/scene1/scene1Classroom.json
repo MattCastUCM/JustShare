@@ -27,7 +27,20 @@
                 "text": "... Ah, sí, hola."
             }
         ],
-
+        "thanks2": [
+            {
+                "text": "Igualmente, <player, encantado, encantada> de conocerte *sonríes*."
+            },
+            {
+                "text": "Gracias, si necesito algo ya te iré diciendo."
+            },
+            {
+                "text": "... Ah, sí, hola."
+            }
+        ],
+        "default": {
+            "text": "(Mejor no decir eso)."
+        },
         "friendly": {
             "text": "Pareces <player, majo, maja>. Si necesitas cualquier cosa, no dudes en preguntarme."
         },
@@ -38,5 +51,4 @@
             "text": "Venga, no seas <player, tímido, tímida>. Si necesitas cualquier cosa, no dudes en preguntarme."
         }
     }
-
 }

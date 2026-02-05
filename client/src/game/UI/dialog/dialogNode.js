@@ -62,6 +62,18 @@ export class ChoiceNode extends DialogNode {
     }
 }
 
+export class SimilarityNode extends DialogNode {
+    constructor() {
+        super();
+
+        this.type = "similarity";
+        this.method = null;
+        this.threshold = 0;
+        this.character = null;
+        this.choices = [];
+    }
+}
+
 export class ConditionNode extends DialogNode {
     /**
     * Clase para la informacion de los nodos de de condicion

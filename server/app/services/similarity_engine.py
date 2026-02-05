@@ -1,11 +1,11 @@
 
-from preprocessing import TextPreprocessor
-from tfidf_vectorizer import TfIdfVectorizer
-from similarity import jaccard_similarity, cosine_similarity
-from schemas import SimilarityResponse
+from app.models.preprocessing import TextPreprocessor
+from app.models.tfidf_vectorizer import TfIdfVectorizer
+from app.utils.similarity import jaccard_similarity, cosine_similarity
+from app.schemas.similarity import SimilarityResponse
 from functools import lru_cache
 from gensim.models import KeyedVectors
-from weighted_word2vec import WeightedWord2Vec, POSWeightedWord2Vec
+from app.models.weighted_word2vec import POSWeightedWord2Vec
 from langchain_ollama import OllamaEmbeddings
 import numpy as np
 from spacy.language import Language

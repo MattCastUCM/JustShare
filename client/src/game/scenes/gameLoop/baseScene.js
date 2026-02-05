@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode } from '../../UI/dialog/dialogNode';
+import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode, SimilarityNode } from '../../UI/dialog/dialogNode';
 import GameManager from '../../managers/gameManager';
 import SceneManager from "../../managers/sceneManager";
 import TrackerManager from "../../managers/trackerManager";
@@ -8,8 +8,8 @@ import TranslatorManager from "../../managers/translatorManager";
 
 export default class BaseScene extends Scene {
     /**
-     * Escena base para las escenas del juego. Guarda parametros como las dimensiones 
-     * del canvas o los managers y posiciones de los retratos de los personajes 
+     * Escena base para las escenas del juego. Guarda parametros como las dimensiones
+     * del canvas o los managers y posiciones de los retratos de los personajes
      * @extends Phaser.Scene
      * @param {String} name - id de la escena
      * @param {String} atlasName - nombre del atlas que se utiliza en esta escena
@@ -42,7 +42,7 @@ export default class BaseScene extends Scene {
         this.PORTRAIT_Y = this.CANVAS_HEIGHT / 1.5;
         this.PORTRAIT_SCALE = 0.7;
 
-        // Transform del retrato con posicion y escala 
+        // Transform del retrato con posicion y escala
         this.portraitTr = {
             x: this.PORTRAIT_X,
             y: this.PORTRAIT_Y,
@@ -62,7 +62,7 @@ export default class BaseScene extends Scene {
         // Se tiene que suscribir el onCreate al evento create porque la escena base
         // es la que se encarga de cambiar los portraits del DialogManager, por lo que
         // no se puede llamar antes de que se cree la escena hija porque no va a haber
-        // portraits, y la escena hija no puede llamar al super al final de su create 
+        // portraits, y la escena hija no puede llamar al super al final de su create
         // porque necesita las variables de la clase padre
         this.events.once('create', () => {
             this.onCreate(params);
@@ -75,7 +75,7 @@ export default class BaseScene extends Scene {
 
     /**
      * Metodo que se llama al terminar de crear la escena. Se encarga de llamar initialSetup
-     * @param {Object} params - objeto con los parametros que pasarle a initialSetup 
+     * @param {Object} params - objeto con los parametros que pasarle a initialSetup
      */
     onCreate(params) {
         this.initialSetup(params);
@@ -83,7 +83,7 @@ export default class BaseScene extends Scene {
 
     /**
      * Metodo que se llama al despertar la escena. Se encarga de llamar initialSetup
-     * @param {Object} params - objeto con los parametros que pasarle a initialSetup 
+     * @param {Object} params - objeto con los parametros que pasarle a initialSetup
      */
     onWake(params) {
         this.initialSetup(params);
@@ -105,7 +105,7 @@ export default class BaseScene extends Scene {
     /**
      * Se encarga de configurar la escena con los parametros iniciales y
      * de anadir los retratos de la escena actual en el dialogManager
-     * @param {Object} params - parametros que se le pasan a la configuracion inicial 
+     * @param {Object} params - parametros que se le pasan a la configuracion inicial
      */
     initialSetup(params) {
         this.dialogManager.changeScene(this);
@@ -129,6 +129,66 @@ export default class BaseScene extends Scene {
         return root;
     }
 
+    createTextNode(character, textTranslation, getObjs, nextNode = null, centered = null) {
+        let node = new TextNode();
+        // Obtiene la id del personaje y coge su nombre del archivo de nombres localizados
+        // let character = fileObj[id].character;
+        node.character = character;
+        node.name = this.translatorManager.translate(node.character, "names", {
+            returnObjects: getObjs
+        });
+
+        // Obtiene si el texto esta centrado o no
+        if (centered) {
+            node.centered = centered;
+        }
+
+        // Obtiene los fragmentos del dialogo
+        let texts = [];
+        // let textTranslation = this.translatorManager.translate(translationId, namespace, {
+        //     name: this.playerName,
+        //     context: this.context,
+        //     returnObjects: getObjs
+        // });
+
+        // Si el texto no esta dividido en fragmentos, se guarda directamente en el array de textos
+        if (!Array.isArray(textTranslation)) {
+            texts.push(textTranslation);
+        }
+        // Si no, se guarda cada fragmento del dialogo en el array
+        else {
+            for (let i = 0; i < textTranslation.length; i++) {
+                texts.push(textTranslation[i]);
+            }
+        }
+
+        // Se recorren todos los fragmentos de texto
+        for (let i = 0; i < texts.length; i++) {
+            // Se crea un dialogo con todo el texto a mostrar
+            let split = {
+                text: texts[i],
+                name: node.name,
+            }
+
+            // Se separa el fragmento en caso de que el texto sea demasiado largo
+            let dialogs = this.splitDialogs([split], character, node.centered);
+
+            // Se concatenan los fragmentos obtenidos con los que ya habia en el nodo
+            // (se tienen que concatenar, ya que splitDialogs devuelve un array, por
+            // lo que hacer push a node.dialogs meteria los fragmentos en varios arrays)
+            node.dialogs = node.dialogs.concat(dialogs);
+        }
+        node.currDialog = 0;
+
+        // Si hay un nodo despues de este, se crea de manera y se
+        // guarda la id de dicho nodo en el array de nodos siguientes
+        if (nextNode) {
+            // let nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
+            node.next.push(nextNode.fullId);
+        }
+
+        return node;
+    }
 
     /**
     * Va leyendo los nodos del json de manera recursiva (el archivo se lee una sola vez y se pasa el objeto obtenido como parametro)
@@ -137,25 +197,25 @@ export default class BaseScene extends Scene {
     * @param {Object} file - objeto obtenido como resultado de leer el json
     * @param {String} namespace - nombre del archivo de localizacion del que se va a leer
     * @param {String} objectName - nombre del objeto en el que esta el dialogo, si es que el json contiene varios dialogos de distintos objetos
-    * @param {Boolean} getObjs - si se quiere devolver el nodo leido como un objeto 
+    * @param {Boolean} getObjs - si se quiere devolver el nodo leido como un objeto
     * @returns {DialogNode} - el nodo de dialogo que se ha procesado
-    * 
-    * 
+    *
+    *
     * IMPORTANTE: Este metodo tiene que llamarse una vez se han creado los retratos de los personajes,
     * ya que al momento de separar los textos que sean demasiado largos, es necesario saber si el personaje
     * es un personaje que va a tener retrato o no para usar el ancho de linea correcto
-    * 
+    *
     * IMPORTANTE 2: La estructura de nodos es comun a todos los idiomas y se tiene que guardar con anterioridad
     * al momento de crear la escena para luego pasarlo como parametro file. El archivo del que se van a leer las
     * traducciones es el que se pasa en el parametro namespace, y tiene que pasarse un string con el nombre del
     * archivo sin la extension .json
-    * 
+    *
     * IMPORTANTE 3: En un nodo con condiciones, cada condicion lleva a otro nodo distinto.
     * Al momento de llegar a un nodo condicion, el siguiente nodo sera el indicado como siguiente
     * en la primera condicion que se cumpla (se van comprobando en el orden en el que se han leido).
-    * Cada condicion puede tener varios requisitos (variables), en cuyo caso, la condicion solo 
-    * se cumplira si todos sus requisitos se cumplen (operador &&. De momento no hay soporte para el operador || ) 
-    * 
+    * Cada condicion puede tener varios requisitos (variables), en cuyo caso, la condicion solo
+    * se cumplira si todos sus requisitos se cumplen (operador &&. De momento no hay soporte para el operador || )
+    *
     */
     readAllNodes(id, file, namespace, objectName, getObjs, nodesMap) {
         let fileObj = file;
@@ -165,7 +225,7 @@ export default class BaseScene extends Scene {
         // del json en el que buscar los nodos, como la id que utilizar para encontrar
         // la traduccion del nodo. Esto es porque la id del nodo debe coincidir tanto
         // en el json como en el archivo de traducciones, pero al estar dentro de un objeto
-        // con (por ejemplo) nombre object, un nodo con la id name deberia buscarse en el 
+        // con (por ejemplo) nombre object, un nodo con la id name deberia buscarse en el
         // archivo de traducciones como object.name, pero la id de nodo seguiria siendo name
         if (objectName !== "") {
             fileObj = this.getObjFromName(file, objectName);
@@ -196,7 +256,7 @@ export default class BaseScene extends Scene {
         if (type === "condition") {
             node = new ConditionNode();
 
-            // Se leen todas las condiciones. Cada condicion lleva a un nodo distinto y 
+            // Se leen todas las condiciones. Cada condicion lleva a un nodo distinto y
             // en una condicion se pueden comprobar multiples variables
             for (let i = 0; i < fileObj[id].conditions.length; i++) {
                 // Obtiene el nombre de las variables a comprobar (suprimiendo la propiedad next)
@@ -217,7 +277,7 @@ export default class BaseScene extends Scene {
                     let condition = obj;
                     condition.key = varName
 
-                    // Guarda el valor por defecto del objeto. Si no tiene 
+                    // Guarda el valor por defecto del objeto. Si no tiene
                     // la propiedad en el json, se pone a false por defecto
                     let defaultValue = false;
                     if (obj.default) {
@@ -245,7 +305,7 @@ export default class BaseScene extends Scene {
                     nodeConditions.push(condition);
                 }
 
-                // Se guardan las condiciones 
+                // Se guardan las condiciones
                 node.conditions.push(nodeConditions);
 
                 // Si hay un nodo despues de este, se crea de manera y se
@@ -351,6 +411,63 @@ export default class BaseScene extends Scene {
                 }
             }
         }
+        else if (type == "similarity") {
+            node = new SimilarityNode();
+            
+            node.method = fileObj[id].method;
+            node.threshold = fileObj[id].threshold;
+            node.character = fileObj[id].character;
+
+            // Se obtienen las opciones del archivo de textos traducidos
+            let texts = this.translatorManager.translate(translationId, namespace, {
+                name: this.playerName,
+                context: this.context,
+                returnObjects: getObjs
+            });
+            node.choices = texts;
+
+            for (let i = 0; i < fileObj[id].choices.length; i++) {
+                // let repeat = false;
+                // if (fileObj[id].choices[i].repeat === undefined || fileObj[id].choices[i].repeat) {
+                //     repeat = true;
+                // }
+                // let choice = {
+                // text: texts[i],
+                // repeat: repeat
+                // }
+
+                // Se guarda la eleccion y se crea de manera recursiva
+                // el nodo siguiente que corresponde a elegir dicha opcion
+                // node.choices.push(choice);
+
+                // Si hay un nodo despues de este, se crea de manera y se
+                // guarda la id de dicho nodo en el array de nodos siguientes
+                let nextNextNode = null;
+                if (fileObj[id].choices[i].next) {
+                    nextNextNode = this.readAllNodes(fileObj[id].choices[i].next, file, namespace, objectName, getObjs, nodesMap);
+                    // node.next.push(nextNode.fullId);
+                }
+                // else {
+                // node.next.push({});
+                // }
+
+                let nextNode = this.createTextNode(node.character, texts[i], getObjs, nextNextNode);
+                nextNode.id = fileObj[id].choices[i].next;
+                nextNode.fullId = `${translationId}.${nextNode.id}`;
+
+                node.next.push(nextNode.fullId);
+            }
+
+            // let defaultNode = this.createTextNode("player", defaultText, getObjs, node)
+            // defaultNode.id = "default";
+            // defaultNode.fullId = `${translationId}.${defaultNode.id}`;
+            // node.next.push(defaultNode.fullId);
+
+            if (fileObj[id].default.next) {
+                let defaultNode = this.readAllNodes(fileObj[id].default.next, file, namespace, objectName, getObjs, nodesMap);
+                node.next.push(defaultNode.fullId);
+            }
+        }
         // Si el nodo es de tipo evento
         else if (type === "event") {
             node = new EventNode();
@@ -360,21 +477,21 @@ export default class BaseScene extends Scene {
                 // Lee el nombre del evento
                 let evtName = Object.keys(fileObj[id].events[i]);
 
-                // Obtiene el objeto que guarda los parametros del evento 
+                // Obtiene el objeto que guarda los parametros del evento
                 let obj = fileObj[id].events[i][evtName];
 
                 // Crea un objeto igual que obj, pero que tambien guarda su nombre
                 let evt = { ...obj };
                 evt.name = evtName[0];
 
-                // Si se ha definido si la variable es global y si se ha definido que no lo 
+                // Si se ha definido si la variable es global y si se ha definido que no lo
                 // es, se guarda en las propiedades del evento la blackboard de esta escena
                 if (obj.global !== undefined && obj.global === false) {
                     evt.blackboard = this.blackboard;
                 }
 
-                // Lo mete en las variables del nodo. Si es un evento de cambiar amistad, lo pone al principio de 
-                // los eventos (por si acaso se lanzan a la vez otros eventos que cambien la escena, ya que hacen 
+                // Lo mete en las variables del nodo. Si es un evento de cambiar amistad, lo pone al principio de
+                // los eventos (por si acaso se lanzan a la vez otros eventos que cambien la escena, ya que hacen
                 // que los eventos de cambiar amistad no se lancen si van despues de un cambio de escena)
                 if (evt.name === "changeFriendship") {
                     node.events.unshift(evt);
@@ -506,8 +623,8 @@ export default class BaseScene extends Scene {
 
     /**
      * Obtiene el objeto json a partir de su nombre
-     * @param {Object} obj - objeto json en el que se busca el objeto 
-     * @param {String} prop - nombre de la propiedad (o del objeto) que se busca 
+     * @param {Object} obj - objeto json en el que se busca el objeto
+     * @param {String} prop - nombre de la propiedad (o del objeto) que se busca
      * @returns {Object} - objeto json con el nombre indicado
      */
     getObjFromName(obj, prop) {
@@ -543,14 +660,14 @@ export default class BaseScene extends Scene {
             // hacer los saltos de liena con el ancho de linea correspondiente
             this.dialogManager.textbox.centerText(centered);
 
-            // Cambia el texto a mostrar por el dialogo completo para obtener sus dimensiones 
+            // Cambia el texto a mostrar por el dialogo completo para obtener sus dimensiones
             // (se copia la informacion del dialogo actual, pero se cambia el texto a mostrar)
             currText = dialogs[i].text;
             dialogCopy = { ...dialogs[i] };
             dialogCopy.text = currText;
             this.dialogManager.setText(dialogCopy, false);
 
-            // Si la altura del texto supera la de la caja de texto 
+            // Si la altura del texto supera la de la caja de texto
             if (this.dialogManager.textTooBig()) {
                 // Se separan todas las palabras del dialogo por espacios
                 let words = currText.split(' ');
@@ -583,7 +700,7 @@ export default class BaseScene extends Scene {
                         newDialogs.push(dialogCopy);
                     }
                 }
-                // Una vez recorrido todo el dialogo, guarda el dialogo con el texto restante 
+                // Una vez recorrido todo el dialogo, guarda el dialogo con el texto restante
                 prevText = newText;
                 newText += " " + currWord;
                 dialogCopy = { ...dialogs[i] };
@@ -592,7 +709,7 @@ export default class BaseScene extends Scene {
 
                 i++;
             }
-            // Si la altura no supera la de la caja de texto, se guarda 
+            // Si la altura no supera la de la caja de texto, se guarda
             // el dialogo actual y se pasa a mirar el siguiente
             else {
                 dialogCopy = { ...dialogs[i] };
@@ -645,7 +762,7 @@ export default class BaseScene extends Scene {
 
         // Al pulsar el icono
         button.on('pointerdown', () => {
-            // Si hay que desactivar el boton al hacer click, deja de ser 
+            // Si hay que desactivar el boton al hacer click, deja de ser
             // interactivo y se reproduce la animacion de desaparecer
             if (deactivateOnClick) {
                 button.disableInteractive();
