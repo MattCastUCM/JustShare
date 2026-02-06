@@ -63,15 +63,18 @@ export default class GameManager {
 
         // this.sceneManager.changeScene("TitleScene");
         this.startGame({
-            name:"Pedro",
-            player:"male",
-            sexuality:"heterosexual",
-            harasser:"female"
+            name: "Pedro",
+            player: "male",
+            sexuality: "heterosexual",
+            harasser: "female"
         })
     }
 
     public startGame(userInfo: UserInfo) {
         this.userInfo = userInfo;
+
+        this.translatorManager.setGenderContext("player", userInfo.player);
+        this.translatorManager.setGenderContext("harasser", userInfo.harasser)
 
         let computerSceneName = 'Computer';
         this.sceneManager.addPersistentScene(computerSceneName);

@@ -5,6 +5,10 @@ import GameManager from './gameManager';
 import EventDispatcher from "./eventDispatcher";
 import SceneManager from "./sceneManager";
 import TrackerManager from "./trackerManager";
+import TranslatorManager from "./translatorManager";
+import axios from "axios";
+import TextInput from "../UI/textInput";
+import { createRectTexture, TEXT_CONFIG } from "../utils/graphics";
 
 /*
 PARA ARREGLAR NODOS DE EVENTO SI SE sALTAN LOS DIALOGOS:
@@ -27,6 +31,7 @@ export default class DialogManager {
         this.dispatcher = EventDispatcher.getInstance();
         this.sceneManager = SceneManager.getInstance();
         this.trackerManager = TrackerManager.getInstance();
+        this.translatorManager = TranslatorManager.getInstance();
 
         this.textbox = null;                // Instancia de la caja de dialogo
         this.lastCharacter = "";            // Ultimo personaje que hablo
@@ -37,6 +42,33 @@ export default class DialogManager {
         this.portraitsImages = new Map();   // Mapa para guardar las imagenes de los retratos en esta escena
 
         this.textbox = new TextBox(scene, this);
+
+        const style = { ...TEXT_CONFIG };
+        style.fontFamily = 'corpid';
+        style.fontSize = '42px';
+        style.color = '#000000';
+        const w = 335, h = 90;
+        createRectTexture(scene, "managerTextInput", w, h, 0xffffff, 1, 2.5, 0x000000, 1, 20);
+
+        this.textInput = new TextInput(scene, this.scene.CANVAS_WIDTH / 2 - w / 2, scene.CANVAS_HEIGHT / 2 - h / 2, "Test", 10, { R: 190, G: 192, B: 230 }, "managerTextInput", style);
+        this.textInput.setVisible(false);
+
+        const fx1 = this.textInput.fillImg.postFX.addGlow(0xffffff, 0, 0, false, 0.1, 32);
+        this.scene.tweens.add({
+            targets: fx1,
+            outerStrength: 8,
+            yoyo: true,
+            loop: -1,
+            ease: 'sine.inout',
+            duration: 2000
+        });
+
+
+        this.dreamBg = this.scene.add.image(0, 0, 'dream').setOrigin(0, 0);
+        const scale = this.scene.CANVAS_HEIGHT / this.dreamBg.height;
+        this.dreamBg.setScale(scale);
+        this.dreamBg.setAlpha(0.8);
+        this.dreamBg.setVisible(false);
 
         this.PORTRAIT_ANIM_TIME = 200;
 
@@ -76,6 +108,9 @@ export default class DialogManager {
             this.textbox.activate(false);
         }
         this.activateOptions(false);
+
+        // Desactiva la caja de input
+        this.activeTextInput(false);
 
         this.portraits.clear();
         // Coge las imagenes de todos los retratos, las copia en esta escena, y las pone detras de la caja de texto
@@ -262,14 +297,47 @@ export default class DialogManager {
     }
 
     async checkSimilarity(corpus, text, method) {
-        let promise = new Promise(resolve => setTimeout(resolve, 1000));
-        await promise;
+        const currentLanguage = this.translatorManager.getCurrentLanguage();
 
-        return {
-            "index": 6,
-            "score": 0.42857142857142855,
-            "text": "Encantado de conocerte también."
-        };
+        const body = {
+            corpus: corpus,
+            text: text,
+            method: method,
+            language: currentLanguage
+        }
+
+        const request = {
+            baseURL: import.meta.env.VITE_ML_BASE_URL,
+            url: "/inference/similarity",
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: body
+        }
+        try {
+            const response = await axios(request)
+            return response;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+
+    async processSimilarityNode(node, text) {
+        try {
+            const result = await this.checkSimilarity(node.choices, text, node.method)
+            const data = result.data;
+            console.log(data);
+            if (data.score >= node.threshold) {
+                return data.index;
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+        // Si se produce un error, devuelve el índice del nodo por defecto
+        return node.choices.length;
     }
 
     // Procesa el nodo actual dependiendo de su tipo
@@ -301,7 +369,19 @@ export default class DialogManager {
                 this.activateOptions(true);
             }
             else if (this.currNode.type === "similarity") {
+                this.activeTextInput(true);
+                this.scene.input.keyboard.on('keydown-ENTER', () => {
+                    if (this.textInput.isValid()) {
+                        const text = this.textInput.getText();
+                        this.processSimilarityNode(this.currNode, text)
+                            .then(index => {
+                                this.activeTextInput(false);
 
+                                this.currNode = this.currNode.next[index];
+                                this.processNextNode(delay);
+                            });
+                    }
+                });
             }
             else if (this.currNode.type === "text") {
                 // Si el nodo no tiene texto, se lo salta y pasa al siguiente nodo
@@ -508,6 +588,14 @@ export default class DialogManager {
         }
         this.processNextNode(delay);
         this.createOptions([]);
+    }
+
+    activeTextInput(active) {
+        if (!active) {
+            this.scene.input.keyboard.off('keydown-ENTER');
+        }
+        this.textInput.setVisible(active);
+        this.dreamBg.setVisible(active);
     }
 
     /**

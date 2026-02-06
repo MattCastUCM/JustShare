@@ -38,8 +38,8 @@
         },
         "thanks2": {
             "type": "similarity",
-            "method": "jaccard",
-            "threshold": 0.3,
+            "method": "word2vec",
+            "threshold": 0.5,
             "character": "player",
             "choices": [
                 {

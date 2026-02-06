@@ -110,8 +110,6 @@ export default class LoginScene extends ComputerBaseScene {
             sexuality: sexuality
         }
         this.gameManager.startGame(userInfo);
-        this.translatorManager.setGenderContext("player", gender);
-        this.translatorManager.setGenderContext("harasser", harasserGender)
     }
 
     checkErrors(nameContainer, genderContainer, sexualityContainer) {

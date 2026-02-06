@@ -1,14 +1,28 @@
-export default class DialogNode {
+type NodeType =
+    | "dialog"
+    | "text"
+    | "choice"
+    | "condition"
+    | "event"
+    | "chatMessage"
+    | "commentary"
+    | "similarity";
+
+export class DialogNode {
     /**
     * Clase base para la informacion de los nodos de dialogo. Inicialmente esta todo vacio
     */
+    type: NodeType
+    id: string
+    next: DialogNode[] | string[]
+    fullId: string
+    nextDelay: number
+
     constructor() {
-        this.type = null;               // dialog, choice, condition, event, chatMessage, socialNetMessage
-
-        this.id = null;                 // id de este nodo dentro del objeto en el que se encuentra
+        this.type = "dialog";               // dialog, choice, condition, event, chatMessage, socialNetMessage
+        this.id = "";                 // id de este nodo dentro del objeto en el que se encuentra
         this.next = [];                 // posibles nodos siguientes
-        this.fullId = null;             // id completa del nodo en el archivo en general
-
+        this.fullId = "";             // id completa del nodo en el archivo en general
         this.nextDelay = 0;             // retardo con el que se procesara el siguiente nodo
     }
 }
@@ -26,18 +40,28 @@ export class TextNode extends DialogNode {
             "centered": "true"
         }
     */
+    dialogs: string[]
+    currDialog: number
+    character: string
+    name: string
+    centered: boolean
+
     constructor() {
         super();
 
         this.type = "text";
         this.dialogs = [];              // serie de dialogos que se van a mostrar
-        this.currDialog = null;         // indice del dialogo que se esta mostrando
-        this.character = null;          // id del personaje que habla
-        this.name = null;               // nombre del personaje que habla (si se trata del player, es el nombre elegido en la pantalla de login)
+        this.currDialog = 0;         // indice del dialogo que se esta mostrando
+        this.character = "";          // id del personaje que habla
+        this.name = "";               // nombre del personaje que habla (si se trata del player, es el nombre elegido en la pantalla de login)
         this.centered = false;          // indica si el texto esta centrado o no (en caso de que no se especifique aparece alineado arriba a la izquierda)
     }
 }
 
+interface Choice {
+    text: string;
+    repeat: boolean;
+}
 
 export class ChoiceNode extends DialogNode {
     /**
@@ -53,25 +77,44 @@ export class ChoiceNode extends DialogNode {
             ]
         }
     */
+    choices: Choice[]
+    selectedOption: number
+
     constructor() {
         super();
 
         this.type = "choice";
         this.choices = [];              // Opciones (texto y si es un mensaje, de que chat y si que hay que responder)
-        this.selectedOption = null;     // indice de la opcion seleccionada
+        this.selectedOption = 0;     // indice de la opcion seleccionada
     }
 }
 
 export class SimilarityNode extends DialogNode {
+    method: string
+    threshold: number
+    character: string
+    choices: string[]
+
     constructor() {
         super();
 
         this.type = "similarity";
-        this.method = null;
+        this.method = "";
         this.threshold = 0;
-        this.character = null;
+        this.character = "";
         this.choices = [];
     }
+}
+
+type Operator = "equal" | "greater" | "lower" | "different"
+
+interface Condition<Type> {
+    key: string;
+    value: Type,
+    operator: Operator
+    global: boolean
+    default: Type
+    blackboard: Map<any, any>;
 }
 
 export class ConditionNode extends DialogNode {
@@ -108,12 +151,22 @@ export class ConditionNode extends DialogNode {
             ]
         }
     */
+
+    conditions: Condition<any>[]
+
     constructor() {
         super();
 
         this.type = "condition";
         this.conditions = [];           // condiciones con su nombre/identificador y sus atributos
     }
+}
+
+interface Event {
+    name: string;
+    variable: string,
+    global: boolean,
+    value: any
 }
 
 export class EventNode extends DialogNode {
@@ -135,6 +188,8 @@ export class EventNode extends DialogNode {
             ]
         }
     */
+    events: Event[]
+
     constructor() {
         super();
         this.type = "event";
@@ -154,14 +209,21 @@ export class ChatNode extends DialogNode {
             "replyDelay": 1000
         }
     */
+    text: string
+    character: string
+    name: string
+    chat: string
+    replyDelay: number
+    phone: boolean
+
     constructor() {
         super();
 
         this.type = "chatMessage";
-        this.text = null;               // texto del mensaje
-        this.character = null;          // id del personaje que envia el mensaje
-        this.name = null;               // nombre del personaje que envia el mensaje (si se trata del jugador, es el nombre elegido en la pantalla de login)
-        this.chat = null;               // chat al que corresponde el mensaje
+        this.text = "";               // texto del mensaje
+        this.character = "";          // id del personaje que envia el mensaje
+        this.name = "";               // nombre del personaje que envia el mensaje (si se trata del jugador, es el nombre elegido en la pantalla de login)
+        this.chat = "";               // chat al que corresponde el mensaje
         this.replyDelay = 0;            // retardo con el que se enviara el mensaje
         this.phone = true
     }
@@ -178,15 +240,22 @@ export class CommentaryNode extends DialogNode {
             "replyDelay": 1000
         }
     */
+    text: string
+    character: string
+    name: string
+    pfp: string
+    post: string
+    replyDelay: number
+
     constructor() {
         super();
 
         this.type = "commentary";
-        this.text = null;
-        this.character = null;
-        this.name = null;
-        this.pfp = null;
-        this.post = null;
+        this.text = "";
+        this.character = "";
+        this.name = "";
+        this.pfp = "";
+        this.post = "";
         this.replyDelay = 0;
     }
 }

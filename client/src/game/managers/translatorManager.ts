@@ -37,6 +37,37 @@ export default class TranslatorManager {
         );
     }
 
+    private processText(str: string) {
+        // Si se ha obtenido algo
+        if (str != null) {
+            // Si el objeto obtenido no es un array, devuelve el texto con las expresiones <> reemplazadas
+            if (!Array.isArray(str)) {
+                if (this.hasTextProperty(str)) {
+                    return this.replaceGender(str.text);
+                }
+                else if (typeof str === "string") {
+                    return this.replaceGender(str);
+                }
+            }
+            // Si es un array
+            else {
+                // Recorre todos los elementos
+                for (let i = 0; i < str.length; i++) {
+                    // Si el elemento tiene la propiedad text, modifica el
+                    // objeto original para reemplazar su contenido por el
+                    // texto con las expresiones <> reemplazadas
+                    if (str[i].text != null) {
+                        str[i] = this.processText(str[i].text);
+                    }
+                    else {
+                        str[i] = this.processText(str[i]);
+                    }
+                }
+            }
+        }
+        return str;
+    }
+
     /**
      * Obtiene el texto traducido
      * @param {string} translationId - id completa del nodo en el que mirar
@@ -51,31 +82,33 @@ export default class TranslatorManager {
 
         let str = i18next.t(translationId, resolvedOptions);
 
-        // Si se ha obtenido algo
-        if (str != null) {
-            // Si el objeto obtenido no es un array, devuelve el texto con las expresiones <> reemplazadas
-            if (!Array.isArray(str)) {
-                if (this.hasTextProperty(str)) {
-                    return this.replaceGender(str.text);
-                }
-                else if (typeof str === "string") {
-                    return this.replaceGender(str)
-                }
-            }
-            // Si es un array
-            else {
-                // Recorre todos los elementos
-                for (let i = 0; i < str.length; i++) {
-                    // Si el elemento tiene la propiedad text, modifica el
-                    // objeto original para reemplazar su contenido por el
-                    // texto con las expresiones <> reemplazadas
-                    if (str[i].text != null) {
-                        str[i] = this.replaceGender(str[i].text);
-                    }
-                }
-            }
-        }
-        return str;
+        return this.processText(str);
+
+        // // Si se ha obtenido algo
+        // if (str != null) {
+        //     // Si el objeto obtenido no es un array, devuelve el texto con las expresiones <> reemplazadas
+        //     if (!Array.isArray(str)) {
+        //         if (this.hasTextProperty(str)) {
+        //             return this.replaceGender(str.text);
+        //         }
+        //         else if (typeof str === "string") {
+        //             return this.replaceGender(str)
+        //         }
+        //     }
+        //     // Si es un array
+        //     else {
+        //         // Recorre todos los elementos
+        //         for (let i = 0; i < str.length; i++) {
+        //             // Si el elemento tiene la propiedad text, modifica el
+        //             // objeto original para reemplazar su contenido por el
+        //             // texto con las expresiones <> reemplazadas
+        //             if (str[i].text != null) {
+        //                 str[i] = this.replaceGender(str[i].text);
+        //             }
+        //         }
+        //     }
+        // }
+        // return str;
     }
 
     /**
@@ -126,5 +159,9 @@ export default class TranslatorManager {
         // Anade el resto del texto al texto completo
         result += input.slice(lastEndIndex);
         return result;
+    }
+
+    public getCurrentLanguage() {
+        return i18next.language;
     }
 }

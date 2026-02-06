@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import DialogNode, { TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode, SimilarityNode } from '../../UI/dialog/dialogNode';
+import { DialogNode, TextNode, ChoiceNode, ConditionNode, EventNode, ChatNode, CommentaryNode, SimilarityNode } from '../../UI/dialog/dialogNode';
 import GameManager from '../../managers/gameManager';
 import SceneManager from "../../managers/sceneManager";
 import TrackerManager from "../../managers/trackerManager";
@@ -132,7 +132,6 @@ export default class BaseScene extends Scene {
     createTextNode(character, textTranslation, getObjs, nextNode = null, centered = null) {
         let node = new TextNode();
         // Obtiene la id del personaje y coge su nombre del archivo de nombres localizados
-        // let character = fileObj[id].character;
         node.character = character;
         node.name = this.translatorManager.translate(node.character, "names", {
             returnObjects: getObjs
@@ -145,12 +144,6 @@ export default class BaseScene extends Scene {
 
         // Obtiene los fragmentos del dialogo
         let texts = [];
-        // let textTranslation = this.translatorManager.translate(translationId, namespace, {
-        //     name: this.playerName,
-        //     context: this.context,
-        //     returnObjects: getObjs
-        // });
-
         // Si el texto no esta dividido en fragmentos, se guarda directamente en el array de textos
         if (!Array.isArray(textTranslation)) {
             texts.push(textTranslation);
@@ -183,7 +176,6 @@ export default class BaseScene extends Scene {
         // Si hay un nodo despues de este, se crea de manera y se
         // guarda la id de dicho nodo en el array de nodos siguientes
         if (nextNode) {
-            // let nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
             node.next.push(nextNode.fullId);
         }
 
@@ -318,62 +310,20 @@ export default class BaseScene extends Scene {
         }
         // Si el nodo es de tipo texto
         else if (type === "text") {
-            node = new TextNode();
-            // Obtiene la id del personaje y coge su nombre del archivo de nombres localizados
-            let character = fileObj[id].character;
-            node.character = character;
-            node.name = this.translatorManager.translate(fileObj[id].character, "names", {
-                returnObjects: getObjs
-            });
-
-            // Obtiene si el texto esta centrado o no
-            if (fileObj[id].centered) {
-                node.centered = fileObj[id].centered;
-            }
-
-            // Obtiene los fragmentos del dialogo
-            let texts = [];
             let textTranslation = this.translatorManager.translate(translationId, namespace, {
                 name: this.playerName,
                 context: this.context,
                 returnObjects: getObjs
             });
 
-            // Si el texto no esta dividido en fragmentos, se guarda directamente en el array de textos
-            if (!Array.isArray(textTranslation)) {
-                texts.push(textTranslation);
-            }
-            // Si no, se guarda cada fragmento del dialogo en el array
-            else {
-                for (let i = 0; i < textTranslation.length; i++) {
-                    texts.push(textTranslation[i]);
-                }
-            }
-
-            // Se recorren todos los fragmentos de texto
-            for (let i = 0; i < texts.length; i++) {
-                // Se crea un dialogo con todo el texto a mostrar
-                let split = {
-                    text: texts[i],
-                    name: node.name,
-                }
-
-                // Se separa el fragmento en caso de que el texto sea demasiado largo
-                let dialogs = this.splitDialogs([split], character, node.centered);
-
-                // Se concatenan los fragmentos obtenidos con los que ya habia en el nodo
-                // (se tienen que concatenar, ya que splitDialogs devuelve un array, por
-                // lo que hacer push a node.dialogs meteria los fragmentos en varios arrays)
-                node.dialogs = node.dialogs.concat(dialogs);
-            }
-            node.currDialog = 0;
-
             // Si hay un nodo despues de este, se crea de manera y se
             // guarda la id de dicho nodo en el array de nodos siguientes
+            let nextNode = null;
             if (fileObj[id].next) {
-                let nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
-                node.next.push(nextNode.fullId);
+                nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
             }
+
+            node = this.createTextNode(fileObj[id].character, textTranslation, getObjs, nextNode, fileObj[id].centered)
         }
         // Si el nodo es de tipo opcion multiple
         else if (type === "choice") {
@@ -413,7 +363,7 @@ export default class BaseScene extends Scene {
         }
         else if (type == "similarity") {
             node = new SimilarityNode();
-            
+
             node.method = fileObj[id].method;
             node.threshold = fileObj[id].threshold;
             node.character = fileObj[id].character;
@@ -427,41 +377,30 @@ export default class BaseScene extends Scene {
             node.choices = texts;
 
             for (let i = 0; i < fileObj[id].choices.length; i++) {
-                // let repeat = false;
-                // if (fileObj[id].choices[i].repeat === undefined || fileObj[id].choices[i].repeat) {
-                //     repeat = true;
-                // }
-                // let choice = {
-                // text: texts[i],
-                // repeat: repeat
-                // }
-
-                // Se guarda la eleccion y se crea de manera recursiva
-                // el nodo siguiente que corresponde a elegir dicha opcion
-                // node.choices.push(choice);
-
                 // Si hay un nodo despues de este, se crea de manera y se
                 // guarda la id de dicho nodo en el array de nodos siguientes
                 let nextNextNode = null;
                 if (fileObj[id].choices[i].next) {
                     nextNextNode = this.readAllNodes(fileObj[id].choices[i].next, file, namespace, objectName, getObjs, nodesMap);
-                    // node.next.push(nextNode.fullId);
                 }
-                // else {
-                // node.next.push({});
-                // }
 
-                let nextNode = this.createTextNode(node.character, texts[i], getObjs, nextNextNode);
-                nextNode.id = fileObj[id].choices[i].next;
-                nextNode.fullId = `${translationId}.${nextNode.id}`;
+                let choices = node.choices[i];
+                if (!Array.isArray(choices)) {
+                    choices = [choices]
+                }
 
-                node.next.push(nextNode.fullId);
+                for (let j = 0; j < choices.length; j++) {
+                    const nextNode = this.createTextNode(node.character, choices[j], getObjs, nextNextNode);
+                    nextNode.id = `${fileObj[id].choices[i].next}.${j}`;
+                    nextNode.fullId = `${translationId}.${nextNode.id}`;
+
+                    node.next.push(nextNode.fullId);
+
+                    nodesMap.set(nextNode.fullId, nextNode);
+                }
             }
 
-            // let defaultNode = this.createTextNode("player", defaultText, getObjs, node)
-            // defaultNode.id = "default";
-            // defaultNode.fullId = `${translationId}.${defaultNode.id}`;
-            // node.next.push(defaultNode.fullId);
+            node.choices = texts.flat();
 
             if (fileObj[id].default.next) {
                 let defaultNode = this.readAllNodes(fileObj[id].default.next, file, namespace, objectName, getObjs, nodesMap);
