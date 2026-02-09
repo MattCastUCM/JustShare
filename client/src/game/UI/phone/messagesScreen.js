@@ -4,6 +4,7 @@ const { ColorWithColor } = Display.Color.Interpolate
 import BaseScreen from "./baseScreen";
 import ChatScreen from "./chatScreen";
 import { TEXT_CONFIG } from "../../utils/graphics";
+import { setInteractive } from "../../utils/misc";
 
 export default class MessagesScreen extends BaseScreen {
     constructor(scene, phone, prevScreen) {
@@ -43,7 +44,7 @@ export default class MessagesScreen extends BaseScreen {
         // Anade la imagen del boton. Dependiendo del numero de chats que haya, se iran creando abajo
         let button = this.scene.add.image(this.BG_X, this.BG_Y * 0.4, 'chatButton');
         button.y += (button.displayHeight + 7) * this.chatNum;
-        button.setInteractive({ useHandCursor: true });
+        setInteractive(button);
 
         // Anade el texto
         let nameText = this.scene.add.text(button.x - button.displayWidth / 3.5, button.y, name, textConfig).setOrigin(0, 0.5);

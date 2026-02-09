@@ -1,0 +1,27 @@
+{
+    "corpus": [
+        "¡Gracias! Si necesito algo, te aviso.",
+        "Igualmente, un gusto conocerte *sonríes*.",
+        "Ah, sí... ¡hola!",
+        "Gracias, cualquier cosa te cuento.",
+        "Perfecto, muchas gracias.",
+        "Igualmente, encantado de conocerte.",
+        "Encantado de conocerte también.",
+        "El gusto es mío.",
+        "Jaja, ¡hola!",
+        "Ah, sí... hola.",
+        "Perdón, me colgué un poco... hola.",
+        "Hola, ¿qué tal?",
+        "Hey, hola.",
+        "Ah, cierto... hola.",
+        "Todo bien, gracias.",
+        "Mucho gusto.",
+        "Encantado, un placer conocerte.",
+        "Hola, hola.",
+        "Ups... ¡hola!",
+        "Ah, sí, perdón... hola."
+    ],
+    "text": "hola, amiga, encantado de conocerte",
+    "method": "jaccard",
+    "language": "spanish"
+}

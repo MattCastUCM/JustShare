@@ -7,6 +7,7 @@ interface ImportMetaEnv {
     readonly VITE_LRS_USERNAME: string
     readonly VITE_LRS_PASSWORD: string
     readonly VITE_ML_BASE_URL: string
+    readonly VITE_DEBUG: "true" | "false" = "false"
 }
 
 interface ImportMeta {

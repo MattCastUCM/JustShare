@@ -1,4 +1,5 @@
 import { GameObjects } from "phaser"
+import { DEBUG } from "../../types/misc"
 
 export default class TextHeader extends GameObjects.Container {
     constructor(socialMediaScreen, width, pfp, username, caption, scale = 1) {
@@ -66,9 +67,8 @@ export default class TextHeader extends GameObjects.Container {
 
         container.bringToTop(text)
 
-        let debug = this.scene.sys.game.debug;
-        if (debug.enable) {
-            let debugRect = this.scene.add.rectangle(rect.x, rect.y, rect.width, rect.height, debug.color);
+        if (DEBUG) {
+            let debugRect = this.scene.add.rectangle(rect.x, rect.y, rect.width, rect.height, 0x00ff00);
             debugRect.alpha = 0.5
             debugRect.setOrigin(rect.originX, rect.originY);
             container.add(debugRect)

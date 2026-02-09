@@ -3,6 +3,8 @@ const { GetColor, IntegerToRGB } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
 import { TEXT_CONFIG } from "../utils/graphics";
+import { DEBUG } from "../../types/misc";
+import { setInteractive } from "../utils/misc";
 
 export default class Button extends GameObjects.Container {
     /**
@@ -41,12 +43,11 @@ export default class Button extends GameObjects.Container {
         this.pCol = IntegerToRGB(this.pCol);
 
         this.fillImg.setTint(GetColor(this.nCol.r, this.nCol.g, this.nCol.b));
-        this.fillImg.setInteractive({ useHandCursor: true });
+        setInteractive(this.fillImg);
 
         // Dibujar el area de colision
-        let debug = this.scene.sys.game.debug;
-        if (debug.enable) {
-            this.scene.input.enableDebug(this.fillImg, debug.color);
+        if (DEBUG) {
+            this.scene.input.enableDebug(this.fillImg, 0x00ff00);
         }
 
         const TINT_FADE_TIME = 25;
@@ -100,7 +101,7 @@ export default class Button extends GameObjects.Container {
                 yoyo: true,
             });
             down.on('complete', () => {
-                this.fillImg.setInteractive({ useHandCursor: true });
+                setInteractive(this.fillImg);
                 onClick();
             });
         });
@@ -118,11 +119,13 @@ export default class Button extends GameObjects.Container {
     setHitArea(hitArea) {
         this.fillImg.removeInteractive();
         this.hitArea = hitArea;
-        this.fillImg.setInteractive(hitArea.area, hitArea.callback, { useHandCursor: true });
+        setInteractive(this.fillImg, {
+            hitArea: hitArea,
+            hitAreaCallback: hitArea.callback
+        })
 
-        let debug = this.scene.sys.game.debug;
-        if (debug.enable) {
-            this.scene.input.enableDebug(this.fillImg, debug.color);
+        if (DEBUG) {
+            this.scene.input.enableDebug(this.fillImg, 0x00ff00);
         }
     }
 

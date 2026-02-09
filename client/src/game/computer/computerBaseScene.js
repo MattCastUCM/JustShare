@@ -3,8 +3,10 @@ const { GetColor, IntegerToRGB } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate;
 import BaseScene from '../scenes/gameLoop/baseScene';
 import Button from '../UI/button'
-import TextInput from '../UI/textInput'
+import TextInput from '../UI/imageTextInput'
 import { createRectTexture, hexToRgb, TEXT_CONFIG } from "../utils/graphics";
+import ImageTextInput from "../UI/imageTextInput";
+import { setInteractive } from "../utils/misc";
 
 export default class ComputerBaseScene extends BaseScene {
     constructor(name) {
@@ -136,7 +138,7 @@ export default class ComputerBaseScene extends BaseScene {
 
         let translation = this.translate(transId);
 
-        let textInput = new TextInput(this, x, y, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb, sprite, style, writeLocked);
+        let textInput = new ImageTextInput(this, x, y, translation, TEXT_INPUT_OFFSET, this.colors.blue0.rgb, sprite, style, writeLocked);
 
         return textInput;
     }
@@ -168,7 +170,7 @@ export default class ComputerBaseScene extends BaseScene {
         const SCALE_MULTIPLIER = 1.2;
         let originalScale = animTarget.scale
 
-        hitTarget.setInteractive({ useHandCursor: true });
+        setInteractive(hitTarget);
 
         hitTarget.on('pointerover', () => {
             this.tweens.add({
@@ -200,7 +202,7 @@ export default class ComputerBaseScene extends BaseScene {
                 yoyo: true
             });
             anim.on('complete', () => {
-                hitTarget.setInteractive({ useHandCursor: true });
+                setInteractive(hitTarget);
                 onClick()
             });
         });
@@ -221,7 +223,7 @@ export default class ComputerBaseScene extends BaseScene {
 
         animTarget.setTint(GetColor(nCol.r, nCol.g, nCol.b));
 
-        hitTarget.setInteractive({ useHandCursor: true });
+        setInteractive(hitTarget);
 
         hitTarget.on('pointerover', () => {
             this.tweens.addCounter({
@@ -272,7 +274,7 @@ export default class ComputerBaseScene extends BaseScene {
                 yoyo: true,
             });
             anim.on('complete', () => {
-                hitTarget.setInteractive({ useHandCursor: true });
+                setInteractive(hitTarget);
                 onClick();
             });
         });
@@ -369,7 +371,7 @@ export default class ComputerBaseScene extends BaseScene {
         hitTarget.interactionAnim = interactionAnim
         hitTarget.restartInteractionAnim = function () {
             this.interactionAnim.restart()
-            this.setInteractive({ useHandCursor: true });
+            setInteractive(hitTarget);
         }
     }
 

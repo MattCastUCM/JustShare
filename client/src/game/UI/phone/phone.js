@@ -1,5 +1,6 @@
 import { Image, GameObjects } from "phaser";
 import MessagesScreen from "./messagesScreen";
+import { setInteractive } from "../../utils/misc";
 
 export default class Phone extends GameObjects.Container {
     constructor(scene, phoneManager) {
@@ -58,7 +59,7 @@ export default class Phone extends GameObjects.Container {
      */
     animateButton(button, onClick) {
         // Se hace interactivo
-        button.setInteractive({ useHandCursor: true });
+        setInteractive(button);
         let originalScale = button.scale
 
         // Al pasar el raton por encima, el icono se hace mas grande,

@@ -1,11 +1,11 @@
-import { generateTrackerFromURL } from "../tracker/index";
-import Tracker from "../tracker/tracker";
-import LRS from "../tracker/lrs";
-import { BasicAuthentication } from "../tracker/authentication";
-import { AccountActor } from "../tracker/statement/actor";
+import { generateTrackerFromURL } from "../../tracker/index";
+import Tracker from "../../tracker/tracker";
+import LRS from "../../tracker/lrs";
+import { BasicAuthentication } from "../../tracker/authentication";
+import { AccountActor } from "../../tracker/statement/actor";
 import GameManager from "./gameManager";
 import SceneManager from "./sceneManager";
-import TrackerEvent from "../tracker/statement/trackerEvent";
+import TrackerEvent from "../../tracker/statement/trackerEvent";
 import { UserInfo } from "../../types/misc";
 
 export default class TrackerManager {

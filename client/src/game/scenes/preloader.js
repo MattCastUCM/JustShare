@@ -24,6 +24,8 @@ export default class Preloader extends Scene {
         this.load.image('exit', 'door-exit.png');
         this.load.image('myBubble', 'myBubble.png');
         this.load.image('othersBubble', 'othersBubble.png');
+        this.load.image('thoughtCloud', 'thoughtCloud.png');
+        this.load.image('arrowIcon', 'arrowIcon.png');
     }
 
     loadComputerAssets() {

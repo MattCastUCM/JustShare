@@ -3,6 +3,8 @@ const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
 import { TEXT_CONFIG } from "../utils/graphics";
+import { DEBUG } from "../../types/misc";
+import { setInteractive } from "../utils/misc";
 
 export default class CheckBox extends GameObjects.Container {
     /**
@@ -39,11 +41,10 @@ export default class CheckBox extends GameObjects.Container {
     }
 
     addHitArea(hitArea) {
-        hitArea.setInteractive({ useHandCursor: true },);
+        setInteractive(hitArea);
 
-        let debug = this.scene.sys.game.debug;
-        if (debug.enable) {
-            this.scene.input.enableDebug(hitArea, debug.color);
+        if (DEBUG) {
+            this.scene.input.enableDebug(hitArea, 0x00ff00);
         }
 
         hitArea.on('pointerdown', () => {

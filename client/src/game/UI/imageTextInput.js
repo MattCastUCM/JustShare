@@ -4,8 +4,10 @@ const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
 import { isTouchInput } from "../../inputDetection"
 import { TEXT_CONFIG } from "../utils/graphics";
+import { DEBUG } from "../../types/misc";
+import { setInteractive } from "../utils/misc";
 
-export default class TextInput extends GameObjects.Container {
+export default class ImageTextInput extends GameObjects.Container {
     /**
     * Clase que permite crear una caja de texto donde poder escribir
     * @param {Scene} scene - escena a la que pertenece
@@ -28,11 +30,10 @@ export default class TextInput extends GameObjects.Container {
         // Es la parte interactuable
         this.fillImg = this.scene.add.image(0, 0, fill);
         this.fillImg.setOrigin(0, 0.5);
-        this.fillImg.setInteractive({ useHandCursor: true });
+        setInteractive(this.fillImg);
 
-        let debug = this.scene.sys.game.debug;
-        if (debug.enable) {
-            this.scene.input.enableDebug(this.fillImg, debug.color);
+        if (DEBUG) {
+            this.scene.input.enableDebug(this.fillImg, 0x00ff00);
         }
         this.add(this.fillImg);
 

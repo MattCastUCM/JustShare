@@ -5,6 +5,7 @@ import BaseScreen from "./baseScreen";
 import VerticalListView from "../listView/verticalListView";
 import MessageBox from "../messageBox";
 import { TEXT_CONFIG } from "../../utils/graphics";
+import { setInteractive } from "../../utils/misc";
 
 export default class ChatScreen extends BaseScreen {
     /**
@@ -86,7 +87,7 @@ export default class ChatScreen extends BaseScreen {
 
         // Anade la imagen de la caja
         this.textBox = this.scene.add.image(this.BG_X, TEXT_BOX_Y, 'chatTextBox');
-        this.textBox.setInteractive({ useHandCursor: true });
+        setInteractive(this.textBox);
 
         // Hace fade del color de la caja al pasar o quitar el raton por encima
         this.textBox.on('pointerover', () => {

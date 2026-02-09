@@ -5,6 +5,7 @@ import SceneManager from "../../managers/sceneManager";
 import TrackerManager from "../../managers/trackerManager";
 import EventDispatcher from "../../managers/eventDispatcher";
 import TranslatorManager from "../../managers/translatorManager";
+import { setInteractive } from "../../utils/misc";
 
 export default class BaseScene extends Scene {
     /**
@@ -688,7 +689,7 @@ export default class BaseScene extends Scene {
         // Anade el icono del boton y lo hace interactivo
         let button = this.add.image(0, 0, img).setOrigin(1, 0).setScale(scale);
         button.setPosition(x, y);
-        button.setInteractive({ useHandCursor: true });
+        setInteractive(button);
 
         // Se reproduce la animacion de aparecer
         this.tweens.add({

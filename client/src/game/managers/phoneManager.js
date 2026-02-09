@@ -3,6 +3,7 @@ import Phone from '../UI/phone/phone';
 import EventDispatcher from './eventDispatcher';
 import TrackerManager from './trackerManager';
 import { TEXT_CONFIG } from '../utils/graphics';
+import { setInteractive } from '../utils/misc';
 
 export default class PhoneManager {
     /**
@@ -24,7 +25,7 @@ export default class PhoneManager {
 
         // Anade un rectangulo para bloquear la interaccion con los elementos del fondo
         this.bgBlock = scene.add.rectangle(0, 0, this.scene.CANVAS_WIDTH, this.scene.CANVAS_HEIGHT, 0xfff, 0).setOrigin(0, 0);
-        this.bgBlock.setInteractive({ useHandCursor: true });
+        setInteractive(this.bgBlock);
         this.bgBlock.setDepth(this.icon.depth - 3);
 
         // Si se pulsa fuera del telefono cuando esta sacado, se guarda
@@ -63,7 +64,7 @@ export default class PhoneManager {
 
         // Anade el icono del telefono
         this.icon = this.scene.add.image(this.scene.CANVAS_WIDTH - OFFSET, this.scene.CANVAS_HEIGHT - OFFSET, 'phoneIcon').setScale(ICON_SCALE);
-        this.icon.setInteractive({ useHandCursor: true });
+        setInteractive(this.icon);
 
         // Al pasar el raton por encima del icono, se hace mas grande,
         // al quitar el raton de encima vuelve a su tamano original,
@@ -279,7 +280,7 @@ export default class PhoneManager {
         this.phone.visible = active;
         this.bgBlock.visible = active;
         if (active) {
-            this.bgBlock.setInteractive();
+            setInteractive(this.bgBlock);
         }
         else {
             this.bgBlock.disableInteractive();

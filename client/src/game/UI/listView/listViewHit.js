@@ -1,4 +1,5 @@
 import { Scene, GameObjects, Geom } from "phaser"
+import { DEBUG } from "../../../types/misc";
 
 export default class ListViewHit extends GameObjects.Zone {
     /**
@@ -50,9 +51,8 @@ export default class ListViewHit extends GameObjects.Zone {
         this.setPosition(rect.x, rect.y);
         this.setSize(rect.width, rect.height);
 
-        let debug = this.scene.sys.game.debug;
-        if (debug.enable) {
-            this.scene.input.enableDebug(this, debug.color);
+        if (DEBUG) {
+            this.scene.input.enableDebug(this, 0x00ff00);
         }
     }
 
@@ -81,9 +81,8 @@ export default class ListViewHit extends GameObjects.Zone {
 
             // Cada vez que se cambia la zona, hay que volver a llamar al enableDebug
             // para que el area de colision se pinte correctamente
-            let debug = this.scene.sys.game.debug;
-            if (debug.enable) {
-                this.scene.input.enableDebug(this, debug.color);
+            if (DEBUG) {
+                this.scene.input.enableDebug(this, 0x00ff00);
             }
         }
     }

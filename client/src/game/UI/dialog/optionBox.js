@@ -3,6 +3,7 @@ const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate;
 import DialogObject from './dialogObject';
 import { TEXT_CONFIG } from "../../utils/graphics";
+import { setInteractive } from "../../utils/misc";
 
 export default class OptionBox extends DialogObject {
     /**
@@ -36,7 +37,7 @@ export default class OptionBox extends DialogObject {
         // Crea el texto
         this.text = this.scene.add.text(x, y, text, this.textConfig);
         this.text.setOrigin(0, 0.5);
-        this.box.setInteractive({ useHandCursor: true });
+        setInteractive(this.box);
 
         // Configuracion de las animaciones
         let tintFadeTime = 50;
@@ -116,7 +117,7 @@ export default class OptionBox extends DialogObject {
         if (active && !isVisible) {
             this.box.disableInteractive();
             super.activate(true, [this.box, this.text], () => {
-                this.box.setInteractive({ useHandCursor: true });
+                setInteractive(this.box);
             }, 0);
         }
         // Si se va a desactivar y es visible, desaparece con animacion

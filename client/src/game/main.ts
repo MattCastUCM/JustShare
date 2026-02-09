@@ -120,17 +120,11 @@ const config = {
             height: max_h,
         },
         zoom: 1,
-        // parent: 'game',
     },
 }
 
-const StartGame = (parent) => {
+const StartGame = (parent: string) => {
     const game = new Game({ ...config, parent });
-
-    game.debug = {
-        enable: true,
-        color: '0x00ff00'
-    }
     return game
 }
 

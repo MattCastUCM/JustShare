@@ -1,4 +1,5 @@
 import { Scene, Geom, Math, GameObjects } from "phaser"
+import { DEBUG } from "../../../types/misc";
 
 export default class VerticalListView extends GameObjects.Container {
     /**
@@ -53,9 +54,8 @@ export default class VerticalListView extends GameObjects.Container {
         // El scrolling esta por encima de cualquier asset
         // De esta forma, se va a poder scrollear sobre la propia listiview
         this.boundedZone.setDepth(1);
-        let debug = this.scene.sys.game.debug;
-        if (debug.enable) {
-            this.scene.input.enableDebug(this.boundedZone, debug.color);
+        if (DEBUG) {
+            this.scene.input.enableDebug(this.boundedZone, 0x00ff00);
         }
         this.add(this.boundedZone);
         // Final de los limites de la listview

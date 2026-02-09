@@ -7,8 +7,11 @@ import SceneManager from "./sceneManager";
 import TrackerManager from "./trackerManager";
 import TranslatorManager from "./translatorManager";
 import axios from "axios";
+import { createRectTexture, growAnimation, TEXT_CONFIG } from "../utils/graphics";
+import ImageTextInput from "../UI/imageTextInput";
+import TextArea from "../UI/textArea";
 import TextInput from "../UI/textInput";
-import { createRectTexture, TEXT_CONFIG } from "../utils/graphics";
+import AnimatedContainer from "../UI/animatedContainer";
 
 /*
 PARA ARREGLAR NODOS DE EVENTO SI SE sALTAN LOS DIALOGOS:
@@ -43,32 +46,10 @@ export default class DialogManager {
 
         this.textbox = new TextBox(scene, this);
 
-        const style = { ...TEXT_CONFIG };
-        style.fontFamily = 'corpid';
-        style.fontSize = '42px';
-        style.color = '#000000';
-        const w = 335, h = 90;
-        createRectTexture(scene, "managerTextInput", w, h, 0xffffff, 1, 2.5, 0x000000, 1, 20);
-
-        this.textInput = new TextInput(scene, this.scene.CANVAS_WIDTH / 2 - w / 2, scene.CANVAS_HEIGHT / 2 - h / 2, "Test", 10, { R: 190, G: 192, B: 230 }, "managerTextInput", style);
-        this.textInput.setVisible(false);
-
-        const fx1 = this.textInput.fillImg.postFX.addGlow(0xffffff, 0, 0, false, 0.1, 32);
-        this.scene.tweens.add({
-            targets: fx1,
-            outerStrength: 8,
-            yoyo: true,
-            loop: -1,
-            ease: 'sine.inout',
-            duration: 2000
-        });
-
-
-        this.dreamBg = this.scene.add.image(0, 0, 'dream').setOrigin(0, 0);
-        const scale = this.scene.CANVAS_HEIGHT / this.dreamBg.height;
-        this.dreamBg.setScale(scale);
-        this.dreamBg.setAlpha(0.8);
-        this.dreamBg.setVisible(false);
+        this.thoughtBox = this.createThoughtBox(scene, "Quiero decir...", "Escribe aquí.", (textInput, button) => {
+            this.processThought(textInput, button);
+        })
+        this.thoughtBox.setVisible(false);
 
         this.PORTRAIT_ANIM_TIME = 200;
 
@@ -87,6 +68,75 @@ export default class DialogManager {
         this.textbox.activate(false);
         this.bgBlock.disableInteractive();
         this.activateOptions(false);
+    }
+
+    createThoughtBox(scene, informativeText, defaultText, onClick) {
+        const container = new AnimatedContainer(scene, 0, 0);
+
+        const dreamBg = scene.add.image(0, 0, 'dream').setOrigin(0, 0);
+        const scale = scene.CANVAS_HEIGHT / dreamBg.height;
+        dreamBg.setScale(scale);
+        dreamBg.setAlpha(0.8);
+        container.add(dreamBg)
+
+        const cloudContainer = new AnimatedContainer(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT / 2);
+
+        const cloud = scene.add.image(0, 0, "thoughtCloud");
+        cloud.setAlpha(0.7);
+        cloudContainer.add(cloud);
+
+        const glowColor = Phaser.Display.Color.GetColor(220, 220, 220);
+        const fx = cloud.postFX.addGlow(glowColor, 0, 0, false, 0.05, 20);
+        scene.tweens.add({
+            targets: fx,
+            outerStrength: { from: 1.5, to: 5 },
+            yoyo: true,
+            loop: -1,
+            ease: 'sine.inOut',
+            duration: 3000,
+        });
+
+        const y = 105
+        const width = cloud.displayWidth - 200;
+
+        const style = { ...TEXT_CONFIG }
+        style.fontFamily = "roboto-regular"
+        style.color = '#2e2e2e'
+        style.fontSize = 46;
+
+        const textStyle = { ...style }
+        textStyle.fontStyle = "bold";
+
+        const text = new TextArea(scene, 0, y, width, cloud.displayHeight, informativeText, textStyle, 0, 0, 0, 0, 0, 0, 0, 0)
+        text.adjustFontSize();
+        cloudContainer.add(text);
+
+        const inputStyle = { ...style }
+        inputStyle.fontSize = 40;
+        style.wordWrap = {
+            width: width,
+            useAdvancedWrap: true
+        }
+
+        const defaultStyle = { ...inputStyle }
+        defaultStyle.fontStyle = "italic";
+
+        const textInput = new TextInput(scene, 0, y - cloud.displayHeight / 2 + text.displayHeight / 2 + 50, width, cloud.displayHeight - 320, defaultText, defaultStyle, style, false, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        cloudContainer.add(textInput);
+
+        const button = scene.add.image(0, textInput.y + textInput.height + 50, 'arrowIcon');
+        button.setTintFill(0x323232);
+        button.setScale(0.27);
+        growAnimation(button, [button], () => {
+            if (onClick != null && typeof onClick == "function") {
+                onClick(textInput, button);
+            }
+        }, false, false, 1.2, 0)
+        cloudContainer.add(button);
+
+        container.add(cloudContainer);
+
+        return container;
     }
 
 
@@ -109,8 +159,8 @@ export default class DialogManager {
         }
         this.activateOptions(false);
 
-        // Desactiva la caja de input
-        this.activeTextInput(false);
+        // Desactiva la caja de pensamiento
+        this.thoughtBox.activate(false, 0);
 
         this.portraits.clear();
         // Coge las imagenes de todos los retratos, las copia en esta escena, y las pone detras de la caja de texto
@@ -340,6 +390,39 @@ export default class DialogManager {
         return node.choices.length;
     }
 
+    processThought(textInput, button) {
+        if (textInput.containsText()) {
+            const text = textInput.getText();
+            textInput.activateInput(false);
+
+            let delay = 0;
+            if (this.currNode.nextDelay != null) {
+                delay = this.currNode.nextDelay;
+            }
+
+            button.disableInteractive();
+
+            // setTimeout(() => {
+            //     this.thoughtBox.activate(false, 150, () => {
+            //         textInput.clear();
+            //         this.currNode = this.currNode.next[9];
+            //         button.setInteractive();
+            //         this.processNextNode(delay);
+            //     })
+            // }, 5000)
+
+            this.processSimilarityNode(this.currNode, text)
+                .then(index => {
+                    this.thoughtBox.activate(false, 150, () => {
+                        textInput.clear();
+                        this.currNode = this.currNode.next[index];
+                        button.setInteractive();
+                        this.processNextNode(delay);
+                    });
+                });
+        }
+    }
+
     // Procesa el nodo actual dependiendo de su tipo
     processNode() {
         // Si el nodo actual es valido
@@ -369,19 +452,7 @@ export default class DialogManager {
                 this.activateOptions(true);
             }
             else if (this.currNode.type === "similarity") {
-                this.activeTextInput(true);
-                this.scene.input.keyboard.on('keydown-ENTER', () => {
-                    if (this.textInput.isValid()) {
-                        const text = this.textInput.getText();
-                        this.processSimilarityNode(this.currNode, text)
-                            .then(index => {
-                                this.activeTextInput(false);
-
-                                this.currNode = this.currNode.next[index];
-                                this.processNextNode(delay);
-                            });
-                    }
-                });
+                this.thoughtBox.activate(true, 250);
             }
             else if (this.currNode.type === "text") {
                 // Si el nodo no tiene texto, se lo salta y pasa al siguiente nodo
@@ -588,14 +659,6 @@ export default class DialogManager {
         }
         this.processNextNode(delay);
         this.createOptions([]);
-    }
-
-    activeTextInput(active) {
-        if (!active) {
-            this.scene.input.keyboard.off('keydown-ENTER');
-        }
-        this.textInput.setVisible(active);
-        this.dreamBg.setVisible(active);
     }
 
     /**

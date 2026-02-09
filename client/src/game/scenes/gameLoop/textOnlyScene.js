@@ -1,4 +1,5 @@
 import { TEXT_CONFIG } from '../../utils/graphics';
+import { setInteractive } from '../../utils/misc';
 import BaseScene from './baseScene';
 
 export default class TextOnlyScene extends BaseScene {
@@ -75,7 +76,7 @@ export default class TextOnlyScene extends BaseScene {
 
         // Se puede hacer click en la imagen de fondo una vez termine el fade in
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, (cam, effect) => {
-            bg.setInteractive({ useHandCursor: true });
+            setInteractive(bg);
         });
 
         this.exiting = false;
