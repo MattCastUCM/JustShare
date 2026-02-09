@@ -46,10 +46,13 @@ export default class DialogManager {
 
         this.textbox = new TextBox(scene, this);
 
-        this.thoughtBox = this.createThoughtBox(scene, "Quiero decir...", "Escribe aquí.", (textInput, button) => {
-            this.processThought(textInput, button);
+        const [thoughtBox, keyEnter] = this.createThoughtBox(scene, "Quiero decir...", "Escribe aquí.", (textInput, button, key) => {
+            this.processThought(textInput, button, key);
         })
+        this.thoughtBox = thoughtBox;
         this.thoughtBox.setVisible(false);
+
+        this.keyEnter = keyEnter;
 
         this.PORTRAIT_ANIM_TIME = 200;
 
@@ -79,30 +82,30 @@ export default class DialogManager {
         dreamBg.setAlpha(0.8);
         container.add(dreamBg)
 
-        const cloudContainer = new AnimatedContainer(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT / 2);
+        const cloudContainer = new AnimatedContainer(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT / 2 - 90);
 
         const cloud = scene.add.image(0, 0, "thoughtCloud");
-        cloud.setAlpha(0.7);
+        cloud.setAlpha(0.8);
         cloudContainer.add(cloud);
 
         const glowColor = Phaser.Display.Color.GetColor(220, 220, 220);
         const fx = cloud.postFX.addGlow(glowColor, 0, 0, false, 0.05, 20);
         scene.tweens.add({
             targets: fx,
-            outerStrength: { from: 1.5, to: 5 },
+            outerStrength: { from: 0, to: 1 },
             yoyo: true,
             loop: -1,
             ease: 'sine.inOut',
             duration: 3000,
         });
 
-        const y = 105
-        const width = cloud.displayWidth - 200;
+        const y = 120
+        const width = cloud.displayWidth - 220;
 
         const style = { ...TEXT_CONFIG }
         style.fontFamily = "roboto-regular"
         style.color = '#2e2e2e'
-        style.fontSize = 46;
+        style.fontSize = 40;
 
         const textStyle = { ...style }
         textStyle.fontStyle = "bold";
@@ -112,31 +115,44 @@ export default class DialogManager {
         cloudContainer.add(text);
 
         const inputStyle = { ...style }
-        inputStyle.fontSize = 40;
+        inputStyle.fontSize = 37;
         style.wordWrap = {
             width: width,
-            useAdvancedWrap: true
+            useAdvancedWrap: false
         }
 
         const defaultStyle = { ...inputStyle }
         defaultStyle.fontStyle = "italic";
 
-        const textInput = new TextInput(scene, 0, y - cloud.displayHeight / 2 + text.displayHeight / 2 + 50, width, cloud.displayHeight - 320, defaultText, defaultStyle, style, false, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        const textInput = new TextInput(scene, 0, y - cloud.displayHeight / 2 + text.displayHeight / 2 + 45, width, cloud.displayHeight - 320, defaultText, defaultStyle, style, false, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         cloudContainer.add(textInput);
 
-        const button = scene.add.image(0, textInput.y + textInput.height + 50, 'arrowIcon');
-        button.setTintFill(0x323232);
+        const keyEnter = this.scene.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.ENTER
+        );
+        keyEnter.enabled = false;
+
+        const button = scene.add.image(235, textInput.y + textInput.height + 50, 'introIcon');
         button.setScale(0.27);
         growAnimation(button, [button], () => {
             if (onClick != null && typeof onClick == "function") {
-                onClick(textInput, button);
+                onClick(textInput, button, keyEnter);
             }
         }, false, false, 1.2, 0)
+
+        this.scene.input.keyboard.off('keydown-ENTER');
+
+        keyEnter.on('down', () => {
+            if (onClick != null && typeof onClick == "function") {
+                onClick(textInput, button, keyEnter);
+            }
+        })
+
         cloudContainer.add(button);
 
         container.add(cloudContainer);
 
-        return container;
+        return [container, keyEnter];
     }
 
 
@@ -394,29 +410,23 @@ export default class DialogManager {
         if (textInput.containsText()) {
             const text = textInput.getText();
             textInput.activateInput(false);
-
+            
             let delay = 0;
             if (this.currNode.nextDelay != null) {
                 delay = this.currNode.nextDelay;
             }
-
+            
+            this.keyEnter.enabled = false;
             button.disableInteractive();
-
-            // setTimeout(() => {
-            //     this.thoughtBox.activate(false, 150, () => {
-            //         textInput.clear();
-            //         this.currNode = this.currNode.next[9];
-            //         button.setInteractive();
-            //         this.processNextNode(delay);
-            //     })
-            // }, 5000)
-
+            
+            // TODO: TRACKER EVENT
             this.processSimilarityNode(this.currNode, text)
                 .then(index => {
                     this.thoughtBox.activate(false, 150, () => {
                         textInput.clear();
-                        this.currNode = this.currNode.next[index];
                         button.setInteractive();
+
+                        this.currNode = this.currNode.next[index];
                         this.processNextNode(delay);
                     });
                 });
@@ -452,7 +462,9 @@ export default class DialogManager {
                 this.activateOptions(true);
             }
             else if (this.currNode.type === "similarity") {
-                this.thoughtBox.activate(true, 250);
+                this.thoughtBox.activate(true, 250, () => {
+                    this.keyEnter.enabled = true;
+                });
             }
             else if (this.currNode.type === "text") {
                 // Si el nodo no tiene texto, se lo salta y pasa al siguiente nodo
