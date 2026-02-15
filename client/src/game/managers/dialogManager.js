@@ -369,7 +369,8 @@ export default class DialogManager {
             corpus: corpus,
             text: text,
             method: method,
-            language: currentLanguage
+            language: currentLanguage,
+            top_k: 1
         }
 
         const request = {
@@ -392,11 +393,13 @@ export default class DialogManager {
 
     async processSimilarityNode(node, text) {
         try {
+            console.log(node.summary);
             const result = await this.checkSimilarity(node.choices, text, node.method)
             const data = result.data;
-            console.log(data);
-            if (data.score >= node.threshold) {
-                return data.index;
+            const match = data.matches[0];
+            console.log(data)
+            if (match.score >= node.threshold) {
+                return match.index;
             }
         }
         catch (error) {
@@ -410,15 +413,15 @@ export default class DialogManager {
         if (textInput.containsText()) {
             const text = textInput.getText();
             textInput.activateInput(false);
-            
+
             let delay = 0;
             if (this.currNode.nextDelay != null) {
                 delay = this.currNode.nextDelay;
             }
-            
+
             this.keyEnter.enabled = false;
             button.disableInteractive();
-            
+
             // TODO: TRACKER EVENT
             this.processSimilarityNode(this.currNode, text)
                 .then(index => {
@@ -498,7 +501,6 @@ export default class DialogManager {
                         if (this.portraits.get(this.currNode.character)) {
                             this.portraits.get(this.currNode.character).setTalking(true, this.PORTRAIT_ANIM_TIME);
                         }
-
 
                         this.textbox.activate(false, () => {
                             showBox();

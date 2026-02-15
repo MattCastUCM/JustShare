@@ -1,47 +1,72 @@
-from langchain_ollama import OllamaEmbeddings
 from gensim.models import KeyedVectors
-from app.core.settings import get_settings
+from ..core.settings import get_settings
+from .sentence_embeddings import SentenceEmbeddings
 from loguru import logger
 import spacy
-from spacy.language import Language
 import os
+from typing import Callable, TypeVar
 
-def get_embedding_model(model: str, temperature: float = 0.8) -> OllamaEmbeddings: 
-    settings = get_settings()
+T = TypeVar("T")
 
-    embeddings = OllamaEmbeddings(
-        model=model,
-        validate_model_on_init=True,
-        base_url=settings.ollama_host,
-        num_gpu=-1,
-        temperature=temperature
-    )
-    return embeddings
+def _load_per_language(languages: set[str], source_map: dict[str, str], loader: Callable[[str], T], model_type: str, validate_path: bool = False) -> dict[str, T]:
+    models: dict[str, T] = {}
 
-def get_word2vec_models(languages: set[str]):
-    settings = get_settings()
-
-    word2vec_paths = settings.word2vec_paths
-    word2vec_models: dict[str, KeyedVectors] = {}
     for lang in languages:
-        path = word2vec_paths.get(lang)
-        if path and os.path.exists(path):
-           word2vec_models[lang] = KeyedVectors.load(path, mmap="r")
-        else:
-            logger.warning(f"No Word2Vec model found for language '{lang}'.")
+        value = source_map.get(lang)
 
-    return word2vec_models
+        if not value:
+            logger.warning(f"No {model_type} configured for language '{lang}'.")
+        else:
+            if validate_path and not os.path.exists(value):
+                logger.warning(f"{model_type} path does not exist for language '{lang}': {value}.")
+            else:
+                try:
+                    models[lang] = loader(value)
+                except Exception as e:
+                    logger.exception(
+                        f"Failed to load {model_type} for language '{lang}': {e}."
+                    )
+
+    return models
+
+def get_sentence_transformers(languages: set[str]):
+    settings = get_settings()
+    
+    return _load_per_language(
+        languages=languages,
+        source_map=settings.sentence_transformers,
+        loader=lambda model_name: SentenceEmbeddings(model_name=model_name),
+        model_type="Sentence Transformers model",
+    )
+
+def get_bert_models(languages: set[str]):
+    settings = get_settings()
+    
+    return _load_per_language(
+        languages=languages,
+        source_map=settings.bert_models,
+        loader=lambda model_name: SentenceEmbeddings(model_name=model_name),
+        model_type="Bert model",
+    )
+
+def get_word2vec(languages: set[str]):
+    settings = get_settings()
+
+    return _load_per_language(
+        languages=languages,
+        source_map=settings.word2vec,
+        loader=lambda path: KeyedVectors.load(path, mmap="r"),
+        model_type="Word2vec model",
+        validate_path=True
+    )
 
 def get_trained_pipelines(languages: set[str]):
     settings = get_settings()
 
-    spacy_paths = settings.spacy_paths
-    spacy_models: dict[str, Language] = {}
-    for lang in languages:
-        model = spacy_paths.get(lang)
-        if model:
-            nlp = spacy.load(model, disable=["parser", "ner"])
-            spacy_models[lang] = nlp
-
-    return spacy_models
+    return _load_per_language(
+        languages=languages,
+        source_map=settings.spacy,
+        loader=lambda model: spacy.load(model, disable=["parser", "ner"]),
+        model_type="spaCy model",
+    )
     

@@ -1,6 +1,6 @@
 from collections import Counter
 import numpy as np
-from app.utils.math_utils import euclidean_normalization
+from ..utils.math_utils import euclidean_normalization
 from collections.abc import Callable
 from typing import Literal
 

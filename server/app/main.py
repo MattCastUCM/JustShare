@@ -1,12 +1,11 @@
 from contextlib import asynccontextmanager
-import asyncio
 from fastapi import FastAPI
-from app.routers.inference import router
+from .routers.inference import router
 import uvicorn
-from app.core.settings import get_settings
+from .core.settings import get_settings
 import nltk
-from app.models.load_models import get_embedding_model, get_word2vec_models, get_trained_pipelines
-from app.services.similarity_engine import SimilarityEngine
+from .models.load_models import get_sentence_transformers, get_word2vec, get_bert_models, get_trained_pipelines
+from .services.similarity_engine import SimilarityEngine
 from fastapi.middleware.cors import CORSMiddleware
 
 def create_similarity_engine(max_n: int):
@@ -14,15 +13,18 @@ def create_similarity_engine(max_n: int):
 	nltk.download("stopwords", quiet=True)
 
 	settings = get_settings()
+	languages = settings.languages
 	
-	embedding_model = get_embedding_model(settings.embedding_model)
-	word2vec_models = get_word2vec_models(settings.languages)
-	spacy_models = get_trained_pipelines(settings.languages)
+	sentence_transformers = get_sentence_transformers(languages)
+	word2vec = get_word2vec(languages)
+	bert_models = get_bert_models(languages)
+	nlps = get_trained_pipelines(languages)
 
 	similarity_engine = SimilarityEngine(
-		word2vec_models=word2vec_models,
-		embedding_model=embedding_model,
-		spacy_models=spacy_models,
+		word2vec=word2vec,
+		sentence_transformers=sentence_transformers,
+		bert_models=bert_models,
+		nlps=nlps,
 		max_n=max_n
 	)
 
@@ -35,15 +37,13 @@ async def lifespan(app: FastAPI):
 		"similarity_engine": similarity_engine
 	}
 
-app = FastAPI(title="Inference Server", lifespan=lifespan)
+settings = get_settings()
 
-origins = [
-	"http://localhost:8080"
-]
+app = FastAPI(title="Inference Server", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.allow_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -51,40 +51,10 @@ app.add_middleware(
 
 app.include_router(router)
 
-async def main():
-	similarity_engine = create_similarity_engine(max_n=2)
-
-	texts = [
-		"¡Gracias! Si necesito algo, te aviso.",
-		"Igualmente, un gusto conocerte *sonríes*.",
-		"Ah, sí... ¡hola!",
-		"Gracias, cualquier cosa te cuento.",
-		"Perfecto, muchas gracias.",
-		"Igualmente, encantado de conocerte.",
-		"Encantado de conocerte también.",
-		"El gusto es mío.",
-		"Jaja, ¡hola!",
-		"Ah, sí... hola.",
-		"Perdón, me colgué un poco... hola.",
-		"Hola, ¿qué tal?",
-		"Hey, hola.",
-		"Ah, cierto... hola.",
-		"Todo bien, gracias.",
-		"Mucho gusto.",
-		"Encantado, un placer conocerte.",
-		"Hola, hola.",
-		"Ups... ¡hola!",
-		"Ah, sí, perdón... hola."
-	]
-	text = "hola, amiga, encantado de conocerte"
-	best_match = similarity_engine.similarity_word2vec(
-		corpus=texts, 
-		text=text,
-		language="es"
-	)
-	print(best_match)
-
-
 if __name__ == "__main__":
-	uvicorn.run(app, host="0.0.0.0", port=8000)
-	# asyncio.run(main())
+	uvicorn.run(
+		"app.main:app",
+		host=settings.host,
+		port=settings.port,
+		reload=True
+	)

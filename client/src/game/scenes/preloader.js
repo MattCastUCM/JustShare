@@ -52,9 +52,6 @@ export default class Preloader extends Scene {
 
         this.load.image('seaPicture', 'seaPicture.png')
         this.load.image('puzzleBooblePicture', 'puzzleBooblePicture.jpeg')
-
-        this.load.setPath('localization/structure/computer');
-        this.load.json('profilePictures', 'profilePictures.json');
     }
 
     loadPhoneAssets() {
@@ -231,8 +228,10 @@ export default class Preloader extends Scene {
         this.load.image('playerPhoto6Female', 'scene6/playerPhoto6Female.png');
     }
 
-    loadCreditsSceneAssets() {
-        this.load.setPath('assets/UI/creditsScene');
+    loadFiles() {
+        this.load.setPath('config');
+        this.load.json('profilePictures', 'profilePictures.json');
+        this.load.json('similarity_thresholds', 'similarity_thresholds.json');
     }
 
     init() {
@@ -308,7 +307,6 @@ export default class Preloader extends Scene {
 
         // Cuando carga un archivo, muestra el nombre del archivo debajo de la barra
         this.load.on('fileprogress', function (file) {
-            // console.log(file.key);
             assetText.setText('Loading asset: ' + file.key);
         });
 
@@ -397,7 +395,7 @@ export default class Preloader extends Scene {
         this.loadCharacters();
         this.loadBackgrounds();
         this.loadPhotos();
-        this.loadCreditsSceneAssets();
+        this.loadFiles();
 
         this.loadi18next(dialogsAndNamespaces, onlyNamespaces);
     }

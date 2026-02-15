@@ -1,11 +1,10 @@
-from app.models.tfidf_vectorizer import TfIdfVectorizer
-from app.models.preprocessing import TextPreprocessor, Token
+from .tfidf_vectorizer import TfIdfVectorizer
+from .preprocessing import TextPreprocessor, Token
 import numpy as np
-from app.utils.math_utils import euclidean_normalization
+from ..utils.math_utils import euclidean_normalization
 from gensim.models import KeyedVectors
 from abc import ABC, abstractmethod
 from spacy.language import Language
-from loguru import logger
 
 class WeightedWord2Vec(ABC):
 	def __init__(self, wv: KeyedVectors, language: str, spacy_models: dict[str, Language]):
@@ -156,7 +155,6 @@ class POSWeightedWord2Vec(WeightedWord2Vec):
 		result = []
 		for doc in docs:
 			tokens = self.preprocess(doc)
-			logger.debug(tokens)
 			weights = self.pos_weights(tokens)
 			tokens = [token.lemma for token in tokens]
 			vector = self.weigthed_vector(tokens, weights)

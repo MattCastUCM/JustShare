@@ -23,5 +23,6 @@
     ],
     "text": "hola, amiga, encantado de conocerte",
     "method": "jaccard",
-    "language": "spanish"
+    "language": "es",
+    "top_k": 1
 }

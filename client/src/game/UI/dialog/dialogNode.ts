@@ -94,6 +94,7 @@ export class SimilarityNode extends DialogNode {
     threshold: number
     character: string
     choices: string[]
+    summary: string
 
     constructor() {
         super();
@@ -103,6 +104,7 @@ export class SimilarityNode extends DialogNode {
         this.threshold = 0;
         this.character = "";
         this.choices = [];
+        this.summary = "";
     }
 }
 

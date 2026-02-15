@@ -38,8 +38,7 @@
         },
         "thanks2": {
             "type": "similarity",
-            "method": "word2vec",
-            "threshold": 0.5,
+            "method": "sentence_transformers",
             "character": "player",
             "choices": [
                 {

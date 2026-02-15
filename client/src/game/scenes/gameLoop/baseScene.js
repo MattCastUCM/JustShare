@@ -351,7 +351,7 @@ export default class BaseScene extends Scene {
                 // el nodo siguiente que corresponde a elegir dicha opcion
                 node.choices.push(choice);
 
-                // Si hay un nodo despues de este, se crea de manera y se
+                // Si hay un nodo despues de este, se crea de manera recursiva y se
                 // guarda la id de dicho nodo en el array de nodos siguientes
                 if (fileObj[id].choices[i].next) {
                     let nextNode = this.readAllNodes(fileObj[id].choices[i].next, file, namespace, objectName, getObjs, nodesMap);
@@ -367,15 +367,26 @@ export default class BaseScene extends Scene {
 
             node.method = fileObj[id].method;
             node.threshold = fileObj[id].threshold;
+            if (!node.threshold) {
+                const thresholds = this.cache.json.get("similarity_thresholds")
+                node.threshold = thresholds[node.method];
+            }
             node.character = fileObj[id].character;
 
             // Se obtienen las opciones del archivo de textos traducidos
-            let texts = this.translatorManager.translate(translationId, namespace, {
+            const texts = this.translatorManager.translate(`${translationId}.responses`, namespace, {
                 name: this.playerName,
                 context: this.context,
                 returnObjects: getObjs
             });
             node.choices = texts;
+
+            const summary = this.translatorManager.translate(`${translationId}.summary`, namespace, {
+                name: this.playerName,
+                context: this.context,
+                returnObjects: getObjs
+            });
+            node.summary = summary;
 
             for (let i = 0; i < fileObj[id].choices.length; i++) {
                 // Si hay un nodo despues de este, se crea de manera y se
