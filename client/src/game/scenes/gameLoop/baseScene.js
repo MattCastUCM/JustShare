@@ -368,7 +368,7 @@ export default class BaseScene extends Scene {
             node.method = fileObj[id].method;
             node.threshold = fileObj[id].threshold;
             if (!node.threshold) {
-                const thresholds = this.cache.json.get("similarity_thresholds")
+                const thresholds = this.cache.json.get("similarityThresholds")
                 node.threshold = thresholds[node.method];
             }
             node.character = fileObj[id].character;
@@ -732,7 +732,7 @@ export default class BaseScene extends Scene {
                 // TRACKER EVENT
                 // console.log("Interactuando con", itemName);
                 // this.gameManager.sendItemInteraction(itemName, npc);
-                this.trackerManager.sendItemInteraction(itemName, npc);
+                this.trackerManager.sendItemInteraction(itemName, {}, npc);
             }
 
         });

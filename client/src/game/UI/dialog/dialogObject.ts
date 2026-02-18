@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { RenderObject } from "../../utils/graphics";
 
 export default class DialogObject {
     /**
@@ -7,7 +8,13 @@ export default class DialogObject {
     * defecto para el texto de los elementos de dialogo 
     * @param {Scene} scene - escena a la que pertenece
     */
-    constructor(scene) {
+    scene: Scene
+    animConfig: {
+        fadeTime: number,
+        fadeEase: string
+    }
+
+    public constructor(scene: Scene) {
         this.scene = scene;
 
         // Configuracion de las animaciones
@@ -19,12 +26,12 @@ export default class DialogObject {
 
     /**
     * Activa o desactiva los objetos indicados
-    * @param {Boolean} active - si se va a activar el objeto
+    * @param {boolean} active - si se va a activar el objeto
     * @param {Array} objects - array de objetos a activar/desactivar
     * @param {Function} onComplete - funcion a la que llamar cuando acabe la animacion
     * @param {Number} delay - tiempo en ms que tarda en llamarse a onComplete
     */
-    activate(active, objects, onComplete = {}, delay = 0) {
+    protected activate_internal(active: boolean, objects: RenderObject[], onComplete: Function = () => { }, delay: number = 0) {
         let fade;
 
         // Si se va a activar

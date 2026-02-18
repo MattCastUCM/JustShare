@@ -26,8 +26,8 @@ export default class AnimatedContainer extends GameObjects.Container {
     * @param {Function} onComplete - funcion a la que llamar cuando acaba la animacion (opcional)
     * @param {number} delay - tiempo en ms que tarda en llamarse a onComplete (opcional)
     */
-    public activate(active: boolean, duration: number = 150, onComplete: Function = () => { }, delay: number = 0) {
-        this.fadeAnim = fadeAnimation(this, active, duration);
+    public activate(active: boolean, onComplete: Function = () => { }, delay: number = 0) {
+        this.fadeAnim = fadeAnimation(this, active);
 
         // Al terminar la animacion, se ejecuta el onComplete si es una funcion valida
         this.fadeAnim.on("complete", () => {

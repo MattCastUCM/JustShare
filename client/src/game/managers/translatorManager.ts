@@ -73,7 +73,7 @@ export default class TranslatorManager {
      * @param {string} translationId - id completa del nodo en el que mirar
      * @param {Record<string, any>} options - parametros que pasarle a i18n
      */
-    public translate(translationId: string, namespace: string, options: Record<string, any> = {}) {
+    public translate(translationId: string, namespace: string, options: Record<string, any> = {}): string | string[] {
         const resolvedOptions = {
             ...this.defaultOptions,
             ...options,

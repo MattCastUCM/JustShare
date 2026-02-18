@@ -1,29 +1,38 @@
-import { Scene, Display } from "phaser";
-const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
+import { Display, GameObjects, Scene } from "phaser";
+import DialogManager from "../../managers/dialogManager";
+const { GetColor, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate;
-import DialogObject from './dialogObject';
 import { TEXT_CONFIG } from "../../utils/graphics";
 import { setInteractive } from "../../utils/misc";
+import DialogObject from "./dialogObject";
 
 export default class OptionBox extends DialogObject {
     /**
     * Caja de texto para la opcion multiple
     * @extends DialogObject
-    * @param {Scene} scene - escena a la que pertenece
-    * @param {Number} index - indice de la opcion
-    * @param {Number} numOpts - numero total de elecciones
-    * @param {String} text - texto de la opcion
+    * @param {BaseScene} scene - escena a la que pertenece
+    * @param {number} index - indice de la opcion
+    * @param {number} numOpts - numero total de elecciones
+    * @param {string} text - texto de la opcion
     */
-    constructor(scene, dialogManager, index, numOpts, text) {
+
+    private box: GameObjects.Image
+    private textConfig: Phaser.Types.GameObjects.Text.TextStyle
+    private text: GameObjects.Text
+
+    public constructor(scene: Scene, dialogManager: DialogManager, index: number, numOpts: number, text: string) {
         super(scene);
 
         let padding = 10;
         // this.box = scene.add.image(this.scene.CANVAS_WIDTH / 2, 0, 'dialogs', 'optionBg').setOrigin(0.5, 0);
-        this.box = scene.add.image(this.scene.CANVAS_WIDTH / 2, 0, 'optionBox').setOrigin(0.5, 0);
-        let scale = this.scene.CANVAS_WIDTH / (this.box.width + padding);
+        const canvasWidth = this.scene.sys.canvas.width;
+        const canvasHeight = this.scene.sys.canvas.height;
+
+        this.box = scene.add.image(canvasWidth / 2, 0, 'optionBox').setOrigin(0.5, 0);
+        let scale = canvasWidth / (this.box.width + padding);
         this.box.setScale(scale);
 
-        this.box.y = this.scene.CANVAS_HEIGHT - (this.box.displayHeight * numOpts) + (this.box.displayHeight * index);
+        this.box.y = canvasHeight - (this.box.displayHeight * numOpts) + (this.box.displayHeight * index);
 
         // Configuracion del texto de la caja
         this.textConfig = { ...TEXT_CONFIG };
@@ -47,30 +56,33 @@ export default class OptionBox extends DialogObject {
 
         // Hace fade del color de la caja al pasar o quitar el raton por encima
         this.box.on('pointerover', () => {
-            scene.tweens.addCounter({
-                targets: [this.box],
+            const config: Phaser.Types.Tweens.NumberTweenBuilderConfig = {
                 from: 0,
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = ColorWithColor(noTint, pointerOverColor, 100, value);
-                    let colInt = GetColor(col.r, col.g, col.b);
-                    this.box.setTint(colInt);
+                    if (value) {
+                        let col = ColorWithColor(noTint, pointerOverColor, 100, value);
+                        let colInt = GetColor(col.r, col.g, col.b);
+                        this.box.setTint(colInt);
+                    }
                 },
                 duration: tintFadeTime,
                 repeat: 0,
-            });
+            }
+            scene.tweens.addCounter(config);
         });
         this.box.on('pointerout', () => {
             scene.tweens.addCounter({
-                targets: [this.box],
                 from: 0,
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = ColorWithColor(pointerOverColor, noTint, 100, value);
-                    let colInt = GetColor(col.r, col.g, col.b);
-                    this.box.setTint(colInt);
+                    if (value) {
+                        let col = ColorWithColor(pointerOverColor, noTint, 100, value);
+                        let colInt = GetColor(col.r, col.g, col.b);
+                        this.box.setTint(colInt);
+                    }
                 },
                 duration: tintFadeTime,
                 repeat: 0,
@@ -82,14 +94,15 @@ export default class OptionBox extends DialogObject {
         this.box.on('pointerdown', () => {
             this.box.disableInteractive();
             let fadeColor = scene.tweens.addCounter({
-                targets: [this.box],
                 from: 0,
                 to: 100,
                 onUpdate: (tween) => {
                     const value = tween.getValue();
-                    let col = ColorWithColor(pointerOverColor, noTint, 100, value);
-                    let colInt = GetColor(col.r, col.g, col.b);
-                    this.box.setTint(colInt);
+                    if (value) {
+                        let col = ColorWithColor(pointerOverColor, noTint, 100, value);
+                        let colInt = GetColor(col.r, col.g, col.b);
+                        this.box.setTint(colInt);
+                    }
                 },
                 duration: tintFadeTime,
                 repeat: 0,
@@ -107,23 +120,23 @@ export default class OptionBox extends DialogObject {
 
     /**
     * Activa/desactiva la caja
-    * @param {Boolean} active - si se va a activar
+    * @param {boolean} active - si se va a activar
     */
-    activate(active) {
+    public activate(active: boolean) {
         // Es visible si el alpha de la caja es 1
         let isVisible = this.box.alpha == 1;
 
         // Si se va a activar y no es visible, aparece con animacion
         if (active && !isVisible) {
             this.box.disableInteractive();
-            super.activate(true, [this.box, this.text], () => {
+            super.activate_internal(true, [this.box, this.text], () => {
                 setInteractive(this.box);
             }, 0);
         }
         // Si se va a desactivar y es visible, desaparece con animacion
         else if (!active && isVisible) {
             this.box.disableInteractive();
-            super.activate(false, [this.box, this.text]);
+            super.activate_internal(false, [this.box, this.text]);
         }
     }
 

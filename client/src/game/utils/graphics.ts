@@ -1,8 +1,8 @@
-import { Scene, GameObjects, Tweens } from "phaser";
+import { Scene, GameObjects, Tweens, Types } from "phaser";
 import { setInteractive } from "./misc";
 
 // Configuracion de texto por defecto
-export const TEXT_CONFIG: Phaser.Types.GameObjects.Text.TextStyle = {
+export const TEXT_CONFIG: Types.GameObjects.Text.TextStyle = {
     fontFamily: 'Arial',        // Fuente (tiene que estar precargada en el html o el css)
     fontSize: '25px',        // Tamano de la fuente del dialogo
     fontStyle: 'normal',        // Estilo de la fuente
@@ -88,7 +88,7 @@ type RenderComponents =
     GameObjects.Components.AlphaSingle &
     GameObjects.Components.Transform;
 
-type RenderObject = GameObjects.GameObject & RenderComponents;
+export type RenderObject = GameObjects.GameObject & RenderComponents;
 
 /**
 * Anadir animacion de mostrar/ocultar un objeto con un fade in/out

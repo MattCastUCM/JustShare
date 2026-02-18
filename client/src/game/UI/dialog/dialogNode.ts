@@ -14,7 +14,7 @@ export class DialogNode {
     */
     type: NodeType
     id: string
-    next: DialogNode[] | string[]
+    next: (DialogNode | string)[]
     fullId: string
     nextDelay: number
 
@@ -26,6 +26,11 @@ export class DialogNode {
         this.nextDelay = 0;             // retardo con el que se procesara el siguiente nodo
     }
 }
+
+export type Dialog = {
+    text: string;
+    name: string;
+};
 
 export class TextNode extends DialogNode {
     /**
@@ -40,7 +45,7 @@ export class TextNode extends DialogNode {
             "centered": "true"
         }
     */
-    dialogs: string[]
+    dialogs: Dialog[]
     currDialog: number
     character: string
     name: string
@@ -110,7 +115,7 @@ export class SimilarityNode extends DialogNode {
 
 type Operator = "equal" | "greater" | "lower" | "different"
 
-interface Condition<Type> {
+export interface Condition<Type> {
     key: string;
     value: Type,
     operator: Operator

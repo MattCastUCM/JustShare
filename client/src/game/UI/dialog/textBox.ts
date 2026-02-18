@@ -1,6 +1,9 @@
-import { Scene } from "phaser";
-import DialogObject from "./dialogObject";
+import { Scene, GameObjects } from "phaser";
 import { TEXT_CONFIG } from "../../utils/graphics";
+import { setInteractive } from "../../utils/misc";
+import DialogManager from "../../managers/dialogManager";
+import DialogObject from "./dialogObject";
+import { Dialog } from "./dialogNode";
 
 export default class TextBox extends DialogObject {
     /**
@@ -8,20 +11,48 @@ export default class TextBox extends DialogObject {
     * @extends DialogObject
     * @param {Scene} scene - escena a la que pertenece
     */
-    constructor(scene, dialogManager) {
+
+    PADDING: number
+    box: GameObjects.Image
+    TEXT_X: number
+    TEXT_Y: number
+    WIDTH: number
+    HEIGHT: number
+    NAME_X: number
+    NAME_Y: number
+    centered: boolean
+    defaultNormalTextConfig: Phaser.Types.GameObjects.Text.TextStyle
+    normalTextConfig: Phaser.Types.GameObjects.Text.TextStyle
+    defaultNameTextConfig: Phaser.Types.GameObjects.Text.TextStyle
+    nameTextConfig: Phaser.Types.GameObjects.Text.TextStyle
+    TEXT_DELAY: number
+    currText: GameObjects.Text
+    fullText: string
+    fullTextSplit: string[]
+    letterCount: number
+    finished: boolean
+    nameText: GameObjects.Text
+    canWrite: boolean
+    timedEvent: Phaser.Time.TimerEvent
+    CANVAS_WIDTH: number
+
+    public constructor(scene: Scene, dialogManager: DialogManager) {
         super(scene);
         this.scene = scene;
 
         // Configuracion de la imagen de la caja de texto
         this.PADDING = 10;        // Espacio entre la caja y los bordes del canvas
 
+        this.CANVAS_WIDTH = this.scene.sys.canvas.width;
+        const canvasHeight = this.scene.sys.canvas.height;
+
         // Imagen de la caja
-        this.box = scene.add.image(this.scene.CANVAS_WIDTH / 2, this.scene.CANVAS_HEIGHT - this.PADDING, 'textbox').setOrigin(0.5, 1);
+        this.box = scene.add.image(this.CANVAS_WIDTH / 2, canvasHeight - this.PADDING, 'textbox').setOrigin(0.5, 1);
         // this.box = scene.add.image(this.scene.CANVAS_WIDTH / 2, this.scene.CANVAS_HEIGHT - this.PADDING, 'dialogs', 'textbox').setOrigin(0.5, 1);
 
         this.box.visible = true;
 
-        this.box.setInteractive({ useHandCursor: true });
+        setInteractive(this.box);
         this.box.on('pointerdown', () => {
             dialogManager.nextDialog();
         });
@@ -39,7 +70,6 @@ export default class TextBox extends DialogObject {
         // this.graphics = scene.add.graphics();
         // this.graphics.fillStyle('black', 0.9);
         // this.graphics.fillRect(this.scene.CANVAS_WIDTH / 2 - this.WIDTH / 2, this.TEXT_Y, this.WIDTH, this.HEIGHT);
-
 
         // Indica si el texto de la caja esta centrado o no
         this.centered = false;
@@ -66,8 +96,8 @@ export default class TextBox extends DialogObject {
         // Animacion del texto
         this.TEXT_DELAY = 30;                                                        // Tiempo que tarda en aparecer cada letra en milisegundos
         this.currText = this.scene.add.text(0, 0, "", this.normalTextConfig);       // Texto escrito hasta el momento
-        this.fulltext = "";                                                         // Texto completo a escribir
-        this.fullTextSplit = null;                                                  // Texto completo a escribir separado por palabras
+        this.fullText = "";                                                         // Texto completo a escribir
+        this.fullTextSplit = [];                                                  // Texto completo a escribir separado por palabras
         this.letterCount = 0;                                                       // Numero de letras del texto completo escritas
         this.finished = false;                                                      // Si ha terminado de mostrar el texto o no
 
@@ -79,10 +109,11 @@ export default class TextBox extends DialogObject {
         this.nameText.alpha = 0;
     }
 
-    setDepth(depth) {
+    public setDepth(depth: number) {
         this.box.setDepth(depth);
         this.currText.setDepth(depth);
         this.nameText.setDepth(depth);
+        return this;
     }
 
     /**
@@ -90,7 +121,7 @@ export default class TextBox extends DialogObject {
     * @param {String} text - texto a escribir
     * @param {Boolean} animate - si se va a animar el texto o no
     */
-    setText(dialogInfo, animate) {
+    setText(dialogInfo: Dialog, animate: boolean) {
         // Limpia los eventos
         if (this.timedEvent) this.timedEvent.remove();
 
@@ -128,7 +159,7 @@ export default class TextBox extends DialogObject {
     * Cambia el texto que se muestra por pantalla
     * @param {String} text - texto a escribir
     */
-    changeText(text) {
+    changeText(text: string) {
         // Arriba a la izquierda y con retrato
         let x = this.TEXT_X;
         let y = this.TEXT_Y;
@@ -138,7 +169,7 @@ export default class TextBox extends DialogObject {
         if (this.centered) {
             x = this.box.x;
             y = this.box.y - this.box.displayHeight / 2.25;
-            width = (this.scene.CANVAS_WIDTH - this.PADDING * 2) / 1.30;
+            width = (this.CANVAS_WIDTH - this.PADDING * 2) / 1.30;
         }
 
         this.normalTextConfig.wordWrap = {
@@ -157,7 +188,7 @@ export default class TextBox extends DialogObject {
     * Cambia el texto del nombre del personaje hablando
     * @param {String} name - nombre del personaje
     */
-    changeName(name) {
+    changeName(name: string) {
         // Crea el texto en la escena
         this.nameText.setOrigin(0.5, 0.5);
         this.nameText.x = this.NAME_X;
@@ -209,7 +240,7 @@ export default class TextBox extends DialogObject {
     * @param {Function} onComplete - funcion a la que llamar cuando acabe la animacion
     * @param {Number} delay - tiempo en ms que tarda en llamarse a onComplete
     */
-    activate(active, onComplete, delay) {
+    public activate(active: boolean, onComplete: Function = () => { }, delay: number = 0) {
         // Es visible si el alpha de la caja es 1
         let isVisible = this.box.alpha == 1;
 
@@ -218,7 +249,7 @@ export default class TextBox extends DialogObject {
             this.canWrite = false;
 
             this.box.disableInteractive();
-            super.activate(true, [this.box, this.currText, this.nameText], () => {
+            super.activate_internal(true, [this.box, this.currText, this.nameText], () => {
                 setTimeout(() => {
                     this.box.setInteractive({ useHandCursor: true });
                     this.canWrite = true;
@@ -230,7 +261,7 @@ export default class TextBox extends DialogObject {
             this.box.disableInteractive();
             this.canWrite = false;
 
-            super.activate(false, [this.box, this.currText, this.nameText], onComplete, delay);
+            super.activate_internal(false, [this.box, this.currText, this.nameText], onComplete, delay);
         }
         // Si se va a desactivar y no era visible, se llama a la funcion que se ha pasado
         else if (!active && !isVisible) {
@@ -259,7 +290,7 @@ export default class TextBox extends DialogObject {
      * Alinear el texto de la caja al centro o arriba a la izquierda
      * @param {Boolean} centered - true si el texto esta centrado, false si esta arriba a la izquierda
      */
-    centerText(centered) {
+    centerText(centered: boolean) {
         this.centered = centered;
 
         this.normalTextConfig.align = 'left';

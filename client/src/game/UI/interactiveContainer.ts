@@ -11,7 +11,7 @@ export default class InteractiveContainer extends AnimatedContainer {
     * @param {number} x - posicion x (opcional)
     * @param {number} y - posicion y (opcional)
     */
-    constructor(scene: Scene, x: number = 0, y: number = 0) {
+    public constructor(scene: Scene, x: number = 0, y: number = 0) {
         super(scene, x, y);
     }
 
@@ -21,7 +21,7 @@ export default class InteractiveContainer extends AnimatedContainer {
     * @param {Function} onComplete - funcion a la que llamar cuando acaba la animacion (opcional)
     * @param {number} delay - tiempo en ms que tarda en llamarse a onComplete (opcional)
     */
-    activate(active: boolean, onComplete = () => { }, delay: number = 0) {
+    public activate(active: boolean, onComplete: Function = () => { }, delay: number = 0) {
         // Si se va a desactivar, se desactiva la interaccion inmediatamente para 
         // que no se pueda seguir interactuando mientras se reproduce la animacion
         if (!active) {
@@ -44,7 +44,7 @@ export default class InteractiveContainer extends AnimatedContainer {
     * Obtiene las dimensiones del rectangulo del container para hacerlo interactivo
     * @param {String} objectName - nombre del objeto a imprimir en el debug (opcional)
     */
-    calculateRectangleSize(objectName = "") {
+    public calculateRectangleSize(objectName = "") {
         // Si no se elimina y se vuelve a llamar este metodo, la nueva zona no se calcula bien
         this.removeInteractive();
 
