@@ -35,7 +35,7 @@ export default class TextArea extends GameObjects.Text {
     private offsetX: number
     private offsetY: number
 
-    private debugRect: GameObjects.Rectangle
+    public debugRect: GameObjects.Rectangle
 
     public constructor(scene: Scene, x: number = 0, y: number = 0, maxWidth: number = 100, maxHeight: number = 100, text: string = "", style: Phaser.Types.GameObjects.Text.TextStyle = {}, originX: number = 0.5, originY: number = 0.5, paddingX: number = 0, paddingY: number = 0, offsetX: number = 0, offsetY: number = 0, alignX: number = 0.5, alignY: number = 0.5) {
         // Se crea el texto y se anade a la escena

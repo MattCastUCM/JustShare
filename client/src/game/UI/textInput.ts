@@ -4,6 +4,7 @@ import TextArea from "./textArea.js";
 import { blinkAnimation, fadeAnimation } from "../utils/graphics.js";
 import { isTouchInput } from "../../inputDetection.js";
 import { fontSizeToInt } from "../utils/misc.js";
+import { DEBUG } from "../../types/misc.js";
 
 export default class TextInput extends InteractiveContainer {
     /**
@@ -66,8 +67,10 @@ export default class TextInput extends InteractiveContainer {
         this.cursor = this.scene.add.text(0, 0, "▌", style);
         this.add(this.cursor);
 
-        const rect = this.scene.add.rectangle(0, 0, width + this.cursor.displayWidth, height, 0xff0000);
-        rect.setAlpha(0);
+        const rect = this.scene.add.rectangle(0, 0, width + this.cursor.displayWidth, height);
+        if (DEBUG) {
+            rect.setStrokeStyle(2, 0xff0000)
+        }
         rect.setOrigin(originX, originY)
         this.add(rect);
 
@@ -135,16 +138,26 @@ export default class TextInput extends InteractiveContainer {
 
     createInput() {
         // Crear un input inivisible del DOM para el teclado virtual
-        const input: HTMLInputElement = document.createElement("input");
+        const input = document.createElement("input") as HTMLInputElement;
 
-        // Colocar el input en un lugar de la pantalla donde no molester y hacerlo invisible
-        input.style.position = "absolute";
-        input.style.top = '50px';
-        input.style.left = '50px';
-        input.style.opacity = '0';
-        input.style.zIndex = '-1';
+        // Identificación (evita warnings)
+        input.id = "virtual-keyboard-input";
+        input.name = "virtualKeyboardInput";
 
-        // Se coloca en el documento
+        // Configuración básica
+        input.type = "text";
+        input.autocomplete = "off";
+        input.autocapitalize = "off";
+        input.spellcheck = false;
+
+        Object.assign(input.style, {
+            position: "fixed",
+            top: "0",
+            left: "0",
+            opacity: "0",
+            pointerEvents: "none"
+        });
+
         document.body.appendChild(input);
 
         // Se detecta la entrada de texto en el teclado virtual
@@ -191,7 +204,7 @@ export default class TextInput extends InteractiveContainer {
         const lines = this.textArea.getLines();
         const width = this.textArea.getDisplayWidth(lines[textSize.lines - 1])
         this.cursor.x = this.textArea.x + width;
-        const totalHeight = textSize.lineHeight * (textSize.lines - 1);
+        const totalHeight = (textSize.lineHeight + (this.style.lineSpacing ?? 0)) * (textSize.lines - 1);
         this.cursor.y = this.textArea.y + totalHeight * (1 - this.textArea.originY);
     }
 

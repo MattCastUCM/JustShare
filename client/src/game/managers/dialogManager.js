@@ -48,6 +48,7 @@ export default class DialogManager {
         this.textbox = new TextBox(scene, this);
 
         this.thoughtBox = this.createThoughtBox(scene);
+        this.thoughtBox.setVisible(false);
 
         this.PORTRAIT_ANIM_TIME = 200;
 
@@ -69,22 +70,17 @@ export default class DialogManager {
     }
 
     createThoughtBox(scene) {
-        const inputTextStyle = { ...TEXT_CONFIG }
-        inputTextStyle.fontFamily = "roboto-regular"
-        inputTextStyle.color = '#2e2e2e'
-        inputTextStyle.fontSize = 37;
+        const style = { ...TEXT_CONFIG }
+        style.fontFamily = "roboto-regular"
+        style.color = '#2e2e2e'
+        style.fontSize = 35;
 
-        const headerTextStyle = { ...inputTextStyle }
-        headerTextStyle.fontStyle = "bold";
-        headerTextStyle.fontSize = 40;
+        const summaryStyle = { ...style }
+        summaryStyle.fontStyle = "bold";
 
-        const defaultTextStyle = { ...inputTextStyle }
-        defaultTextStyle.fontStyle = "italic";
-
-        const thoughtBox = new ThoughtBox(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT / 2 - 90, "Quiero decir...", "Escribe aquí.", headerTextStyle, defaultTextStyle, inputTextStyle, () => {
+        const thoughtBox = new ThoughtBox(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT - 15, "Quiero decir...", summaryStyle, style, style, () => {
             this.processThought();
         })
-        thoughtBox.setVisible(false);
 
         return thoughtBox;
     }
@@ -391,10 +387,17 @@ export default class DialogManager {
                 this.activateOptions(true);
             }
             else if (this.currNode.type === "similarity") {
-                this.thoughtBox.clearText();
-                this.thoughtBox.activate(true, () => {
-                    this.thoughtBox.activateInput(true);
-                });
+                this.thoughtBox.setSummaryText(this.currNode.summary);
+                if (this.portraits.get(this.lastCharacter)) {
+                    this.portraits.get(this.lastCharacter).setTalking(false, this.PORTRAIT_ANIM_TIME);
+                    this.lastCharacter = "";
+                }
+                this.textbox.activate(false, () => {
+                    this.thoughtBox.clearText();
+                    this.thoughtBox.activate(true, () => {
+                        this.thoughtBox.activateInput(true);
+                    });
+                })
             }
             else if (this.currNode.type === "text") {
                 // Si el nodo no tiene texto, se lo salta y pasa al siguiente nodo

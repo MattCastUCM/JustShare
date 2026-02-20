@@ -4,13 +4,15 @@ import { growAnimation } from "../../utils/graphics";
 import TextArea from "../textArea";
 import TextInput from "../textInput";
 import { completeMissingProperties } from "../../utils/misc";
+import { DEBUG } from "../../../types/misc";
 
 export default class ThoughtBox extends AnimatedContainer {
     private textInput: TextInput
     private button: GameObjects.Image
     private enterKey: Input.Keyboard.Key
+    private summaryTextArea: TextArea
 
-    public constructor(scene: Scene, cloudX: number, cloudY: number, headerText: string, defaultText: string, headerTextStyle: Types.GameObjects.Text.TextStyle, defaultTextStyle: Types.GameObjects.Text.TextStyle, inputTextStyle: Types.GameObjects.Text.TextStyle, onClick: Function) {
+    public constructor(scene: Scene, cloudX: number, cloudY: number, headerText: string, summaryTextStyle: Types.GameObjects.Text.TextStyle, headerTextStyle: Types.GameObjects.Text.TextStyle, inputTextStyle: Types.GameObjects.Text.TextStyle, onClick: Function) {
         super(scene, 0, 0);
 
         const canvasHeight = scene.sys.game.canvas.height;
@@ -25,7 +27,6 @@ export default class ThoughtBox extends AnimatedContainer {
         const cloudContainer = new AnimatedContainer(scene, cloudX, cloudY);
 
         const cloud = scene.add.image(0, 0, "thoughtCloud");
-        cloud.setAlpha(0.8);
         cloudContainer.add(cloud);
 
         const glowColor = Phaser.Display.Color.GetColor(220, 220, 220);
@@ -39,46 +40,43 @@ export default class ThoughtBox extends AnimatedContainer {
             duration: 3000,
         });
 
-        const textY = 120
-        const textWidth = cloud.displayWidth - 220;
+        const width = cloud.displayWidth - 455
+        const height = cloud.displayHeight - 220
 
         const defaultObj = {
             wordWrap: {
-                width: textWidth,
+                width: width,
                 useAdvancedWrap: false
-            }
+            },
+            lineSpacing: 9
         }
-        const fixedHeaderTextStyle = completeMissingProperties(defaultObj, headerTextStyle);
-        const fixedDefaultTextStyle = completeMissingProperties(defaultObj, defaultTextStyle);
         const fixedInputTextStyle = completeMissingProperties(defaultObj, inputTextStyle);
 
-        // const style: Phaser.Types.GameObjects.Text.TextStyle = { ...TEXT_CONFIG }
-        // style.fontFamily = "roboto-regular"
-        // style.color = '#2e2e2e'
-        // style.fontSize = 40;
+        const offsetX = -10;
 
-        // const textStyle = { ...style }
-        // textStyle.fontStyle = "bold";
+        this.summaryTextArea = new TextArea(scene, -width / 2, -height / 2, width, height, "", summaryTextStyle, 0, 0, 0, 0, offsetX, 0, 0.5, 0.5)
+        // summaryTextArea.adjustFontSize();
+        console.log(this.summaryTextArea.y);
+        if (DEBUG) {
+            cloudContainer.add(this.summaryTextArea.debugRect)
+        }
+        cloudContainer.add(this.summaryTextArea);
 
-        const textArea = new TextArea(scene, 0, textY, textWidth, cloud.displayHeight, headerText, fixedHeaderTextStyle, 0, 0, 0, 0, 0, 0, 0, 0)
-        textArea.adjustFontSize();
-        cloudContainer.add(textArea);
+        const y = this.summaryTextArea.y + this.summaryTextArea.displayHeight + 30;
 
-        // const inputStyle = { ...style }
-        // inputStyle.fontSize = 37;
-        // style.wordWrap = {
-        //     width: textWidth,
-        //     useAdvancedWrap: false
-        // }
+        const headerTextArea = new TextArea(scene, this.summaryTextArea.x, y, width, height, headerText, headerTextStyle, 0, 0, 0, 0, 0, 0, 0.5, 0.5)
+        headerTextArea.adjustFontSize();
+        console.log(headerTextArea.y);
+        if (DEBUG) {
+            cloudContainer.add(headerTextArea.debugRect)
+        }
+        cloudContainer.add(headerTextArea);
 
-        // const defaultStyle = { ...inputStyle }
-        // defaultStyle.fontStyle = "italic";
-
-        this.textInput = new TextInput(scene, 0, textY - cloud.displayHeight / 2 + textArea.displayHeight / 2 + 45, textWidth, cloud.displayHeight - 320, defaultText, fixedDefaultTextStyle, fixedInputTextStyle, false, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        this.textInput = new TextInput(scene, offsetX, -height / 2 - y + 63, width, 110, "", fixedInputTextStyle, fixedInputTextStyle, false, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         cloudContainer.add(this.textInput);
 
-        this.button = scene.add.image(235, this.textInput.y + this.textInput.height + 50, 'introIcon');
-        this.button.setScale(0.27);
+        this.button = scene.add.image(173, this.textInput.y + this.textInput.displayHeight + 40, 'introIcon');
+        this.button.setScale(0.26);
 
         growAnimation(this.button, [this.button], () => {
             this.handleOnClick(onClick);
@@ -87,12 +85,13 @@ export default class ThoughtBox extends AnimatedContainer {
         cloudContainer.add(this.button);
         this.add(cloudContainer);
 
+        cloudContainer.setContainerOrigin(0.5, 1);
+
         const keyboard = this.scene.input.keyboard;
         if (keyboard) {
             this.enterKey = keyboard.addKey(
                 Phaser.Input.Keyboard.KeyCodes.ENTER
             );
-            // keyEnter.enabled = false;
 
             keyboard.off('keydown-ENTER');
 
@@ -103,18 +102,18 @@ export default class ThoughtBox extends AnimatedContainer {
     }
 
 
-    handleOnClick(onClick: Function) {
+    private handleOnClick(onClick: Function) {
         if (onClick != undefined && typeof onClick == "function" && this.textInput.containsText()) {
             onClick();
         }
     }
 
-    getText() {
+    public getText() {
         return this.textInput.getText();
     }
 
-    activateInput(active: boolean) {
-        this.textInput.activateInput(active);
+    public activateInput(active: boolean) {
+        // this.textInput.activateInput(active);
         this.enterKey.enabled = active;
         if (active) {
             this.button.setInteractive();
@@ -124,23 +123,11 @@ export default class ThoughtBox extends AnimatedContainer {
         }
     }
 
-    clearText() {
+    public clearText() {
         this.textInput.clear();
     }
 
-    ensureWordWrap(style: Types.GameObjects.Text.TextStyle, width: number) {
-        if (!style.wordWrap) {
-            style.wordWrap = {};
-        }
-
-        if (!style.wordWrap.width === undefined) {
-            style.wordWrap.width = width;
-        }
-
-        if (style.wordWrap.useAdvancedWrap === undefined) {
-            style.wordWrap.useAdvancedWrap = false;
-        }
-
-        return style;
+    public setSummaryText(text: string) {
+        this.summaryTextArea.setText(text);
     }
 }
