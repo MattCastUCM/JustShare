@@ -1,5 +1,6 @@
-import { Scene, GameObjects, Tweens, Types } from "phaser";
+import { Scene, Tweens, Types } from "phaser";
 import { setInteractive } from "./misc";
+import { RenderObject, RGB } from "../../types/graphics";
 
 // Configuracion de texto por defecto
 export const TEXT_CONFIG: Types.GameObjects.Text.TextStyle = {
@@ -25,12 +26,6 @@ export function componentToHex(component: number) {
 export function rgbToHex(R: number, G: number, B: number) {
     return "#" + componentToHex(R) + componentToHex(G) + componentToHex(B);
 }
-
-type RGB = {
-    R: number;
-    G: number;
-    B: number;
-};
 
 export function hexToRgb(hex: string): RGB | null {
     // ^ ---> tiene que comenzar por #
@@ -82,13 +77,6 @@ export function createRectTexture(scene: Scene, textureId: string, width: number
         graphics.destroy();
     }
 }
-
-type RenderComponents =
-    GameObjects.Components.Visible &
-    GameObjects.Components.AlphaSingle &
-    GameObjects.Components.Transform;
-
-export type RenderObject = GameObjects.GameObject & RenderComponents;
 
 /**
 * Anadir animacion de mostrar/ocultar un objeto con un fade in/out

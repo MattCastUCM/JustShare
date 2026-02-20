@@ -3,7 +3,7 @@ const { GetColor, IntegerToRGB, HexStringToColor } = Display.Color;
 const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
 import { TEXT_CONFIG } from "../utils/graphics";
-import { DEBUG } from "../../types/misc";
+import { DEBUG } from "../../types/config";
 import { setInteractive } from "../utils/misc";
 
 export default class CheckBox extends GameObjects.Container {

@@ -3,7 +3,7 @@ import TrackerManager from "./trackerManager";
 import TranslatorManager from "./translatorManager";
 import Computer from "../computer/computer";
 import UIManager from "./UIManager";
-import { UserInfo } from "../../types/misc";
+import { UserInfo } from "../../types/user";
 
 export default class GameManager {
     private sceneManager: SceneManager;

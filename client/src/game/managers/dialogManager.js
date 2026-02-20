@@ -78,7 +78,14 @@ export default class DialogManager {
         const summaryStyle = { ...style }
         summaryStyle.fontStyle = "bold";
 
-        const thoughtBox = new ThoughtBox(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT - 15, "Quiero decir...", summaryStyle, style, style, () => {
+        const defaultStyle = { ...style }
+        defaultStyle.color = '#6e6e6e'
+        defaultStyle.fontStyle = "italic";
+
+        const headerText = this.translatorManager.translate("thoughtBoxHeader", "dialogManager");
+        const defaultText = this.translatorManager.translate("thoughtBoxInput", "dialogManager");
+
+        const thoughtBox = new ThoughtBox(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT - 15, headerText, style, summaryStyle, defaultText, defaultStyle, style, () => {
             this.processThought();
         })
 
@@ -322,11 +329,14 @@ export default class DialogManager {
 
     async processSimilarityNode(node, text) {
         try {
-            console.log(node.summary);
             const result = await this.checkSimilarity(node.choices, text, node.method)
             const data = result.data;
             const match = data.matches[0];
-            console.log(data)
+
+            // TRACKER EVENT
+            const choice = node.choices[match.index];
+            this.trackerManager.sendWrittenResponse(node.fullId, text, node.method, node.threshold, match.score, choice, data.processing_time)
+
             if (match.score >= node.threshold) {
                 return match.index;
             }
@@ -348,7 +358,6 @@ export default class DialogManager {
 
         this.thoughtBox.activateInput(false);
 
-        // TODO: TRACKER EVENT
         this.processSimilarityNode(this.currNode, text)
             .then(index => {
                 this.thoughtBox.activate(false, () => {

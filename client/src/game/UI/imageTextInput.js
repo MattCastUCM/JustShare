@@ -4,7 +4,7 @@ const { ColorWithColor } = Display.Color.Interpolate
 import GameManager from "../managers/gameManager";
 import { isTouchInput } from "../../inputDetection"
 import { TEXT_CONFIG } from "../utils/graphics";
-import { DEBUG } from "../../types/misc";
+import { DEBUG } from "../../types/config";
 import { setInteractive } from "../utils/misc";
 
 export default class ImageTextInput extends GameObjects.Container {

@@ -1,5 +1,5 @@
-import { GameObjects, Types } from "phaser";
-import { DEBUG } from "../../types/misc";
+import { GameObjects } from "phaser";
+import { DEBUG } from "../../types/config";
 import { isPlainObject } from "./guards";
 
 /**

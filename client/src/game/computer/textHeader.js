@@ -1,5 +1,5 @@
 import { GameObjects } from "phaser"
-import { DEBUG } from "../../types/misc"
+import { DEBUG } from "../../types/config"
 
 export default class TextHeader extends GameObjects.Container {
     constructor(socialMediaScreen, width, pfp, username, caption, scale = 1) {

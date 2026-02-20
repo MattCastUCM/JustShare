@@ -1,12 +1,4 @@
-type NodeType =
-    | "dialog"
-    | "text"
-    | "choice"
-    | "condition"
-    | "event"
-    | "chatMessage"
-    | "commentary"
-    | "similarity";
+import { Condition, Dialog, NodeType, Event, Choice } from "../../../types/dialogNode"
 
 export class DialogNode {
     /**
@@ -26,11 +18,6 @@ export class DialogNode {
         this.nextDelay = 0;             // retardo con el que se procesara el siguiente nodo
     }
 }
-
-export type Dialog = {
-    text: string;
-    name: string;
-};
 
 export class TextNode extends DialogNode {
     /**
@@ -61,11 +48,6 @@ export class TextNode extends DialogNode {
         this.name = "";               // nombre del personaje que habla (si se trata del player, es el nombre elegido en la pantalla de login)
         this.centered = false;          // indica si el texto esta centrado o no (en caso de que no se especifique aparece alineado arriba a la izquierda)
     }
-}
-
-interface Choice {
-    text: string;
-    repeat: boolean;
 }
 
 export class ChoiceNode extends DialogNode {
@@ -113,17 +95,6 @@ export class SimilarityNode extends DialogNode {
     }
 }
 
-type Operator = "equal" | "greater" | "lower" | "different"
-
-export interface Condition<Type> {
-    key: string;
-    value: Type,
-    operator: Operator
-    global: boolean
-    default: Type
-    blackboard: Map<any, any>;
-}
-
 export class ConditionNode extends DialogNode {
     /**
     * Clase para la informacion de los nodos de de condicion
@@ -167,13 +138,6 @@ export class ConditionNode extends DialogNode {
         this.type = "condition";
         this.conditions = [];           // condiciones con su nombre/identificador y sus atributos
     }
-}
-
-interface Event {
-    name: string;
-    variable: string,
-    global: boolean,
-    value: any
 }
 
 export class EventNode extends DialogNode {

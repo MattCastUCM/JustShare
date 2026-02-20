@@ -1,6 +1,6 @@
 import { Scene, Geom } from "phaser";
 import AnimatedContainer from "./animatedContainer";
-import { DEBUG } from "../../types/misc";
+import { DEBUG } from "../../types/config";
 import { setInteractive } from "../utils/misc";
 
 export default class InteractiveContainer extends AnimatedContainer {

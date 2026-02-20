@@ -8,5 +8,3 @@ export interface UserInfo {
     sexuality: Sexuality
     harasser: Gender;
 }
-
-export const DEBUG: boolean = import.meta.env.VITE_DEBUG === 'true';

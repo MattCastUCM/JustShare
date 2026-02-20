@@ -4,7 +4,7 @@ import TextArea from "./textArea.js";
 import { blinkAnimation, fadeAnimation } from "../utils/graphics.js";
 import { isTouchInput } from "../../inputDetection.js";
 import { fontSizeToInt } from "../utils/misc.js";
-import { DEBUG } from "../../types/misc.js";
+import { DEBUG } from "../../types/config.js";
 
 export default class TextInput extends InteractiveContainer {
     /**

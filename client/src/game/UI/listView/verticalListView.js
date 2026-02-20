@@ -1,5 +1,5 @@
 import { Scene, Geom, Math, GameObjects } from "phaser"
-import { DEBUG } from "../../../types/misc";
+import { DEBUG } from "../../../types/config";
 
 export default class VerticalListView extends GameObjects.Container {
     /**

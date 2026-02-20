@@ -1,5 +1,8 @@
-import { Gender } from "../../types/misc";
+import { Scene } from "phaser";
+import { Gender } from "../../types/user";
+import { DEBUG, SUPPORTED_LNGS } from "../../types/config";
 import i18next from "i18next";
+import Backend from 'i18next-http-backend';
 
 export default class TranslatorManager {
     private static instance: TranslatorManager;
@@ -35,6 +38,53 @@ export default class TranslatorManager {
             'text' in value &&
             typeof (value as any).text === 'string'
         );
+    }
+
+    public loadDialogs(scene: Scene, dialogs: string[]) {
+        // Archivos de dialogos (estructura)
+        scene.load.setPath('localization/structure');
+
+        dialogs.forEach(dialog => {
+            // Quedarse con la ultima parte del path, que corresponde con el id del archivo
+            const subPaths = dialog.split('/');
+            const name = subPaths[subPaths.length - 1];
+            // Ruta completa (dentro de la carpeta structure y con el extension .json)
+            const path = dialog + ".json";
+            scene.load.json(name, path);
+        });
+    }
+
+    public async loadNamespaces(dialogs: string[], namespaces: string[]) {
+        const result = dialogs.concat(namespaces).map(path => path.replace(/\//g, '\\'));
+
+        const languages = SUPPORTED_LNGS;
+
+        // Inicialmente solo se carga el idioma inicial y los de respaldo
+        // Luego, conforme se usan tambien se cargan el resto
+        await i18next
+            .use(Backend)
+            .init({
+                // Idioma inicial
+                lng: languages[0],
+                // en caso de que no se encuentra una key en otro idioma se comprueba en los siguientes en orden
+                fallbackLng: languages[0],
+                // Idiomas permitidos
+                supportedLngs: languages,
+                // IMPORTANTE: hay que precargar los namespaces de todos los idiomas porque sino a la hora
+                // de usar un namespace por primera vez no le da tiempo a encontrar la traduccion
+                preload: languages,
+                // Namespaces que se cargan para cada uno de los idiomas
+                ns: result,
+                // Mostrar informacion de ayuda por consola
+                debug: DEBUG,
+                // Cargar las traducciones de un servidor especificado en vez de ponerlas directamente
+                backend: {
+                    // La ruta desde donde cargamos las traducciones
+                    // {{lng}} --> nombre carpeta de cada uno de los idiomas
+                    // {{ns}} --> nombre carpeta de cada uno de los namespaces
+                    loadPath: 'localization/{{lng}}/{{ns}}.json'
+                }
+            })
     }
 
     private processText(str: string) {
@@ -83,32 +133,6 @@ export default class TranslatorManager {
         let str = i18next.t(translationId, resolvedOptions);
 
         return this.processText(str);
-
-        // // Si se ha obtenido algo
-        // if (str != null) {
-        //     // Si el objeto obtenido no es un array, devuelve el texto con las expresiones <> reemplazadas
-        //     if (!Array.isArray(str)) {
-        //         if (this.hasTextProperty(str)) {
-        //             return this.replaceGender(str.text);
-        //         }
-        //         else if (typeof str === "string") {
-        //             return this.replaceGender(str)
-        //         }
-        //     }
-        //     // Si es un array
-        //     else {
-        //         // Recorre todos los elementos
-        //         for (let i = 0; i < str.length; i++) {
-        //             // Si el elemento tiene la propiedad text, modifica el
-        //             // objeto original para reemplazar su contenido por el
-        //             // texto con las expresiones <> reemplazadas
-        //             if (str[i].text != null) {
-        //                 str[i] = this.replaceGender(str[i].text);
-        //             }
-        //         }
-        //     }
-        // }
-        // return str;
     }
 
     /**

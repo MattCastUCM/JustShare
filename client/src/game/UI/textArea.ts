@@ -1,6 +1,6 @@
 import { GameObjects, Scene } from "phaser"
 import { fontSizeToInt, range } from "../utils/misc.js";
-import { DEBUG } from "../../types/misc.js";
+import { DEBUG } from "../../types/config.js";
 
 export default class TextArea extends GameObjects.Text {
     /**

@@ -6,7 +6,11 @@ import { AccountActor } from "../../tracker/statement/actor";
 import GameManager from "./gameManager";
 import SceneManager from "./sceneManager";
 import TrackerEvent from "../../tracker/statement/trackerEvent";
-import { UserInfo } from "../../types/misc";
+import { UserInfo } from "../../types/user";
+import Alternative from "../../tracker/interfaces/alternative";
+import Accessible from "../../tracker/interfaces/accessible";
+import Completable from "../../tracker/interfaces/completable";
+import GameObject from "../../tracker/interfaces/gameObject";
 
 export default class TrackerManager {
     private static instance: TrackerManager;
@@ -14,10 +18,10 @@ export default class TrackerManager {
     private trackerInitialized: boolean;
     private gameCompleted: boolean;
     private tracker: Tracker;
-    private accesible: any;
-    private alternative: any;
-    private completable: any;
-    private gameObject: any;
+    private accesible: Accessible;
+    private alternative: Alternative;
+    private completable: Completable;
+    private gameObject: GameObject;
 
     private sceneManager: SceneManager;
     private gameManager: GameManager;
@@ -190,6 +194,7 @@ export default class TrackerManager {
             this.tracker.addEvent(evt);
         }
     }
+
     sendDialogEnded(nodeId: string, dialogText: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let scene = this.sceneManager.getCurrentScene().scene.key;
@@ -197,6 +202,26 @@ export default class TrackerManager {
             let evt = this.completable.completed(this.completable.types.storyNode, "DialogEnd", 1, true, true);
             evt.result.setExtension("Node", scene + "." + nodeId);
             evt.result.setExtension("Dialog", dialogText);
+            this.tracker.addEvent(evt);
+        }
+    }
+
+    sendWrittenResponse(nodeId: string, response: string, method: string, threshold: number, score: number, matchingText: string, duration: number) {
+        if (this.trackerInitialized && !this.gameCompleted) {
+            const evt = this.alternative.selected(this.alternative.types.dialogTree, nodeId, response);
+
+            evt.result.setScaledScore(score);
+            evt.result.setRawScore(score);
+            evt.result.setMinimumScore(0);
+            evt.result.setMaximumScore(1);
+
+            evt.result.setSuccess(score >= threshold);
+
+            evt.result.setDuration(duration);
+
+            evt.result.setExtension("Method", method);
+            evt.result.setExtension("Threshold", threshold);
+            evt.result.setExtension("MatchingText", matchingText);
             this.tracker.addEvent(evt);
         }
     }
