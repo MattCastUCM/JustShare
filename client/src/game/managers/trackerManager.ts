@@ -230,7 +230,8 @@ export default class TrackerManager {
         if (this.trackerInitialized && !this.gameCompleted) {
             let scene = this.sceneManager.getCurrentScene().scene.key;
 
-            let evt = this.alternative.selected(this.alternative.types.dialogTree, "OptionSelect", " ");
+            // TODO: cambiar a choice
+            let evt = this.alternative.selected(this.alternative.types.dialogTree, nodeId, " ");
             evt.result.setExtension("Node", scene + "." + nodeId);
             evt.result.setExtension("Response", choiceText);
 

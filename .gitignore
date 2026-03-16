@@ -229,7 +229,7 @@ cython_debug/
 dbt_packages/
 logs/
 
-server/app/models/artifacts/
+server/models/
 
 # ==================================================
 # MANUSCRIPT

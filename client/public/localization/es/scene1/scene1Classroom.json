@@ -14,8 +14,7 @@
     },
     "part2": {
         "root": {
-            "text": "Hey, soy Laura, encantada.",
-            "summary": "Laura me ha saludado."
+            "text": "Hey, soy Laura, encantada."
         },
         "thanks": [
             {
@@ -49,7 +48,7 @@
                     "text": [
                         "... Ah, sí, hola.",
                         "Eh… claro, sí.",
-                        "Ah… hola."
+                        "Ah, hola."
                     ]
                 }
             ]
