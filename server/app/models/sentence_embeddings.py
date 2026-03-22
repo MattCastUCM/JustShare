@@ -32,7 +32,7 @@ class SentenceEmbeddings:
 		return torch.max(token_embeddings, dim=1).values
 	
 	# [CLS] pooling consiste en usar el embedding del primer token de la secuencia como el embedding de la oración.
-	# Este token está diseñador para capturar una representación global de la oración, ya que durante el preentrenamiento
+	# Este token está diseñado para capturar una representación global de la oración, ya que durante el preentrenamiento
 	# se utiliza para tareas como:
 	#   - Next Sentence Prediction
 	# Sin embargo, el embedding [CLS] no fue entrenado para específicamente para tareas de similitud semántica.

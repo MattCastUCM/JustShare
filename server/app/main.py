@@ -3,15 +3,11 @@ from fastapi import FastAPI
 from .routers.inference import router
 import uvicorn
 from .core.settings import get_settings
-import nltk
 from .models.load_models import get_sentence_transformers, get_word2vec, get_bert_models, get_trained_pipelines
 from .services.similarity_engine import SimilarityEngine
 from fastapi.middleware.cors import CORSMiddleware
 
 def create_similarity_engine(max_n: int):
-	nltk.download("punkt", quiet=True)
-	nltk.download("stopwords", quiet=True)
-
 	settings = get_settings()
 	languages = settings.languages
 	
@@ -56,5 +52,4 @@ if __name__ == "__main__":
 		"app.main:app",
 		host=settings.host,
 		port=settings.port,
-		# reload=True
 	)

@@ -1,43 +1,16 @@
 from .tfidf_vectorizer import TfIdfVectorizer
-from .preprocessing import TextPreprocessor, Token
+from .preprocessing import Token
 import numpy as np
 from ..utils.math_utils import euclidean_normalization
 from gensim.models import KeyedVectors
 from abc import ABC, abstractmethod
-from spacy.language import Language
+from collections import Counter
 
 class WeightedWord2Vec(ABC):
-	def __init__(self, wv: KeyedVectors, language: str, spacy_models: dict[str, Language]):
+	def __init__(self, wv: KeyedVectors):
 		self.wv = wv
-		self.pre = TextPreprocessor(language, spacy_models)
 
-	def preprocess(self, text: str):
-		tokens = self.pre.pipeline_tokenize(
-            text,
-            steps=[
-                self.pre.clean_text,
-                self.pre.autocorrect,
-            ],
-        )
-		tokens = self.pre.preprocess(
-            tokens,
-            steps=[
-				lambda tokens: self.pre.lemmatize_and_pos(tokens, lemmatize=True, get_pos=True),
-				self.pre.remove_stopwords
-            ],
-        )
-
-		return tokens
-	
-	def preprocess_lemmas(self, text: str):
-		tokens = self.preprocess(text)
-		tokens = [token.lemma for token in tokens]
-		return tokens
-	
-	def preprocess_batch(self, texts: list[str]):
-		return [self.preprocess_lemmas(text) for text in texts]
-	
-	def weigthed_vector(self, tokens: list[str], weights: np.ndarray):
+	def weighted_vector(self, tokens: list[str], weights: np.ndarray):
 		vector_size = self.wv.vector_size
 		
 		vectors = []
@@ -49,92 +22,105 @@ class WeightedWord2Vec(ABC):
 		vectors = np.array(vectors)
 		return weights @ vectors
 	
-	def fit(self, corpus: list[str]):
+	def fit(self, tokenized_docs: list[list[str]]):
 		return self
 
 	@abstractmethod
-	def transform(self, docs: list[str]) -> np.ndarray:
+	def transform(self, tokenized_docs: list[list[str]]) -> np.ndarray:
 		pass
 	
-	def fit_transform(self, corpus: list[str]):
-		self.fit(corpus)
-		result = self.transform(corpus)
+	def fit_transform(self, tokenized_docs: list[list[str]]):
+		self.fit(tokenized_docs)
+		result = self.transform(tokenized_docs)
 		return result
 	
 class IdfWeightedWord2Vec(WeightedWord2Vec):
-	def __init__(self, wv: KeyedVectors, language: str, spacy_models: dict[str, Language]):
-		super().__init__(wv, language, spacy_models)
-		self.vectorizer = TfIdfVectorizer(self.preprocess_batch)
-	
-	def idf_weights(self, tokens: list[str]):
+	def __init__(self, wv: KeyedVectors):
+		super().__init__(wv)
+
+	def _idf_weights(self, tokens: list[str]):
 		weights = [self.idf_dict.get(token, np.log(self.n_docs)) for token in tokens]
 		return np.array(weights)
 
-	def idf_weighted(self, docs: list[str]):
+	def _idf_weighted(self, tokenized_docs: list[list[str]]):
 		result = []
-		for doc in docs:
-			tokens = self.preprocess_lemmas(doc)
-			weights = self.idf_weights(tokens)
-			vector = self.weigthed_vector(tokens, weights)
+		for tokens in tokenized_docs:
+			weights = self._idf_weights(tokens)
+			vector = self.weighted_vector(tokens, weights)
 			result.append(vector)
 		return np.array(result)
 	
-	def fit(self, corpus: list[str]):
-		self.vectorizer.fit(corpus)
+	def fit(self, tokenized_docs: list[list[str]]):
+		self.vectorizer = TfIdfVectorizer()
+		self.vectorizer.fit(tokenized_docs)
 
-		terms = self.vectorizer.get_terms()
-		self.idf_dict = dict((zip(terms, self.vectorizer.get_idf())))
-		self.n_docs = len(corpus)
+		terms = self.vectorizer.get_feature_names()
+		idf = self.vectorizer.get_idf()
+		self.idf_dict = dict(zip(terms, idf))
+		self.n_docs = len(tokenized_docs)
 		
 		return self
 
-	def transform(self, docs: list[str]):
-		result = self.idf_weighted(docs)
-		result = euclidean_normalization(result)
-		return result
+	def transform(self, tokenized_docs: list[list[str]]):
+		X = self._idf_weighted(tokenized_docs)
+		return euclidean_normalization(X)
 
-class CenterWeigtedWord2Vec(WeightedWord2Vec):
-	def __init__(self, wv: KeyedVectors, language: str, spacy_models: dict[str, Language]):
-		super().__init__(wv, language, spacy_models)
-		self.vectorizer = TfIdfVectorizer(self.preprocess_batch)
-	
-	def idf_weights(self, tokens: list[str]):
+class CenterWeightedWord2Vec(WeightedWord2Vec):
+	def __init__(self, wv: KeyedVectors):
+		super().__init__(wv)
+		
+	def _idf_weights(self, tokens: list[str]):
 		weights = [self.idf_dict.get(token, np.log(self.n_docs)) for token in tokens]
 		return np.array(weights)
 		
-	def calculate_center(self, tf: np.ndarray, tokens: list[str]):
-		weights = self.idf_weights(tokens) * tf
-		return self.weigthed_vector(tokens, weights)
+	def _calculate_center(self, tf: np.ndarray, tokens: list[str]):
+		weights = self._idf_weights(tokens) * tf
+		return self.weighted_vector(tokens, weights)
 
-	def center_weighted(self, docs: list[str]):
+	def _center_weighted(self, tokenized_docs: list[list[str]]):
 		result = []
-		for doc in docs:
-			vectorizer = TfIdfVectorizer(self.preprocess_batch, use_idf=False)
-			tf = vectorizer.fit_transform([doc])
+		for tokens in tokenized_docs:
+			# Calcular la term frequency para este documento utilizando el vocabulario de fit
+			tf = np.zeros(len(self.vocab))
+			vocab = self.vocab
+			counts = Counter(tokens)
+			for term, count in counts.items():
+				idx = vocab.get(term)
+				if idx is not None:
+					tf[idx] = count
 
-			center = self.calculate_center(tf[0], vectorizer.get_terms())
+			center = self._calculate_center(tf, self.terms)
 			result.append(center - self.corpus_center)
-		result = np.array(result)
-		return result
-	
-	def fit(self, corpus: list[str]):
-		self.vectorizer.fit(corpus)
+		return np.array(result)
+		
+	def fit(self, tokenized_docs: list[list[str]]):
+		vectorizer = TfIdfVectorizer()
+		vectorizer.fit(tokenized_docs)
 
-		terms = self.vectorizer.get_terms()
-		self.idf_dict = dict((zip(terms, self.vectorizer.get_idf())))
-		self.n_docs = len(corpus)
+		self.terms = vectorizer.get_feature_names()
+		idf = vectorizer.get_idf()
+		self.idf_dict = dict(zip(self.terms, idf))
+		self.n_docs = len(tokenized_docs)
+		self.vocab = vectorizer.vocab
 
-		corpus_tokens = self.preprocess_batch(corpus)
-		corpus_tokens = [token for tokens in corpus_tokens for token in tokens]
-		vocab_tf = self.vectorizer.calculate_term_frequency(corpus_tokens)
-		self.corpus_center = self.calculate_center(vocab_tf, terms)
+		# Calcula el centroide del corpus sumando todas las frecuencias de los términos a lo largo del corpus
+		all_tokens = []
+		for tokens in tokenized_docs:
+			all_tokens.extend(tokens)
+		total_counts = Counter(all_tokens)
+		tf_total = np.zeros(len(self.terms))
+		for term, count in total_counts.items():
+			idx = self.vocab.get(term)
+			if idx is not None:
+				tf_total[idx] = count
+
+		self.corpus_center = self._calculate_center(tf_total, self.terms)
 		
 		return self
 
-	def transform(self, docs: list[str]):
-		result = self.center_weighted(docs)
-		result = euclidean_normalization(result)
-		return result
+	def transform(self, tokenized_docs: list[list[str]]):
+		X = self._center_weighted(tokenized_docs)
+		return euclidean_normalization(X)
 
 class POSWeightedWord2Vec(WeightedWord2Vec):
 	POS_WEIGHTS = {
@@ -147,21 +133,20 @@ class POSWeightedWord2Vec(WeightedWord2Vec):
 
 	DEFAULT_POS_WEIGHT = 0.2
 
-	def pos_weights(self, tokens: list[Token]):
-		weights = [self.POS_WEIGHTS.get(token.pos, self.DEFAULT_POS_WEIGHT) for token in tokens]
+	def pos_weights(self, tokens: list[str]):
+		weights = [self.POS_WEIGHTS.get(token, self.DEFAULT_POS_WEIGHT) for token in tokens]
 		return np.array(weights)
 	
-	def pos_weigthed(self, docs: list[str]):
+	def pos_weigthed(self, tokenized_docs: list[list[str]]):
 		result = []
-		for doc in docs:
-			tokens = self.preprocess(doc)
+		for tokens in tokenized_docs:
 			weights = self.pos_weights(tokens)
-			tokens = [token.lemma for token in tokens]
-			vector = self.weigthed_vector(tokens, weights)
+			# tokens = [token.lemma for token in tokens]
+			vector = self.weighted_vector(tokens, weights)
 			result.append(vector)
 		return np.array(result)
 
-	def transform(self, docs: list[str]):
-		result = self.pos_weigthed(docs)
+	def transform(self, tokenized_docs: list[list[str]]):
+		result = self.pos_weigthed(tokenized_docs)
 		result = euclidean_normalization(result)
 		return result
