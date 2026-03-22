@@ -25,20 +25,6 @@ class SimilarityEngine:
 		if nlp is None:
 			raise ValueError(f"No Spacy model found for language '{language}")
 		return TextPreprocessor(language, nlp)
-	
-	def preprocess(self, text: str, language: str):
-		pre = self.get_preprocessor(language)
-
-		text_steps = [
-			pre.clean_text,
-			pre.autocorrect,
-		]
-
-		token_steps = [
-			pre.remove_stopwords,
-		]
-
-		return pre.run_pipeline(text, text_steps, token_steps)
 
 	def preprocess_stems(self, text: str, language: str):
 		pre = self.get_preprocessor(language)
@@ -82,11 +68,7 @@ class SimilarityEngine:
 			pre.remove_stopwords,
 		]
 
-		tokens = pre.run_pipeline(text, text_steps, token_steps)
-		return [token.lemma for token in tokens]
-		
-	def preprocess_batch(self, texts: list[str], language: str):
-		return [self.preprocess(text, language) for text in texts]
+		return pre.run_pipeline(text, text_steps, token_steps)
 
 	def similarity_jaccard(self, corpus: list[str], text: str, language: str):
 		corpus_tokens = [self.preprocess_stems(doc, language) for doc in corpus]
@@ -143,18 +125,26 @@ class SimilarityEngine:
 		all_texts = corpus + [text]
 		tokenized = [self.preprocess_lemmas(doc, language) for doc in all_texts]
 
-		corpus_tokens = tokenized[:-1]
-		query_tokens = tokenized[-1]
+		lemmas = [[token.lemma for token in doc] for doc in tokenized]
+
+		corpus_tokens = lemmas[:-1]
+		query_tokens = lemmas[-1]
+		
+		kwargs_corpus = {}
+		kwargs_query = {}
 
 		if method == "pos":
+			pos_tags = [[token.pos for token in doc] for doc in tokenized]
+			kwargs_corpus["pos_docs"] = pos_tags[:-1]
+			kwargs_query["pos_docs"] = [pos_tags[-1]]
 			model = POSWeightedWord2Vec(wv)
 		elif method == "idf":
 			model = IdfWeightedWord2Vec(wv)
 		elif method == "center":
 			model = CenterWeightedWord2Vec(wv)
 
-		corpus_vectors = model.fit_transform(corpus_tokens)
-		query_vector = model.transform([query_tokens])
+		corpus_vectors = model.fit_transform(corpus_tokens, **kwargs_corpus)
+		query_vector = model.transform([query_tokens], **kwargs_query)
 
 		scores = cosine_similarity(corpus_vectors, query_vector)
 

@@ -1,5 +1,4 @@
 from .tfidf_vectorizer import TfIdfVectorizer
-from .preprocessing import Token
 import numpy as np
 from ..utils.math_utils import euclidean_normalization
 from gensim.models import KeyedVectors
@@ -26,12 +25,12 @@ class WeightedWord2Vec(ABC):
 		return self
 
 	@abstractmethod
-	def transform(self, tokenized_docs: list[list[str]]) -> np.ndarray:
+	def transform(self, tokenized_docs: list[list[str]], **kwargs) -> np.ndarray:
 		pass
 	
-	def fit_transform(self, tokenized_docs: list[list[str]]):
+	def fit_transform(self, tokenized_docs: list[list[str]], **kwargs):
 		self.fit(tokenized_docs)
-		result = self.transform(tokenized_docs)
+		result = self.transform(tokenized_docs, **kwargs)
 		return result
 	
 class IdfWeightedWord2Vec(WeightedWord2Vec):
@@ -61,7 +60,7 @@ class IdfWeightedWord2Vec(WeightedWord2Vec):
 		
 		return self
 
-	def transform(self, tokenized_docs: list[list[str]]):
+	def transform(self, tokenized_docs: list[list[str]], **kwargs):
 		X = self._idf_weighted(tokenized_docs)
 		return euclidean_normalization(X)
 
@@ -118,7 +117,7 @@ class CenterWeightedWord2Vec(WeightedWord2Vec):
 		
 		return self
 
-	def transform(self, tokenized_docs: list[list[str]]):
+	def transform(self, tokenized_docs: list[list[str]], **kwargs):
 		X = self._center_weighted(tokenized_docs)
 		return euclidean_normalization(X)
 
@@ -133,20 +132,25 @@ class POSWeightedWord2Vec(WeightedWord2Vec):
 
 	DEFAULT_POS_WEIGHT = 0.2
 
-	def pos_weights(self, tokens: list[str]):
-		weights = [self.POS_WEIGHTS.get(token, self.DEFAULT_POS_WEIGHT) for token in tokens]
+	def _pos_weights(self, pos_tags: list[str]):
+		weights = [self.POS_WEIGHTS.get(pos, self.DEFAULT_POS_WEIGHT) for pos in pos_tags]
 		return np.array(weights)
 	
-	def pos_weigthed(self, tokenized_docs: list[list[str]]):
+	def transform(self, tokenized_docs: list[list[str]], **kwargs):
+		pos_docs = kwargs.get("pos_docs")
+
+		if pos_docs is None:
+			raise ValueError("pos_docs must be provided for POSWeightedWord2Vec")
+
 		result = []
-		for tokens in tokenized_docs:
-			weights = self.pos_weights(tokens)
-			# tokens = [token.lemma for token in tokens]
+
+		for tokens, pos_tags in zip(tokenized_docs, pos_docs):
+			if len(tokens) != len(pos_tags):
+				raise ValueError("Tokens and POS tags must align")
+
+			weights = self._pos_weights(pos_tags)
 			vector = self.weighted_vector(tokens, weights)
 			result.append(vector)
-		return np.array(result)
 
-	def transform(self, tokenized_docs: list[list[str]]):
-		result = self.pos_weigthed(tokenized_docs)
-		result = euclidean_normalization(result)
-		return result
+		result = np.array(result)
+		return euclidean_normalization(result)
