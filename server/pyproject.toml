@@ -18,6 +18,7 @@ dependencies = [
     "transformers>=4.57.6",
     "keras>=3.13.2",
     "tensorflow>=2.21.0",
+    "tqdm>=4.67.3",
 ]
 
 [dependency-groups]
