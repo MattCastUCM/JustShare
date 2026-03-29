@@ -5005,11 +5005,9 @@ Olivia Colman gana el segundo premio BAFTA,Baftas 2013: Olivia Colman recibe dos
 "Los laboratorios de violín del Titanic registran 1,4 millones de dólares","El violín del Titanic se vende por 1,7 millones de dólares",3.8,train,0.76
 Ankeet Chavan concedió una fianza condicional para el matrimonio,Ankeet Chavan concedió la libertad bajo fianza para casarse,5.0,train,1.0
 La primera orden de JAL de Airbus es soplar a Boeing,Japan Airlines encarga 31 Airbus A350 valorados en 9.500 millones de dólares,3.0,train,0.6
-Sienna Miller testifica en el juicio por piratería telefónica en el Reino Unido,Sienna Miller ataca a la prensa por 'Äėtitillating'Äô informes en el juicio de hacking,3.0,train,0.6
 Los israelíes atacan a 2 palestinos en la zona de Jerusalén,Colonos golpean a un palestino en Jerusalén,2.6,train,0.52
 La UE amplía las sanciones contra Rusia,Nigeria retira los cargos de tráfico de armas contra marineros rusos,0.4,train,0.08
 "Cuba ve ""un papel importante"" para la inversión extranjera",La Cámara de Representantes votará el plan para reabrir el gobierno,0.0,train,0.0
-'ÄėGlee'Äô estrella Cory Monteith fue encontrado muerto en una habitación de hotel,Cory Monteith fue encontrado muerto: La estrella canadiense 'ÄėGlee'Äô tenía 31 años,3.4,train,0.6799999999999999
 "El Primer Ministro del Líbano forma un ""gabinete de unidad"" El Primer Ministro del Líbano ha formado un gabinete más de 10 meses después de tomar posesión del cargo, que incluye una amplia gama de grupos políticos después de haber superado graves divisiones am","BEIRUT: El Primer Ministro del Líbano formó un gabinete más de 10 meses después de tomar posesión del cargo ayer, que incluía una amplia gama de grupos políticos después de salvar graves divisiones entre ellos, sobre todo en lo que respecta a",4.6,train,0.9199999999999999
 El presidente iraní hace su debut en la escena mundial,El candidato presidencial iraní dice que las sanciones occidentales deben romperse,0.6,train,0.12
 "Cameron ""no se preocupa"" por la carne halal",La sonda de salud de los veteranos confirma el encubrimiento de los retrasos en la atención,0.0,train,0.0
@@ -5175,7 +5173,6 @@ Tipos de cambio en la India,Tipos de cambio en Singapur,1.4,train,0.279999999999
 El incendio forestal de Colorado destruye más de 90 casas a medida que los vientos empeoran,El incendio forestal de Colorado puede ser el mayor destructor de propiedades en la historia del estado,3.6,train,0.72
 "Un terremoto de magnitud 6,3 golpea la isla de Indonesia",Un terremoto de magnitud 6 golpea a Tailandia,2.0,train,0.4
 EE.UU. y el gobierno afgano mantendrán conversaciones de paz con los talibanes,Pakistán mantiene conversaciones directas con los talibanes,2.0,train,0.4
-"Noticias de Terrorismo y el Conflicto Israelí-Palestino (22 de enero 'Äď 28, 2014)",Noticias de Terrorismo y el Conflicto Israelí-Palestino (31 de julio 'Äď 6 de agosto de 2013),3.0,train,0.6
 """Es demasiado tarde o demasiado pronto para intervenir en Siria",Jefe de la ONU: Los inspectores necesitan 4 días para concluir la investigación en Siria,1.6,train,0.32
 El equipo de negociación nuclear de Irán parte hacia Kazajstán,"La búsqueda nuclear de Irán ""le ha costado a Teherán más de 100 mil millones de dólares",1.0,train,0.2
 "Los pedidos de las fábricas de EE.UU. bajaron 0,7 puntos porcentuales en enero.",Los pedidos de las fábricas alemanas se recuperan en enero,0.8,train,0.16
@@ -5238,15 +5235,12 @@ Es probable que se amplíen las conversaciones nucleares con Irán,El petróleo 
 El fuego mató a 38 personas en una institución psiquiátrica rusa,Se teme que 38 personas mueran en el incendio de un hospital psiquiátrico ruso,3.6,train,0.72
 Rusia advierte que podría no firmar el histórico Tratado de Armas de la ONU,La ONU se acerca a un tratado histórico sobre armas,1.6,train,0.32
 Didier Reynders sobre Siria,El día de Obama: En horario de máxima audiencia en Siria,1.6,train,0.32
-Corea del Norte: los expertos piden un diálogo 'Äď y dicen que China debe desempeñar un papel,Corea del Norte corta los últimos lazos con el Sur al prohibir el parque industrial conjunto,0.8,train,0.16
 Las existencias de China abren al alza el lunes,Las existencias de China cierran a la baja el jueves,1.0,train,0.2
 Sony Xperia Z2 y la serie Nokia'Äôs X se presentan,La Corte ordena la prohibición política de Italia'Äôs Berlusconi,0.0,train,0.0
 El nuevo coronavirus probablemente puede ser transmitido de persona a persona - OMS,OMS: El nuevo virus probablemente puede pasar de persona a persona,3.8,train,0.76
-Mandela volvió al hospital en 'Äėserious pero estable'.,Nelson Mandela regresa al hospital en 'Äėserious pero estable'Äô condición,5.0,train,1.0
 Aumenta el número de muertos por la explosión de East Harlem,El número de muertos en la tormenta de México sigue aumentando,0.0,train,0.0
 El primer ministro ucraniano renuncia en medio de las protestas,El Primer Ministro británico condena el asesinato de adolescentes,0.0,train,0.0
 El DJ de Royal Hoax toma medidas contra la estación,Los talibanes bombardean una base de EE.UU. en Afganistán,0.0,train,0.0
-Arsenal contra Stoke City 'Äď en vivo!,Tottenham v Manchester City 'Äď en vivo!,2.2,train,0.44000000000000006
 "Noticias de negocios y mercados: como sucedió, 17 de abril de 2013","Noticias de negocios y mercados: como sucedió, 20 de junio de 2013",2.4,train,0.48
 Irán y las potencias mundiales inician una nueva ronda de conversaciones nucleares,Irán y las potencias mundiales prometen nuevas conversaciones nucleares,4.2,train,0.8400000000000001
 La tormenta tropical Karen apunta a la costa del Golfo de los EE.UU.,La tormenta tropical Karen se debilita a medida que se acerca a la costa del Golfo de los EE.UU.,2.6,train,0.52
@@ -5303,7 +5297,6 @@ El secuestrador de Cleveland Ariel Castro fue encontrado colgado en una celda de
 Google presenta un prototipo de coche autoconductor,Google revela el concepto de auto-conducción,5.0,train,1.0
 "El incendio de una fábrica de ropa en Bangladesh ""mata a 8"".",El colapso de una fábrica de ropa en Bangladesh mata a 149,2.0,train,0.4
 EE.UU. busca tranquilizar a los cautelosos aliados del Golfo sobre el acuerdo con Irán,Hagel busca tranquilizar a los temerosos aliados del Golfo después del acuerdo con Irán,4.0,train,0.8
-Ucrania es la anfitriona de las conversaciones de 'Äėunity'.,El Papa visita 'Äėwar para vender armas en Siria.,0.0,train,0.0
 El pakistaní Musharraf detenido en el asesinato de Bhutto,El pakistaní Musharraf llega a la corte por primera vez,2.4,train,0.48
 Se ha fijado la fecha del juicio del jefe de la Hermandad Musulmana de Egipto,La Hermandad Musulmana de Siria se enfrenta a una batalla difícil,2.2,train,0.44000000000000006
 El panda'Äôs rojo escapó del zoológico por poco tiempo,Los indios marchan a Marte,0.0,train,0.0
@@ -5434,7 +5427,6 @@ Los manifestantes se reúnen en Brasil a pesar de las concesiones,Las protestas 
 El PM australiano Kevin Rudd llama a elecciones para el 7 de septiembre,El PM australiano Rudd llama a la encuesta del 7 de septiembre,4.6,train,0.9199999999999999
 Se espera que las conversaciones nucleares de Irán se reanuden esta semana,REINO UNIDO: Las conversaciones nucleares de Irán en un punto serio,3.0,train,0.6
 La tensión de Bangkok en la víspera de las elecciones tailandesas,Bangladesh: La represión se intensifica antes de las elecciones,2.2,train,0.44000000000000006
-China 'Äėwill proteger los intereses'Äô de los negocios extranjeros,Obama en 'Äėdirect'Äô confrontación con Putin en Ucrania,0.0,train,0.0
 Los votos de D.C. para despenalizar la marihuana,DC vota para despenalizar la marihuana,5.0,train,1.0
 Muchos muertos mientras el barco del asilo se hunde frente a Australia,Mandela pasa el tercer día en el hospital,0.0,train,0.0
 Kim de Corea del Norte saluda la ejecución del poderoso tío,Intriga norcoreana: La ejecución del poder,2.6,train,0.52

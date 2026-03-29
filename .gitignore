@@ -231,6 +231,8 @@ logs/
 
 server/models/
 
+.env*
+
 # ==================================================
 # MANUSCRIPT
 # LaTeX / PDFLaTeX / BibTeX Environment
