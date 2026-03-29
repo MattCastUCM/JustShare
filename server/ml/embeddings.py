@@ -11,6 +11,6 @@ def load_gensim_embeddings(path: str, word2idx: dict, embed_dim: int):
 		if word in wv.key_to_index:
 			embedding_matrix[idx] = wv[word]
 			found += 1
-	print(f"Found {found}/{len(word2idx)} words.")
+	print(f"Found {found}/{len(word2idx)} words")
 	return embedding_matrix
 
