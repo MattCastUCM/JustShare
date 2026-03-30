@@ -1,6 +1,6 @@
 from gensim.models import KeyedVectors
 from ..core.settings import get_settings
-from .sentence_embeddings import SentenceEmbeddings
+from .sentence_transformers import SentenceTransformers
 from loguru import logger
 import spacy
 import os
@@ -58,7 +58,7 @@ def get_sentence_transformers(languages: set[str]):
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.sentence_transformers,
-        loader_fn=lambda model_name: SentenceEmbeddings(model_name=model_name),
+        loader_fn=lambda model_name: SentenceTransformers(model_name=model_name),
         model_type="Sentence Transformers model",
     )
 
@@ -68,7 +68,7 @@ def get_bert_models(languages: set[str]):
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.bert_models,
-        loader_fn=lambda model_name: SentenceEmbeddings(model_name=model_name),
+        loader_fn=lambda model_name: SentenceTransformers(model_name=model_name),
         model_type="Bert model",
     )
 

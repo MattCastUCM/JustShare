@@ -15,3 +15,4 @@ def save_splits(dataframe: pd.DataFrame, output_dir: str):
     for split, data in dataframe.groupby("split"):
         path = os.path.join(output_dir, f"stsb-es-{split}.csv")
         data.to_csv(path, index=False)
+    

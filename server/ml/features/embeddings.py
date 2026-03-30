@@ -13,4 +13,3 @@ def load_gensim_embeddings(path: str, word2idx: dict, embed_dim: int):
 			found += 1
 	print(f"Found {found}/{len(word2idx)} words")
 	return embedding_matrix
-

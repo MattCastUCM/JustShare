@@ -4,7 +4,7 @@ from typing import Literal
 
 PoolingMethod = Literal["mean", "max", "cls"]
 
-class SentenceEmbeddings:
+class SentenceTransformers:
 	def __init__(self, model_name: str, device: str | None = None):
 		self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
 		self.tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -48,7 +48,7 @@ class SentenceEmbeddings:
 		else:
 			return model_output["last_hidden_state"][:, 0]
 
-	def encode(self, sentences: list[str], pooling: PoolingMethod):
+	def encode(self, sentences: list[str], pooling: PoolingMethod, normalize: bool=True):
 		# Modificar la tokenización para aplicar "truncation" (cortar la oración si es más larga que la longitud máxima) y "padding" (agregar [PAD] tokens al final de la oración).
 		encoded_input = self.tokenizer(
 			sentences,
@@ -68,6 +68,7 @@ class SentenceEmbeddings:
 			case "cls":
 				sentence_embeddings = self.cls_pooling(model_output)				
 		
-		sentence_embeddings = torch.nn.functional.normalize(sentence_embeddings, p=2, dim=1)
+		if normalize:
+			sentence_embeddings = torch.nn.functional.normalize(sentence_embeddings, p=2, dim=1)
 
 		return sentence_embeddings.cpu().numpy()

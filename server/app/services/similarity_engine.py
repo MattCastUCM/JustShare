@@ -5,13 +5,13 @@ from ..utils.similarity import jaccard_similarity, cosine_similarity
 from functools import lru_cache
 from gensim.models import KeyedVectors
 from ..models.weighted_word2vec import POSWeightedWord2Vec, IdfWeightedWord2Vec, CenterWeightedWord2Vec
-from ..models.sentence_embeddings import SentenceEmbeddings, PoolingMethod
+from ..models.sentence_transformers import SentenceTransformers, PoolingMethod
 import numpy as np
 from spacy.language import Language
 from typing import Literal
 
 class SimilarityEngine:
-	def __init__(self, word2vec: dict[str, KeyedVectors], sentence_transformers: dict[str, SentenceEmbeddings], bert_models: dict[str, SentenceEmbeddings], nlps: dict[str, Language], min_n: int = 2, max_n: int = 2):
+	def __init__(self, word2vec: dict[str, KeyedVectors], sentence_transformers: dict[str, SentenceTransformers], bert_models: dict[str, SentenceTransformers], nlps: dict[str, Language], min_n: int = 2, max_n: int = 2):
 		self.word2vec = word2vec
 		self.sentence_transformers = sentence_transformers
 		self.bert_models = bert_models

@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 	bidirectional: bool = False
 	concat_features: list[str] = ["diff"]
 	epochs: int = 20
-	siamese_dir: str = "siamese_lstm"
+	siamese_name: str = "siamese_lstm"
 
 	model_config = SettingsConfigDict(
 		env_file=".env.model",

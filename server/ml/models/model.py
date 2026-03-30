@@ -3,7 +3,7 @@ import numpy as np
 from keras import Model, layers
 import keras
 from keras import ops
-from similarity import manhattan_similarity, cosine_similarity
+from models.similarity import manhattan_similarity, cosine_similarity
 
 class SiameseLSTM(Model):
 	def __init__(self, vocab_size: int, embedding_dim: int, hidden_dim: int, mlp_dropout: float, lstm_dropout: float, embedding_matrix: Optional[np.ndarray] = None, pooling: Literal["last", "mean"] = "mean", similarity: Literal["manhattan", "cosine", "mlp"] = "cosine", mlp_layers: list[int] = [], bidirectional: bool = False, concat_features: list[Literal["vec1", "vec2", "diff", "prod"]] = ["diff", "prod"], name="siamese_lstm", **kwargs):
@@ -131,8 +131,8 @@ class SiameseLSTM(Model):
 		else:
 			return self.compute_similarity(vec1, vec2)
 	
-	def get_settings(self):
-		settings = super().get_settings()
+	def get_config(self):
+		settings = super().get_config()
 		settings.update({
 			"vocab_size": self.vocab_size,
 			"embedding_dim": self.embedding_dim,
@@ -148,7 +148,7 @@ class SiameseLSTM(Model):
 		return settings
 	
 	@classmethod
-	def from_settings(cls, settings):
+	def from_config(cls, settings):
 		return cls(**settings, embedding_matrix=None)
 	
 	def get_head_model(self):
