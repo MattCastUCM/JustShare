@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     sentence_transformers: dict[str, str] = Field(default_factory=dict)
     word2vec: dict[str, str] = Field(default_factory=dict)
     spacy: dict[str, str] = Field(default_factory=dict)
+    siamese_lstm: dict[str, str] = Field(default_factory=dict)
 
     allow_origins: list[str] = Field(default_factory=list)
     host: str = ""

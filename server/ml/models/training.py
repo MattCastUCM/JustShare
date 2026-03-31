@@ -1,10 +1,6 @@
 from keras.optimizers import Adam
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-from keras import ops
-from keras import Model
-
-def rmse(y_true, y_pred):
-    return ops.sqrt(ops.mean(ops.square(y_true - y_pred)))
+from keras import Model, metrics
 
 def compile_model(model: Model):
     # optimizer = Adadelta(learning_rate=1.0, clipnorm=1.0)
@@ -13,11 +9,10 @@ def compile_model(model: Model):
     model.compile(
         optimizer=optimizer,
         loss="mse",
-        metrics=["mae", rmse]
+        metrics=["mae", metrics.RootMeanSquaredError(name="rmse")]
     )
 
     return model
-
 
 def get_callbacks(save_path: str):
     callbacks = [

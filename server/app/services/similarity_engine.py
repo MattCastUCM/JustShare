@@ -6,16 +6,18 @@ from functools import lru_cache
 from gensim.models import KeyedVectors
 from ..models.weighted_word2vec import POSWeightedWord2Vec, IdfWeightedWord2Vec, CenterWeightedWord2Vec
 from ..models.sentence_transformers import SentenceTransformers, PoolingMethod
+from ..models.sentence_lstm import SentenceLSTM
 import numpy as np
 from spacy.language import Language
 from typing import Literal
 
 class SimilarityEngine:
-	def __init__(self, word2vec: dict[str, KeyedVectors], sentence_transformers: dict[str, SentenceTransformers], bert_models: dict[str, SentenceTransformers], nlps: dict[str, Language], min_n: int = 2, max_n: int = 2):
+	def __init__(self, word2vec: dict[str, KeyedVectors], sentence_transformers: dict[str, SentenceTransformers], bert_models: dict[str, SentenceTransformers], nlps: dict[str, Language], siamese_lstm: dict[str, SentenceLSTM], min_n: int = 2, max_n: int = 2):
 		self.word2vec = word2vec
 		self.sentence_transformers = sentence_transformers
 		self.bert_models = bert_models
 		self.nlps = nlps
+		self.siamese_lstm = siamese_lstm
 		self.min_n = min_n
 		self.max_n = max_n
 
@@ -150,3 +152,17 @@ class SimilarityEngine:
 
 		return scores
 	
+	def similarity_lstm(self, corpus: list[str], text: str, language: str):
+		model = self.siamese_lstm.get(language)
+		if model is None:
+			raise ValueError(f"No Siamese LSTM found for language '{language}'")
+
+		combined = corpus + [text]
+		combined_embeddings = model.encode(combined)
+
+		corpus_embeddings = combined_embeddings[:-1]
+		query_embedding = combined_embeddings[-1]
+
+		scores = cosine_similarity(corpus_embeddings, query_embedding)
+
+		return scores

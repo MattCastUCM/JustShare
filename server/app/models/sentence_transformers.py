@@ -7,6 +7,8 @@ PoolingMethod = Literal["mean", "max", "cls"]
 class SentenceTransformers:
 	def __init__(self, model_name: str, device: str | None = None):
 		self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
+		print("Using device:", self.device)
+
 		self.tokenizer = AutoTokenizer.from_pretrained(model_name)
 		self.model = AutoModel.from_pretrained(model_name).to(self.device)
 		self.model.eval()

@@ -1,12 +1,12 @@
 import numpy as np
 from scipy.stats import pearsonr, spearmanr
-from keras import Model
-import tensorflow as tf
+from .visualization import (
+    plot_density_kde,
+    plot_heatmap_kde,
+    plot_heatmap_hist2d
+)
 
-def evaluate_model(model: Model, dataset: tf.data.Dataset):
-    y_true = np.concatenate([y.numpy() for _, y in dataset], axis=0)
-    y_pred = model.predict(dataset).flatten()
-
+def evaluate_model(y_true: np.ndarray, y_pred: np.ndarray, save_dir: str):
     errors = y_true - y_pred
 
     mse = np.mean(errors ** 2)
@@ -33,11 +33,16 @@ def evaluate_model(model: Model, dataset: tf.data.Dataset):
     print(
         f"Pearson: {pearson:.4f} | "
         f"Spearman: {spearman:.4f} | "
-        f"MSE: {mse:.6f} | "
-        f"MAE: {mae:.6f} | "
-        f"RMSE: {rmse:.6f} | "
+        f"MSE: {mse:.4f} | "
+        f"MAE: {mae:.4f} | "
+        f"RMSE: {rmse:.4f} | "
+        f"Bias: {bias:.4f} | "
         f"R²: {r2:.4f}"
     )
+
+    plot_heatmap_kde(y_true, y_pred, save_dir)
+    plot_heatmap_hist2d(y_true, y_pred, save_dir)
+    plot_density_kde(y_true, y_pred, save_dir)
 
     metrics = {
         "pearson": float(pearson),
@@ -47,7 +52,6 @@ def evaluate_model(model: Model, dataset: tf.data.Dataset):
         "rmse": float(rmse),
         "bias": float(bias),
         "r2": float(r2),
-        "n_samples": int(len(y_true))
     }
 
     return metrics

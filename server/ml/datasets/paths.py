@@ -1,34 +1,58 @@
 import os
-from config.settings import get_settings
+from typing import Optional
 
-settings = get_settings()
+class ProjectPaths:
+    def __init__(self, base_dir: str="../", siamese_name: Optional[str]=None):
+        self.base_dir = base_dir
+        self.siamese_name = siamese_name
+        self._setup_paths()
 
-# base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-base_dir = "../"
+    def _make_dirs(self, dirs: list[str]):
+        for dir in dirs:
+            os.makedirs(dir, exist_ok=True)
 
-data_dir = os.path.join(base_dir, "data")
-raw_dir = os.path.join(data_dir, "raw")
-processed_dir = os.path.join(data_dir, "processed")
-augmented_dir = os.path.join(data_dir, "augmented")
+    def _setup_paths(self):
+        self.data_dir = os.path.join(self.base_dir, "data")
+        self.raw_dir = os.path.join(self.data_dir, "raw")
+        self.processed_dir = os.path.join(self.data_dir, "processed")
+        self.augmented_dir = os.path.join(self.data_dir, "augmented")
+        self._make_dirs([self.raw_dir, self.processed_dir, self.augmented_dir])
 
-for dir in [raw_dir, processed_dir, augmented_dir]:
-    os.makedirs(dir, exist_ok=True)
+        self.models_dir = os.path.join(self.base_dir, "models")
+        self._make_dirs([self.models_dir])
 
-models_dir = os.path.join(base_dir, "models")
-os.makedirs(models_dir, exist_ok=True)
+        self.word2vec_dir = os.path.join(self.models_dir, "spanish_word2vec")
+        self._make_dirs([self.word2vec_dir])
+        self.word2vec_path = os.path.join(self.word2vec_dir, "spanish_word2vec.wordvectors")
 
-word2vec_dir = os.path.join(models_dir, "spanish_word2vec")
-word2vec_path = os.path.join(word2vec_dir, "spanish_word2vec.wordvectors")
-os.makedirs(word2vec_dir, exist_ok=True)
+        if self.siamese_name:
+            self._update_siamese_paths(self.siamese_name)
+        else:
+            self.siamese_dir = None
+            self.test_dir = None
+            self.calibration_dir = None
+            self.embedding_path = None
+            self.vectorizer_path = None
+            self.siamese_path = None
+            self.history_path = None
+            self.metrics_path = None
+            self.config_path = None
+            self.iso_path = None
 
-siamese_dir = os.path.join(models_dir, settings.siamese_name)
-os.makedirs(siamese_dir, exist_ok=True)
+    def _update_siamese_paths(self, siamese_name: str):
+        self.siamese_dir = os.path.join(self.models_dir, siamese_name)
+        self.test_dir = os.path.join(self.siamese_dir, "test")
+        self.calibration_dir = os.path.join(self.siamese_dir, "calibration")
+        self._make_dirs([self.siamese_dir, self.test_dir, self.calibration_dir])
 
-embedding_path = os.path.join(siamese_dir, "embedding_matrix.npy")
-vectorizer_path = os.path.join(siamese_dir, "vectorizer.keras")
-siamese_path = os.path.join(siamese_dir, "siamese_lstm.keras")
-history_path = os.path.join(siamese_dir, "history.npy")
-metrics_path = os.path.join(siamese_dir, "metrics.json")
-save_path = os.path.join(siamese_dir, "training_history.png")
+        self.embedding_path = os.path.join(self.siamese_dir, "embedding_matrix.npy")
+        self.vectorizer_path = os.path.join(self.siamese_dir, "vectorizer.keras")
+        self.siamese_path = os.path.join(self.siamese_dir, "siamese_lstm.keras")
+        self.history_path = os.path.join(self.siamese_dir, "history.npy")
+        self.metrics_path = os.path.join(self.siamese_dir, "metrics.json")
+        self.config_path = os.path.join(self.siamese_dir, "run_config.json")
+        self.iso_path = os.path.join(self.siamese_dir, "iso.joblib")
 
-histories_path = os.path.join(models_dir, "all_histories.png")
+    def change_siamese(self, new_siamese_name: str):
+        self.siamese_name = new_siamese_name
+        self._update_siamese_paths(new_siamese_name)

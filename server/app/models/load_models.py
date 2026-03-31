@@ -1,6 +1,7 @@
 from gensim.models import KeyedVectors
 from ..core.settings import get_settings
 from .sentence_transformers import SentenceTransformers
+from .sentence_lstm import SentenceLSTM
 from loguru import logger
 import spacy
 import os
@@ -58,8 +59,8 @@ def get_sentence_transformers(languages: set[str]):
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.sentence_transformers,
-        loader_fn=lambda model_name: SentenceTransformers(model_name=model_name),
-        model_type="Sentence Transformers model",
+        loader_fn=lambda model_name: SentenceTransformers(model_name),
+        model_type="Sentence Transformers",
     )
 
 def get_bert_models(languages: set[str]):
@@ -68,8 +69,8 @@ def get_bert_models(languages: set[str]):
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.bert_models,
-        loader_fn=lambda model_name: SentenceTransformers(model_name=model_name),
-        model_type="Bert model",
+        loader_fn=lambda model_name: SentenceTransformers(model_name),
+        model_type="BERT",
     )
 
 def get_word2vec(languages: set[str]):
@@ -79,7 +80,18 @@ def get_word2vec(languages: set[str]):
         languages=languages,
         source_map=settings.word2vec,
         loader_fn=lambda path: KeyedVectors.load(path, mmap="r"),
-        model_type="Word2vec model",
+        model_type="Word2vec",
+        validate_path=True
+    )
+
+def get_siamese_lstm(languages: set[str]):
+    settings = get_settings()
+
+    return _create_lazy_loaders(
+        languages=languages,
+        source_map=settings.siamese_lstm,
+        loader_fn=lambda dir: SentenceLSTM(dir),
+        model_type="Siamese LSTM",
         validate_path=True
     )
 
@@ -87,12 +99,12 @@ def get_word2vec(languages: set[str]):
 def _load_spacy_model(model_name: str):
     return spacy.load(model_name, disable=["parser", "ner"])
 
-def get_trained_pipelines(languages: set[str]) -> dict[str, LazyLoader]:
+def get_trained_pipelines(languages: set[str]):
     settings = get_settings()
     
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.spacy,
         loader_fn=lambda name: _load_spacy_model(name),
-        model_type="spaCy model",
+        model_type="spaCy",
     )

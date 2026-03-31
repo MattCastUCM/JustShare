@@ -3,37 +3,49 @@ from fastapi import FastAPI
 from .routers.inference import router
 import uvicorn
 from .core.settings import get_settings
-from .models.load_models import get_sentence_transformers, get_word2vec, get_bert_models, get_trained_pipelines
 from .services.similarity_engine import SimilarityEngine
 from fastapi.middleware.cors import CORSMiddleware
+from .models.load_models import (
+	get_sentence_transformers, 
+	get_word2vec, 
+	get_bert_models, 
+	get_trained_pipelines,
+	get_siamese_lstm,
+	LazyLoader
+)
 
-def create_similarity_engine(max_n: int):
+def load_models(lazy_loaders: dict[str, LazyLoader]):
+	return {lang: loader.model for lang, loader in lazy_loaders.items()}
+
+def create_similarity_engine():
 	settings = get_settings()
 	languages = settings.languages
-	
+
 	lazy_sentence_transformers = get_sentence_transformers(languages)
 	lazy_word2vec = get_word2vec(languages)
 	lazy_bert = get_bert_models(languages)
 	lazy_nlps = get_trained_pipelines(languages)
-	
-	sentence_transformers = {lang: loader.model for lang, loader in lazy_sentence_transformers.items()}
-	word2vec = {lang: loader.model for lang, loader in lazy_word2vec.items()}
-	bert_models = {lang: loader.model for lang, loader in lazy_bert.items()}
-	nlps = {lang: loader.model for lang, loader in lazy_nlps.items()}
+	lazy_lstm = get_siamese_lstm(languages)
+
+	sentence_transformers = load_models(lazy_sentence_transformers)
+	word2vec = load_models(lazy_word2vec)
+	bert_models = load_models(lazy_bert)
+	nlps = load_models(lazy_nlps)
+	siamese_lstm = load_models(lazy_lstm)
 
 	similarity_engine = SimilarityEngine(
 		word2vec=word2vec,
 		sentence_transformers=sentence_transformers,
 		bert_models=bert_models,
 		nlps=nlps,
-		max_n=max_n
+		siamese_lstm=siamese_lstm,
 	)
 
 	return similarity_engine
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-	similarity_engine = create_similarity_engine(max_n=2)
+	similarity_engine = create_similarity_engine()
 	yield {
 		"similarity_engine": similarity_engine
 	}

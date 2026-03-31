@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, field_validator
 from typing import Literal
 from ..core.settings import get_settings
 
-SimilarityMethod = Literal["jaccard", "tfidf", "sentence_transformers", "bert", "word2vec"]
+SimilarityMethod = Literal["jaccard", "tfidf", "sentence_transformers", "bert", "word2vec", "siamese_lstm"]
 
 class SimilarityRequest(BaseModel):
     corpus: list[str] = Field(..., min_length=1)

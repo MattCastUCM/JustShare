@@ -58,6 +58,13 @@ def similarity(req: SimilarityRequest, request: Request):
                     model_type="bert",
                     pooling="mean"
                 )
+            
+            case "siamese_lstm":
+                scores = similarity_engine.similarity_lstm(
+                    corpus=req.corpus,
+                    text=req.text,
+                    language=req.language,
+                )
 
         scores = scores.reshape(-1)
         top_indexes = np.argsort(-scores)[:req.top_k]
