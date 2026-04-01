@@ -31,7 +31,7 @@ dev = [
     "pandas>=3.0.1",
     "matplotlib>=3.10.8",
     "seaborn>=0.13.2",
-    "i18next>=0.0.3",
+    "pyi18next>=0.0.2",
 ]
 
 [tool.uv.sources]
