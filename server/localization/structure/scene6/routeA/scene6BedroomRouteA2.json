@@ -1,0 +1,82 @@
+{
+    "dad": {
+        "root": {
+            "type": "text",
+            "character": "dad",
+            "next": "spawnInteractions"
+        },
+        "spawnInteractions": {
+            "type": "event",
+            "events": [
+                {
+                    "spawnInteractions": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    },
+
+    "bed": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "computer": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "closet": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "bedAfterLunch": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "computerAfterLunch": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "closetAfterLunch": {
+        "root": {
+            "type": "text",
+            "character": "player",
+            "next": "prepare"
+        },
+        "prepare": {
+            "type": "event",
+            "events": [
+                {
+                    "prepare": {
+                        "variable": "prepared",
+                        "global": true,
+                        "value": true,
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    },
+    
+    "closetAfterDressing": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    }
+}

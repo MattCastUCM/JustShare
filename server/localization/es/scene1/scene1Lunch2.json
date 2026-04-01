@@ -1,0 +1,31 @@
+{
+    "main": {
+        "root": {
+            "text": "Nosotros nos vamos ya. Cuídate mucho y pórtate bien."
+        },
+        "reassure": {
+            "text": "Ya sabes que siempre lo hago."
+        },
+        "sure": {
+            "text": "Ya... Ten cuidado, anda. <player, Listillo, Listilla>."
+        },
+        "call": {
+            "text": "Mamá, cualquier cosa, llámanos inmediatamente, por favor."
+        },
+        "getOut": {
+            "text": "Sí, sí. Anda, idos ya, que vais a perder el vuelo."
+        },
+        "bye": {
+            "text": "Chao, chao."
+        },
+        "wave": {
+            "text": "Adiós, buen viaje. *agitas la mano*"
+        }
+    },
+
+    "door": {
+        "root": {
+            "text": "(Ahora mismo no tengo nada que hacer fuera)."
+        }
+    }
+}

@@ -1,0 +1,128 @@
+{
+    "main": {
+        "root": {
+            "type": "text",
+            "character": "mom",
+            "next": "wish"
+        },
+        "wish": {
+            "type": "text",
+            "character": "player",
+            "next": "wait"
+        },
+        "wait": {
+            "type": "text",
+            "character": "dad",
+            "next": "iGuess"
+        },
+        "iGuess": {
+            "type": "text",
+            "character": "player",
+            "next": "patience"
+        },
+        "patience": {
+            "type": "text",
+            "character": "mom",
+            "next": "checkExplained"
+        },
+    
+        "checkExplained": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "flee",
+                    "explained": {
+                        "value": false,
+                        "operator": "equal",
+                        "global": true,
+                        "default": false
+                    }
+                },
+                {
+                    "next": "caught",
+                    "explained": {
+                        "value": true,
+                        "operator": "equal",
+                        "global": true,
+                        "default": false
+                    }
+                }
+            ]
+        },
+    
+        "flee": {
+            "type": "text",
+            "character": "mom",
+            "next": "despair"
+        },
+        "caught": {
+            "type": "text",
+            "character": "mom",
+            "next": "despair"
+        },
+        "despair": {
+            "type": "text",
+            "character": "player",
+            "next": "warning"
+        },
+        "warning": {
+            "type": "text",
+            "character": "dad",
+            "next": "end"
+        },
+        "end": {
+            "type": "event",
+            "events": [
+                {
+                    "end": {
+                        "delay": 0
+                    }
+                }
+            ]
+        }
+    },
+
+    "bed": {
+        "root": {
+            "type": "text",
+            "character": "player",
+            "next": "ask"
+        },
+        "ask": {
+            "type": "text",
+            "character": "player",
+            "next": "goToSleep"
+        },
+        "goToSleep": {
+            "type": "choice",
+            "choices": [
+                { "next": "sleep" },
+                {  }
+            ]
+        },
+        "sleep": {
+           "type": "event",
+            "events": [
+                {
+                    "sleep": {
+                        "delay": 500
+                    }
+                }
+            ] 
+        }
+    },
+
+    "computer": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "closet": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    }
+}

@@ -1,0 +1,70 @@
+{
+    "fill": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill2"
+        },
+        "fill2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill3"
+        },
+        "fill3": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill4"
+        },
+        "fill4": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0
+        }
+    },
+
+    "main": {
+        "root": {
+            "type": "text",
+            "character": "paula",
+            "next": "congrats"
+        },
+        "congrats": {
+            "type": "text",
+            "character": "player",
+            "next": "thanks"
+        },
+        "thanks": {
+            "type": "text",
+            "character": "paula",
+            "next": "laura"
+        },
+        "laura": {
+            "type": "text",
+            "character": "player",
+            "next": "msg"
+        },
+        "msg": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "end"
+        },
+        "end": {
+            "type": "event",
+            "events": [
+                {
+                    "end": { }
+                }
+            ]
+        }
+    }
+
+}

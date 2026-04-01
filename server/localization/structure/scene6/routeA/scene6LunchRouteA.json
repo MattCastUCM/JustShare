@@ -1,0 +1,80 @@
+{
+    "main": {
+        "root": {
+            "type": "text",
+            "character": "mom",
+            "next": "explain"
+        },
+        "explain": {
+            "type": "text",
+            "character": "player",
+            "next": "scold"
+        },
+        "scold": {
+            "type": "text",
+            "character": "dad",
+            "next": "endLunch"
+        },
+        "endLunch": {
+            "type": "event",
+            "events": [
+                {
+                    "endLunch": {
+                        "delay": 500
+                    }
+                },
+                {
+                    "endLunchVar1": {
+                        "variable": "endedLunch",
+                        "global": true,
+                        "value": true,
+                        "delay": 0
+                    }
+                },
+                {
+                    "endLunchVar2": {
+                        "variable": "prepared",
+                        "global": true,
+                        "value": false,
+                        "delay": 0
+                    }
+                }
+            ]
+        }
+    },
+
+    "doorUnprepared": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "doorPrepared": {
+        "root": {
+            "type": "text",
+            "character": "player",
+            "next": "bye"
+        },
+        "bye": {
+            "type": "text",
+            "character": "dad",
+            "next": "late"
+        },
+        "late": {
+            "type": "text",
+            "character": "mom",
+            "next": "exitHome"
+        },
+        "exitHome": {
+            "type": "event",
+            "events": [
+                {
+                    "exitHome": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}

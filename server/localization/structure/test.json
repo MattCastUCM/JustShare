@@ -1,0 +1,72 @@
+{
+     "phone": {
+        "root": {
+            "type": "chatMessage",
+            "character": "laura",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "spawnInteractions"
+        },
+        "spawnInteractions": {
+            "type": "event",
+            "events": [
+                {
+                    "spawnInteractions": {
+                        "delay": 500
+                    }
+                }
+            ],
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices":[
+                { "next": "photo1" },
+                { "next": "photo2" }
+            ]
+        },
+        "photo1": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "msg3"
+        },
+        "photo2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "msg3"
+        },
+        "msg3": {
+            "type": "chatMessage",
+            "character": "laura",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg4"
+        },
+        "msg4": {
+            "type": "chatMessage",
+            "character": "laura",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
+            "next": "chatEnded"
+        },
+        "chatEnded": {
+            "type": "event",
+            "events": [
+                {
+                    "chatEnded": {
+                        "delay": 0
+                    }
+                }
+            ]
+        }
+    }
+}

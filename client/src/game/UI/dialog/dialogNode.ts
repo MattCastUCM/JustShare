@@ -77,6 +77,34 @@ export class ChoiceNode extends DialogNode {
 }
 
 export class SimilarityNode extends DialogNode {
+    /**
+    * Clase para la informacion de los nodos de similitud
+    * @extends DialogNode
+    * 
+    * 
+    * 
+    * Ejemplo:
+        {
+            "type": "similarity",
+            "threshold": 0.5,
+            "method": "sentence_transformers",
+            "character": "player",
+            "choices": [
+                {
+                    "next": "friendly"
+                },
+                {
+                    "next": "neutral"
+                },
+                {
+                    "next": "shy"
+                }
+            ],
+            "default": {
+                "next": "default"
+            }
+        }
+    */
     method: string
     threshold: number
     character: string
@@ -97,7 +125,7 @@ export class SimilarityNode extends DialogNode {
 
 export class ConditionNode extends DialogNode {
     /**
-    * Clase para la informacion de los nodos de de condicion
+    * Clase para la informacion de los nodos de condicion
     * @extends DialogNode
     * 
     * Ejemplo:

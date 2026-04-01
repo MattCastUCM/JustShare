@@ -946,6 +946,15 @@ wheels = [
 ]
 
 [[package]]
+name = "i18next"
+version = "0.0.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f2/15/8690e07c48bb44aae8316f19ed988dedb906fc78af80a42c438419b97f4e/i18next-0.0.3.tar.gz", hash = "sha256:69387928e3b0ec0ae655dd2761dd486567876cec5e869d3f38791b89e89f2bd7", size = 12444, upload-time = "2022-07-11T12:51:48.698Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/02/b7/c82ed3540808ba870c12cb8060f9647e836d72d13dd3074463303ac0e5fc/i18next-0.0.3-py3-none-any.whl", hash = "sha256:d47b3baeda79db92ba68c9da265716d68335e1bcb0442a669be8b8e77f684a66", size = 9288, upload-time = "2022-07-11T12:51:47.175Z" },
+]
+
+[[package]]
 name = "idna"
 version = "3.11"
 source = { registry = "https://pypi.org/simple" }
@@ -1125,6 +1134,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "hf-xet" },
+    { name = "i18next" },
     { name = "ipykernel" },
     { name = "ipywidgets" },
     { name = "matplotlib" },
@@ -1157,6 +1167,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "hf-xet", specifier = ">=1.2.0" },
+    { name = "i18next", specifier = ">=0.0.3" },
     { name = "ipykernel", specifier = ">=7.1.0" },
     { name = "ipywidgets", specifier = ">=8.1.8" },
     { name = "matplotlib", specifier = ">=3.10.8" },

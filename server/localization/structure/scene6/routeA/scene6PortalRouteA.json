@@ -1,0 +1,72 @@
+{
+    "main": {
+        "root": {
+            "type": "text",
+            "character": "player",
+            "next": "comeIn"
+        },
+        "comeIn": {
+            "type": "text",
+            "character": "???",
+            "next": "thanks"
+        },
+        "thanks": {
+            "type": "text",
+            "character": "player",
+            "next": "enter"
+        },
+        "enter": {
+            "type": "event",
+            "events": [
+                {
+                    "enter": {
+                        "delay": 0
+                    }
+                }
+            ],
+            "next": "ask",
+            "nextDelay": 500
+        },
+        "ask": {
+            "type": "text",
+            "character": "player",
+            "next": "laugh"
+        },
+        "laugh": {
+            "type": "text",
+            "character": "???",
+            "next": "end"
+        },
+        "end": {
+            "type": "event",
+            "events": [
+                {
+                    "end": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    },
+
+    "incorrectDoor1": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "incorrectDoor2": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "incorrectDoor3": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    }
+}

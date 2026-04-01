@@ -1,0 +1,54 @@
+{
+    "dad": {
+        "root": {
+            "text": "¡Despierta que es tarde y vamos a comer en nada!"
+        }
+    },
+
+    "bed": {
+        "root": {
+            "text": "(Ya no tengo sueño)."
+        }
+    },
+
+    "computer": {
+        "root": {
+            "text": "(Ya lo miraré luego, que tengo que ir a comer)."
+        }
+    },
+
+    "closet": {
+        "root": {
+            "text": "(No puedo ponerme a ordenarlo ahora, tengo que ir a comer)."
+        }
+    },
+
+    "bedAfterLunch": {
+        "root": {
+            "text": "(No puedo dormirme ahora, he quedado con <harasser, Pablo, Lucía>)."
+        }
+    },
+
+    "computerAfterLunch": {
+        "root": {
+            "text": "(Ya lo miraré cuando vuelva)."
+        }
+    },
+
+    "closetAfterLunch": {
+        "root": [
+            {
+                "text": "(A ver, qué me puedo poner...)."
+            },
+            {
+                "text": "(Yo creo que con esto bastará)."
+            }
+        ]
+    },
+
+    "closetAfterDressing": {
+        "root": {
+            "text": "(Ya estoy <player, listo, lista> para salir)."
+        }
+    }
+}

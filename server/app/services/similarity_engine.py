@@ -93,12 +93,11 @@ class SimilarityEngine:
 		model = TfIdfVectorizer()
 
 		corpus_vectors = model.fit_transform(corpus_tokens)
-
 		query_vector = model.transform([query_tokens])
 
 		scores = cosine_similarity(corpus_vectors, query_vector)
 		
-		return scores
+		return scores.flatten()
 	
 	def similarity_transformer(self, corpus: list[str], text: str, language: str, model_type: Literal["sentence", "bert"] = "sentence", pooling: PoolingMethod = "mean"):
 			if model_type == "sentence":
@@ -117,7 +116,7 @@ class SimilarityEngine:
 
 			scores = cosine_similarity(corpus_embeddings, query_embedding)
 
-			return scores
+			return scores.flatten()
 	
 	def similarity_word2vec(self, corpus: list[str], text: str, language: str, method: Literal["pos", "idf", "center"] = "pos"):
 		wv = self.word2vec.get(language)
@@ -150,7 +149,7 @@ class SimilarityEngine:
 
 		scores = cosine_similarity(corpus_vectors, query_vector)
 
-		return scores
+		return scores.flatten()
 	
 	def similarity_lstm(self, corpus: list[str], text: str, language: str):
 		model = self.siamese_lstm.get(language)
@@ -164,5 +163,6 @@ class SimilarityEngine:
 		query_embedding = combined_embeddings[-1]
 
 		scores = cosine_similarity(corpus_embeddings, query_embedding)
+		scores = model.calibrate(scores)
 
-		return scores
+		return scores.flatten()

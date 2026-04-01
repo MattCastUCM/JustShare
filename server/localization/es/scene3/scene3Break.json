@@ -1,0 +1,128 @@
+{
+    "fill": {
+        "root": {
+            "text": "Pues no me apetece nada mañana ir a clase la verdad..."
+        },
+        "fill2": {
+            "text": "Ya la verdad que a mi tampoco, pero es lo que toca xdd"
+        },
+        "fill3": {
+            "text": "Me voy ya que es tarde"
+        },
+        "fill4": {
+            "text": "Hasta mañanaa"
+        },
+        "fill5": {
+            "text": "Chaoo"
+        }
+    },
+    
+    "conversation1": {
+        "root": {
+            "text": "... Por dónde iba... Ah, sí, ten cuidado cuando te cruces con ese profesor. Me han contado que una vez castigó a un alumno por solo chocarse con él."
+        },
+        "choices": [
+            {
+                "text": "Contestar al teléfono."
+            },
+            {
+                "text": "Seguir escuchando."
+            }
+        ],
+        "listen": {
+            "text": "... y también le recordé lo mismo a Paula que siempre se le olvida hacer la tarea y luego por eso saca mala nota..."
+        },
+        "choices2": [
+            {
+                "text": "Contestar al teléfono."
+            },
+            {
+                "text": "Seguir escuchando."
+            }
+        ],
+        "listen2": {
+            "text": "... y el último vídeo me ha sorprendido bastante..."
+        },
+        "msg4": {
+            "text": "Heyy, bien"
+        },
+        "msg5": {
+            "text": "Tu que tal?"
+        },
+        "msg6": {
+            "text": "Bienn, justo te escribia porque tengo ahora un rato libre"
+        },
+        "msg7": {
+            "text": "Guayy, yo estoy en la cafeteria ahora"
+        },
+        "msg8": {
+            "text": "Ahh de relax entonces, y que haceis?"
+        },
+        "msg9": {
+            "text": "Naaa, <player, sentado, sentada> hablando con Laura"
+        }
+    },
+
+    "phone1": {
+        "root": {
+            "text": "Heyy"
+        }
+    },
+
+    "phone2": {
+        "root": {
+            "text": "Que tal??"
+
+        }
+    },
+
+    "phone3": {
+        "root": {
+            "text": "Como van las clases?"
+        }
+    },
+
+    "conversation2": {
+        "root": {
+            "text": "..., pero bueno. ¿Tú qué opinas?"
+        },
+        "thoughts": {
+            "text": "(¿Qué me ha preguntado?)"
+        },
+        "choices3": [
+            {
+                "text": "Sobre el profesor..."
+            },
+            {
+                "text": "Sobre Paula..."
+            }
+        ],
+    
+        "teacher": {
+            "text": "Pues pienso que es un poco exagerado castigar a alguien solo por un accidente."
+        },
+        "homework": {
+            "text": "Es cierto que después de hacer los deberes es mucho más fácil enterarse del tema."
+        },
+    
+        "notListening": [
+            {
+                "text": "Veo que no me estás haciendo ni caso."
+            },
+            {
+                "text": "Te estaba preguntando sobre el nuevo video de Toni, pero parece que tienes tu atención enfocada en otra cosa..."
+            }
+        ],
+        "sorry": {
+            "text": "Perdón, me distraje un momento y perdí el hilo."
+        },
+        "whatever": [
+            {
+                "text": "Ya bueno, ya da igual."
+            },
+            {
+                "text": "Voy yendo a clase, te veo allí."
+            }
+        ]
+    }
+}

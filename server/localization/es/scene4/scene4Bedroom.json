@@ -1,0 +1,94 @@
+{
+    "bed": {
+        "root": {
+            "text": "(Voy a escribir a <harasser, Pablo, Lucía> antes de dormir)."
+        }
+    },
+
+    "phone": {
+        "root": [
+            {
+                "text": "Ya he vuelto."
+            }
+        ],
+        "arrived": {
+            "text": "Ya he llegado a casa"
+        },
+        "msg3": {
+            "text": "Olee, que tal?"
+        },
+        "msg4": {
+            "text": "No se, Laura se ha enfadado conmigo"
+        },
+        "msg5": {
+            "text": "y eso? que ha pasado?"
+        },
+        "choices": [
+            {
+                "text": "Por la foto."
+            },
+            {
+                "text": "Por nuestra relación."
+            },
+            {
+                "text": "Prefiero no hablar de ello."
+            }
+        ],
+
+        "photo": {
+            "text": "No le ha gustado que te haya enviado la foto despues de que Paula me dijera que no"
+        },
+        "relationship": {
+            "text": "No termina de entender que nos llevemos tan bien siendo amigos online"
+        },
+        "noTell": {
+            "text": "No se, prefiero no hablar de eso"
+        },
+
+        "msg7": {
+            "text": "Sinceramente pienso que esta celosa de lo bien que nos llevamos nosotros, y eso hace que salte a la minima y que este en contra de nuestra amistad"
+        },
+        "msg8": {
+            "text": "Pero no te preocupes por eso, siempre me vas a tener a mi para todo, y siempre voy a apoyarte"
+        },
+        "msg9": {
+            "text": "Gracias, se que puedo contar contigo para lo que sea"
+        },
+        "msg10": {
+            "text": "Yo creo que me voy ya a dormir"
+        },
+        "msg11": {
+            "text": "Una foto de buenas noches para tu  mejor <harasser, amigo, amiga>?"
+        },
+        "msg12": {
+            "text": "Venga vale"
+        },
+        "choices2": [
+            {
+                "text": "Foto sonriendo."
+            },
+            {
+                "text": "Foto sacando la lengua."
+            }
+        ],
+        "smile": {
+            "text": "<player, [playerPhoto2SmileMale], [playerPhoto2SmileFemale]>"
+        },
+        "tongueOut": {
+            "text": "<player, [playerPhoto2TongueMale], [playerPhoto2TongueFemale]>"
+        },
+        "msg14": {
+            "text": "Ay que <player, guapoooo, guapaaaa>"
+        },
+        "msg15": {
+            "text": "Que descanses {{name}}, mañana hablamos"
+        },
+        "msg16": {
+            "text": "Gracias <harasser, Pablo, Lucia>"
+        },
+        "msg17": {
+            "text": "Buenas noches"
+        }
+
+    }
+}

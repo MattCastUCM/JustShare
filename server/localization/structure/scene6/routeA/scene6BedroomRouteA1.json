@@ -1,0 +1,213 @@
+{
+    "bed": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+    
+    "closet": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "phone": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "choices1"
+        },
+        "choices1": {
+            "type": "choice",
+            "choices":[
+                { "next": "msg2" }
+            ]
+        },
+        "msg2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg3"
+        },
+        "msg3": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg4"
+        },
+        "msg4": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg5"
+        },
+        "msg5": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg6"
+        },
+        "msg6": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "choices2"
+        },
+        "choices2": {
+            "type": "choice",
+            "choices":[
+                { "next": "msg7A" },
+                { "next": "reject" }
+            ]
+        },
+        
+        "msg7A": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg8A"
+        },
+        "msg8A": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg9A"
+        },
+        "msg9A": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg10A"
+        },
+        "msg10A": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg11A"
+        },
+        "msg11A": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg12A"
+        },
+        "msg12A": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "chatEnded"
+        },
+
+        "reject": {
+            "type": "event",
+            "events": [
+                {
+                    "routeB": {
+                        "variable": "routeA", 
+                        "global": true,
+                        "value": false, 
+                        "delay": 0
+                    }
+                },
+                {
+                    "routeB": {
+                        "variable": "routeB",
+                        "global": true,
+                        "value": true,
+                        "delay": 0
+                    }
+                }
+            ],
+            "next": "msg7B"
+        },
+        "msg7B": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg8B"
+        },
+        "msg8B": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg9B"
+        },
+        "msg9B": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg10B"
+        },
+        "msg10B": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg11B"
+        },
+        "msg11B": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg12B"
+        },
+        "msg12B": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg13B"
+        },
+        "msg13B": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg14B"
+        },
+        "msg14B": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg15B"
+        },
+        "msg15B": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "chatEnded"
+        },
+
+        "chatEnded": {
+            "type": "event",
+            "events": [
+                {
+                    "chatEnded": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}
