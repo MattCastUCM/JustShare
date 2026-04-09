@@ -1,6 +1,6 @@
 from collections import Counter
 import numpy as np
-from ..utils.math_utils import euclidean_normalization
+from similarities.vector_numpy import l2_normalize
 from typing import Literal, Optional
 
 class TfIdfVectorizer:
@@ -82,7 +82,7 @@ class TfIdfVectorizer:
             X[i] = tf * self.idf
 
         if self.norm == "l2":
-            result = euclidean_normalization(X)
+            result = l2_normalize(X)
 
         return result
 

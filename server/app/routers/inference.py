@@ -1,6 +1,6 @@
-from ..schemas.similarity import SimilarityRequest, SimilarityResponse, SimilarityMatch
+from app.schemas.similarity import SimilarityRequest, SimilarityResponse, SimilarityMatch
 from fastapi import APIRouter, Request, HTTPException
-from ..services.similarity_engine import SimilarityEngine
+from app.services.similarity_engine import SimilarityEngine
 from typing import cast
 import time
 from loguru import logger

@@ -1,36 +1,8 @@
-from ..utils.math_utils import get_intersection, get_union
-import numpy as np
 import numpy.typing as npt
+import numpy as np
+from typing import Optional
 
-# --- Token-based similarities ---
-
-def jaccard_similarity(tokens1: list[str], tokens2: list[str]):
-    intersection = get_intersection(tokens1, tokens2)
-    union = get_union(tokens1, tokens2)
-    
-    if not union:
-        return 0.0
-    
-    return len(intersection) / len(union)
-
-def dice_coefficient(tokens1: list[str], tokens2: list[str]):
-    intersection = get_intersection(tokens1, tokens2)
-    denom = len(tokens1) + len(tokens2)
-
-    return 2 * len(intersection) / denom
-
-def overlap_coefficient(tokens1: list[str], tokens2: list[str]):
-    intersection = get_intersection(tokens1, tokens2)
-    min_len = min(len(tokens1), len(tokens2))
-
-    if min_len <= 0:
-        return 0.0
-
-    return len(intersection) / min_len
-
-# --- Vector-based similarities ---
-
-def _prepare_vectors(X: npt.ArrayLike,Y: npt.ArrayLike | None = None) -> tuple[np.ndarray, np.ndarray]:
+def _prepare_vectors(X: npt.ArrayLike, Y: Optional[npt.ArrayLike] = None) -> tuple[np.ndarray, np.ndarray]:
     """
     Convert inputs to 2D float arrays and validate dimensions.
 
@@ -60,6 +32,25 @@ def _prepare_vectors(X: npt.ArrayLike,Y: npt.ArrayLike | None = None) -> tuple[n
 
     return X, Y
 
+def l2_normalize(X: npt.ArrayLike) -> np.ndarray:
+    """
+    Row-wise L2 normalization.
+
+    Parameters
+    ----------
+    X : array-like of shape (n_samples, n_features)
+
+    Returns
+    -------
+    X_normalized : ndarray of shape (n_samples, n_features)
+    """
+    X, _ = _prepare_vectors(X)
+
+    norms = np.linalg.norm(X, axis=1, keepdims=True)
+    norms = np.maximum(norms, 1e-12)
+
+    return X / norms
+
 def cosine_similarity(X: npt.ArrayLike, Y: npt.ArrayLike | None = None) -> np.ndarray:
     """
     Compute the cosine similarity between rows of X and Y.
@@ -87,16 +78,11 @@ def cosine_similarity(X: npt.ArrayLike, Y: npt.ArrayLike | None = None) -> np.nd
     array([[0.   , 0.   ],
            [0.577, 0.816]])
     """
+    
     X, Y = _prepare_vectors(X, Y)
 
-    X_norm = np.linalg.norm(X, axis=1, keepdims=True)
-    Y_norm = np.linalg.norm(Y, axis=1, keepdims=True)
-
-    X_norm[X_norm == 0] = 1.0
-    Y_norm[Y_norm == 0] = 1.0
-
-    X_normalized = X / X_norm
-    Y_normalized = Y / Y_norm
+    X_normalized = l2_normalize(X)
+    Y_normalized = l2_normalize(Y)
 
     return X_normalized @ Y_normalized.T
  
@@ -129,5 +115,5 @@ def manhattan_similarity(X: npt.ArrayLike, Y: npt.ArrayLike | None = None):
     """
     X, Y = _prepare_vectors(X, Y)
 
-    distances = np.linalg.norm(X[:, None, :] - Y[None, :, :], axis=2, ord=2)
+    distances = np.linalg.norm(X[:, None, :] - Y[None, :, :], axis=2, ord=1)
     return 1.0 / (1.0 + distances)

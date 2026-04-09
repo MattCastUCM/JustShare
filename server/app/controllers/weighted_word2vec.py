@@ -1,6 +1,6 @@
-from .tfidf_vectorizer import TfIdfVectorizer
+from app.controllers.tfidf_vectorizer import TfIdfVectorizer
 import numpy as np
-from ..utils.math_utils import euclidean_normalization
+from similarities.vector_numpy import l2_normalize
 from gensim.models import KeyedVectors
 from abc import ABC, abstractmethod
 from collections import Counter
@@ -62,7 +62,7 @@ class IdfWeightedWord2Vec(WeightedWord2Vec):
 
 	def transform(self, tokenized_docs: list[list[str]], **kwargs):
 		X = self._idf_weighted(tokenized_docs)
-		return euclidean_normalization(X)
+		return l2_normalize(X)
 
 class CenterWeightedWord2Vec(WeightedWord2Vec):
 	def __init__(self, wv: KeyedVectors):
@@ -119,7 +119,7 @@ class CenterWeightedWord2Vec(WeightedWord2Vec):
 
 	def transform(self, tokenized_docs: list[list[str]], **kwargs):
 		X = self._center_weighted(tokenized_docs)
-		return euclidean_normalization(X)
+		return l2_normalize(X)
 
 class POSWeightedWord2Vec(WeightedWord2Vec):
 	POS_WEIGHTS = {
@@ -153,4 +153,4 @@ class POSWeightedWord2Vec(WeightedWord2Vec):
 			result.append(vector)
 
 		result = np.array(result)
-		return euclidean_normalization(result)
+		return l2_normalize(result)

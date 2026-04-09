@@ -1,5 +1,5 @@
 from typing import Callable
-from models.siamese_lstm import SiameseLSTM
+from ..models.siamese_lstm import SiameseLSTM
 import pandas as pd
 import numpy as np
 import json

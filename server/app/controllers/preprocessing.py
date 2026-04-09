@@ -1,7 +1,7 @@
 import re
 import unicodedata
 from autocorrect import Speller
-from ..utils.language_name import get_language_name
+from app.core.language_name import get_language_name
 from pydantic import BaseModel
 from typing import Callable
 from spacy.language import Language

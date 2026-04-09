@@ -3,7 +3,7 @@ import numpy as np
 from keras import Model, layers
 import keras
 from keras import ops
-from .similarity import manhattan_similarity, cosine_similarity
+from similarities.vector_keras import manhattan_similarity, cosine_similarity
 
 class SiameseLSTM(Model):
 	def __init__(self, vocab_size: int, embedding_dim: int, hidden_dim: int, mlp_dropout: float, lstm_dropout: float, embedding_matrix: Optional[np.ndarray] = None, pooling: Literal["last", "mean"] = "mean", similarity: Literal["manhattan", "cosine", "mlp"] = "cosine", mlp_layers: list[int] = [], bidirectional: bool = False, concat_features: list[Literal["vec1", "vec2", "diff", "prod"]] = ["diff", "prod"], name="siamese_lstm", **kwargs):

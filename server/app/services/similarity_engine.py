@@ -1,12 +1,13 @@
 
-from ..models.preprocessing import TextPreprocessor
-from ..models.tfidf_vectorizer import TfIdfVectorizer
-from ..utils.similarity import jaccard_similarity, cosine_similarity
+from app.controllers.preprocessing import TextPreprocessor
+from app.controllers.tfidf_vectorizer import TfIdfVectorizer
+from similarities.token import jaccard_similarity
+from similarities.vector_numpy import cosine_similarity
 from functools import lru_cache
 from gensim.models import KeyedVectors
-from ..models.weighted_word2vec import POSWeightedWord2Vec, IdfWeightedWord2Vec, CenterWeightedWord2Vec
-from ..models.sentence_transformers import SentenceTransformers, PoolingMethod
-from ..models.sentence_lstm import SentenceLSTM
+from app.controllers.weighted_word2vec import POSWeightedWord2Vec, IdfWeightedWord2Vec, CenterWeightedWord2Vec
+from app.controllers.sentence_transformers import SentenceTransformers, PoolingMethod
+from app.controllers.sentence_lstm import SentenceLSTM
 import numpy as np
 from spacy.language import Language
 from typing import Literal

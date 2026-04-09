@@ -1,7 +1,7 @@
 from gensim.models import KeyedVectors
-from ..core.settings import get_settings
-from .sentence_transformers import SentenceTransformers
-from .sentence_lstm import SentenceLSTM
+from app.core.settings import get_settings
+from app.controllers.sentence_transformers import SentenceTransformers
+from app.controllers.sentence_lstm import SentenceLSTM
 from loguru import logger
 import spacy
 import os

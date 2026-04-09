@@ -1,7 +1,7 @@
 import os
 os.environ["KERAS_BACKEND"] = "torch"
 
-from ml.models.similarity import l2_normalize, manhattan_similarity, cosine_similarity
+from similarities.vector_keras import l2_normalize, manhattan_similarity, cosine_similarity
 from ml.models.siamese_lstm import SiameseLSTM
 from keras.models import load_model
 import joblib

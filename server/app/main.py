@@ -1,11 +1,11 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from .routers.inference import router
+from app.routers.inference import router
 import uvicorn
-from .core.settings import get_settings
-from .services.similarity_engine import SimilarityEngine
+from app.core.settings import get_settings
+from app.services.similarity_engine import SimilarityEngine
 from fastapi.middleware.cors import CORSMiddleware
-from .models.load_models import (
+from app.controllers.load_models import (
 	get_sentence_transformers, 
 	get_word2vec, 
 	get_bert_models, 
