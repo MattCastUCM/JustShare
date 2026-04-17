@@ -1,10 +1,10 @@
 digraph decision_tree {
 	nodesep=0.6 rankdir=LR ranksep=0.8 splines=true
 	node [color=lightblue2 shape=box style="rounded,filled"]
-	send_additional_nudes -> meet_harasser [label="Enviar otra foto. (38.27%)" penwidth=2.91358024691358]
-	meet_harasser -> send_nudes_and_meet [label="Aceptar. (83.87%)" penwidth=5.193548387096774]
-	send_additional_nudes -> confess_to_parents [label="Ya no quiero enviar más fotos. (61.73%)" penwidth=4.086419753086419]
-	confess_to_parents -> refuse_and_hide [label="Mentir. (14.55%)" penwidth=1.7272727272727273]
-	confess_to_parents -> refuse_and_confess [label="Decir la verdad. (85.45%)" penwidth=5.2727272727272725]
-	meet_harasser -> confess_to_parents [label="Negarse. (16.13%)" penwidth=1.8064516129032258]
+	send_more_nudes -> agree_to_meet_harasser [label="Enviar otra foto. (38.27%)" penwidth=2.91358024691358]
+	agree_to_meet_harasser -> meet_harasser_in_person [label="Aceptar. (83.87%)" penwidth=5.193548387096774]
+	send_more_nudes -> confess_to_parents [label="Ya no quiero enviar más fotos. (61.73%)" penwidth=4.086419753086419]
+	confess_to_parents -> hide_truth [label="Mentir. (14.55%)" penwidth=1.7272727272727273]
+	confess_to_parents -> confess_truth [label="Decir la verdad. (85.45%)" penwidth=5.2727272727272725]
+	agree_to_meet_harasser -> confess_to_parents [label="Negarse. (16.13%)" penwidth=1.8064516129032258]
 }
