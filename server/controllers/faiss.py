@@ -8,6 +8,7 @@ import pickle
 import faiss
 import time
 import os
+from loguru import logger
 
 class FaissRetriever(BaseRetriever):
 	"""
@@ -75,12 +76,12 @@ class FaissRetriever(BaseRetriever):
 
 		# Train if needed (IVF indexes)
 		if self._needs_training and not self.index.is_trained:
-			print(f"Training {self.index_type} index on {len(embeddings)} vectors...")
+			logger.debug(f"Training {self.index_type} index on {len(embeddings)} vectors...")
 			self.index.train(embeddings)
 
 		# Add vectors
 		self.index.add(embeddings)
-		print(f"Indexed {self.index.ntotal} vectors")
+		logger.debug(f"Indexed {self.index.ntotal} vectors")
 
 		self.metadata = [
 			{

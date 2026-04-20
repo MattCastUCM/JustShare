@@ -35,38 +35,40 @@ def build_similarity_engine(models: dict, engines: dict[str, DenseVectorEngine])
 		engines=engines
 	)
 
-def build_dense_vector_engines(models: dict, base_dir: str):
-    def build_transformer_encoders(transformers: dict[str, Transformer]):
-        return {
-            lang: (lambda sentences, model=transformer: model.encode(sentences, "mean"))
-            for lang, transformer in transformers.items()
-        }
+def build_dense_vector_engines(models: dict, base_dir: str, languages: set[str]):
+	def build_transformer_encoders(transformers: dict[str, Transformer]):
+		return {
+			lang: (lambda sentences, model=transformer: model.encode(sentences, "mean"))
+			for lang, transformer in transformers.items()
+		}
 
-    engines: list[DenseVectorEngine] = []
+	engines = []
 
-    sbert_models = build_transformer_encoders(models["sberts"])
-    engines.append(DenseVectorEngine(sbert_models, "sbert", base_dir))
+	sbert_models = build_transformer_encoders(models["sberts"])
+	engines.append(DenseVectorEngine(sbert_models, "sbert", base_dir))
 
-    return {engine.model_name: engine for engine in engines}
+	engines = {engine.model_name: engine for engine in engines}
 
-def create_engines(base_dir):
+	for engine in engines.values():
+		engine.load_all(languages)
+
+	return engines
+
+def create_similarity_engine(base_dir):
 	settings = get_settings()
 	languages = settings.languages
 
 	models = load_models(languages)
 
-	engines = build_dense_vector_engines(models, base_dir)
+	engines = build_dense_vector_engines(models, base_dir, languages)
 	similarity_engine = build_similarity_engine(models, engines)
 
-	return {
-		"similarity": similarity_engine,
-		"sbert": engines,
-	}
+	return similarity_engine
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 	base_dir = "./faiss_data"
-	similarity_engine = create_engines(base_dir=)
+	similarity_engine = create_similarity_engine(base_dir)
 	yield {
 		"similarity_engine": similarity_engine
 	}

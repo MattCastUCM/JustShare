@@ -2,6 +2,7 @@ from controllers.faiss import FaissRetriever
 from typing import Iterable
 from typing import Callable
 import numpy as np
+from loguru import logger
 import os
 
 class DenseVectorEngine:
@@ -22,20 +23,19 @@ class DenseVectorEngine:
 		flat_texts = []
 		flat_meta = []
 		
-		sentence_index = 0
-
-		for group_id, group in enumerate(fixed_responses):
-			for sentence_id, text in enumerate(group["text"]):
+		idx = 0
+		for group_idx, group in enumerate(fixed_responses):
+			for sentence_idx, text in enumerate(group["text"]):
 				flat_texts.append(text)
 				flat_meta.append({
-					"index": sentence_index,
+					"index": idx,
 					"text": text,
-					"group_index": group_id,
-					"sentence_index": sentence_id,
+					"group_index": group_idx,
+					"sentence_index": sentence_idx,
 					"node": node_key
 				})
 
-				sentence_index += 1
+				idx += 1
 
 		return flat_texts, flat_meta
 
@@ -71,6 +71,8 @@ class DenseVectorEngine:
 		dir = os.path.join(self.base_dir, language, node_key, self.model_name)
 		os.makedirs(dir, exist_ok=True)
 
+		logger.debug(f"Saving FAISS node | model={self.model_name} | language={language} | node={node_key}")
+
 		retriever = self.retrievers[language][node_key]
 		retriever.save(dir)
 
@@ -83,11 +85,19 @@ class DenseVectorEngine:
 		self.retrievers.setdefault(language, {})
 		dir = os.path.join(self.base_dir, language, node_key, self.model_name)
 
+		logger.debug(f"Loading FAISS node | model={self.model_name} | language={language} | node={node_key}")
+
+		if not os.path.exists(dir):
+			logger.warning("Node not found on disk.")
+			return
+
 		model = self._get_model_for_language(language)
 
 		retriever = FaissRetriever.load(model, dir)
 
 		self.retrievers[language][node_key] = retriever
+
+		logger.success("Loaded node successfully.")
 
 	def load_all(self, languages: Iterable[str]):
 		for lang in os.listdir(self.base_dir):
