@@ -1,10 +1,14 @@
 from transformers import AutoTokenizer, AutoModel
 import torch
 from typing import Literal
+import numpy as np
+from similarities.vector_numpy import cosine_similarity
+from controllers.retriever import BaseRetriever
+from schemas.similarity import SimilarityMatch
 
 PoolingMethod = Literal["mean", "max", "cls"]
 
-class SentenceTransformers:
+class Transformer:
 	def __init__(self, model_name: str, device: str | None = None):
 		self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
 		print("Using device:", self.device)
@@ -40,8 +44,8 @@ class SentenceTransformers:
 	# Sin embargo, el embedding [CLS] no fue entrenado para específicamente para tareas de similitud semántica.
 	# Por esto, en muchos casos el mean pooling produce mejores embeddings para comparaciones de oraciones.
 	
-    # Some weights of BertModel were not initialized from the model checkpoint at dccuchile/bert-base-spanish-wwm-cased and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight'].
-    # You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+	# Some weights of BertModel were not initialized from the model checkpoint at dccuchile/bert-base-spanish-wwm-cased and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight'].
+	# You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 	def cls_pooling(self, model_output):
 		# Algunos modelos, como BERT, incluyen "pooler_output", que corresponde 
 		# al embedding del token [CLS] después de pasar por una capa lineal y una activación tanh.
@@ -74,3 +78,39 @@ class SentenceTransformers:
 			sentence_embeddings = torch.nn.functional.normalize(sentence_embeddings, p=2, dim=1)
 
 		return sentence_embeddings.cpu().numpy()
+
+class TransformerRetriever(BaseRetriever):
+	def __init__(self, models: dict[str, Transformer], pooling: PoolingMethod="mean"):
+		self.models = models
+		self.pooling: PoolingMethod = pooling
+
+	def fit(self, corpus: list[str], language: str):
+		self.corpus = corpus
+		
+		model = self.models.get(language)
+		if model is None:
+			raise ValueError(f"No Transformer found for language '{language}'")
+		
+		self.model = model
+
+		self.embeddings = model.encode(corpus, pooling=self.pooling)
+		return self
+
+	def search(self, query: str, top_k: int=3):
+		if self.embeddings is None:
+			raise ValueError("Retriever not fitted. Call 'fit' first.")
+
+		query_embedding = self.model.encode([query], pooling=self.pooling)[0]
+
+		scores = cosine_similarity(self.embeddings, query_embedding)
+		top_indices = np.argsort(scores)[::-1][:top_k]
+
+		return [
+			SimilarityMatch(
+				index=int(i),
+				score=float(scores[i]),
+				text=self.corpus[i],
+			)
+			for i in top_indices
+		]
+	

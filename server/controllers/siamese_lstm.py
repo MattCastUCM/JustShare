@@ -1,14 +1,16 @@
 import os
 os.environ["KERAS_BACKEND"] = "torch"
 
-from similarities.vector_keras import l2_normalize, manhattan_similarity, cosine_similarity
-from ml.models.siamese_lstm import SiameseLSTM
+from similarities import vector_keras, vector_numpy
+from siamese_lstm.models.siamese_lstm import SiameseLSTM
+from controllers.retriever import BaseRetriever
 from keras.models import load_model
+from schemas.similarity import SimilarityMatch
 import joblib
 import numpy as np
 import torch
 
-class SentenceLSTM:
+class SiameseLSTM:
     def __init__(self, model_dir: str):
         self.model_dir = model_dir
 
@@ -43,9 +45,9 @@ class SentenceLSTM:
 
         custom_objects = {
             "SiameseLSTM": SiameseLSTM,
-            "l2_normalize": l2_normalize,
-            "manhattan_similarity": manhattan_similarity,
-            "cosine_similarity": cosine_similarity,
+            "l2_normalize": vector_keras.l2_normalize,
+            "manhattan_similarity": vector_keras.manhattan_similarity,
+            "cosine_similarity": vector_keras.cosine_similarity,
         }
 
         model = load_model(path, custom_objects=custom_objects, compile=False)
@@ -67,7 +69,7 @@ class SentenceLSTM:
             embeddings = self.head_model(sentence_tensor)
 
             if normalize:
-                embeddings = l2_normalize(embeddings)
+                embeddings = vector_numpy.l2_normalize(embeddings)
 
             return embeddings.detach().cpu().numpy()
 
@@ -86,3 +88,43 @@ class SentenceLSTM:
     
     def print_device(self):
         print("Head model device:", next(self.head_model.parameters()).device)
+
+class LSTMRetriever(BaseRetriever):
+    def __init__(self, siamese_lstm_models: dict[str, SiameseLSTM]):
+        self.models = siamese_lstm_models
+
+    def fit(self, corpus: list[str], language: str):
+        self.corpus = corpus
+        self.language = language
+
+        model = self.models.get(language)
+        if model is None:
+            raise ValueError(f"No LSTM found for language '{language}'")
+
+        self.model = model
+
+        self.embeddings = self.model.encode(corpus)
+
+        return self
+
+    def search(self, query: str, top_k: int=3):
+        if self.embeddings is None:
+            raise ValueError("Retriever not fitted. Call 'fit' first.")
+        
+        query_embedding = self.model.encode([query])[0]
+
+        scores = vector_numpy.cosine_similarity(self.embeddings, query_embedding)
+
+        scores = self.model.calibrate(scores)
+
+        top_indices = np.argsort(scores)[::-1][:top_k]
+
+        return [
+			SimilarityMatch(
+				index=int(i),
+				score=float(scores[i]),
+				text=self.corpus[i],
+			)
+			for i in top_indices
+		]
+    

@@ -1,9 +1,13 @@
-from app.controllers.tfidf_vectorizer import TfIdfVectorizer
+from controllers.tfidf_vectorizer import TfIdfVectorizer
 import numpy as np
 from similarities.vector_numpy import l2_normalize
 from gensim.models import KeyedVectors
 from abc import ABC, abstractmethod
 from collections import Counter
+from controllers.retriever import BaseRetriever
+from similarities.vector_numpy import cosine_similarity
+from schemas.similarity import SimilarityMatch
+from typing import Literal
 
 class WeightedWord2Vec(ABC):
 	def __init__(self, wv: KeyedVectors):
@@ -154,3 +158,78 @@ class POSWeightedWord2Vec(WeightedWord2Vec):
 
 		result = np.array(result)
 		return l2_normalize(result)
+	
+Word2VecMethod = Literal["pos", "idf", "center"]
+
+class Word2VecRetriever(BaseRetriever):
+	def __init__(
+		self,
+		word2vecs: dict,
+		preprocessor_fn,
+		method: Word2VecMethod
+	):
+		self.word2vecs = word2vecs
+		self.preprocess = preprocessor_fn
+		self.method = method
+
+	def fit(self, corpus: list[str], language: str):
+		self.language = language
+		self.corpus = corpus
+
+		wv = self.word2vecs.get(language)
+		if wv is None:
+			raise ValueError(f"No Word2Vec found for language '{language}'")
+		
+		tokenized = [self.preprocess(doc, language) for doc in corpus]
+
+		self.corpus_tokens = [[token.lemma for token in doc] for doc in tokenized]
+
+		kwargs = {}
+
+		if self.method == "pos":
+			self.corpus_pos = [[token.pos for token in doc] for doc in tokenized]
+			kwargs["pos_docs"] = self.corpus_pos
+			self.model = POSWeightedWord2Vec(wv)
+
+		elif self.method == "idf":
+			self.model = IdfWeightedWord2Vec(wv)
+
+		elif self.method == "center":
+			self.model = CenterWeightedWord2Vec(wv)
+
+		else:
+			raise ValueError(f"Unknown method: {self.method}")
+		
+		self.corpus_vectors = self.model.fit_transform(self.corpus_tokens, **kwargs)
+
+		return self
+
+	def search(self, query: str, top_k: int=3):
+		if self.corpus_vectors is None:
+			raise ValueError("Retriever not fitted. Call 'fit' first.")
+		
+		tokenized = self.preprocess(query, self.language)
+
+		query_tokens = [token.lemma for token in tokenized]
+
+		kwargs = {}
+
+		if self.method == "pos":
+			query_pos = [token.pos for token in tokenized]
+			kwargs["pos_docs"] = [query_pos]
+
+		query_embedding = self.model.transform([query_tokens], **kwargs)[0]
+
+		scores = cosine_similarity(self.corpus_vectors, query_embedding)
+
+		top_indices = np.argsort(scores)[::-1][:top_k]
+
+		return [
+			SimilarityMatch(
+				index=int(i),
+				score=float(scores[i]),
+				text=self.corpus[i],
+			)
+			for i in top_indices
+		]
+	

@@ -1,7 +1,7 @@
 from gensim.models import KeyedVectors
-from app.core.settings import get_settings
-from app.controllers.sentence_transformers import SentenceTransformers
-from app.controllers.sentence_lstm import SentenceLSTM
+from core.settings import get_settings
+from controllers.transformer import Transformer
+from controllers.siamese_lstm import SiameseLSTM
 from loguru import logger
 import spacy
 import os
@@ -33,6 +33,9 @@ class LazyLoader(Generic[T]):
         status = "loaded" if self._model is not None else "not loaded"
         return f"<LazyLoader({self.model_type}, {self.identifier}, {status})>"
     
+def resolve_models(lazy_loaders: dict[str, LazyLoader]):
+	return {lang: loader.model for lang, loader in lazy_loaders.items()}
+    
 def _create_lazy_loaders(languages: set[str], source_map: dict[str, str], loader_fn: Callable[[str], T], model_type: str, validate_path: bool = False,) -> dict[str, LazyLoader]:
     loaders = {}
     for lang in languages:
@@ -53,44 +56,44 @@ def _create_lazy_loaders(languages: set[str], source_map: dict[str, str], loader
 
     return loaders
 
-def get_sentence_transformers(languages: set[str]):
+def get_sberts(languages: set[str]):
     settings = get_settings()
     
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.sentence_transformers,
-        loader_fn=lambda model_name: SentenceTransformers(model_name),
-        model_type="Sentence Transformers",
+        loader_fn=lambda model_name: Transformer(model_name),
+        model_type="SBERT",
     )
 
-def get_bert_models(languages: set[str]):
+def get_berts(languages: set[str]):
     settings = get_settings()
     
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.bert_models,
-        loader_fn=lambda model_name: SentenceTransformers(model_name),
+        loader_fn=lambda model_name: Transformer(model_name),
         model_type="BERT",
     )
 
-def get_word2vec(languages: set[str]):
+def get_word2vecs(languages: set[str]):
     settings = get_settings()
 
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.word2vec,
-        loader_fn=lambda path: KeyedVectors.load(path, mmap="r"),
+        loader_fn=lambda path: KeyedVectors.load_word2vec_format(path, binary=True),
         model_type="Word2vec",
         validate_path=True
     )
 
-def get_siamese_lstm(languages: set[str]):
+def get_siamese_lstms(languages: set[str]):
     settings = get_settings()
 
     return _create_lazy_loaders(
         languages=languages,
         source_map=settings.siamese_lstm,
-        loader_fn=lambda dir: SentenceLSTM(dir),
+        loader_fn=lambda dir: SiameseLSTM(dir),
         model_type="Siamese LSTM",
         validate_path=True
     )
@@ -99,7 +102,7 @@ def get_siamese_lstm(languages: set[str]):
 def _load_spacy_model(model_name: str):
     return spacy.load(model_name, disable=["parser", "ner"])
 
-def get_trained_pipelines(languages: set[str]):
+def get_nlps(languages: set[str]):
     settings = get_settings()
     
     return _create_lazy_loaders(

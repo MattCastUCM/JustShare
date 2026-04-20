@@ -23,7 +23,7 @@ class ProjectPaths:
 
         self.word2vec_dir = os.path.join(self.models_dir, "spanish_word2vec")
         self._make_dirs([self.word2vec_dir])
-        self.word2vec_path = os.path.join(self.word2vec_dir, "spanish_word2vec.wordvectors")
+        self.word2vec_path = os.path.join(self.word2vec_dir, "complete.wordvectors")
 
         if self.siamese_name:
             self._update_siamese_paths(self.siamese_name)
