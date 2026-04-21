@@ -1,13 +1,12 @@
 from controllers.tfidf_vectorizer import TfIdfVectorizer
 import numpy as np
-from similarities.vector_numpy import l2_normalize
+from utils.vector_numpy import l2_normalize
 from gensim.models import KeyedVectors
 from abc import ABC, abstractmethod
 from collections import Counter
 from controllers.retriever import BaseRetriever
-from similarities.vector_numpy import cosine_similarity
-from schemas.similarity import SimilarityMatch
-from typing import Literal
+from utils.vector_numpy import cosine_similarity
+from enum import StrEnum
 
 class WeightedWord2Vec(ABC):
 	def __init__(self, wv: KeyedVectors):
@@ -159,7 +158,10 @@ class POSWeightedWord2Vec(WeightedWord2Vec):
 		result = np.array(result)
 		return l2_normalize(result)
 	
-Word2VecMethod = Literal["pos", "idf", "center"]
+class Word2VecMethod(StrEnum):
+	POS = "pos"
+	IDF = "idf"
+	CENTER = "center"
 
 class Word2VecRetriever(BaseRetriever):
 	def __init__(
@@ -186,15 +188,15 @@ class Word2VecRetriever(BaseRetriever):
 
 		kwargs = {}
 
-		if self.method == "pos":
+		if self.method == Word2VecMethod.POS:
 			self.corpus_pos = [[token.pos for token in doc] for doc in tokenized]
 			kwargs["pos_docs"] = self.corpus_pos
 			self.model = POSWeightedWord2Vec(wv)
 
-		elif self.method == "idf":
+		elif self.method == Word2VecMethod.IDF:
 			self.model = IdfWeightedWord2Vec(wv)
 
-		elif self.method == "center":
+		elif self.method == Word2VecMethod.CENTER:
 			self.model = CenterWeightedWord2Vec(wv)
 
 		else:
@@ -224,12 +226,9 @@ class Word2VecRetriever(BaseRetriever):
 
 		top_indices = np.argsort(scores)[::-1][:top_k]
 
-		return [
-			SimilarityMatch(
-				index=int(i),
-				score=float(scores[i]),
-				text=self.corpus[i],
-			)
-			for i in top_indices
-		]
-	
+		idx_arr = np.array(top_indices, dtype=np.int32)
+		score_arr = scores[top_indices].astype(np.float32)
+		text_arr = np.array([self.corpus[i] for i in top_indices], dtype=object)
+
+		return idx_arr, score_arr, text_arr
+		

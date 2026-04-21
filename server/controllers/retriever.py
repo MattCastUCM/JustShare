@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from schemas.similarity import SimilarityMatch
 
 class BaseRetriever(ABC):
     @abstractmethod
@@ -7,5 +6,5 @@ class BaseRetriever(ABC):
         pass
 
     @abstractmethod
-    def search(self, query: str, top_k: int=3) -> list[SimilarityMatch]:
+    def search(self, query: str, top_k: int=3):
         pass

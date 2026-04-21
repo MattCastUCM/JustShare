@@ -117,3 +117,19 @@ def manhattan_similarity(X: npt.ArrayLike, Y: npt.ArrayLike | None = None):
 
     distances = np.linalg.norm(X[:, None, :] - Y[None, :, :], axis=2, ord=1)
     return 1.0 / (1.0 + distances)
+
+def sigmoid(x: np.ndarray, k: float):
+    x = np.clip(x, -50, 50)
+    return 1.0 / (1.0 + np.exp(-k * x))
+
+def normalize(values: np.ndarray):
+    if values.size == 0:
+        return values
+
+    min_v = values.min()
+    max_v = values.max()
+
+    if np.isclose(max_v, min_v):
+        return np.zeros_like(values, dtype=np.float32)
+
+    return (values - min_v) / (max_v - min_v)

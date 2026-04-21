@@ -1,12 +1,14 @@
 from transformers import AutoTokenizer, AutoModel
 import torch
-from typing import Literal
 import numpy as np
-from similarities.vector_numpy import cosine_similarity
+from utils.vector_numpy import cosine_similarity
 from controllers.retriever import BaseRetriever
-from schemas.similarity import SimilarityMatch
+from enum import StrEnum
 
-PoolingMethod = Literal["mean", "max", "cls"]
+class PoolingMethod(StrEnum):
+	MEAN = "mean"
+	MAX = "max"
+	CLS = "cls"
 
 class Transformer:
 	def __init__(self, model_name: str, device: str | None = None):
@@ -67,11 +69,11 @@ class Transformer:
 			model_output = self.model(**encoded_input)
 
 		match pooling:
-			case "mean":
+			case PoolingMethod.MEAN:
 				sentence_embeddings = self.mean_pooling(model_output, encoded_input["attention_mask"])
-			case "max":
+			case PoolingMethod.MAX:
 				sentence_embeddings = self.max_pooling(model_output, encoded_input["attention_mask"])
-			case "cls":
+			case PoolingMethod.CLS:
 				sentence_embeddings = self.cls_pooling(model_output)				
 		
 		if normalize:
@@ -102,15 +104,12 @@ class TransformerRetriever(BaseRetriever):
 
 		query_embedding = self.model.encode([query], pooling=self.pooling)[0]
 
-		scores = cosine_similarity(self.embeddings, query_embedding)
+		scores = cosine_similarity(self.embeddings, query_embedding).ravel()
 		top_indices = np.argsort(scores)[::-1][:top_k]
 
-		return [
-			SimilarityMatch(
-				index=int(i),
-				score=float(scores[i]),
-				text=self.corpus[i],
-			)
-			for i in top_indices
-		]
+		idx_arr = np.array(top_indices, dtype=np.int32)
+		score_arr = scores[top_indices].astype(np.float32)
+		text_arr = np.array([self.corpus[i] for i in top_indices], dtype=object)
+
+		return idx_arr, score_arr, text_arr
 	

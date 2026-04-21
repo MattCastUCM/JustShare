@@ -1,11 +1,10 @@
 import os
 os.environ["KERAS_BACKEND"] = "torch"
 
-from similarities import vector_keras, vector_numpy
+from utils import vector_keras, vector_numpy
 from siamese_lstm.models.siamese_lstm import SiameseLSTM
 from controllers.retriever import BaseRetriever
 from keras.models import load_model
-from schemas.similarity import SimilarityMatch
 import joblib
 import numpy as np
 import torch
@@ -119,12 +118,8 @@ class LSTMRetriever(BaseRetriever):
 
         top_indices = np.argsort(scores)[::-1][:top_k]
 
-        return [
-			SimilarityMatch(
-				index=int(i),
-				score=float(scores[i]),
-				text=self.corpus[i],
-			)
-			for i in top_indices
-		]
-    
+        idx_arr = np.array(top_indices, dtype=np.int32)
+        score_arr = scores[top_indices].astype(np.float32)
+        text_arr = np.array([self.corpus[i] for i in top_indices], dtype=object)
+
+        return idx_arr, score_arr, text_arr

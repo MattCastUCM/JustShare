@@ -7,7 +7,7 @@ from controllers.jaccard import JaccardRetriever
 from controllers.transformer import Transformer, PoolingMethod, TransformerRetriever
 from controllers.siamese_lstm import LSTMRetriever, SiameseLSTM
 from services.dense_vector_engine import DenseVectorEngine
-from controllers.hybrid import HybridRetriever
+from controllers.hybrid import HybridRetriever, FusionMethod
 from spacy.language import Language
 from typing import Literal
 
@@ -95,7 +95,7 @@ class SimilarityEngine:
 
 		return retriever.search(query, top_k)
 	
-	def search_transformer(self, query: str, corpus: list[str], top_k: int, language: str, model_type: Literal["sbert", "bert"] = "sbert", pooling: PoolingMethod = "mean"):
+	def search_transformer(self, query: str, corpus: list[str], top_k: int, language: str, model_type: Literal["sbert", "bert"] = "sbert", pooling: PoolingMethod = PoolingMethod.MEAN):
 		if model_type == "sbert":
 			models = self.sberts
 		elif model_type == "bert":
@@ -107,7 +107,7 @@ class SimilarityEngine:
 
 		return retriever.search(query, top_k)
 	
-	def search_word2vec(self, query: str, corpus: list[str], top_k: int, language: str, method: Word2VecMethod = "pos"):
+	def search_word2vec(self, query: str, corpus: list[str], top_k: int, language: str, method: Word2VecMethod = Word2VecMethod.POS):
 		retriever = Word2VecRetriever(
 			word2vecs=self.word2vecs,
 			preprocessor_fn=self.preprocess_lemmas,
@@ -128,7 +128,7 @@ class SimilarityEngine:
 		retriever = engine.get_retriever(language, node_key)
 		return retriever.search(query, top_k)
 
-	def search_hybrid(self, query: str, corpus: list[str], top_k: int, language: str, model_name: str, node_key: str,):
+	def search_hybrid(self, query: str, corpus: list[str], top_k: int, language: str, model_name: str, node_key: str, fusion_method: FusionMethod):
 		sparse_retriever = TfIdfRetriever(
 			vectorizer=TfIdfVectorizer(),
 			preprocessor_fn=self.preprocess_stems
@@ -143,9 +143,7 @@ class SimilarityEngine:
 		retriever = HybridRetriever(
 			sparse=sparse_retriever,
 			dense=dense_retriever,
-			fusion_method="reciprocal_rank_fusion",
-			rrf_k=60,
-			sigmoid_k=8.0
+			fusion_method=fusion_method,
 		)
 
 		return retriever.search(query, top_k)

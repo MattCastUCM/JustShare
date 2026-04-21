@@ -1,15 +1,12 @@
 from collections import Counter
 import numpy as np
-from similarities.vector_numpy import l2_normalize, cosine_similarity
-from typing import Literal, Optional
+from utils.vector_numpy import l2_normalize, cosine_similarity
 from controllers.retriever import BaseRetriever
-from schemas.similarity import SimilarityMatch
 
 class TfIdfVectorizer:
-	def __init__(self, use_idf: bool = True, norm: Optional[Literal["l2"]] = "l2", sublinear_tf: bool = True, smooth_idf: bool = True):
+	def __init__(self, use_idf: bool = True, sublinear_tf: bool = True, smooth_idf: bool = True):
 		self.fitted = False
 		self.use_idf = use_idf
-		self.norm = norm
 		self.sublinear_tf = sublinear_tf
 		self.smooth_idf = smooth_idf
 
@@ -73,7 +70,7 @@ class TfIdfVectorizer:
 
 		return self
 	
-	def transform(self, tokenized_docs: list[list[str]]):
+	def transform(self, tokenized_docs: list[list[str]], normalize: bool=True):
 		if not self.fitted:
 			raise ValueError("Vectorizer not fitted. Call 'fit' first.")
 		
@@ -83,7 +80,7 @@ class TfIdfVectorizer:
 			tf = self.calculate_term_frequency(tokens)
 			X[i] = tf * self.idf
 
-		if self.norm == "l2":
+		if normalize:
 			result = l2_normalize(X)
 
 		return result
@@ -111,31 +108,28 @@ class TfIdfVectorizer:
 		return self.vocab
 
 class TfIdfRetriever(BaseRetriever):
-    def __init__(self, vectorizer: TfIdfVectorizer, preprocessor_fn):
-        self.vectorizer = vectorizer
-        self.preprocess = preprocessor_fn
+	def __init__(self, vectorizer: TfIdfVectorizer, preprocessor_fn):
+		self.vectorizer = vectorizer
+		self.preprocess = preprocessor_fn
 
-    def fit(self, corpus: list[str], language: str):
-        self.corpus = corpus
-        self.language = language
+	def fit(self, corpus: list[str], language: str):
+		self.corpus = corpus
+		self.language = language
 
-        self.tokenized = [self.preprocess(doc, language) for doc in corpus]
-        self.doc_vectors = self.vectorizer.fit_transform(self.tokenized)
+		self.tokenized = [self.preprocess(doc, language) for doc in corpus]
+		self.doc_vectors = self.vectorizer.fit_transform(self.tokenized)
 
-        return self
+		return self
 
-    def search(self, query: str, top_k: int=3):
-        tokens = self.preprocess(query, self.language)
-        query_embedding = self.vectorizer.transform([tokens])[0]
+	def search(self, query: str, top_k: int=3):
+		tokens = self.preprocess(query, self.language)
+		query_embedding = self.vectorizer.transform([tokens])[0]
 
-        scores = cosine_similarity(self.doc_vectors, query_embedding)
-        top_indices = np.argsort(scores)[::-1][:top_k]
+		scores = cosine_similarity(self.doc_vectors, query_embedding).ravel()
+		top_indices = np.argsort(scores)[::-1][:top_k]
 
-        return [
-			SimilarityMatch(
-				index=int(i),
-				score=float(scores[i]),
-				text=self.corpus[i],
-			)
-			for i in top_indices
-		]
+		idx_arr = np.array(top_indices, dtype=np.int32)
+		score_arr = scores[top_indices].astype(np.float32)
+		text_arr = np.array([self.corpus[i] for i in top_indices], dtype=object)
+
+		return idx_arr, score_arr, text_arr

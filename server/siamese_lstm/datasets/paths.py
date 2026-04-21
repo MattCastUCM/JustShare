@@ -2,8 +2,9 @@ import os
 from typing import Optional
 
 class ProjectPaths:
-    def __init__(self, base_dir: str="../", siamese_name: Optional[str]=None):
-        self.base_dir = base_dir
+    def __init__(self, data_dir: str="./data", models_dir: str="../models", siamese_name: Optional[str]=None):
+        self.data_dir = data_dir
+        self.models_dir = models_dir
         self.siamese_name = siamese_name
         self._setup_paths()
 
@@ -12,18 +13,15 @@ class ProjectPaths:
             os.makedirs(dir, exist_ok=True)
 
     def _setup_paths(self):
-        self.data_dir = os.path.join(self.base_dir, "data")
         self.raw_dir = os.path.join(self.data_dir, "raw")
         self.processed_dir = os.path.join(self.data_dir, "processed")
         self.augmented_dir = os.path.join(self.data_dir, "augmented")
         self._make_dirs([self.raw_dir, self.processed_dir, self.augmented_dir])
 
-        self.models_dir = os.path.join(self.base_dir, "models")
         self._make_dirs([self.models_dir])
-
         self.word2vec_dir = os.path.join(self.models_dir, "spanish_word2vec")
         self._make_dirs([self.word2vec_dir])
-        self.word2vec_path = os.path.join(self.word2vec_dir, "complete.wordvectors")
+        self.word2vec_path = os.path.join(self.word2vec_dir, "word2vec.bin")
 
         if self.siamese_name:
             self._update_siamese_paths(self.siamese_name)

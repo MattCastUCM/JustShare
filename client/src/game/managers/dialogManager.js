@@ -298,20 +298,32 @@ export default class DialogManager {
         }
     }
 
-    async checkSimilarity(corpus, text, method) {
+    async checkSimilarity(corpus, text, method, node_key) {
         const currentLanguage = this.translatorManager.getCurrentLanguage();
 
-        const body = {
-            corpus: corpus,
-            text: text,
-            method: method,
+        let body = {
+            query: text,
             language: currentLanguage,
             top_k: 1
+        };
+
+        if (method === "sbert" || method === "bert") {
+            body.node_key = node_key;
+        } 
+        else if (method === "hybrid") {
+            body = {
+                ...body,
+                corpus,
+                node_key
+            };
+        } 
+        else {
+            body.corpus = corpus;
         }
 
         const request = {
             baseURL: import.meta.env.VITE_ML_BASE_URL,
-            url: "/inference/similarity",
+            url: `/similarity/${method}`,
             method: "post",
             headers: {
                 "Content-Type": "application/json"
@@ -329,7 +341,7 @@ export default class DialogManager {
 
     async processSimilarityNode(node, text) {
         try {
-            const result = await this.checkSimilarity(node.choices, text, node.method)
+            const result = await this.checkSimilarity(node.choices, text, node.method, "")
             const data = result.data;
             const match = data.matches[0];
 

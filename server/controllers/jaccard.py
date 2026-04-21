@@ -1,5 +1,4 @@
 from controllers.retriever import BaseRetriever
-from schemas.similarity import SimilarityMatch
 import numpy as np
 
 class JaccardRetriever(BaseRetriever):
@@ -35,11 +34,8 @@ class JaccardRetriever(BaseRetriever):
 
         top_indices = np.argsort(scores)[::-1][:top_k]
 
-        return [
-			SimilarityMatch(
-				index=int(i),
-				score=float(scores[i]),
-				text=self.corpus[i],
-			)
-			for i in top_indices
-		]
+        idx_arr = np.array(top_indices, dtype=np.int32)
+        score_arr = scores[top_indices]
+        text_arr = np.array([self.corpus[i] for i in top_indices], dtype=object)
+
+        return idx_arr, score_arr, text_arr

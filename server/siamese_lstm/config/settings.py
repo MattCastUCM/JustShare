@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 	siamese_name: str = "siamese_lstm"
 
 	model_config = SettingsConfigDict(
-		env_file=".env.model",
+		env_file=".env.lstm",
 		env_file_encoding="utf-8",
 		case_sensitive=False,
 	)

@@ -24,7 +24,7 @@
         },
         "thanks2": {
             "type": "similarity",
-            "method": "sentence_transformers",
+            "method": "sbert",
             "character": "player",
             "choices": [
                 {

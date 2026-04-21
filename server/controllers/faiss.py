@@ -1,6 +1,5 @@
-from similarities.vector_numpy import l2_normalize
+from utils.vector_numpy import l2_normalize
 from controllers.retriever import BaseRetriever
-from schemas.similarity import SimilarityMatch
 from typing import Callable
 import numpy as np
 import json
@@ -108,18 +107,23 @@ class FaissRetriever(BaseRetriever):
 		
 		scores, indices = self.index.search(query_embedding, top_k)
 
-		results: list[SimilarityMatch] = []
+		idx_list: list[int] = []
+		score_list: list[float] = []
+		text_list: list[str] = []
+
 		for idx, score in zip(indices[0], scores[0]):
 			if idx >= 0:  # FAISS returns -1 for missing results
-				metadata = self.metadata[idx]
-				match = SimilarityMatch(
-					index=metadata["index"],
-					score=float(score),
-					text=metadata["text"]
-				)
-				results.append(match)
+				meta = self.metadata[idx]
 
-		return results
+				idx_list.append(meta["index"])
+				score_list.append(float(score))
+				text_list.append(meta["text"])
+
+		return (
+			np.array(idx_list, dtype=np.int32),
+			np.array(score_list, dtype=np.float32),
+			np.array(text_list, dtype=object)
+		)
 
 	def benchmark(self, queries: list[str], top_k: int=5):
 		"""Benchmark search performance."""
@@ -138,7 +142,7 @@ class FaissRetriever(BaseRetriever):
 		}
 	
 	def save(self, dir: str):
-		index_path = os.path.join(dir, "index.faiss")
+		index_path = os.path.join(dir, "index.bin")
 		faiss.write_index(self.index, index_path)
 
 		metadata_path = os.path.join(dir, "metadata.pkl")
@@ -151,7 +155,7 @@ class FaissRetriever(BaseRetriever):
 			
 	@classmethod
 	def load(cls, model: Callable[[list[str]], np.ndarray], dir: str):
-		index_path = os.path.join(dir, "index.faiss")
+		index_path = os.path.join(dir, "index.bin")
 		metadata_path = os.path.join(dir, "metadata.pkl")
 
 		if not os.path.exists(index_path):

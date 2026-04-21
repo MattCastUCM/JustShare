@@ -1,7 +1,9 @@
 {
     "jaccard": 0.35,
     "tfidf": 0.75,
-    "sentence_transformers": 0.65,
+    "sbert": 0.65,
     "bert": 0.85,
-    "word2vec": 0.70
+    "word2vec": 0.70,
+    "lstm": 0.70,
+    "hybrid": 0.50
 }

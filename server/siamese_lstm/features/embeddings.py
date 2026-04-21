@@ -2,7 +2,7 @@ from gensim.models import KeyedVectors
 import numpy as np
 
 def load_gensim_embeddings(path: str, word2idx: dict, embed_dim: int):
-	wv = KeyedVectors.load(path, mmap="r")
+	wv = KeyedVectors.load_word2vec_format(path, binary=True)
 	embedding_matrix = np.random.uniform(-0.05, 0.05, (len(word2idx), embed_dim))
 	# El índice 0 se utiliza como padding token, por lo que tiene un vector de ceros, para indicar que no contribuye
 	embedding_matrix[0] = 0
