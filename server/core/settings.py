@@ -5,8 +5,8 @@ from functools import lru_cache
 class Settings(BaseSettings):
     languages: set[str] = Field(default_factory=set)
 
-    bert_models: dict[str, str] = Field(default_factory=dict)
-    sentence_transformers: dict[str, str] = Field(default_factory=dict)
+    bert: dict[str, str] = Field(default_factory=dict)
+    sbert: dict[str, str] = Field(default_factory=dict)
     word2vec: dict[str, str] = Field(default_factory=dict)
     spacy: dict[str, str] = Field(default_factory=dict)
     siamese_lstm: dict[str, str] = Field(default_factory=dict)

@@ -35,7 +35,7 @@ class TextPreprocessor:
 		# Eliminar URLs
 		text = re.sub(r"http\S+|www\S+", " ", text)
 
-		# Eliminar todo excepto letras de cualquier idioma (cualquier idioma) y números
+		# Eliminar todo excepto letras de cualquier idioma y números
 		text = re.sub(r"[^\w\s]", " ", text, flags=re.UNICODE)
 		# Eliminar números
 		text = re.sub(r"\d+", " ", text)

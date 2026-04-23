@@ -1,8 +1,7 @@
 from transformers import AutoTokenizer, AutoModel
 import torch
-import numpy as np
-from utils.vector_numpy import cosine_similarity
-from controllers.retriever import BaseRetriever
+from typing import Optional
+from controllers.encoders.encoder import Encoder
 from enum import StrEnum
 
 class PoolingMethod(StrEnum):
@@ -10,14 +9,18 @@ class PoolingMethod(StrEnum):
 	MAX = "max"
 	CLS = "cls"
 
-class Transformer:
-	def __init__(self, model_name: str, device: str | None = None):
+class Transformer(Encoder):
+	name = "transformer"
+
+	def __init__(self, model_name: str, device: Optional[str] = None, pooling_method: PoolingMethod = PoolingMethod.MEAN):
 		self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
 		print("Using device:", self.device)
 
 		self.tokenizer = AutoTokenizer.from_pretrained(model_name)
 		self.model = AutoModel.from_pretrained(model_name).to(self.device)
 		self.model.eval()
+
+		self.pooling_method = pooling_method
 
 	# Mean pooling captura el contenido semántico general promediando todos los word embeddings.
 	def mean_pooling(self, model_output, attention_mask):
@@ -55,8 +58,11 @@ class Transformer:
 			return model_output["pooler_output"]
 		else:
 			return model_output["last_hidden_state"][:, 0]
+		
+	def fit(self, sentences: list[str]):
+		pass
 
-	def encode(self, sentences: list[str], pooling: PoolingMethod, normalize: bool=True):
+	def _transform(self, sentences: list[str]):
 		# Modificar la tokenización para aplicar "truncation" (cortar la oración si es más larga que la longitud máxima) y "padding" (agregar [PAD] tokens al final de la oración).
 		encoded_input = self.tokenizer(
 			sentences,
@@ -68,48 +74,12 @@ class Transformer:
 		with torch.no_grad():
 			model_output = self.model(**encoded_input)
 
-		match pooling:
-			case PoolingMethod.MEAN:
-				sentence_embeddings = self.mean_pooling(model_output, encoded_input["attention_mask"])
-			case PoolingMethod.MAX:
-				sentence_embeddings = self.max_pooling(model_output, encoded_input["attention_mask"])
-			case PoolingMethod.CLS:
-				sentence_embeddings = self.cls_pooling(model_output)				
-		
-		if normalize:
-			sentence_embeddings = torch.nn.functional.normalize(sentence_embeddings, p=2, dim=1)
+			match self.pooling_method:
+				case PoolingMethod.MEAN:
+					sentence_embeddings = self.mean_pooling(model_output, encoded_input["attention_mask"])
+				case PoolingMethod.MAX:
+					sentence_embeddings = self.max_pooling(model_output, encoded_input["attention_mask"])
+				case PoolingMethod.CLS:
+					sentence_embeddings = self.cls_pooling(model_output)			
 
-		return sentence_embeddings.cpu().numpy()
-
-class TransformerRetriever(BaseRetriever):
-	def __init__(self, models: dict[str, Transformer], pooling: PoolingMethod="mean"):
-		self.models = models
-		self.pooling: PoolingMethod = pooling
-
-	def fit(self, corpus: list[str], language: str):
-		self.corpus = corpus
-		
-		model = self.models.get(language)
-		if model is None:
-			raise ValueError(f"No Transformer found for language '{language}'")
-		
-		self.model = model
-
-		self.embeddings = model.encode(corpus, pooling=self.pooling)
-		return self
-
-	def search(self, query: str, top_k: int=3):
-		if self.embeddings is None:
-			raise ValueError("Retriever not fitted. Call 'fit' first.")
-
-		query_embedding = self.model.encode([query], pooling=self.pooling)[0]
-
-		scores = cosine_similarity(self.embeddings, query_embedding).ravel()
-		top_indices = np.argsort(scores)[::-1][:top_k]
-
-		idx_arr = np.array(top_indices, dtype=np.int32)
-		score_arr = scores[top_indices].astype(np.float32)
-		text_arr = np.array([self.corpus[i] for i in top_indices], dtype=object)
-
-		return idx_arr, score_arr, text_arr
-	
+			return sentence_embeddings.detach().cpu().numpy()

@@ -299,11 +299,11 @@ export default class DialogManager {
     }
 
     async checkSimilarity(corpus, text, method, node_key) {
-        const currentLanguage = this.translatorManager.getCurrentLanguage();
+        const language = this.translatorManager.getCurrentLanguage();
 
         let body = {
             query: text,
-            language: currentLanguage,
+            language: language,
             top_k: 1
         };
 
@@ -344,12 +344,18 @@ export default class DialogManager {
             const result = await this.checkSimilarity(node.choices, text, node.method, "")
             const data = result.data;
             const match = data.matches[0];
+            
+            const thresholds = this.cache.json.get("similarityThresholds")
+            
+            if (method != "hybrid" && match.score >= thresholds[node.method]) {
+                // TRACKER EVENT
+                const choice = node.choices[match.index];
 
-            // TRACKER EVENT
-            const choice = node.choices[match.index];
-            this.trackerManager.sendWrittenResponse(node.fullId, text, node.method, node.threshold, match.score, choice, data.processing_time)
+                this.trackerManager.sendWrittenResponse(node.fullId, text, node.method, node.threshold, match.score, choice, data.processing_time)
 
-            if (match.score >= node.threshold) {
+                return match.index;
+            }
+            else if (match.sparse_score > thresholds.tfidf && match.dense_score > thresholds.sbert) {
                 return match.index;
             }
         }

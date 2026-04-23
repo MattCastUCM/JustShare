@@ -1,10 +1,13 @@
 from collections import Counter
 import numpy as np
-from utils.vector_numpy import l2_normalize, cosine_similarity
-from controllers.retriever import BaseRetriever
+from controllers.encoders.encoder import Encoder
+from typing import Callable
 
-class TfIdfVectorizer:
-	def __init__(self, use_idf: bool = True, sublinear_tf: bool = True, smooth_idf: bool = True):
+class TfIdfVectorizer(Encoder):
+	name = "tfidf"
+
+	def __init__(self, preprocessor_fn: Callable[[str], list[str]], use_idf: bool = True, sublinear_tf: bool = True, smooth_idf: bool = True):
+		self.preprocessor = preprocessor_fn
 		self.fitted = False
 		self.use_idf = use_idf
 		self.sublinear_tf = sublinear_tf
@@ -51,7 +54,9 @@ class TfIdfVectorizer:
 				idf[i] = np.log(n_docs / (doc_freq + 1)) + 1
 		return idf
 
-	def fit(self, tokenized_docs: list[list[str]]):
+	def fit(self, texts: list[str]):
+		tokenized_docs = [self.preprocessor(text) for text in texts]
+
 		n_docs = len(tokenized_docs)
 
 		all_terms = set()
@@ -70,9 +75,11 @@ class TfIdfVectorizer:
 
 		return self
 	
-	def transform(self, tokenized_docs: list[list[str]], normalize: bool=True):
+	def _transform(self, texts: list[str]):
 		if not self.fitted:
 			raise ValueError("Vectorizer not fitted. Call 'fit' first.")
+		
+		tokenized_docs = [self.preprocessor(text) for text in texts]
 		
 		X = np.zeros((len(tokenized_docs), len(self.terms)))
 
@@ -80,15 +87,7 @@ class TfIdfVectorizer:
 			tf = self.calculate_term_frequency(tokens)
 			X[i] = tf * self.idf
 
-		if normalize:
-			result = l2_normalize(X)
-
-		return result
-
-	def fit_transform(self, tokenized_docs: list[list[str]]):
-		self.fit(tokenized_docs)
-		result = self.transform(tokenized_docs)
-		return result
+		return X
 	
 	def get_feature_names(self):
 		if not self.fitted:
@@ -106,30 +105,3 @@ class TfIdfVectorizer:
 		if not self.fitted:
 			raise ValueError("Vectorizer not fitted.")
 		return self.vocab
-
-class TfIdfRetriever(BaseRetriever):
-	def __init__(self, vectorizer: TfIdfVectorizer, preprocessor_fn):
-		self.vectorizer = vectorizer
-		self.preprocess = preprocessor_fn
-
-	def fit(self, corpus: list[str], language: str):
-		self.corpus = corpus
-		self.language = language
-
-		self.tokenized = [self.preprocess(doc, language) for doc in corpus]
-		self.doc_vectors = self.vectorizer.fit_transform(self.tokenized)
-
-		return self
-
-	def search(self, query: str, top_k: int=3):
-		tokens = self.preprocess(query, self.language)
-		query_embedding = self.vectorizer.transform([tokens])[0]
-
-		scores = cosine_similarity(self.doc_vectors, query_embedding).ravel()
-		top_indices = np.argsort(scores)[::-1][:top_k]
-
-		idx_arr = np.array(top_indices, dtype=np.int32)
-		score_arr = scores[top_indices].astype(np.float32)
-		text_arr = np.array([self.corpus[i] for i in top_indices], dtype=object)
-
-		return idx_arr, score_arr, text_arr

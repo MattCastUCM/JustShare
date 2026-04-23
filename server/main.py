@@ -3,13 +3,31 @@ from fastapi import FastAPI
 from routers.inference import router
 from core.settings import get_settings
 from fastapi.middleware.cors import CORSMiddleware
-from utils.misc import build_similarity_engine
+from services.similarity_engine import SimilarityEngine
+from services.multilingual_manager import MultilingualManager
+from services.encoder_factory import EncoderFactory
+from services.model_registry import ModelRegistry
+from core.settings import Settings
 import uvicorn
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 	base_dir = "./faiss_data"
-	similarity_engine = build_similarity_engine(base_dir)
+
+	settings = Settings()
+	languages = settings.languages
+
+	model_registry = ModelRegistry(languages)
+	model_registry.build()
+
+	encoder_factory = EncoderFactory(model_registry)
+	multilingual = MultilingualManager(encoder_factory, base_dir)
+	model_types = model_registry.active_model_types()
+
+	multilingual.load_all_node_engines(languages, model_types)
+
+	similarity_engine = SimilarityEngine(multilingual)
+
 	yield {
 		"similarity_engine": similarity_engine
 	}

@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Annotated
 from core.settings import get_settings
+from typing import Union
 
 settings = get_settings()
 
@@ -52,9 +53,12 @@ class SimilarityMatch(BaseModel):
     score: float
     text: str
 
+class HybridMatch(SimilarityMatch):
+    sparse_score: float
+    dense_score: float
+
 class SimilarityResponse(BaseModel):
-    
-    matches: list[SimilarityMatch]
+    matches: list[Union[SimilarityMatch, HybridMatch]]
     processing_time: float = Field(
         ...,
         ge=0,

@@ -367,10 +367,10 @@ export default class BaseScene extends Scene {
 
             node.method = fileObj[id].method;
             node.threshold = fileObj[id].threshold;
-            if (!node.threshold) {
-                const thresholds = this.cache.json.get("similarityThresholds")
-                node.threshold = thresholds[node.method];
-            }
+            // if (!node.threshold) {
+                // const thresholds = this.cache.json.get("similarityThresholds")
+                // node.threshold = thresholds[node.method];
+            // }
             node.character = fileObj[id].character;
 
             // Se obtienen las opciones del archivo de textos traducidos

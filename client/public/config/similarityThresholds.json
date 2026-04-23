@@ -4,6 +4,5 @@
     "sbert": 0.65,
     "bert": 0.85,
     "word2vec": 0.70,
-    "lstm": 0.70,
-    "hybrid": 0.50
+    "lstm": 0.70
 }
