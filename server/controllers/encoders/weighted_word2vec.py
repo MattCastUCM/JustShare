@@ -4,6 +4,8 @@ from gensim.models import KeyedVectors
 from controllers.encoders.encoder import Encoder
 from collections import Counter
 from typing import Callable
+from abc import abstractmethod
+from utils.vector_numpy import l2_normalize
 
 class WeightedWord2Vec(Encoder):
 	name = "word2vec"
@@ -24,6 +26,16 @@ class WeightedWord2Vec(Encoder):
 				vectors.append(np.zeros(vector_size))
 		vectors = np.array(vectors)
 		return weights @ vectors
+	
+	@abstractmethod
+	def _transform(self, texts: list[str]):
+		raise NotImplementedError()
+	
+	def transform(self, texts: list[str], normalize: bool = True):
+		X = self._transform(texts)
+		if normalize:
+			return l2_normalize(X)
+		return X
 	
 class IdfWeightedWord2Vec(WeightedWord2Vec):
 	def __init__(self, wv: KeyedVectors, tokenizer_fn: Callable[[str], list[str]]):

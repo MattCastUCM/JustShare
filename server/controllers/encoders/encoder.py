@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from utils.vector_numpy import l2_normalize
 from typing import Optional
 
 class Encoder(ABC):
@@ -13,14 +12,8 @@ class Encoder(ABC):
 		raise NotImplementedError
 	
 	@abstractmethod
-	def _transform(self, texts: list[str]):
-		raise NotImplementedError()
-
 	def transform(self, texts: list[str], normalize: bool = True):
-		X = self._transform(texts)
-		if normalize:
-			X = l2_normalize(X)
-		return X
+		raise NotImplementedError()
 
 	def fit_transform(self, texts: list[str]):
 		self.fit(texts)

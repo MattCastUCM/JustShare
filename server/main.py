@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from services.similarity_engine import SimilarityEngine
 from services.multilingual_manager import MultilingualManager
 from services.encoder_factory import EncoderFactory
+from services.calibrator_factory import CalibratorFactory
 from services.model_registry import ModelRegistry
 from core.settings import Settings
 import uvicorn
@@ -18,11 +19,13 @@ async def lifespan(app: FastAPI):
 	languages = settings.languages
 
 	model_registry = ModelRegistry(languages)
-	model_registry.build()
+	# model_registry.build()
+	model_registry.build_spacy()
 	model_registry.resolve_all()
 
 	encoder_factory = EncoderFactory(model_registry)
-	multilingual = MultilingualManager(encoder_factory, base_dir)
+	calibrator_factory = CalibratorFactory(model_registry)
+	multilingual = MultilingualManager(encoder_factory, calibrator_factory, base_dir)
 	model_types = model_registry.active_model_types()
 
 	multilingual.load_all_node_engines(languages, model_types)

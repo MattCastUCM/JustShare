@@ -34,7 +34,7 @@ class SimilarityEngine:
             model_type=method,
             similarity_fn=similarity_fn,
         )
-
+        
         if corpus is not None:
             retriever.fit(corpus)
 

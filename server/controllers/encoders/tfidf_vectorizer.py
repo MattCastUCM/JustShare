@@ -2,6 +2,7 @@ from collections import Counter
 import numpy as np
 from controllers.encoders.encoder import Encoder
 from typing import Callable
+from utils.vector_numpy import l2_normalize
 
 class TfIdfVectorizer(Encoder):
 	name = "tfidf"
@@ -76,7 +77,7 @@ class TfIdfVectorizer(Encoder):
 
 		return self
 	
-	def _transform(self, texts: list[str]):
+	def transform(self, texts: list[str], normalize: bool = True):
 		if not self.fitted:
 			raise ValueError("Vectorizer not fitted. Call 'fit' first.")
 		
@@ -88,6 +89,8 @@ class TfIdfVectorizer(Encoder):
 			tf = self.calculate_term_frequency(tokens)
 			X[i] = tf * self.idf
 
+		if normalize:
+			return l2_normalize(X)
 		return X
 	
 	def get_feature_names(self):

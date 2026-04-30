@@ -169,7 +169,6 @@ class FaissRetriever(Retriever):
 		
 		instance.index = index
 		instance.metadata = metadata
-		print(instance.metadata)
 		instance.fitted = True
 
 		return instance

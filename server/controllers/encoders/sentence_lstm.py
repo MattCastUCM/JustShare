@@ -8,6 +8,7 @@ from keras.models import load_model
 import numpy as np
 import torch
 from controllers.encoders.encoder import Encoder
+from utils.vector_numpy import l2_normalize
 
 class SentenceLSTM(Encoder):
     name = "lstm"
@@ -63,12 +64,15 @@ class SentenceLSTM(Encoder):
     def fit(self, sentences: list[str]):
         pass
 
-    def _transform(self, sentences: list[str]):
+    def transform(self, sentences: list[str], normalize: bool = True):
         with torch.no_grad():
             sentence_tensor = self.vectorizer(sentences).to(self.device)
             embeddings = self.head_model(sentence_tensor)
 
-            return embeddings.detach().cpu().numpy()
+            vec = embeddings.detach().cpu().numpy()
+            if normalize:
+                return l2_normalize(vec)
+            return vec
 
     def predict_similarity(self, sentences_1: list[str], sentences_2: list[str]):
         with torch.no_grad():

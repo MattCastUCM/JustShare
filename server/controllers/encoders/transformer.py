@@ -3,6 +3,7 @@ import torch
 from typing import Optional
 from controllers.encoders.encoder import Encoder
 from enum import StrEnum
+from utils.vector_numpy import l2_normalize
 
 class PoolingMethod(StrEnum):
 	MEAN = "mean"
@@ -63,7 +64,7 @@ class Transformer(Encoder):
 	def fit(self, sentences: list[str]):
 		pass
 
-	def _transform(self, sentences: list[str]):
+	def transform(self, sentences: list[str], normalize: bool = True):
 		# Modificar la tokenización para aplicar "truncation" (cortar la oración si es más larga que la longitud máxima) y "padding" (agregar [PAD] tokens al final de la oración).
 		encoded_input = self.tokenizer(
 			sentences,
@@ -83,4 +84,7 @@ class Transformer(Encoder):
 				case PoolingMethod.CLS:
 					sentence_embeddings = self.cls_pooling(model_output)			
 
-			return sentence_embeddings.detach().cpu().numpy()
+			vec = sentence_embeddings.detach().cpu().numpy()
+			if normalize:
+				return l2_normalize(vec)
+			return vec

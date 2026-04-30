@@ -19,7 +19,7 @@ class LazyLoader(Generic[T]):
 			except Exception as e:
 				logger.exception(f"Failed to load {self.model_type} for '{self.language}': {e}")
 				raise
-			logger.debug(f"Successfully loaded {self.model_type} for '{self.language}'")
+			logger.success(f"Successfully loaded {self.model_type} for '{self.language}'")
 		return self._model
 
 	def __repr__(self):

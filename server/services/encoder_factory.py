@@ -4,6 +4,7 @@ from controllers.encoders.weighted_word2vec import POSWeightedWord2Vec
 from controllers.encoders.tfidf_vectorizer import TfIdfVectorizer
 from controllers.encoders.jaccard import JaccardEncoder
 from functools import lru_cache, partial
+from controllers.encoders.encoder import Encoder
 
 class EncoderFactory:
 	def __init__(self, registry: ModelRegistry, min_n: int = 1, max_n: int = 2):
@@ -70,7 +71,7 @@ class EncoderFactory:
 	def _bind_preprocessor(self, fn, language: str):
 		return partial(fn, language=language)
 
-	def get(self, model_type: str, language: str):
+	def get(self, model_type: str, language: str) -> Encoder:
 		model = self.registry.get_dense(model_type, language)
 
 		if model_type == POSWeightedWord2Vec.name:
@@ -87,7 +88,8 @@ class EncoderFactory:
 		
 		if model_type == JaccardEncoder.name:
 			return JaccardEncoder(
-				self._bind_preprocessor(self.preprocess_stems, language)
+				self._bind_preprocessor(self.preprocess_stems, language),
+
 			)
 		
 		return model

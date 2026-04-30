@@ -366,7 +366,7 @@ export default class BaseScene extends Scene {
             node = new SimilarityNode();
 
             node.method = fileObj[id].method;
-            node.threshold = fileObj[id].threshold;
+            // node.threshold = fileObj[id].threshold;
             // if (!node.threshold) {
                 // const thresholds = this.cache.json.get("similarityThresholds")
                 // node.threshold = thresholds[node.method];

@@ -301,25 +301,34 @@ export default class DialogManager {
     async checkSimilarity(corpus, text, method, node_key) {
         const language = this.translatorManager.getCurrentLanguage();
 
-        let body = {
+        const baseBody = {
             query: text,
             language: language,
             top_k: 1
         };
 
-        if (method === "sbert" || method === "bert") {
-            body.node_key = node_key;
-        } 
-        else if (method === "hybrid") {
-            body = {
-                ...body,
-                corpus,
-                node_key
-            };
-        } 
-        else {
-            body.corpus = corpus;
+        if (method === "sbert") {
+            methodConfig = {
+                node_key: node_key
+            }
         }
+        else if (method === "hybrid") {
+            method_config = {
+                corpus: corpus,
+                node_key: node_key,
+                methods: ["tfidf", "sbert"]
+            }
+        }
+        else {
+            methodConfig = {
+                corpus: corpus
+            }
+        }
+
+        const body = {
+            ...baseBody,
+            ...(methodConfig[method] || methodConfig.default)
+        };
 
         const request = {
             baseURL: import.meta.env.VITE_ML_BASE_URL,
@@ -341,29 +350,42 @@ export default class DialogManager {
 
     async processSimilarityNode(node, text) {
         try {
-            const result = await this.checkSimilarity(node.choices, text, node.method, "")
-            const data = result.data;
-            const match = data.matches[0];
-            
+            const { data } = await this.checkSimilarity(node.choices, text, node.method, "")
+
+            const match = data?.matches?.[0];
+            if (!match) {
+                return node.choices.length
+            }
+
             const thresholds = this.cache.json.get("similarityThresholds")
-            
-            if (method != "hybrid" && match.score >= thresholds[node.method]) {
-                // TRACKER EVENT
-                const choice = node.choices[match.index];
+            const scores = match.score;
+            const choice = node.choices[match.index];
 
-                this.trackerManager.sendWrittenResponse(node.fullId, text, node.method, node.threshold, match.score, choice, data.processing_time)
+            let exceedThresholds = true
 
+            for (const [method, score] of Object.entries(scores) && exceedThresholds) {
+                const threshold = thresholds[method] ?? 0
+
+                if (score > 0) {
+                    // TRACKER EVENT
+                    this.trackerManager.sendWrittenResponse(node.fullId, text, method, thresholds, score, choice, data.processing_time)
+
+                    if (score < threshold) {
+                        exceedThresholds = false
+                    }
+                }
+            }
+
+            if (exceedThresholds) {
                 return match.index;
             }
-            else if (match.sparse_score > thresholds.tfidf && match.dense_score > thresholds.sbert) {
-                return match.index;
-            }
+
+            return exceedThresholds ? match.index : node.choices.length
         }
         catch (error) {
-            console.error(error);
+            console.error("processSimilarity error:", error);
+            return node.choices.length;
         }
-        // Si se produce un error, devuelve el índice del nodo por defecto
-        return node.choices.length;
     }
 
     processThought() {

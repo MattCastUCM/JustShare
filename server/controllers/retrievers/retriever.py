@@ -20,7 +20,7 @@ class Retriever(ABC):
     
     def fit(self, corpus: list[str]):
         self._fit(corpus)
-        self._fitted = True
+        self.fitted = True
         return self
     
     def _postprocess_scores(self, scores: np.ndarray):
