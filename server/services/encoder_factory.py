@@ -13,7 +13,7 @@ class EncoderFactory:
 
 	@lru_cache(maxsize=32)
 	def get_preprocessor(self, language: str):
-		spacy = self.registry.get("spacy", language)
+		spacy = self.registry.get_spacy(language)
 		return TextPreprocessor(language, spacy)
 
 	def preprocess_stems(self, text: str, language: str):
@@ -71,7 +71,7 @@ class EncoderFactory:
 		return partial(fn, language=language)
 
 	def get(self, model_type: str, language: str):
-		model = self.registry.get(model_type, language)
+		model = self.registry.get_dense(model_type, language)
 
 		if model_type == POSWeightedWord2Vec.name:
 			return POSWeightedWord2Vec(

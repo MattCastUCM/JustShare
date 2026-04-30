@@ -5,7 +5,6 @@ from typing import Optional
 from utils import vector_keras
 from siamese_lstm.models.siamese_lstm import SiameseLSTM
 from keras.models import load_model
-import joblib
 import numpy as np
 import torch
 from controllers.encoders.encoder import Encoder
@@ -14,6 +13,7 @@ class SentenceLSTM(Encoder):
     name = "lstm"
 
     def __init__(self, model_dir: str, device: Optional[str] = None):
+        super().__init__()
         self.model_dir = model_dir
 
         self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
@@ -25,7 +25,6 @@ class SentenceLSTM(Encoder):
         self.model.eval()
         self.head_model = self.model.get_head_model().to(self.device)
         self.head_model.eval()
-        self.iso_regression = self._load_iso_regression()
 
     def _load_file(self, filename: str):
         path = os.path.join(self.model_dir, filename)
@@ -61,10 +60,6 @@ class SentenceLSTM(Encoder):
 
         return model.to(self.device)
     
-    def _load_iso_regression(self):
-        path = self._load_file("iso.joblib")
-        return joblib.load(path)
-    
     def fit(self, sentences: list[str]):
         pass
 
@@ -81,12 +76,7 @@ class SentenceLSTM(Encoder):
             tensor2 = self.vectorizer(sentences_2).to(self.device)
 
             similarity = self.model([tensor1, tensor2])
-            similarity = similarity.detach().cpu().numpy()
-
-            return self.calibrate(similarity)
-    
-    def calibrate(self, similarity: np.ndarray):
-        return self.iso_regression.predict(similarity)
+            return similarity.detach().cpu().numpy()    
     
     def print_device(self):
         print("Head model device:", next(self.head_model.parameters()).device)

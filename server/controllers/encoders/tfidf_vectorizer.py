@@ -7,6 +7,7 @@ class TfIdfVectorizer(Encoder):
 	name = "tfidf"
 
 	def __init__(self, preprocessor_fn: Callable[[str], list[str]], use_idf: bool = True, sublinear_tf: bool = True, smooth_idf: bool = True):
+		super().__init__()
 		self.preprocessor = preprocessor_fn
 		self.fitted = False
 		self.use_idf = use_idf

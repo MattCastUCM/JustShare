@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
 from controllers.encoders.encoder import Encoder
+from typing import Callable, Optional
+from services.calibrator_factory import Calibrator
+import numpy as np
 
 class Retriever(ABC):
-    def __init__(self, encoder: Encoder, calibrator=None):
+    def __init__(self, encoder: Encoder, calibrator: Optional[Calibrator] = None):
         self.encoder = encoder
         self.calibrator = calibrator
         self.fitted = False
 
-    def search(self, query: str, top_k: int = 3):
+    def search(self, query: str, top_k: int = 3) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         if not self.fitted:
             raise ValueError(f"{self.__class__.__name__} is not fitted.")
 
@@ -20,7 +23,7 @@ class Retriever(ABC):
         self._fitted = True
         return self
     
-    def _postprocess_scores(self, scores):
+    def _postprocess_scores(self, scores: np.ndarray):
         if self.calibrator:
             return self.calibrator(scores)
         return scores

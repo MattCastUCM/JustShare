@@ -1,5 +1,7 @@
 from controllers.retrievers.retriever import Retriever
 from controllers.encoders.encoder import Encoder
+from services.calibrator_factory import Calibrator
+from typing import Optional
 import numpy as np
 import json
 import pickle
@@ -20,7 +22,7 @@ class FaissRetriever(Retriever):
 
 	def __init__(self,
 		encoder: Encoder, 
-		calibrator = None,
+		calibrator: Optional[Calibrator] = None,
 		index_type: str = "flat",
 		nlist: int = 100,  # Number of clusters for IVF
 		m: int = 32,       # HNSW connections per layer
@@ -113,13 +115,14 @@ class FaissRetriever(Retriever):
 		query_embedding = self.encoder.transform([query])
 		query_embedding = np.asarray(query_embedding, dtype=np.float32)
 		
-		scores, indices = self.index.search(query_embedding, top_k)
+		faiss_scores, faiss_indices = self.index.search(query_embedding, top_k)
 
 		idxs, scores, texts = [], [], []
 
-		for idx, score in zip(indices[0], scores[0]):
+		for idx, score in zip(faiss_indices[0], faiss_scores[0]):
 			if idx >= 0:  # FAISS returns -1 for missing results
 				meta = self.metadata[idx]
+				print(meta)
 
 				idxs.append(meta["index"])
 				scores.append(float(score))
@@ -166,5 +169,7 @@ class FaissRetriever(Retriever):
 		
 		instance.index = index
 		instance.metadata = metadata
+		print(instance.metadata)
+		instance.fitted = True
 
 		return instance

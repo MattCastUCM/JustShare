@@ -12,7 +12,8 @@ class PoolingMethod(StrEnum):
 class Transformer(Encoder):
 	name = "transformer"
 
-	def __init__(self, model_name: str, device: Optional[str] = None, pooling_method: PoolingMethod = PoolingMethod.MEAN):
+	def __init__(self, name: str, model_name: str, device: Optional[str] = None, pooling_method: PoolingMethod = PoolingMethod.MEAN):
+		super().__init__(name)
 		self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
 		print("Using device:", self.device)
 

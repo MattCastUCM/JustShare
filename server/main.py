@@ -19,6 +19,7 @@ async def lifespan(app: FastAPI):
 
 	model_registry = ModelRegistry(languages)
 	model_registry.build()
+	model_registry.resolve_all()
 
 	encoder_factory = EncoderFactory(model_registry)
 	multilingual = MultilingualManager(encoder_factory, base_dir)

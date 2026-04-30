@@ -9,6 +9,7 @@ class WeightedWord2Vec(Encoder):
 	name = "word2vec"
 
 	def __init__(self, wv: KeyedVectors, tokenizer_fn: Callable[[str], list[str]]):
+		super().__init__()
 		self.wv = wv
 		self.tokenizer = tokenizer_fn
 

@@ -1,6 +1,5 @@
 from controllers.retrievers.retriever import Retriever
 from utils.vector_numpy import normalize
-from typing import Optional
 from enum import StrEnum
 import numpy as np
 
@@ -22,8 +21,8 @@ class HybridRetriever:
 
 	def __init__(self, 
 			retrievers: list[Retriever], 
+			weights: list[float],
 			fusion_method: FusionMethod = FusionMethod.RRF, 
-			weights: Optional[list[float]] = None,
 			rrf_k: int = 60,
 			retrieval_multiplier: int = 5, 
 			min_retrieval_k: int = 20 
@@ -40,25 +39,23 @@ class HybridRetriever:
 		self.retrieval_multiplier = retrieval_multiplier
 		self.min_retrieval_k = min_retrieval_k
 	
-	def fit(self, corpus: list[str], language: str):
+	def fit(self, corpus: list[str]):
 		for retriever in self.retrievers:
 			if not retriever.is_fitted():
-				retriever.fit(corpus, language)
+				retriever.fit(corpus)
 		return self
 
-	def _reciprocal_rank_fusion(self, all_results, top_k: int):
+	def _reciprocal_rank_fusion(self, all_results: list[tuple[np.ndarray, np.ndarray, np.ndarray]], raw_score_maps: list[dict[int, float]], top_k: int):
 		rrf_scores = {}
 		text_map = {}
 
-		for retr_idx, (idxs, scores, texts) in enumerate(all_results):
-			weight = self.weights[retr_idx]
-
-			for rank, (idx, score) in enumerate(zip(idxs, scores)):
+		for idxs, scores, texts in all_results:
+			for rank, (idx, text) in enumerate(zip(idxs, texts)):
 				rrf_scores[idx] = rrf_scores.get(idx, 0.0)
-				rrf_scores[idx] += weight * (1.0 / (self.rrf_k + rank + 1))
+				rrf_scores[idx] += 1.0 / (self.rrf_k + rank + 1)
 
 				if idx not in text_map:
-					text_map[idx] = texts[rank]
+					text_map[idx] = text
 
 		indices = np.array(list(rrf_scores.keys()), dtype=np.int32)
 		scores = np.array(list(rrf_scores.values()), dtype=np.float32)
@@ -73,9 +70,23 @@ class HybridRetriever:
 			dtype=object
 		)
 
-		return top_indices, top_scores, top_texts
+		raw_matrix = []
+		for retr_idx in range(len(raw_score_maps)):
+			retr_map = raw_score_maps[retr_idx]
+			raw_matrix.append([
+				retr_map.get(idx, 0.0) for idx in top_indices
+			])
+
+		return {
+			"indices": top_indices,
+			"scores": {
+				"combined": top_scores,
+				"raw_per_retriever": np.array(raw_matrix, dtype=np.float32),
+			},
+			"texts": top_texts
+		}
 	
-	def _weighted_fusion(self, all_results, top_k: int):
+	def _weighted_fusion(self, all_results: list[tuple[np.ndarray, np.ndarray, np.ndarray]], raw_score_maps: list[dict[int, float]], top_k: int):
 		"""
 		Weighted sum of normalized scores.
 
@@ -98,10 +109,10 @@ class HybridRetriever:
 
 			vec = np.zeros(len(all_indices), dtype=np.float32)
 
-			for i, idx in enumerate(idxs):
-				vec[idx_map[idx]] = scores[i]
+			for idx, score, text in zip(idxs, scores, texts):
+				vec[idx_map[idx]] = score
 				if idx not in text_map:
-					text_map[idx] = texts[i]
+					text_map[idx] = text
 
 			vec = normalize(vec)
 
@@ -117,9 +128,23 @@ class HybridRetriever:
 			dtype=object
 		)
 
-		return top_indices, top_scores, top_texts
+		raw_matrix = []
+		for retr_idx in range(len(raw_score_maps)):
+			retr_map = raw_score_maps[retr_idx]
+			raw_matrix.append([
+				retr_map.get(idx, 0.0) for idx in top_indices
+			])
 
-	def search(self, query: str, language: str, top_k = 3):
+		return {
+			"indices": top_indices,
+			"scores": {
+				"combined": top_scores,
+				"raw_per_retriever": np.array(raw_matrix, dtype=np.float32),
+			},
+			"texts": top_texts
+		}
+
+	def search(self, query: str, top_k = 3):
 		"""
 		Hybrid search combining sparse and dense results.
 
@@ -131,12 +156,19 @@ class HybridRetriever:
 		retrieval_k = max(top_k * self.retrieval_multiplier, self.min_retrieval_k)
 
 		all_results = [
-			r.search(query, language, top_k=retrieval_k)
+			r.search(query, retrieval_k)
 			for r in self.retrievers
 		]
 
+		raw_score_maps: list[dict[int, float]] = []
+		for (idxs, scores, _) in all_results:
+			raw_score_maps.append({
+				idx: score for idx, score in zip(idxs, scores)
+			})
+
 		if self.fusion_method == FusionMethod.RRF:
-			return self._reciprocal_rank_fusion(all_results, top_k)
+			# https://www.mongodb.com/resources/basics/reciprocal-rank-fusion
+			return self._reciprocal_rank_fusion(all_results, raw_score_maps, top_k)
 		else:
-			return self._weighted_fusion(all_results, top_k)
+			return self._weighted_fusion(all_results, raw_score_maps, top_k)
 		

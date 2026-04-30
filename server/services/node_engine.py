@@ -1,13 +1,16 @@
 from controllers.retrievers.faiss import FaissRetriever
 from controllers.encoders.encoder import Encoder
 from loguru import logger
+from .calibrator_factory import Calibrator
+from typing import Optional
 import os
 
 class NodeEngine:
-	def __init__(self, encoder: Encoder, base_dir: str, language: str):
+	def __init__(self, encoder: Encoder, base_dir: str, language: str, calibrator: Optional[Calibrator]):
 		self.model = encoder
 		self.base_dir = base_dir
 		self.language = language
+		self.calibrator = calibrator
 
 		self.retrievers: dict[str, FaissRetriever] = {}
 		os.makedirs(self.base_dir, exist_ok=True)
@@ -37,7 +40,8 @@ class NodeEngine:
 
 		retriever = FaissRetriever(
 			encoder=self.model,
-			index_type=index_type
+			index_type=index_type,
+			calibrator=self.calibrator
 		)
 		retriever.fit(flat_texts)
 		retriever.add_metadata(flat_meta)
@@ -73,7 +77,11 @@ class NodeEngine:
 			logger.warning("Node not found on disk.")
 			return
 
-		retriever = FaissRetriever.load(self.model, dir)
+		retriever = FaissRetriever.load(
+			encoder=self.model, 
+			dir=dir,
+			calibrator=self.calibrator
+		)
 
 		self.retrievers[node_key] = retriever
 

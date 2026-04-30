@@ -1,9 +1,17 @@
 from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Annotated
+from enum import StrEnum
 from core.settings import get_settings
-from typing import Union
 
 settings = get_settings()
+
+class SearchMethod(StrEnum):
+    WORD2VEC = "word2vec"
+    TFIDF = "tfidf"
+    JACCARD = "jaccard"
+    LSTM = "lstm"
+    BERT = "bert"
+    SBERT = "sbert"
 
 NonEmptyStr = Annotated[str, Field(min_length=1)]
 
@@ -30,16 +38,18 @@ class NodeKeyRequest(BaseModel):
 class FaissSimilarityRequest(BaseSimilarityRequest, NodeKeyRequest):
     pass
 
-class SimilarityRequest(BaseSimilarityRequest, CorpusRequest):
+class HybridSimilarityRequest(BaseSimilarityRequest, CorpusRequest, NodeKeyRequest):
+    methods: list[SearchMethod]
+
     @model_validator(mode="after")
     def validate_top_k_against_corpus(self):
         if self.top_k > len(self.corpus):
             raise ValueError(
                 f"top_k ({self.top_k}) cannot be greater than corpus size ({len(self.corpus)})"
             )
-        return self
+        return self    
 
-class HybridSimilarityRequest(BaseSimilarityRequest, CorpusRequest, NodeKeyRequest):
+class SimilarityRequest(BaseSimilarityRequest, CorpusRequest):
     @model_validator(mode="after")
     def validate_top_k_against_corpus(self):
         if self.top_k > len(self.corpus):
@@ -50,15 +60,11 @@ class HybridSimilarityRequest(BaseSimilarityRequest, CorpusRequest, NodeKeyReque
 
 class SimilarityMatch(BaseModel):
     index: int = Field(..., ge=0)
-    score: float
+    score: dict[str, float]
     text: str
 
-class HybridMatch(SimilarityMatch):
-    sparse_score: float
-    dense_score: float
-
 class SimilarityResponse(BaseModel):
-    matches: list[Union[SimilarityMatch, HybridMatch]]
+    matches: list[SimilarityMatch]
     processing_time: float = Field(
         ...,
         ge=0,
