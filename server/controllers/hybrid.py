@@ -155,16 +155,35 @@ class HybridRetriever:
 		"""
 		retrieval_k = max(top_k * self.retrieval_multiplier, self.min_retrieval_k)
 
-		all_results = [
+		raw_results = [
 			r.search(query, retrieval_k)
 			for r in self.retrievers
 		]
 
+		all_results = []
 		raw_score_maps: list[dict[int, float]] = []
-		for (idxs, scores, _) in all_results:
-			raw_score_maps.append({
-				idx: score for idx, score in zip(idxs, scores)
-			})
+
+		# Quedarse con la version de cada oracion con mayor socre para evitar indices duplicados, en el caso de que un retriever es de FAISS
+		for (idxs, scores, texts) in raw_results:
+			dedup: dict[int, tuple[float, str]] = {}
+
+			for idx, score, text in zip(idxs, scores, texts):
+				idx = int(idx)
+				score = float(score)
+
+				if idx not in dedup or score > dedup[idx][0]:
+					dedup[idx] = (score, text)
+
+			clean_idxs = list(dedup.keys())
+			clean_scores = [dedup[i][0] for i in clean_idxs]
+			clean_texts = [dedup[i][1] for i in clean_idxs]
+
+			all_results.append((clean_idxs, clean_scores, clean_texts))
+			raw_score_maps.append({i: dedup[i][0] for i in clean_idxs})
+
+		print(all_results)
+		print(raw_score_maps)
+		print("weights:", self.weights)
 
 		if self.fusion_method == FusionMethod.RRF:
 			# https://www.mongodb.com/resources/basics/reciprocal-rank-fusion

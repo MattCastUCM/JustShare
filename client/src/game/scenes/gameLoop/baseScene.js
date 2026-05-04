@@ -366,11 +366,13 @@ export default class BaseScene extends Scene {
             node = new SimilarityNode();
 
             node.method = fileObj[id].method;
-            // node.threshold = fileObj[id].threshold;
-            // if (!node.threshold) {
-                // const thresholds = this.cache.json.get("similarityThresholds")
-                // node.threshold = thresholds[node.method];
-            // }
+
+            const parts = namespace.split("/");
+            const lastSegment = parts[parts.length - 1];
+            const idSnakeCase = translationId.replace(/\./g, "_")
+            node.nodeKey = `${lastSegment}_${idSnakeCase}`;
+            console.log(node.nodeKey);
+            
             node.character = fileObj[id].character;
 
             // Se obtienen las opciones del archivo de textos traducidos

@@ -1,4 +1,3 @@
-from utils.vector_numpy import cosine_similarity
 from services.encoder_factory import EncoderFactory
 from services.calibrator_factory import CalibratorFactory
 from services.node_engine import NodeEngine
@@ -12,7 +11,7 @@ class MultilingualManager:
 
 		self.node_cache: dict[tuple[str, str], NodeEngine] = {}
 
-	def get_dense_retriever(self, language: str, model_type: str, similarity_fn = cosine_similarity):
+	def get_dense_retriever(self, language: str, model_type: str, similarity_fn):
 		encoder = self.encoder_factory.get(model_type, language)
 		calibrator = self.calibrator_factory.get(model_type, language)
 

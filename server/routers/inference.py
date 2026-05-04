@@ -5,7 +5,8 @@ from schemas.similarity import (
 	SimilarityMatch,
 	FaissSimilarityRequest,
 	HybridSimilarityRequest,
-	SearchMethod
+	SearchMethod,
+	SimilarityScore
 )
 from services.similarity_engine import SimilarityEngine
 import numpy as np
@@ -25,8 +26,10 @@ def build_similarity_response(indices: np.ndarray, scores: np.ndarray, texts: np
 		matches=[
 			SimilarityMatch(
 				index=int(idx),
-				score={
-					method: float(score)
+				scores={
+					method: SimilarityScore(
+						value=score,
+					)
 				},
 				text=str(text),
 			)
@@ -105,7 +108,7 @@ def similarity_lstm(req: SimilarityRequest, engine: SimilarityEngine = Depends(g
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/sbert", response_model=SimilarityResponse)
-def similarity_bert(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_sbert(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -120,7 +123,25 @@ def similarity_bert(req: FaissSimilarityRequest, engine: SimilarityEngine = Depe
 		return build_similarity_response(top_indices, top_scores, top_texts, elapsed, SearchMethod.SBERT)
 	except ValueError as e:
 		raise HTTPException(status_code=404, detail=str(e))
+	
+@router.post("/bert", response_model=SimilarityResponse)
+def similarity_bert(req: SimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+	start = time.perf_counter()
+	try:
+		top_indices, top_scores, top_texts = engine.search(
+			query=req.query,
+			corpus=req.corpus,
+			top_k=req.top_k,
+			language=req.language,
+			method=SearchMethod.BERT
+		)
+		elapsed = time.perf_counter() - start
+		logger.debug(f"sbert endpoint took {elapsed:.4f}s")
+		return build_similarity_response(top_indices, top_scores, top_texts, elapsed, SearchMethod.BERT)
+	except ValueError as e:
+		raise HTTPException(status_code=404, detail=str(e))
 
+@router.post("/hybrid", response_model=SimilarityResponse)
 def similarity_hybrid(req: HybridSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
@@ -130,7 +151,8 @@ def similarity_hybrid(req: HybridSimilarityRequest, engine: SimilarityEngine = D
 			corpus=req.corpus,
 			top_k=req.top_k,
 			language=req.language,
-			methods=req.methods
+			methods=req.methods,
+			weights=req.weights
 		)
 		elapsed = time.perf_counter() - start
 		logger.debug(f"hybrid [{req.methods}] endpoint took {elapsed:.4f}s")
@@ -141,21 +163,24 @@ def similarity_hybrid(req: HybridSimilarityRequest, engine: SimilarityEngine = D
 
 		combined = scores["combined"]
 		raw = scores["raw_per_retriever"]
-
+		
 		matches = []
 
 		for i in range(len(indices)):
-			method_scores = {}
+			method_scores: dict[str, SimilarityScore] = {}
 			for j, method in enumerate(req.methods):
-				method_scores[method] = float(raw[i][j])
+				method_scores[method] = SimilarityScore(
+					value=float(raw[j][i]),
+					weight=req.weights[j]
+				)
+			method_scores["combined"] = SimilarityScore(
+				value=float(combined[i])
+			)
 
 			matches.append(
 				SimilarityMatch(
 					index=int(indices[i]),
-					score={
-						"combined": float(combined[i]),
-						**method_scores,
-					},
+					scores=method_scores,
 					text=str(texts[i]),
 				)
 			)

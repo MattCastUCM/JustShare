@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Annotated
 from enum import StrEnum
 from core.settings import get_settings
+from math import isclose
 
 settings = get_settings()
 
@@ -39,7 +40,8 @@ class FaissSimilarityRequest(BaseSimilarityRequest, NodeKeyRequest):
     pass
 
 class HybridSimilarityRequest(BaseSimilarityRequest, CorpusRequest, NodeKeyRequest):
-    methods: list[SearchMethod]
+    methods: list[SearchMethod] = Field(..., min_length=2)
+    weights: list[float] = Field(..., min_length=2)
 
     @model_validator(mode="after")
     def validate_top_k_against_corpus(self):
@@ -47,7 +49,19 @@ class HybridSimilarityRequest(BaseSimilarityRequest, CorpusRequest, NodeKeyReque
             raise ValueError(
                 f"top_k ({self.top_k}) cannot be greater than corpus size ({len(self.corpus)})"
             )
-        return self    
+
+        if len(self.methods) != len(self.weights):
+            raise ValueError(
+                f"'methods' and 'weights' must have the same length "
+                f"(got {len(self.methods)} and {len(self.weights)})"
+            )
+
+        if not isclose(sum(self.weights), 1.0, rel_tol=1e-6, abs_tol=1e-8):
+            raise ValueError(
+                f"'weights' must sum to 1.0 (got {sum(self.weights)})"
+            )
+
+        return self
 
 class SimilarityRequest(BaseSimilarityRequest, CorpusRequest):
     @model_validator(mode="after")
@@ -57,10 +71,14 @@ class SimilarityRequest(BaseSimilarityRequest, CorpusRequest):
                 f"top_k ({self.top_k}) cannot be greater than corpus size ({len(self.corpus)})"
             )
         return self
+    
+class SimilarityScore(BaseModel):
+    value: float
+    weight: float = 1.0
 
 class SimilarityMatch(BaseModel):
     index: int = Field(..., ge=0)
-    score: dict[str, float]
+    scores: dict[str, SimilarityScore]
     text: str
 
 class SimilarityResponse(BaseModel):

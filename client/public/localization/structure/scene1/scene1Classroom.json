@@ -24,7 +24,7 @@
         },
         "thanks2": {
             "type": "similarity",
-            "method": "sbert",
+            "method": "hybrid",
             "character": "player",
             "choices": [
                 {

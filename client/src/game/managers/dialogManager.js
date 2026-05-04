@@ -298,7 +298,7 @@ export default class DialogManager {
         }
     }
 
-    async checkSimilarity(corpus, text, method, node_key) {
+    async checkSimilarity(corpus, text, method, nodeKey) {
         const language = this.translatorManager.getCurrentLanguage();
 
         const baseBody = {
@@ -307,16 +307,18 @@ export default class DialogManager {
             top_k: 1
         };
 
+        let methodConfig = {}
         if (method === "sbert") {
             methodConfig = {
-                node_key: node_key
+                node_key: nodeKey
             }
         }
         else if (method === "hybrid") {
-            method_config = {
+            methodConfig = {
                 corpus: corpus,
-                node_key: node_key,
-                methods: ["tfidf", "sbert"]
+                node_key: nodeKey,
+                methods: ["tfidf", "sbert"],
+                weights: [0.5, 0.5]
             }
         }
         else {
@@ -327,7 +329,7 @@ export default class DialogManager {
 
         const body = {
             ...baseBody,
-            ...(methodConfig[method] || methodConfig.default)
+            ...methodConfig
         };
 
         const request = {
@@ -349,35 +351,35 @@ export default class DialogManager {
     }
 
     async processSimilarityNode(node, text) {
+        console.log(node);
+        console.log(node.id);
+
         try {
-            const { data } = await this.checkSimilarity(node.choices, text, node.method, "")
+            const { data } = await this.checkSimilarity(node.choices, text, node.method, node.nodeKey)
 
             const match = data?.matches?.[0];
             if (!match) {
                 return node.choices.length
             }
 
-            const thresholds = this.cache.json.get("similarityThresholds")
-            const scores = match.score;
+            const thresholds = this.scene.cache.json.get("similarityThresholds")
+            const scores = match.scores;
             const choice = node.choices[match.index];
 
             let exceedThresholds = true
 
-            for (const [method, score] of Object.entries(scores) && exceedThresholds) {
-                const threshold = thresholds[method] ?? 0
+            for (const [method, score] of Object.entries(scores)) {
+                if (!exceedThresholds) break;
 
-                if (score > 0) {
+                if (score.value > 0 && method in thresholds) {
+                    const threshold = thresholds[method]
                     // TRACKER EVENT
                     this.trackerManager.sendWrittenResponse(node.fullId, text, method, thresholds, score, choice, data.processing_time)
 
-                    if (score < threshold) {
+                    if (score.value < threshold * score.weight) {
                         exceedThresholds = false
                     }
                 }
-            }
-
-            if (exceedThresholds) {
-                return match.index;
             }
 
             return exceedThresholds ? match.index : node.choices.length

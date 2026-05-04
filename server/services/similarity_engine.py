@@ -4,6 +4,7 @@ from schemas.similarity import SearchMethod
 from controllers.hybrid import HybridRetriever, FusionMethod
 from controllers.retrievers.retriever import Retriever
 from typing import Optional
+from utils.vector_numpy import cosine_similarity
 
 class SimilarityEngine:
     def __init__(self, manager: MultilingualManager):
@@ -25,7 +26,7 @@ class SimilarityEngine:
             )
             return node_engine.get_retriever(node_key)
 
-        similarity_fn = None
+        similarity_fn = cosine_similarity
         if method == SearchMethod.JACCARD:
             similarity_fn = JaccardEncoder.jaccard
 
@@ -59,7 +60,8 @@ class SimilarityEngine:
         top_k: int,
         language: str,
         corpus: list[str],
-        node_key: Optional[str]
+        node_key: Optional[str],
+        weights: list[float]
     ):
         if not methods:
             raise ValueError("methods list cannot be empty")
@@ -69,12 +71,13 @@ class SimilarityEngine:
             for method in methods
         ]
 
-        weight = 1.0 / len(retrievers)
+        # weight = 1.0 / len(retrievers)
 
         hybrid = HybridRetriever(
             retrievers=retrievers,
-            weights=[weight] * len(retrievers),
-            fusion_method=FusionMethod.RRF,
+            # weights=[weight] * len(retrievers),
+            weights=weights,
+            fusion_method=FusionMethod.WEIGHTED,
         )
 
         hybrid.fit(corpus)

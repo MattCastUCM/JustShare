@@ -33,7 +33,7 @@ export default class Scene1Classroom extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene1Classroom');
-        let node = super.readNodes(nodes, "scene1\\scene1Classroom", "part1", true);
+        let node = super.readNodes(nodes, "scene1/scene1Classroom", "part1", true);
 
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
@@ -42,7 +42,7 @@ export default class Scene1Classroom extends BaseScene {
 
         // Al producirse, cambia de dialogo
         this.dispatcher.add("appearLaura", this, () => {
-            node = super.readNodes(nodes, "scene1\\scene1Classroom", "part2", true);
+            node = super.readNodes(nodes, "scene1/scene1Classroom", "part2", true);
             this.dialogManager.setNode(node, [lauraPortrait]);
         });
 

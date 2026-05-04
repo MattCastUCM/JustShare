@@ -21,14 +21,18 @@ async def lifespan(app: FastAPI):
 	model_registry = ModelRegistry(languages)
 	# model_registry.build()
 	model_registry.build_spacy()
+	model_registry.build_tranformer("bert")
+	model_registry.build_tranformer("sbert")
+	model_registry.build_word2vec()
+	model_registry.build_lstm()
 	model_registry.resolve_all()
 
 	encoder_factory = EncoderFactory(model_registry)
 	calibrator_factory = CalibratorFactory(model_registry)
 	multilingual = MultilingualManager(encoder_factory, calibrator_factory, base_dir)
-	model_types = model_registry.active_model_types()
+	# model_types = model_registry.active_model_types()
 
-	multilingual.load_all_node_engines(languages, model_types)
+	multilingual.load_all_node_engines(languages, ["sbert"])
 
 	similarity_engine = SimilarityEngine(multilingual)
 

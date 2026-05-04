@@ -25,7 +25,7 @@ class Retriever(ABC):
     
     def _postprocess_scores(self, scores: np.ndarray):
         if self.calibrator:
-            return self.calibrator(scores)
+            scores = self.calibrator(scores)
         return scores
     
     def is_fitted(self):

@@ -55,9 +55,11 @@ export default class TranslatorManager {
     }
 
     public async loadNamespaces(dialogs: string[], namespaces: string[]) {
-        const result = dialogs.concat(namespaces).map(path => path.replace(/\//g, '\\'));
+        const result = dialogs.concat(namespaces);
 
         const languages = SUPPORTED_LNGS;
+
+        console.log(languages)
 
         // Inicialmente solo se carga el idioma inicial y los de respaldo
         // Luego, conforme se usan tambien se cargan el resto
@@ -76,7 +78,7 @@ export default class TranslatorManager {
                 // Namespaces que se cargan para cada uno de los idiomas
                 ns: result,
                 // Mostrar informacion de ayuda por consola
-                debug: DEBUG,
+                debug: true,
                 // Cargar las traducciones de un servidor especificado en vez de ponerlas directamente
                 backend: {
                     // La ruta desde donde cargamos las traducciones

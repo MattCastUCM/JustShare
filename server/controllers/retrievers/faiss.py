@@ -122,8 +122,7 @@ class FaissRetriever(Retriever):
 		for idx, score in zip(faiss_indices[0], faiss_scores[0]):
 			if idx >= 0:  # FAISS returns -1 for missing results
 				meta = self.metadata[idx]
-				print(meta)
-
+				
 				idxs.append(meta["index"])
 				scores.append(float(score))
 				texts.append(meta["text"])

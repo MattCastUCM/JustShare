@@ -19,6 +19,7 @@ class DenseRetriever(Retriever):
         query_vec = self.encoder.transform([query])[0]
 
         scores = self.similarity_fn(self.embeddings, query_vec)
+        scores = scores.flatten()
 
         top_idx = np.argsort(scores)[::-1][:top_k]
 

@@ -77,7 +77,8 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     setNamespace(namespace) {
-        this.namespace = namespace.replace(/\//g, '\\');
+        // this.namespace = namespace.replace(/\//g, '\\');
+        this.namespace = namespace;
     }
 
     translate(transId, options = {}) {
@@ -85,7 +86,7 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     translateWithNamespace(transId, namespace, options = {}) {
-        namespace = namespace.replace(/\//g, '\\');
+        // namespace = namespace.replace(/\//g, '\\');
         return this.translatorManager.translate(transId, namespace, options)
     }
 
@@ -126,6 +127,7 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     createButton(x, y, sprite, transId, onClick, style) {
+        console.log("hola:",transId)
         const translation = this.translate(transId);
 
         let button = new Button(this, x, y, onClick, sprite, this.colors.blue1.rgb, this.colors.blue2.rgb, this.colors.blue3.rgb, translation, style);
