@@ -233,6 +233,8 @@ server/models/
 
 .env*
 
+server/adaptation/data
+
 # ==================================================
 # MANUSCRIPT
 # LaTeX / PDFLaTeX / BibTeX Environment
