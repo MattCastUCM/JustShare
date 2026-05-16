@@ -1,0 +1,112 @@
+{
+    "start": {
+        "root": {
+            "text": "(¿Seguirá <harasser, Pablo enfadado, Lucía endadada> conmigo...?)"
+        }
+    },
+    "phone": {
+        "root": [
+            {
+                "text": "Estas <harasser, enfadado, endadada>?"
+            }
+        ],
+        "msg1": {
+            "text": "Hey, estas <harasser, enfadado, endadada>?"
+        },
+        "msg2": {
+            "text": "Depende de ti"
+        },
+        "msg3": {
+            "text": "Vas a empezar a tomarte en serio lo nuestro? O vas a seguir desconfiando?"
+        },
+        "choices": [
+            {
+                "text": "No dudo."
+            },
+            {
+                "text": "Todavía es muy pronto."
+            }
+        ],
+        "noDoubt": {
+            "text": "No es que dude, es simplemente que no estoy <player, comodo, comoda> con lo que pides"
+        },
+        "early": {
+            "text": "Todavia es muy pronto y no estoy <player, comodo, comoda> con lo que pides"
+        },
+        "msg5": {
+            "text": "Vale, pues no me dejas otra"
+        },
+        "msg6": {
+            "text": "O haces lo que te he pedido o subo las fotos que me has pasao"
+        },
+        "msg7": {
+            "text": "Como??"
+        },
+        "msg8": {
+            "text": "Y creeme que lo haré, no tengo nada que perder"
+        },
+        "msg9": {
+            "text": "Pero tu si, y mucho"
+        }
+    },
+    "interruption": {
+        "root": {
+            "text": "Oye, ¿todo bien?"
+        },
+        "choices": [
+            {
+                "text": "Decir la verdad."
+            },
+            {
+                "text": "Mentir."
+            }
+        ],
+        "truth": {
+            "text": "No, tengo algo que contaros."
+        },
+        "ask": {
+            "text": "¿Qué pasa?"
+        },
+        "reveal": [
+            {
+                "text": "Desde principio de curso he estado hablando con alguien y hace poco empezamos una relación."
+            },
+            {
+                "text": "Y... una noche... estábamos hablando y acabamos mandándonos fotos..."
+            },
+            {
+                "text": "... fotos explícitas."
+            }
+        ],
+        "surprise": {
+            "text": "¿¡Cómo!?"
+        },
+        "problem": {
+            "text": "El problema es que no era como yo pensaba, y ahora me está chantajeando con publicar las fotos si no accedo a hacer lo que me pide."
+        },
+        "scold": {
+            "text": "¿¡A quién se le ocurre mandar eso a alguien que no conoces!?"
+        },
+        "sorry": {
+            "text": "Lo siento mucho, de verdad."
+        },
+        "police": [
+            {
+                "text": "Tenemos que ir a la policía a denunciar."
+            },
+            {
+                "text": "No hables más con esa persona, nosotros nos encargamos del resto."
+            }
+        ],
+
+        "lie": {
+            "text": "Sí, sí."
+        },
+        "reassure": {
+            "text": "Ya sabes que cualquier cosa puedes contarnos, cariño."
+        },
+        "thanks": {
+            "text": "Sí, gracias mamá."
+        }
+    }
+}

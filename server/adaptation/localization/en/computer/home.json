@@ -1,7 +1,0 @@
-{
-    "key": "Hello",
-    "nested": {
-        "value": "Deep hello"
-    },
-    "greet": "Hello, {{name}}!"
-}

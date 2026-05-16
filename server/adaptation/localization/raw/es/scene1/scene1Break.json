@@ -1,0 +1,54 @@
+{
+    "mainConversation": {
+        "root": {
+            "text": "¡{{name}}! ¡Ven aquí, siéntate conmigo!"
+        },
+        "thanks": {
+            "text": "Gracias por compartir mesa conmigo. Como soy <player, nuevo, nueva> no sabía donde sentarme."
+        },
+        "welcome": {
+           "text": "Sin problema. Justo estaba viendo el último video de ToniVlogs hablando de su viaje a Japón."
+        },
+        "surprise": {
+            "text": "¿Cómo? ¿¡Tú también eres fan de ToniVlogs!? Es mi influencer favorito."
+        },
+        "dog": {
+            "text": "¡Sí! Me encantan sus videos, sobre todo en los que sale su perrita Mila. Es la perrita más mona que he visto nunca."
+        },
+        "agree": {
+            "text": "Yo los vi a los dos en persona este verano y créeme que Mila es la mejor. Tengo una foto de ella en la que sale genial."
+        },
+        "phone": [
+            {
+                "text": "¿¡En serio!? Pásamela luego, porfa."
+            },
+            {
+                "text": "Ten, este es mi número *te apunta su número*."
+            }
+        ],
+        "photo": {
+            "text": "Gracias, luego al llegar a casa te envío la foto de Mila."
+        },
+        "lauraThanks": {
+            "text": "¡Eres <player, el, la> mejor!"
+        }
+    },
+
+    "tables1": {
+        "root": {
+            "text": "(Esa mesa parece llena, mejor busco otra)."
+        }
+    },
+
+    "tables2": {
+        "root": {
+            "text": "(Parece que todos los de esa mesa ya se conocen, qué vergüenza sentarme con ellos)."
+        }
+    },
+
+    "tables3": {
+        "root": {
+            "text": "(Los de ahí no me dan muy buena espina..)."
+        }
+    }
+}

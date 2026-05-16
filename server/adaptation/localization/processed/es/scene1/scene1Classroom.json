@@ -1,0 +1,91 @@
+{
+    "part1": {
+        "root": [
+            {
+                "text": "Buenos días. Espero que hayáis pasado un buen verano."
+            },
+            {
+                "text": "Este año se une a nosotros {{name}}, espero que seáis buenos con <player, él, ella>."
+            },
+            {
+                "text": "{{name}} por favor, siéntate ahí al lado de Laura."
+            }
+        ]
+    },
+    "part2": {
+        "root": {
+            "text": "Hey, soy Laura, encantada."
+        },
+        "thanks": [
+            {
+                "text": "Igualmente, <player, encantado, encantada> de conocerte *sonríes*."
+            },
+            {
+                "text": "Gracias, si necesito algo ya te iré diciendo."
+            },
+            {
+                "text": "... Ah, sí, hola."
+            }
+        ],
+        "thanks2": {
+            "summary": "Laura me ha saludado.",
+            "responses": [
+                {
+                    "text": [
+                        "Hola, soy {{name}}! Encantada de conocerte",
+                        "Hola, soy {{name}}! Encantado de conocerte.",
+                        "Holaaa buenas, soy {{name}}, acabo de llegar y estoy todavía un poco perdida, y tú?",
+                        "Holaaa buenas, soy {{name}}, acabo de llegar y estoy todavía un poco perdido, y tú?",
+                        "Hola Laura yo soy {{name}} encantada",
+                        "Hola Laura yo soy {{name}} encantado",
+                        "Hol, soy {{name}} un gusto",
+                        "Buenas, yo soy {{name}}, encantado",
+                        "Encantado soy {{name}}",
+                        "Hola, soy {{name}} un placer",
+                        "Qué tal? Soy {{name}}",
+                        "Hola, ¿qué tal? Yo soy {{name}}.",
+                        "Hola. Soy {{name}}. Encantado.",
+                        "Hola! soy {{name}}, encantado también",
+                        "Buenas, soy {{name}}. Encantado.",
+                        "Qué tal, soy {{name}}",
+                        "¡Hola! Yo me llamo {{name}}",
+                        "Holaaa, soy {{name}} que ta",
+                        "Hola Laura, ¿qué tal? soy {{name}}, encantado",
+                        "Hola Laura, ¿qué tal? Soy {{name}}, encantado.",
+                        "Hola, yo {{name}}, lo mismo digo.",
+                        "Hola Laura! Encantado de conocerte yo soy {{name}}",
+                        "Hola Laura! Encantada de conocerte yo soy {{name}}.",
+                        "Hola! Soy {{name}}",
+                        "Encantado, soy {{name}}. ¿Tú también eres nueva aquí?"
+                    ]
+                },
+                {
+                    "text": [
+                        "Hola yo soy {{name}}"
+                    ]
+                },
+                {
+                    "text": [
+                        "Hola, Laura, encantado.",
+                        "Hola, Laura, encantada.",
+                        "Emmm. Hola.",
+                        "Hola",
+                        "Hola, soy {{name}}; mucho gusto."
+                    ]
+                }
+            ]
+        },
+        "default": {
+            "text": "(Mejor no decir eso)."
+        },
+        "friendly": {
+            "text": "Pareces <player, majo, maja>. Si necesitas cualquier cosa, no dudes en preguntarme."
+        },
+        "neutral": {
+            "text": "Espero que nos llevemos bien. Tú no dudes en preguntarme."
+        },
+        "shy": {
+            "text": "Venga, no seas <player, tímido, tímida>. Si necesitas cualquier cosa, no dudes en preguntarme."
+        }
+    }
+}

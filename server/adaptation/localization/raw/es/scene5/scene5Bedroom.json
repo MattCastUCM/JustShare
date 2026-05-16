@@ -1,0 +1,172 @@
+{
+    "bed": {
+        "root": {
+            "text": "(Quiero hablar con <harasser, Pablo, Lucía> antes de irme a dormir)."
+        }
+    },
+    
+    "closet": {
+        "root": {
+            "text": "(Quiero hablar con <harasser, Pablo, Lucía> antes de ordenarlo)."
+        }
+    },
+
+    "phone": {
+        "root": {
+            "text": "El otro dia me salio un video de Toni que me recordó un monton a ti"
+        },
+        "fill2": {
+            "text": "Ah sii?"
+        },
+        "fill3": {
+            "text": "Sii, era jugando con su perrita y se que te encantaa"
+        },
+        "fill4": {
+            "text": "Ayy, es que es la mejorrr"
+        },
+        "fill5": {
+            "text": "Jajajja"
+        },
+
+        "msg1": {
+            "text": "Me encanta hablar contigo {{name}}"
+        },
+        "msg2": {
+            "text": "No te imaginas lo mucho que me gustas de verdad"
+        },
+        "choices1": [
+            {
+                "text": "Tú también a mí."
+            }
+        ],
+        "msg3": {
+            "text": "Tu tambien me gustas mucho <harasser, Pablo, Lucia>"
+        },
+        "msg4": {
+            "text": "Me tienes <player, loco, loca> por ti la verdad"
+        },
+        "msg5": {
+            "text": "Que ganas más tontas de verteee"
+        },
+        "msg6": {
+            "text": "Y tanto :("
+        },
+        "choices2": [
+            {
+                "text": "Mandar una foto."
+            },
+            {
+                "text": "No mandar nada."
+            }
+        ],
+
+        "photo": {
+            "text": "<player, [playerPhoto3Male], [playerPhoto3Female]>"
+        },
+        "msg8A": {
+            "text": "Ayy si es que eres <player, guapisimoo, guapisimaa>"
+        },
+        "msg9A": {
+            "text": "No tanto como tuu"
+        },
+
+        "msg8B": {
+            "text": "<harasser, [harasserPhoto2Male], [harasserPhoto2Female]>"
+        },
+        "msg9B": {
+            "text": "Si es que mirateee, que <harasser, guapoo, guapaa>"
+        },
+        "msg10": {
+            "text": "Te gusta? Quieres otra?"
+        },
+        "msg11": {
+            "text": "Claroo"
+        },
+        "msg12": {
+            "text": "<harasser, [harasserPhoto3Male], [harasserPhoto3Female]>"
+        },
+        "msg13": {
+            "text": "Y así que tal?"
+        },
+        "choices3": [
+            {
+                "text": "¿Qué estas haciendo?"
+            },
+            {
+                "text": "Wow."
+            }
+        ],
+
+        "what": {
+            "text": "Que estas haciendoo? Estas <harasser, seguro, segura> de enviar esto?"
+        },
+        "wow": {
+            "text": "Wow, me encantass"
+        },
+        "msg15": {
+            "text": "Pense que igual te apetecía dar el siguiente paso juntos"
+        },
+        "msg16": {
+            "text": "Como no nos podemos ver todavia, las fotos son buena opción no crees?"
+        },
+        "msg17": {
+            "text": "Pues me gustas mucho y creeme que tengo muchas ganas de verte, pero no se si está bien enviar estas cosas, no?"
+        },
+        "msg18": {
+            "text": "No te preocupes, esto es solo para nosotros"
+        },
+        "msg19": {
+            "text": "Asi podemos calmar un poco las ganas de vernos hasta que podamos"
+        },
+        "choices4": [
+            {
+                "text": "Mandarle una foto igual."
+            }
+        ],
+        "msg20": {
+            "text": "<player, [playerPhoto4Male], [playerPhoto4Female]>"
+        },
+        "msg21": {
+            "text": "Wow wow wow"
+        },
+        "msg22": {
+            "text": "Literalmente <player, un dios, una diosa>, que <player, precioso, preciosa> eresss {{name}}"
+        },
+        "msg23": {
+            "text": "De verdad, como te quierooooo"
+        },
+        "msg24": {
+            "text": "Graciass <harasser, Pablo, Lucia>, pero nada comparado contigoo"
+        },
+        "msg25": {
+            "text": "Yo voy a irme ya a dormir, pero antes dejo esto por aquí ;)"
+        },
+        "msg26": {
+            "text": "<harasser, [harasserPhoto4Male], [harasserPhoto4Female]>"
+        },
+        "msg27": {
+            "text": "Madre miaa, que increible eress"
+        },
+        "msg28": {
+            "text": "Que descansesss"
+        },
+        "msg29": {
+            "text": "<player, [playerPhoto5Male], [playerPhoto5Female]>"
+        },
+        "msg30": {
+            "text": ";)"
+        },
+        "msg31": {
+            "text": "Me encantas, me encantas, me encantassss"
+        },
+        "msg32": {
+            "text": "Eres la persona más guapa del mundo"
+        },
+        "msg33": {
+            "text": "Que descanses {{name}}, mañana hablamoss"
+        },
+        "msg34": {
+            "text": "Ahora voy a soñar contigo y esas fotoss ;)"
+        }
+    }
+}

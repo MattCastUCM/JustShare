@@ -1,0 +1,181 @@
+{
+    "gifts": {
+        "root": {
+            "text": "Gracias a todos por venir hoy, lo estoy pasando genial."
+        },
+        "thanks": {
+            "text": "Gracias a ti por invitarnos."
+        },
+        "amazing": {
+            "text": "Está siendo increíble."
+        },
+        "woohoo": {
+            "text": "¡Fiestón!"
+        },
+        "returnThanks": {
+            "text": "Gracias a ti."
+        },
+        "wow": [
+            {
+                "text": "Wow, ¡me encantan mis regalos!"
+            },
+            {
+                "text": "Muchas gracias, ¡sois los mejores!"
+            }
+        ],
+        "msg": {
+            "text": "Que tal han ido los regalos? Le han gustado a Paula?"
+        },
+        "thoughts": {
+            "text": "(<harasser, Pablo, Lucía> me está escribiendo..)."
+        }
+    },
+    
+    "phone1": {
+        "root": [
+            {
+                "text": "Sí, son increíbles."
+            }
+        ],
+        "amazing": {
+            "text": "Sii, la verdad que son increibles"
+        },
+        "msg2": {
+            "text": "Mmmm... Ahora me has dejado con la intriga xd"
+        },
+        "msg3": {
+            "text": "Ojalá estar ahí con vosotros la verdad..."
+        },
+        "msg4": {
+            "text": "Pasame una foto de los regalos para verlos porfi"
+        },
+        "msg5": {
+            "text": "Okay, dame un segundo"
+        }
+    },
+
+    "photo": {
+        "root": {
+            "text": "{{name}}, ¿qué vas a hacer con esa foto de mis regalos?"
+        },
+        "explain": {
+            "text": "Nada, es para <harasser, un amigo mío, una amiga mía>."
+        },
+        "question": {
+            "text": "¿<harasser, Lo, La> conozco?"
+        },
+
+        "choices": [
+            {
+                "text": "Decir la verdad."
+            },
+            {
+                "text": "Mentir."
+            }
+        ],
+        "truth": {
+            "text": "No creo, es <harasser, un amigo, una amiga> que hice online."
+        },
+        "lie": {
+            "text": "Seguramente, pero no sé."
+        },
+
+        "dont": [
+            {
+                "text": "Preferiría que no le envies una foto de mis regalos a una persona desconocida, que encima salimos mis amigos y yo."
+            },
+            {
+                "text": "No me siento cómoda con ello."
+            }
+        ],
+        "ok": {
+            "text": "Bueno, supongo que no lo haré entonces."
+        }
+    },
+
+    "phone2": {
+        "root": {
+            "text": "Al final has podido sacarle foto a los regalos?"
+        },
+        "choices": [
+            {
+                "text": "No te la puedo pasar."
+            }
+        ],
+        "yes": {
+            "text": "Si, pero Paula me ha dicho que no se siente comoda si te la envio"
+        },
+
+        "msg3": {
+            "text": "Veo que no soy tan importante para ti como pensaba"
+        },
+        "msg4": {
+            "text": "Pues nada, no te molesto mas"
+        },
+        "msg5": {
+            "text": "Espera."
+        },
+        "msg6": {
+            "text": "Te la envio, pero espero que no se entere nadie"
+        }
+    },
+
+    "interruption": {
+        "root": [
+            {
+                "text": "{{name}}, ¿qué haces?"
+            },
+            {
+                "text": "Paula te ha dicho que no le envies la foto a nadie."
+            }
+        ],
+        "choices": [
+            {
+                "text": "Nadie lo va a saber."
+            },
+            {
+                "text": "No te incumbe."
+            }
+        ],
+
+        "nobodysGonnaKnow": {
+            "text": "No es para tanto, nadie tiene que saberlo."
+        },
+        "disrespectful": {
+            "text": "¡Si es para tanto! Tu amiga te ha pedido que no compartas esa foto y lo has hecho igualmente."
+        },
+
+        "notYourProblem": {
+            "text": "No es para tanto, no tiene que ver contigo."
+        },
+        "dontCare": {
+            "text": "¡Da igual si tiene que ver conmigo o no! No puedes hacer lo que te dé la gana."
+        },
+
+        "sorry": {
+            "text": "Tienes razón, lo siento."
+        },
+        "tooLate": [
+            {
+                "text": "Un poco tarde para eso, {{name}}."
+            },
+            {
+                "text": "Has priorizado a una persona que ni siquiera conoces antes que a tu amiga."
+            }
+        ],
+        "youDontUnderstand": {
+            "text": "Sí que nos conocemos. El problema es que tú no lo entiendes."
+        },
+        "thinkAboutIt":  [
+            {
+                "text": "Claro, el problema es de cualquiera menos tuyo."
+            },
+            {
+                "text": "Igual deberías replantearte tu relación con <harasser, él, ella>, porque es algo rara."
+            }
+        ]
+    }
+
+
+    
+}

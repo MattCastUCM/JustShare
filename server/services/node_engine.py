@@ -15,29 +15,7 @@ class NodeEngine:
 		self.retrievers: dict[str, FaissRetriever] = {}
 		os.makedirs(self.base_dir, exist_ok=True)
 
-	# def _flatten_responses(self, fixed_responses: list, node_key: str):
-	# 	flat_texts = []
-	# 	flat_meta = []
-		
-	# 	idx = 0
-	# 	for group_idx, group in enumerate(fixed_responses):
-	# 		for sentence_idx, text in enumerate(group["text"]):
-	# 			flat_texts.append(text)
-	# 			flat_meta.append({
-	# 				"index": idx,
-	# 				"text": text,
-	# 				"group_index": group_idx,
-	# 				"sentence_index": sentence_idx,
-	# 				"node": node_key
-	# 			})
-
-	# 			idx += 1
-
-	# 	return flat_texts, flat_meta
-
 	def build_node(self, node_key: str, corpus: list[str], index_type: str = "flat"):
-		# flat_texts, flat_meta = self._flatten_responses(fixed_responses, node_key)
-
 		retriever = FaissRetriever(
 			encoder=self.model,
 			index_type=index_type,

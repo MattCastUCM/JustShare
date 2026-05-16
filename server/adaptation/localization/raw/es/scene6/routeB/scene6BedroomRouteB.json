@@ -1,0 +1,154 @@
+{
+    "bedStart": {
+        "root": {
+            "text": "(<harasser, Pablo, Lucía> me está escribiendo, debería contestar)."
+        }
+    },
+    "bedBeforeLaura": {
+        "root": {
+            "text": "(Alguien me está enviando mensajes, debería contestar)."
+        }
+    },
+    "bedAfterLaura": {
+        "root": {
+            "text": "(No puedo echarme a dormir ahora, ¡tengo que entrar a JustShare rápido!)"
+        }
+    },
+
+    
+    "closet": {
+        "root": {
+            "text": "(Ya ordenaré esto en otro momento, ¡ahora tengo que entrar a JustShare!)"
+        }
+    },
+    
+    "harasserChat": {
+        "root": {
+            "text": "He sido paciente y te he dejado tiempo, pero ya estoy cansado de esperar"
+        },
+        "choices": [
+            {
+                "text": "Dame más tiempo."
+            }
+        ],
+        "msg2": {
+            "text": "De verdad que me importas mucho pero por favor, dejame pensarmelo un poco mas"
+        },
+        "msg3": {
+            "text": "Solo inventas excusas para no contestarme"
+        },
+        "msg4": {
+            "text": "Espero que te gusten mis nuevas publicaciones <player, niñato, niñata>"
+        }
+    },
+
+    "chat2": {
+        "root": {
+            "text": "Haciendo cosas así no vas a llegar a nada"
+        },
+        "msg2": {
+            "text": "Mucha clase si si"
+        }
+    },
+
+    "chat3": {
+        "root": {
+            "text": "Tu madre estara super contenta"
+        },
+        "msg2": {
+            "text": "Menuda nos espera si gente como tu es el futuro del planeta..."
+        }
+    },
+
+    "lauraChat": {
+        "root": {
+            "text": "QUE HA PASADO??"
+        },
+        "msg2": {
+            "text": "ALGUIEN HA SUBIDO FOTOS TUYAS A JUSTSHARE!!"
+        },
+        "choices": [
+            {
+                "text": "Ha sido <harasser, Pablo, Lucía>."
+            }
+        ],
+        "msg3": {
+            "text": "Ha sido <harasser, Pablo, Lucia>"
+        },
+        "msg4": {
+            "text": "Perdon por no escucharte, tenias razón"
+        }
+    },
+
+    "stress": {
+        "root": {
+            "text": "(No puede ser, ahora todos han visto mis fotos)."
+        },
+        "worry": {
+            "text": "(Voy a ser el hazmerreír de la escuela)."
+        },
+        "wish": {
+            "text": "(Ojalá no haber conocido nunca a <harasser, Pablo, Lucía>)."
+        },
+        
+        "notExplained": {
+            "text": "(Papá y mamá van a estar muy decepcionados conmigo)."
+        }
+    },
+
+    "interruptionExplained": {
+        "root": {
+            "text": "Hemos visto que ha subido las fotos al final."
+        },
+        "sorry": {
+            "text": "Lo siento mucho, nunca debí haber enviado nada."
+        },
+        "comfort": {
+            "text": "Lo sé cariño, pero no te preocupes. Todo va a estar bien."
+        },
+        "report": {
+           "text": "Vamos a ir ahora a la comisaría a denunciar la publicación de las fotos."
+        }
+    },
+
+    "interruptionNotExplained": {
+        "root": {
+            "text": "¡{{name}}! ¿¡Qué es esto!?"
+        },
+        "ask": {
+            "text": "¿Qué has hecho?"
+
+        },
+        "explain": [
+            {
+                "text": "Ha sido <harasser, un chico, una chica> que conocí por internet."
+            },
+            {
+                "text": "Hemos estado hablando mucho y nos gustábamos..."
+            },
+            {
+                "text": "... un día nos mandamos fotos así, pero le dije que no quería seguir enviándole más..."
+            },
+            {
+                "text": "... Y ahora las ha subido porque no he hecho lo que me pedía."
+            },
+            {
+                "text": "Lo siento mucho de verdad."
+            }
+        ],
+        "scold": {
+            "text": "No debiste enviar nada así a alguien que no conoces."
+        },
+        "report": [
+            {
+                "text": "Bueno, lo hecho hecho está. Ahora vamos a la comisaría a denunciar."
+            },
+            {
+                "text": "No te preocupes cariño, todo va a estar bien."
+            },
+            {
+                "text": "Pero deberías haber venido a nosotros cuando empezaron los chantajes."
+            }
+        ]
+    }
+}

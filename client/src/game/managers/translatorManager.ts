@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
 import { Gender } from "../../types/user";
-import { DEBUG, SUPPORTED_LNGS } from "../../types/config";
+import { SUPPORTED_LNGS } from "../../types/config";
 import i18next from "i18next";
 import Backend from 'i18next-http-backend';
 

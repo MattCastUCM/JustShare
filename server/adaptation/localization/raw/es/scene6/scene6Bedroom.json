@@ -1,0 +1,75 @@
+{
+    "bed": {
+        "root": {
+            "text": "(Quiero hablar con <harasser, Pablo, Lucía> antes de irme a dormir)."
+        }
+    },
+    "closet": {
+        "root": {
+            "text": "(Quiero hablar con <harasser, Pablo, Lucía> antes de ordenarlo)."
+        }
+    },
+    "phone": {
+        "root": {
+            "text": "Llevo todo el dia pensando en la foto que me pasaste ayer"
+        },
+        "choices1": [
+            {
+                "text": "Yo también."
+            }
+        ],
+        "msg2": {
+            "text": "Yo tambien la verdad"
+        },
+        "msg3": {
+            "text": "No puedo esperar a que me mandes otraaa"
+        },
+        "choices2": [
+            {
+                "text": "Enviar otra foto."
+            },
+            {
+                "text": "Ya no quiero enviar más fotos."
+            }
+        ],
+        "msg4A": {
+            "text": "<player, [playerPhoto6Male], [playerPhoto6Female]>"
+        },
+        "msg5A": {
+            "text": "Aqui tienes ;)"
+        },
+        "msg6A": {
+            "text": "Simplemente wow, que increible"
+        },
+        "msg7A": {
+            "text": "Me alegro que te guste :)"
+        },
+        "msg8A": {
+            "text": "Yo me voy ya dormir, que descansesss"
+        },
+        "msg9A": {
+            "text": "Soñare contigo ;)"
+        },
+        "msg4B": {
+            "text": "La verdad que no me sentí muy <player, comodo, comoda> al mandarte esa foto, prefiero no enviar mas"
+        },
+        "msg5B": {
+            "text": "Que pasa, no me quieres tanto como dices?"
+        },
+        "msg6B": {
+            "text": "Mucho dices que soy de lo mejor que te ha pasado y ahora te niegas?"
+        },
+        "msg7B": {
+            "text": "No es eso, simplemente no estoy <player, comodo, comoda> del todo haciendolo otra vez"
+        },
+        "msg8B": {
+            "text": "Ya bueno, igual deberías replantearte tus prioridades"
+        },
+        "msg9B": {
+            "text": "Me voy a la cama"
+        },
+        "msg10B": {
+            "text": "Yo también me voy"
+        }
+    }
+}

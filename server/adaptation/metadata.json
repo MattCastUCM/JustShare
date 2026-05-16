@@ -1,0 +1,30 @@
+{
+    "1": {
+        "file": "scene1/scene1Classroom.json",
+        "object": "part2.thanks2",
+        "summary": "Laura me ha saludado.",
+        "choices": {
+            "Amigable y cordial.": "friendly",
+            "Neutral.": "neutral",
+            "Tímido y reservado.": "shy"
+        },
+        "remove": [
+            "Baseado en mi personalidad, si una persuna fueste cordial y amigable comigo, yo sería amigable y cordial con la persona.",
+            "Educada"
+        ]
+    },
+    "4": {
+        "choices": {},
+        "remove": [
+            "No lo conozco mucho"
+        ]
+    },
+    "7": {
+        "choices": {},
+        "remove": [
+            "Yo estaría disfruanto del momento, y empezaría a conocer más la persona que he hablado a través de un youtuber",
+            "no respondería porque me lo estoy pasando bien",
+            "Bien, ya abrieron los regalos y justo ahorita estamos comiendo. Qué tal tu día?"
+        ]
+    }
+}

@@ -1,86 +1,219 @@
 [
     {
         "index": 0,
-        "text": "Igualmente, encantado de conocerte *sonríes*.",
-        "group_index": 0,
-        "sentence_index": 0,
-        "node": "scene1Classroom_part2_thanks2"
-    },
-    {
-        "index": 0,
-        "text": "Igualmente, encantada de conocerte *sonríes*.",
+        "text": "Hola, soy [nombre]! Encantada de conocerte",
         "group_index": 0,
         "sentence_index": 0,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
         "index": 1,
-        "text": "El gusto es mío, amigo *asientes con la cabeza*.",
-        "group_index": 0,
-        "sentence_index": 1,
-        "node": "scene1Classroom_part2_thanks2"
-    },
-    {
-        "index": 1,
-        "text": "El gusto es mío, amiga *asientes con la cabeza*.",
+        "text": "Hola, soy [nombre]! Encantado de conocerte.",
         "group_index": 0,
         "sentence_index": 1,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
         "index": 2,
-        "text": "Un placer conocerte también, encantado *sonríes levemente*.",
-        "group_index": 0,
-        "sentence_index": 2,
-        "node": "scene1Classroom_part2_thanks2"
-    },
-    {
-        "index": 2,
-        "text": "Un placer conocerte también, encantada *sonríes levemente*.",
+        "text": "Holaaa buenas, soy [nombre], acabo de llegar y estoy todavía un poco perdida, y tú?",
         "group_index": 0,
         "sentence_index": 2,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
         "index": 3,
-        "text": "Gracias, si necesito algo ya te iré diciendo.",
-        "group_index": 1,
-        "sentence_index": 0,
+        "text": "Holaaa buenas, soy [nombre], acabo de llegar y estoy todavía un poco perdido, y tú?",
+        "group_index": 0,
+        "sentence_index": 3,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
         "index": 4,
-        "text": "De acuerdo, ya te diré si necesito algo.",
-        "group_index": 1,
-        "sentence_index": 1,
+        "text": "Hola Laura yo soy [nombre] encantada",
+        "group_index": 0,
+        "sentence_index": 4,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
         "index": 5,
-        "text": "Perfecto, muchas gracias por avisar.",
-        "group_index": 1,
-        "sentence_index": 2,
+        "text": "Hola Laura yo soy [nombre] encantado",
+        "group_index": 0,
+        "sentence_index": 5,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
         "index": 6,
-        "text": "... Ah, sí, hola.",
+        "text": "Hol, soy [nombre] un gusto",
+        "group_index": 0,
+        "sentence_index": 6,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 7,
+        "text": "Buenas, yo soy [nombre], encantado",
+        "group_index": 0,
+        "sentence_index": 7,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 8,
+        "text": "Encantado soy [nombre]",
+        "group_index": 0,
+        "sentence_index": 8,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 9,
+        "text": "Hola, soy [nombre] un placer",
+        "group_index": 0,
+        "sentence_index": 9,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 10,
+        "text": "Qué tal? Soy [nombre]",
+        "group_index": 0,
+        "sentence_index": 10,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 11,
+        "text": "Hola, ¿qué tal? Yo soy [nombre].",
+        "group_index": 0,
+        "sentence_index": 11,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 12,
+        "text": "Hola. Soy [nombre]. Encantado.",
+        "group_index": 0,
+        "sentence_index": 12,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 13,
+        "text": "Hola! soy [nombre], encantado también",
+        "group_index": 0,
+        "sentence_index": 13,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 14,
+        "text": "Buenas, soy [nombre]. Encantado.",
+        "group_index": 0,
+        "sentence_index": 14,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 15,
+        "text": "Qué tal, soy [nombre]",
+        "group_index": 0,
+        "sentence_index": 15,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 16,
+        "text": "¡Hola! Yo me llamo [nombre]",
+        "group_index": 0,
+        "sentence_index": 16,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 17,
+        "text": "Holaaa, soy [nombre] que ta",
+        "group_index": 0,
+        "sentence_index": 17,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 18,
+        "text": "Hola Laura, ¿qué tal? soy [nombre], encantado",
+        "group_index": 0,
+        "sentence_index": 18,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 19,
+        "text": "Hola Laura, ¿qué tal? Soy [nombre], encantado.",
+        "group_index": 0,
+        "sentence_index": 19,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 20,
+        "text": "Hola, yo [nombre], lo mismo digo.",
+        "group_index": 0,
+        "sentence_index": 20,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 21,
+        "text": "Hola Laura! Encantado de conocerte yo soy [nombre]",
+        "group_index": 0,
+        "sentence_index": 21,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 22,
+        "text": "Hola Laura! Encantada de conocerte yo soy [nombre].",
+        "group_index": 0,
+        "sentence_index": 22,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 23,
+        "text": "Hola! Soy [nombre]",
+        "group_index": 0,
+        "sentence_index": 23,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 24,
+        "text": "Encantado, soy [nombre]. ¿Tú también eres nueva aquí?",
+        "group_index": 0,
+        "sentence_index": 24,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 25,
+        "text": "Hola yo soy [nombre]",
+        "group_index": 1,
+        "sentence_index": 0,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 26,
+        "text": "Hola, Laura, encantado.",
         "group_index": 2,
         "sentence_index": 0,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
-        "index": 7,
-        "text": "Eh... claro, sí.",
+        "index": 27,
+        "text": "Hola, Laura, encantada.",
         "group_index": 2,
         "sentence_index": 1,
         "node": "scene1Classroom_part2_thanks2"
     },
     {
-        "index": 8,
-        "text": "Ah, hola.",
+        "index": 28,
+        "text": "Emmm. Hola.",
         "group_index": 2,
         "sentence_index": 2,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 29,
+        "text": "Hola",
+        "group_index": 2,
+        "sentence_index": 3,
+        "node": "scene1Classroom_part2_thanks2"
+    },
+    {
+        "index": 30,
+        "text": "Hola, soy [nombre]; mucho gusto.",
+        "group_index": 2,
+        "sentence_index": 4,
         "node": "scene1Classroom_part2_thanks2"
     }
 ]
