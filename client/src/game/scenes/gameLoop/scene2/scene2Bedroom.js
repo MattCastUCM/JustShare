@@ -23,20 +23,20 @@ export default class Scene2Bedroom extends BaseScene {
         let generalNodes = this.cache.json.get('generalDialogs');
 
         // Armario
-        let closetNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "closet", true);
+        let closetNode = super.readNodes(nodes, "scene2/scene2Bedroom", "closet", true);
         super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
             this.dialogManager.setNode(closetNode, []);
         }, false, "closet");
 
         // Cama
-        let bedNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "bed", true);
+        let bedNode = super.readNodes(nodes, "scene2/scene2Bedroom", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
 
         // Ordenador
         this.computer.socialMediaScreen.addDirectChat("harasser")
-        let pcNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "computer", true);
+        let pcNode = super.readNodes(nodes, "scene2/scene2Bedroom", "computer", true);
         this.dialogManager.setNode(pcNode, [])
 
         let canUseComputer = true
@@ -53,13 +53,13 @@ export default class Scene2Bedroom extends BaseScene {
 
         // Al producirse, aparece el icono del telefono y se recibe un mensaje
         this.dispatcher.add("endConversation", this, () => {
-            pcNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "computerUnanswered", true);
+            pcNode = super.readNodes(nodes, "scene2/scene2Bedroom", "computerUnanswered", true);
             canUseComputer = false
 
-            bedNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "bedUnanswered", true);
+            bedNode = super.readNodes(nodes, "scene2/scene2Bedroom", "bedUnanswered", true);
 
             let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
-            let phoneNode = super.readNodes(nodes, "scene2\\scene2Bedroom", "phone", true);
+            let phoneNode = super.readNodes(nodes, "scene2/scene2Bedroom", "phone", true);
             this.phoneManager.phone.addChat(chatName, "harasserPfp");
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
 

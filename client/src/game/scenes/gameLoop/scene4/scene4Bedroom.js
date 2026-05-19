@@ -32,12 +32,12 @@ export default class Scene4Bedroom extends BaseScene {
         }, false, "closet");
 
         // Cama
-        let bedNode = super.readNodes(nodes, "scene4\\scene4Bedroom", "bed", true);
+        let bedNode = super.readNodes(nodes, "scene4/scene4Bedroom", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
 
-        let phoneNode = super.readNodes(nodes, "scene4\\scene4Bedroom", "phone", true);
+        let phoneNode = super.readNodes(nodes, "scene4/scene4Bedroom", "phone", true);
         this.phoneManager.phone.setChatNode(this.chatName, phoneNode);
 
 

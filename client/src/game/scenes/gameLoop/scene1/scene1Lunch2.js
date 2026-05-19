@@ -35,7 +35,7 @@ export default class Scene1Lunch2 extends BaseScene {
         
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene1Lunch2');
-        let node = super.readNodes(nodes, "scene1\\scene1Lunch2", "main", true);
+        let node = super.readNodes(nodes, "scene1/scene1Lunch2", "main", true);
         
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
@@ -45,7 +45,7 @@ export default class Scene1Lunch2 extends BaseScene {
 
         // Al producirse, se crean los elementos interactuables de la escena
         this.dispatcher.add("parentsLeave", this, () => {
-            let doorNode = super.readNodes(nodes, "scene1\\scene1Lunch2", "door", true);
+            let doorNode = super.readNodes(nodes, "scene1/scene1Lunch2", "door", true);
             super.createInteractiveElement(890, 380, "pointer", 0.3, () => {
                 this.dialogManager.setNode(doorNode, []);
             }, false, "exitDoor");

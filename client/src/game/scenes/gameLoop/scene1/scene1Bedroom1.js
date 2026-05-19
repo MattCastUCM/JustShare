@@ -44,7 +44,7 @@ export default class Scene1Bedroom1 extends BaseScene {
         }, false, "closet");
 
         // Cama
-        let bedNode = super.readNodes(nodes, "scene1\\scene1Bedroom1", "bed", true);
+        let bedNode = super.readNodes(nodes, "scene1/scene1Bedroom1", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
@@ -53,28 +53,28 @@ export default class Scene1Bedroom1 extends BaseScene {
         // Ordenador
         // Chats
         this.computer.socialMediaScreen.addDirectChat("ana")
-        let chatNode = super.readNodes(nodes, "scene1\\scene1Bedroom1", "computerChats.ana", true);
+        let chatNode = super.readNodes(nodes, "scene1/scene1Bedroom1", "computerChats.ana", true);
         this.dialogManager.setNode(chatNode, []);
 
         this.computer.socialMediaScreen.addDirectChat("harasser")
-        let pcNode = super.readNodes(nodes, "scene1\\scene1Bedroom1", "computer1", true);
+        let pcNode = super.readNodes(nodes, "scene1/scene1Bedroom1", "computer1", true);
         this.dialogManager.setNode(pcNode, []);
 
         this.computer.socialMediaScreen.addDirectChat("mike")
-        chatNode = super.readNodes(nodes, "scene1\\scene1Bedroom1", "computerChats.mike", true);
+        chatNode = super.readNodes(nodes, "scene1/scene1Bedroom1", "computerChats.mike", true);
         this.dialogManager.setNode(chatNode, []);
 
         // Posts
         this.computer.socialMediaScreen.addPost("rndPost1", "ana")
 
         this.computer.socialMediaScreen.addPost("toniPost1", "toni", "puzzleBooblePicture")
-        let postNode = super.readNodes(nodes, "scene1\\scene1Bedroom1", "computerPosts.toniPost1", true);
+        let postNode = super.readNodes(nodes, "scene1/scene1Bedroom1", "computerPosts.toniPost1", true);
         this.dialogManager.setNode(postNode, []);
 
         this.computer.socialMediaScreen.addPost("rndPost2", "mike")
 
         this.computer.socialMediaScreen.addPost("rndPost3", "mary", "seaPicture")
-        postNode = super.readNodes(nodes, "scene1\\scene1Bedroom1", "computerPosts.rndPost3", true);
+        postNode = super.readNodes(nodes, "scene1/scene1Bedroom1", "computerPosts.rndPost3", true);
         this.dialogManager.setNode(postNode, []);
 
         let canUseComputer = true
@@ -92,10 +92,10 @@ export default class Scene1Bedroom1 extends BaseScene {
         this.dispatcher.add("answerDoor", this, () => {
             canUseComputer = false
             this.gameManager.leaveComputer(() => {
-                let node = super.readNodes(nodes, "scene1\\scene1Bedroom1", "interruption", true);
+                let node = super.readNodes(nodes, "scene1/scene1Bedroom1", "interruption", true);
                 this.dialogManager.setNode(node, [momPortrait, dadPortrait]);
 
-                pcNode = super.readNodes(nodes, "scene1\\scene1Bedroom1", "homework", true);
+                pcNode = super.readNodes(nodes, "scene1/scene1Bedroom1", "homework", true);
             })
         });
 
@@ -103,7 +103,7 @@ export default class Scene1Bedroom1 extends BaseScene {
         this.dispatcher.add("endHomework", this, () => {
             canUseComputer = true
 
-            let node = super.readNodes(nodes, "scene1\\scene1Bedroom1", "computer2", true);
+            let node = super.readNodes(nodes, "scene1/scene1Bedroom1", "computer2", true);
             this.computer.socialMediaScreen.setChatNode("harasser", node)
         });
 

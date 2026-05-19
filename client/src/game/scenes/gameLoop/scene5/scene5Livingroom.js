@@ -28,7 +28,7 @@ export default class Scene5Livingroom extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene5Livingroom');
-        let node = super.readNodes(nodes, "scene5\\scene5Livingroom", "", true);
+        let node = super.readNodes(nodes, "scene5/scene5Livingroom", "", true);
 
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {

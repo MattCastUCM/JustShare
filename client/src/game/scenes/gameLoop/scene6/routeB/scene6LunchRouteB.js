@@ -35,10 +35,10 @@ export default class Scene6LunchRouteB extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6LunchRouteB');
-        let node = super.readNodes(nodes, "scene6\\routeB\\scene6LunchRouteB", "start", true);
+        let node = super.readNodes(nodes, "scene6/routeB/scene6LunchRouteB", "start", true);
 
         let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
-        let phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6LunchRouteB", "phone", true);
+        let phoneNode = super.readNodes(nodes, "scene6/routeB/scene6LunchRouteB", "phone", true);
         this.phoneManager.phone.setChatNode(chatName, phoneNode);
 
         // Callback que al llamarse cambiara el nodo de dialogo
@@ -51,7 +51,7 @@ export default class Scene6LunchRouteB extends BaseScene {
         this.dispatcher.add("chatEnded", this, () => {
             this.phoneManager.togglePhone(false);
 
-            node = super.readNodes(nodes, "scene6\\routeB\\scene6LunchRouteB", "interruption", true);
+            node = super.readNodes(nodes, "scene6/routeB/scene6LunchRouteB", "interruption", true);
             this.dialogManager.setNode(node, [momPortrait, dadPortrait]);
         });
 

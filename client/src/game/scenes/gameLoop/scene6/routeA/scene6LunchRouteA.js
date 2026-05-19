@@ -35,7 +35,7 @@ export default class Scene6LunchRouteA extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6LunchRouteA');
-        let node = super.readNodes(nodes, "scene6\\routeA\\scene6LunchRouteA", "main", true);
+        let node = super.readNodes(nodes, "scene6/routeA/scene6LunchRouteA", "main", true);
 
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
@@ -57,8 +57,8 @@ export default class Scene6LunchRouteA extends BaseScene {
 
         // Se crean los elementos interactuables
         this.endLunch = () => {
-            let doorNodePrepared = super.readNodes(nodes, "scene6\\routeA\\scene6LunchRouteA", "doorPrepared", true);
-            let doorNodeUnprepared = super.readNodes(nodes, "scene6\\routeA\\scene6LunchRouteA", "doorUnprepared", true);
+            let doorNodePrepared = super.readNodes(nodes, "scene6/routeA/scene6LunchRouteA", "doorPrepared", true);
+            let doorNodeUnprepared = super.readNodes(nodes, "scene6/routeA/scene6LunchRouteA", "doorUnprepared", true);
 
             // Puerta a la calle
             let doorIcon = super.createInteractiveElement(890, 380, "pointer", 0.3, () => {

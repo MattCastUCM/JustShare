@@ -23,20 +23,20 @@ export default class Scene5Bedroom extends BaseScene {
         let generalNodes = this.cache.json.get('generalDialogs');
 
         // Armario
-        let closetNode = super.readNodes(nodes, "scene5\\scene5Bedroom", "closet", true);
+        let closetNode = super.readNodes(nodes, "scene5/scene5Bedroom", "closet", true);
         super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
             this.dialogManager.setNode(closetNode, []);
         }, false, "closet");
 
         // Cama
-        let bedNode = super.readNodes(nodes, "scene5\\scene5Bedroom", "bed", true);
+        let bedNode = super.readNodes(nodes, "scene5/scene5Bedroom", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
 
 
         this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
-        let phoneNode = super.readNodes(nodes, "scene5\\scene5Bedroom", "phone", true);
+        let phoneNode = super.readNodes(nodes, "scene5/scene5Bedroom", "phone", true);
         this.dialogManager.setNode(phoneNode, []);
 
 

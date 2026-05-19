@@ -27,7 +27,7 @@ export default class Scene3Break extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene3Break');
-        let node = super.readNodes(nodes, "scene3\\scene3Break", "conversation1", true);
+        let node = super.readNodes(nodes, "scene3/scene3Break", "conversation1", true);
         this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
 
 
@@ -37,7 +37,7 @@ export default class Scene3Break extends BaseScene {
         }
 
         this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
-        let phoneNode = super.readNodes(nodes, "scene3\\scene3Break", "fill", true);
+        let phoneNode = super.readNodes(nodes, "scene3/scene3Break", "fill", true);
         this.dialogManager.setNode(phoneNode, []);
 
         // Ajusta las posiciones de la caja de texto para que esten por debajo del movil (solo en esta escena)
@@ -110,7 +110,7 @@ export default class Scene3Break extends BaseScene {
             this.phoneManager.toggling = false;
             this.phoneManager.togglePhone(false);
 
-            node = super.readNodes(nodes, "scene3\\scene3Break", "conversation2", true);
+            node = super.readNodes(nodes, "scene3/scene3Break", "conversation2", true);
             this.dialogManager.setNode(node, [lauraPortrait], false);
         });
 
@@ -147,7 +147,7 @@ export default class Scene3Break extends BaseScene {
 
     sendMsg(nodes, msg) {
         let nodeName = "phone" + msg;
-        let phoneNode = super.readNodes(nodes, "scene3\\scene3Break", nodeName, true);
+        let phoneNode = super.readNodes(nodes, "scene3/scene3Break", nodeName, true);
 
         this.phoneManager.phone.addChat(this.chatName, "harasserPfp");
         this.phoneManager.phone.setChatNode(this.chatName, phoneNode);

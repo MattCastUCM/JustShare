@@ -39,7 +39,7 @@ export default class TrackerManager {
         catch {
             this.tracker = new Tracker(
                 new LRS({
-                    baseUrl: import.meta.env.VITE_LRS_BASE_URL,
+                    baseUrl: import.meta.env.VITE_LRS_URL,
                     authScheme: new BasicAuthentication(
                         import.meta.env.VITE_LRS_USERNAME,
                         import.meta.env.VITE_LRS_PASSWORD

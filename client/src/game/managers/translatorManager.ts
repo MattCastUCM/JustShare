@@ -42,7 +42,7 @@ export default class TranslatorManager {
 
     public loadDialogs(scene: Scene, dialogs: string[]) {
         // Archivos de dialogos (estructura)
-        scene.load.setPath('localization/structure');
+        scene.load.setPath(`${import.meta.env.VITE_API_URL}/localization/structure`);
 
         dialogs.forEach(dialog => {
             // Quedarse con la ultima parte del path, que corresponde con el id del archivo
@@ -84,7 +84,7 @@ export default class TranslatorManager {
                     // La ruta desde donde cargamos las traducciones
                     // {{lng}} --> nombre carpeta de cada uno de los idiomas
                     // {{ns}} --> nombre carpeta de cada uno de los namespaces
-                    loadPath: 'localization/{{lng}}/{{ns}}.json'
+                    loadPath: `${import.meta.env.VITE_API_URL}/localization/{{lng}}/{{ns}}.json`
                 }
             })
     }

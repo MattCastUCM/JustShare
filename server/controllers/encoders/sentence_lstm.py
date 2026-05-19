@@ -9,6 +9,7 @@ import numpy as np
 import torch
 from controllers.encoders.encoder import Encoder
 from utils.vector_numpy import l2_normalize
+import siamese_lstm.features.vectorizer
 
 class SentenceLSTM(Encoder):
     name = "lstm"

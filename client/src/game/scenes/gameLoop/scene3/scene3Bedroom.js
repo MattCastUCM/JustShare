@@ -21,10 +21,10 @@ export default class Scene3Bedroom extends BaseScene {
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene3Bedroom');
 
-        let node = super.readNodes(nodes, "scene3\\scene3Bedroom", "main", true);
+        let node = super.readNodes(nodes, "scene3/scene3Bedroom", "main", true);
 
         this.chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
-        let phoneNode = super.readNodes(nodes, "scene3\\scene3Bedroom", "fill", true);
+        let phoneNode = super.readNodes(nodes, "scene3/scene3Bedroom", "fill", true);
         this.dialogManager.setNode(phoneNode, []);
 
         this.phoneManager.togglePhone(true, 0, () => {

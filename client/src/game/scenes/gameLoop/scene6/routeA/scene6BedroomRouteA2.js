@@ -28,15 +28,15 @@ export default class Scene6BedroomRouteA2 extends BaseScene {
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6BedroomRouteA2');
 
-        let node = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "dad", true);
+        let node = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "dad", true);
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
             this.dialogManager.setNode(node, [dadPortrait]);
         }
         
-        let bedNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "bed", true);
-        let pcNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "computer", true);
-        let closetNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "closet", true);
+        let bedNode = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "bed", true);
+        let pcNode = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "computer", true);
+        let closetNode = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "closet", true);
 
         // Al producirse, hace aparecer los elementos interactuables
         this.dispatcher.add("spawnInteractions", this, () => {
@@ -67,14 +67,14 @@ export default class Scene6BedroomRouteA2 extends BaseScene {
 
         // Al producirse, cambia los nodos de dialogo de los elementos interactuables
         this.dispatcher.add("endLunch", this, () => {
-            bedNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "bedAfterLunch", true);
-            pcNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "computerAfterLunch", true);
-            closetNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "closetAfterLunch", true);
+            bedNode = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "bedAfterLunch", true);
+            pcNode = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "computerAfterLunch", true);
+            closetNode = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "closetAfterLunch", true);
         });
         
         // Al producirse, cambia el nodo de dialogo del armario
         this.dispatcher.add("prepare", this, () => {
-            closetNode = super.readNodes(nodes, "scene6\\routeA\\scene6BedroomRouteA2", "closetAfterDressing", true);
+            closetNode = super.readNodes(nodes, "scene6/routeA/scene6BedroomRouteA2", "closetAfterDressing", true);
         });
     }
 

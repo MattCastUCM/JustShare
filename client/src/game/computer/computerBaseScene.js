@@ -77,7 +77,6 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     setNamespace(namespace) {
-        // this.namespace = namespace.replace(/\//g, '\\');
         this.namespace = namespace;
     }
 
@@ -86,7 +85,6 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     translateWithNamespace(transId, namespace, options = {}) {
-        // namespace = namespace.replace(/\//g, '\\');
         return this.translatorManager.translate(transId, namespace, options)
     }
 

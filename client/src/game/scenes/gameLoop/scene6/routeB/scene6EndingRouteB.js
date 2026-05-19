@@ -35,7 +35,7 @@ export default class Scene6EndingRouteB extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6EndingRouteB');
-        let node = super.readNodes(nodes, "scene6\\routeB\\scene6EndingRouteB", "main", true);
+        let node = super.readNodes(nodes, "scene6/routeB/scene6EndingRouteB", "main", true);
 
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
@@ -46,20 +46,20 @@ export default class Scene6EndingRouteB extends BaseScene {
         this.dispatcher.add("end", this, () => {
             setTimeout(() => {
                 // Armario
-                let closetNode = super.readNodes(nodes, "scene6\\routeB\\scene6EndingRouteB", "closet", true);
+                let closetNode = super.readNodes(nodes, "scene6/routeB/scene6EndingRouteB", "closet", true);
                 super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
                     this.dialogManager.setNode(closetNode, []);
                 }, false, "closet");
 
                 // Cama
-                let bedNode = super.readNodes(nodes, "scene6\\routeB\\scene6EndingRouteB", "bed", true);
+                let bedNode = super.readNodes(nodes, "scene6/routeB/scene6EndingRouteB", "bed", true);
                 super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
                     this.dialogManager.setNode(bedNode, []);
                 }, false, "bed");
 
 
                 // Ordenador
-                let pcNode = super.readNodes(nodes, "scene6\\routeB\\scene6EndingRouteB", "computer", true);
+                let pcNode = super.readNodes(nodes, "scene6/routeB/scene6EndingRouteB", "computer", true);
                 super.createInteractiveElement(1390, 400, "pointer", 0.3, () => {
                     this.dialogManager.setNode(pcNode, []);
                 }, false, "computer");

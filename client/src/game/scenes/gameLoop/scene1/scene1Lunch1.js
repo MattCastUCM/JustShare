@@ -35,7 +35,7 @@ export default class Scene1Lunch1 extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene1Lunch1');
-        let node = super.readNodes(nodes, "scene1\\scene1Lunch1", "main", true);
+        let node = super.readNodes(nodes, "scene1/scene1Lunch1", "main", true);
 
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
@@ -44,7 +44,7 @@ export default class Scene1Lunch1 extends BaseScene {
 
         // Al producirse, cambia de dialogo
         this.dispatcher.add("endLunch", this, () => {
-            let thoughtNode = super.readNodes(nodes, "scene1\\scene1Lunch1", "endLunch", true);
+            let thoughtNode = super.readNodes(nodes, "scene1/scene1Lunch1", "endLunch", true);
             this.dialogManager.setNode(thoughtNode, []);
         });
 
@@ -53,7 +53,7 @@ export default class Scene1Lunch1 extends BaseScene {
             this.phoneManager.activatePhoneIcon(true);
 
             let chatName = this.translatorManager.translate("textMessages.chat1", "deviceInfo");
-            let phoneNode = super.readNodes(nodes, "scene1\\scene1Lunch1", "phone", true);
+            let phoneNode = super.readNodes(nodes, "scene1/scene1Lunch1", "phone", true);
             this.phoneManager.phone.addChat(chatName, "lauraPfp");
             this.dialogManager.setNode(phoneNode, []);
         })
@@ -68,7 +68,7 @@ export default class Scene1Lunch1 extends BaseScene {
                 this.dialogManager.setNode(doorNode, []);
             }, false, "exitDoor");
 
-            let bedroomNode = super.readNodes(nodes, "scene1\\scene1Lunch1", "unanswered", true);
+            let bedroomNode = super.readNodes(nodes, "scene1/scene1Lunch1", "unanswered", true);
             super.createInteractiveElement(1140, 380, "enter", 0.4, () => {
                 if (msgAnswered) {
                     this.sceneManager.changeScene("Scene1Bedroom1", {}, true);

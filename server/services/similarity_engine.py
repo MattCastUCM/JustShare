@@ -1,10 +1,10 @@
 from controllers.encoders.jaccard import JaccardEncoder
 from services.multilingual_manager import MultilingualManager
-from schemas.similarity import SearchMethod
 from controllers.hybrid import HybridRetriever, FusionMethod
 from controllers.retrievers.retriever import Retriever
-from typing import Optional
 from utils.vector_numpy import cosine_similarity
+from schemas.similarity import SearchMethod
+from typing import Optional
 
 class SimilarityEngine:
     def __init__(self, manager: MultilingualManager):

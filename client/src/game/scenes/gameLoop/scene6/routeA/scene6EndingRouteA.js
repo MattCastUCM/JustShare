@@ -21,7 +21,7 @@ export default class Scene6EndingRouteA extends BaseScene {
         this.dispatcher.add("addMomChat", this, () => {
             let chatName = this.translatorManager.translate("textMessages.chat4", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "momPfp");
-            let phoneNode = super.readNodes(this.nodes, "scene6\\routeA\\scene6EndingRouteA", "mom", true);
+            let phoneNode = super.readNodes(this.nodes, "scene6/routeA/scene6EndingRouteA", "mom", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
         });
 
@@ -65,7 +65,7 @@ export default class Scene6EndingRouteA extends BaseScene {
             setTimeout(() => {
                 let chatName = this.translatorManager.translate("textMessages.chat3", "deviceInfo");
                 this.phoneManager.phone.addChat(chatName, "dadPfp");
-                let phoneNode = super.readNodes(this.nodes, "scene6\\routeA\\scene6EndingRouteA", "dad", true);
+                let phoneNode = super.readNodes(this.nodes, "scene6/routeA/scene6EndingRouteA", "dad", true);
                 this.phoneManager.phone.setChatNode(chatName, phoneNode);
             }, 1000);
         }, 1000);

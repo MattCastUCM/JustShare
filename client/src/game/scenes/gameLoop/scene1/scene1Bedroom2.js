@@ -29,18 +29,18 @@ export default class Scene1Bedroom2 extends BaseScene {
         }, false, "closet");
 
         // Cama
-        let bedNode = super.readNodes(nodes, "scene1\\scene1Bedroom2", "bed", true);
+        let bedNode = super.readNodes(nodes, "scene1/scene1Bedroom2", "bed", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
 
         // Ordenador
         this.computer.socialMediaScreen.addDirectChat("harasser")
-        let pcNode = super.readNodes(nodes, "scene1\\scene1Bedroom2", "computer", true);
+        let pcNode = super.readNodes(nodes, "scene1/scene1Bedroom2", "computer", true);
         this.dialogManager.setNode(pcNode, []);
 
         this.computer.socialMediaScreen.addPost("toniPost2", "toni")
-        let postNode = super.readNodes(nodes, "scene1\\scene1Bedroom2", "toniPost2", true);
+        let postNode = super.readNodes(nodes, "scene1/scene1Bedroom2", "toniPost2", true);
         this.dialogManager.setNode(postNode, []);
 
         let canUseComputer = true

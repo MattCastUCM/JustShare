@@ -50,19 +50,19 @@ export default class Scene1Break extends BaseScene {
     addTables() {
         this.interactedTables = 0;
 
-        let nodeTable1 = super.readNodes(this.nodes, "scene1\\scene1Break", "tables1", true);
+        let nodeTable1 = super.readNodes(this.nodes, "scene1/scene1Break", "tables1", true);
         super.createInteractiveElement(550, 480, "pointer", 0.3, () => {
             this.dialogManager.setNode(nodeTable1, []);
             this.interactedTables++;
         }, true, "table");
 
-        let nodeTable2 = super.readNodes(this.nodes, "scene1\\scene1Break", "tables2", true);
+        let nodeTable2 = super.readNodes(this.nodes, "scene1/scene1Break", "tables2", true);
         super.createInteractiveElement(980, 460, "pointer", 0.3, () => {
             this.dialogManager.setNode(nodeTable2, []);
             this.interactedTables++;
         }, true, "table");
 
-        let nodeTable3 = super.readNodes(this.nodes, "scene1\\scene1Break", "tables3", true);
+        let nodeTable3 = super.readNodes(this.nodes, "scene1/scene1Break", "tables3", true);
         super.createInteractiveElement(1300, 520, "pointer", 0.4, () => {
             this.dialogManager.setNode(nodeTable3, []);
             this.interactedTables++;
@@ -80,7 +80,7 @@ export default class Scene1Break extends BaseScene {
     // Comprueba si se ha interactuado con todas las mesas y si es asi, cambia el nodo de dialogo
     checkAllTables() {
         if (this.interactedTables >= 3) {
-            let node = super.readNodes(this.nodes, "scene1\\scene1Break", "mainConversation", true);
+            let node = super.readNodes(this.nodes, "scene1/scene1Break", "mainConversation", true);
             setTimeout(() => {
                 this.dialogManager.setNode(node, [this.portraits.get("laura")]);
             }, 500);

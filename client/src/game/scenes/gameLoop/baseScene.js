@@ -500,7 +500,7 @@ export default class BaseScene extends Scene {
                         node.name = this.computer.getUsername()
                     }
                     else {
-                        node.name = this.translatorManager.translate(character, "computer\\usernames");
+                        node.name = this.translatorManager.translate(character, "computer/usernames");
                     }
                 }
             }
@@ -541,7 +541,7 @@ export default class BaseScene extends Scene {
                 node.pfp = 'unknownPfp'
             }
             else {
-                node.name = this.translatorManager.translate(node.character, "computer\\usernames");
+                node.name = this.translatorManager.translate(node.character, "computer/usernames");
 
                 let pfpsFile = this.cache.json.get('profilePictures');
                 node.pfp = pfpsFile[node.character]

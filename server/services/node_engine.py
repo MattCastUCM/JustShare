@@ -22,8 +22,7 @@ class NodeEngine:
 			calibrator=self.calibrator
 		)
 		retriever.fit(corpus)
-		# retriever.add_metadata(flat_meta)
-
+		
 		self.retrievers[node_key] = retriever
 
 		return retriever

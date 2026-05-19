@@ -190,7 +190,6 @@ export default class Preloader extends Scene {
         // Son tanto archivos de dialogos como namespaces de i18next
         // Ruta archivo dialogo --> structure/test/dialog.json
         // Id archivo dialogo --> dialog
-        // Namespace --> test\\dialog.json
         this.dialogs = [
             "generalDialogs",
             "scene1/scene1Classroom",
@@ -233,7 +232,6 @@ export default class Preloader extends Scene {
         ]
 
         // Solo son namespaces del plugin i18next
-        // Namespace --> test\\dialog.json
         this.namespaces = [
             "names",
 

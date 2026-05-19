@@ -34,7 +34,7 @@ export default class Scene2Break extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene2Break');
-        let node = super.readNodes(nodes, "scene2\\scene2Break", "part1", true);
+        let node = super.readNodes(nodes, "scene2/scene2Break", "part1", true);
 
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {
@@ -46,7 +46,7 @@ export default class Scene2Break extends BaseScene {
         this.dispatcher.add("paulaAppear", this, () => {
             lauraTr.x = this.CANVAS_WIDTH / 2 - this.CANVAS_WIDTH / 5;
             lauraPortrait.setPosX(lauraTr.x);
-            node = super.readNodes(nodes, "scene2\\scene2Break", "part2", true);
+            node = super.readNodes(nodes, "scene2/scene2Break", "part2", true);
             this.dialogManager.setNode(node, [lauraPortrait, paulaPortrait]);
         });
 

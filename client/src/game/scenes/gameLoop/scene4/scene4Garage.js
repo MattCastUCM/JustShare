@@ -35,7 +35,7 @@ export default class Scene4Garage extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene4Garage');
-        let node = super.readNodes(nodes, "scene4\\scene4Garage", "gifts", true);
+        let node = super.readNodes(nodes, "scene4/scene4Garage", "gifts", true);
 
         let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
 
@@ -56,7 +56,7 @@ export default class Scene4Garage extends BaseScene {
         // Al producirse, se hace que se pueda contestar al movil
         this.dispatcher.add("endGifts", this, () => {
             setTimeout(() => {
-                let phoneNode = super.readNodes(nodes, "scene4\\scene4Garage", "phone1", true);
+                let phoneNode = super.readNodes(nodes, "scene4/scene4Garage", "phone1", true);
                 this.phoneManager.phone.setChatNode(chatName, phoneNode);
             }, 1);
         });
@@ -64,21 +64,21 @@ export default class Scene4Garage extends BaseScene {
         // Al producirse, aparece el icono para interactuar con los regalos
         this.dispatcher.add("takePhoto", this, () => {
             super.createInteractiveElement(800, 430, "pointer", 0.4, () => {
-                let node = super.readNodes(nodes, "scene4\\scene4Garage", "photo", true);
+                let node = super.readNodes(nodes, "scene4/scene4Garage", "photo", true);
                 this.dialogManager.setNode(node, [paulaPortrait]);
             }, true, "photo");
         });
 
         // Al producirse, se recibe un mensaje en el movil
         this.dispatcher.add("endPhoto", this, () => {
-            let phoneNode = super.readNodes(nodes, "scene4\\scene4Garage", "phone2", true);
+            let phoneNode = super.readNodes(nodes, "scene4/scene4Garage", "phone2", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
         });
 
         // Al producirse, se guarda el movil y se pone la conversacion con laura
         this.dispatcher.add("lauraInterrupt", this, () => {
             this.phoneManager.togglePhone(false);
-            let node = super.readNodes(nodes, "scene4\\scene4Garage", "interruption", true);
+            let node = super.readNodes(nodes, "scene4/scene4Garage", "interruption", true);
             this.dialogManager.setNode(node, [lauraPortrait]);
         });
 

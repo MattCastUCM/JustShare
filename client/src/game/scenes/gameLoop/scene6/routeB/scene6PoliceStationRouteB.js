@@ -38,7 +38,7 @@ export default class Scene6PoliceStationRouteB extends BaseScene {
 
         // Lee el archivo de nodos
         let nodes = this.cache.json.get('scene6PoliceStationRouteB');
-        let node = super.readNodes(nodes, "scene6\\routeB\\scene6PoliceStationRouteB", "", true);
+        let node = super.readNodes(nodes, "scene6/routeB/scene6PoliceStationRouteB", "", true);
 
         // Callback que al llamarse cambiara el nodo de dialogo
         this.setNode = () => {

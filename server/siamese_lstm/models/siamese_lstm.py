@@ -27,6 +27,10 @@ class SiameseLSTM(Model):
 			initializer = "uniform"
 			trainable = True	
 
+		# Cuando se usa mask_zero=True, queda así:
+		# 0 -> [PAD]
+		# 1 -> [UNK]
+		# 2... -> Vocabulario real
 		self.embedding = layers.Embedding(
 			input_dim=vocab_size,
 			output_dim=embedding_dim,

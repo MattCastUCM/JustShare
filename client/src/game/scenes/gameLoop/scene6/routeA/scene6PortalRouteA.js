@@ -55,22 +55,22 @@ export default class Scene6PortalRouteA extends BaseScene {
     }
     
     addDoors() {
-        let nodeDoor1 = super.readNodes(this.nodes, "scene6\\routeA\\scene6PortalRouteA", "incorrectDoor1", true);
+        let nodeDoor1 = super.readNodes(this.nodes, "scene6/routeA/scene6PortalRouteA", "incorrectDoor1", true);
         let door1 = super.createInteractiveElement(260, 380, "pointer", 0.3, () => {
             this.dialogManager.setNode(nodeDoor1, []);
         }, true, "portalDoor");
 
-        let nodeDoor2 = super.readNodes(this.nodes, "scene6\\routeA\\scene6PortalRouteA", "incorrectDoor2", true);
+        let nodeDoor2 = super.readNodes(this.nodes, "scene6/routeA/scene6PortalRouteA", "incorrectDoor2", true);
         let door2 = super.createInteractiveElement(820, 330, "pointer", 0.3, () => {
             this.dialogManager.setNode(nodeDoor2, []);
         }, true, "portalDoor");
 
-        let nodeDoor3 = super.readNodes(this.nodes, "scene6\\routeA\\scene6PortalRouteA", "incorrectDoor3", true);
+        let nodeDoor3 = super.readNodes(this.nodes, "scene6/routeA/scene6PortalRouteA", "incorrectDoor3", true);
         let door3 = super.createInteractiveElement(990, 330, "pointer", 0.3, () => {
             this.dialogManager.setNode(nodeDoor3, []);
         }, true, "portalDoor");
 
-        let nodeDoor4 = super.readNodes(this.nodes, "scene6\\routeA\\scene6PortalRouteA", "main", true);
+        let nodeDoor4 = super.readNodes(this.nodes, "scene6/routeA/scene6PortalRouteA", "main", true);
         let door4 = super.createInteractiveElement(490, 330, "pointer", 0.3, () => {
             this.dialogManager.setNode(nodeDoor4, [this.portraits.get("harasser")]);
         }, true, "harasserDoor");

@@ -87,7 +87,7 @@ export class SimilarityNode extends DialogNode {
         {
             "type": "similarity",
             "threshold": 0.5,
-            "method": "sentence_transformers",
+            "method": "tfidf",
             "character": "player",
             "choices": [
                 {

@@ -2,7 +2,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
 
 class Settings(BaseSettings):
-	embed_dim: int = 400
 	batch_size: int = 64
 
 	mlp_dropout: float = 0.4

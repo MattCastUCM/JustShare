@@ -333,7 +333,7 @@ export default class DialogManager {
         };
 
         const request = {
-            baseURL: import.meta.env.VITE_ML_BASE_URL,
+            baseURL: import.meta.env.VITE_API_URL,
             url: `/similarity/${method}`,
             method: "post",
             headers: {

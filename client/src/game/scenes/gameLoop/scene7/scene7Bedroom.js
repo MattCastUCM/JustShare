@@ -34,7 +34,7 @@ export default class Scene7Bedroom extends BaseScene {
         // Laura
         let chatName = this.translatorManager.translate("textMessages.chat1", "deviceInfo");
         this.phoneManager.phone.addChat(chatName, "lauraPfp");
-        let phoneNode = super.readNodes(nodes, "scene7\\scene7Bedroom", "lauraChat", true);
+        let phoneNode = super.readNodes(nodes, "scene7/scene7Bedroom", "lauraChat", true);
         this.phoneManager.phone.setChatNode(chatName, phoneNode);
 
         // Quitar notificaciones de los mensajes anteriores
@@ -43,7 +43,7 @@ export default class Scene7Bedroom extends BaseScene {
 
             chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "harasserPfp");
-            phoneNode = super.readNodes(nodes, "scene7\\scene7Bedroom", "phone", true);
+            phoneNode = super.readNodes(nodes, "scene7/scene7Bedroom", "phone", true);
             this.dialogManager.setNode(phoneNode, []);
 
             this.phoneManager.togglePhone(true, 0, () => {
@@ -65,7 +65,7 @@ export default class Scene7Bedroom extends BaseScene {
             chatName = this.translatorManager.translate("textMessages.chat3", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "dadPfp");
 
-            let phoneNode = super.readNodes(nodes, "scene7\\scene7Bedroom", "callButton", true);
+            let phoneNode = super.readNodes(nodes, "scene7/scene7Bedroom", "callButton", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
         });
 
@@ -85,7 +85,7 @@ export default class Scene7Bedroom extends BaseScene {
             momPortrait.setFlipX(true);
             this.portraits.set("mom", momPortrait);
 
-            let node = super.readNodes(nodes, "scene7\\scene7Bedroom", "call", true);
+            let node = super.readNodes(nodes, "scene7/scene7Bedroom", "call", true);
             this.dialogManager.setNode(node, [dadPortrait, momPortrait]);
         });
 

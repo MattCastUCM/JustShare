@@ -25,7 +25,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
 
         let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
         this.phoneManager.phone.addChat(chatName, "harasserPfp");
-        let phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "harasserChat", true);
+        let phoneNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "harasserChat", true);
         this.dialogManager.setNode(phoneNode, []);
 
         this.phoneManager.togglePhone(true, 100, () => {
@@ -39,7 +39,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
         }, false, "closet");
 
         // Cama
-        let bedNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "bedStart", true);
+        let bedNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "bedStart", true);
         super.createInteractiveElement(790, 550, "pointer", 0.3, () => {
             this.dialogManager.setNode(bedNode, []);
         }, false, "bed");
@@ -48,23 +48,23 @@ export default class Scene6BedroomRouteB extends BaseScene {
         this.dispatcher.add("harasserChatEnded", this, () => {
             chatName = this.translatorManager.translate("textMessages.chat5", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "unknownPfp");
-            phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "chat2", true);
+            phoneNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "chat2", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
 
-            bedNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "bedBeforeLaura", true);
+            bedNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "bedBeforeLaura", true);
         });
 
         this.dispatcher.add("chat2Ended", this, () => {
             chatName = this.translatorManager.translate("textMessages.chat6", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "unknownPfp");
-            phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "chat3", true);
+            phoneNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "chat3", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
         });
 
         this.dispatcher.add("chat3Ended", this, () => {
             chatName = this.translatorManager.translate("textMessages.chat1", "deviceInfo");
             this.phoneManager.phone.addChat(chatName, "lauraPfp");
-            phoneNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "lauraChat", true);
+            phoneNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "lauraChat", true);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
         });
 
@@ -81,8 +81,8 @@ export default class Scene6BedroomRouteB extends BaseScene {
 
         // Al producirse, se cambian los nodos de la cama y el armario
         this.dispatcher.add("lauraChatEnded", this, () => {
-            bedNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "bedAfterLaura", true);
-            closetNode = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "closet", true);
+            bedNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "bedAfterLaura", true);
+            closetNode = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "closet", true);
 
             // Ordenador
             super.createInteractiveElement(1390, 400, "pointer", 0.3, () => {
@@ -93,7 +93,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
                     computerCamera.postFX.addVignette(0.5, 0.55, 0.54, 0.5)
                     computerCamera.shake(20000, 0.001)
 
-                    let node = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "stress", true);
+                    let node = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "stress", true);
                     this.dialogManager.setNode(node, []);
                 })
             }, false, "computer");
@@ -119,10 +119,10 @@ export default class Scene6BedroomRouteB extends BaseScene {
 
                 let node = null;
                 if (this.gameManager.blackboard.has("explained")) {
-                    node = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "interruptionExplained", true);
+                    node = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "interruptionExplained", true);
                 }
                 else {
-                    node = super.readNodes(nodes, "scene6\\routeB\\scene6BedroomRouteB", "interruptionNotExplained", true);
+                    node = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "interruptionNotExplained", true);
                 }
                 setTimeout(() => {
                     this.dialogManager.setNode(node, [dadPortrait, momPortrait]);
