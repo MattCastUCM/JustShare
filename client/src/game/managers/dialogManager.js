@@ -370,7 +370,7 @@ export default class DialogManager {
 
             for (const [method, score] of Object.entries(scores)) {
                 if (!exceedThresholds) break;
-
+                
                 if (score.value > 0 && method in thresholds) {
                     const threshold = thresholds[method]
                     // TRACKER EVENT

@@ -124,7 +124,13 @@ class ModelRegistry:
 			else:
 				self.spacy_loaders[lang] = self._create_loader(
 					"spaCy", lang,
-					lambda n=name: spacy.load(n, disable=["parser", "ner"])
+					lambda n=name: spacy.load(n, disable=[
+						"parser",
+						"ner",
+						"textcat",
+						"senter",
+						"attribute_ruler"
+					])
 				)
 	
 	def active_model_types(self):

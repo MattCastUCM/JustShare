@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from controllers.encoders.encoder import Encoder
 from typing import Optional
 from services.calibrator_factory import Calibrator
-from adaptation.utils import apply_name_patterns
 import numpy as np
 
 class Retriever(ABC):
@@ -16,10 +15,10 @@ class Retriever(ABC):
             raise ValueError(f"{self.__class__.__name__} is not fitted.")
 
         # Aplicar expresiones regulares para tratar de enmascarar nombres propios de personas
-        processed_query = apply_name_patterns(query, replacement_token)
-        print(processed_query)
+        # processed_query = apply_name_patterns(query, replacement_token)
+        # print(processed_query)
 
-        idx, scores, texts = self._search(processed_query, top_k)
+        idx, scores, texts = self._search(query, top_k)
 
         scores = self._postprocess_scores(scores)
         return idx, scores, texts

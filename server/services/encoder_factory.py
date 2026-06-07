@@ -25,7 +25,7 @@ class EncoderFactory:
 			text_steps=[
 				pre.clean_text,
 				pre.remove_accents,
-				pre.autocorrect,
+				# pre.autocorrect,
 			],
 			token_steps=[
 				pre.remove_stopwords,
@@ -50,7 +50,7 @@ class EncoderFactory:
 			text=text,
 			text_steps=[
 				pre.clean_text,
-				pre.autocorrect,
+				# pre.autocorrect,
 			],
 			token_steps=[
 				pre.remove_stopwords,

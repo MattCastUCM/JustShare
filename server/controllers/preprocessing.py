@@ -1,13 +1,13 @@
 import re
 import unicodedata
-from autocorrect import Speller
 from core.language_name import get_language_name
-from pydantic import BaseModel
 from typing import Callable
 from spacy.language import Language
 from nltk import SnowballStemmer
+from dataclasses import dataclass
 
-class Token(BaseModel):
+@dataclass(slots=True)
+class Token:
 	text: str
 	lemma: str = ""
 	stem: str = ""
@@ -17,12 +17,19 @@ TextStep = Callable[[str], str]
 TokenStep = Callable[[list[Token]], list[Token]]
 
 class TextPreprocessor:
+	URL_RE = re.compile(r"http\S+|www\S+")
+	PUNCT_RE = re.compile(r"[^\w\s]", re.UNICODE)
+	DIGIT_RE = re.compile(r"\d+")
+	SPACE_RE = re.compile(r"\s+")
+	ACCENT_RE = re.compile(r"[\u0300-\u036f]")
+
+	TOKEN_FIELDS = frozenset({"text", "lemma", "stem", "pos"})
+
 	MIN_NGRAM_SIZE = 2
 
 	def __init__(self, language: str, nlp: Language):
 		self.stopwords = nlp.Defaults.stop_words
 		self.stemmer = SnowballStemmer(get_language_name(language))
-		self.speller = Speller(language)
 		self.nlp = nlp
 
 	# --------------------
@@ -33,24 +40,22 @@ class TextPreprocessor:
 		text = text.lower()
 
 		# Eliminar URLs
-		text = re.sub(r"http\S+|www\S+", " ", text)
+		text = self.URL_RE.sub(" ", text)
 
 		# Eliminar todo excepto letras de cualquier idioma y números
-		text = re.sub(r"[^\w\s]", " ", text, flags=re.UNICODE)
+		text = self.PUNCT_RE.sub(" ", text)
+
 		# Eliminar números
-		text = re.sub(r"\d+", " ", text)
+		text = self.DIGIT_RE.sub(" ", text)
 
 		# Juntar espacios múltiples
-		text = re.sub(r"\s+", " ", text).strip()
+		text = self.SPACE_RE.sub(" ", text).strip()
 
 		return text
 	
 	def remove_accents(self, text: str):
 		text = unicodedata.normalize("NFD", text)
-		return re.sub(r"[\u0300-\u036f]", "", text)
-	
-	def autocorrect(self, text: str):
-		return self.speller.autocorrect_sentence(text)
+		return self.ACCENT_RE.sub(text, "")
 	
 	def remove_stopwords(self, tokens: list[Token]):
 		tokens = [token for token in tokens if not token.text.lower() in self.stopwords]
@@ -61,22 +66,26 @@ class TextPreprocessor:
 			token.stem = self.stemmer.stem(token.text)
 		return tokens
 	
-	def tokenize(self, text: str) -> list[Token]:
+	def tokenize(self, text: str, with_features: bool = True) -> list[Token]:
+		if not with_features:
+			doc = self.nlp.make_doc(text)
+			return [Token(text=t.text) for t in doc]
+
 		doc = self.nlp(text)
-		tokens = []
-		for spacy_token in doc:
-			token = Token(
-				text=spacy_token.text,
-				lemma=spacy_token.lemma_,
-				pos=spacy_token.pos_
+
+		return [
+			Token(
+				text=t.text,
+				lemma=t.lemma_,
+				pos=t.pos_,
 			)
-			tokens.append(token)
-		return tokens
-	
-	def pipeline_tokenize(self, text: str, steps: list[TextStep]):
+			for t in doc
+		]
+
+	def pipeline_tokenize(self, text: str, steps: list[TextStep], with_feature: bool = True):
 		for step in steps:
 			text = step(text)
-		return self.tokenize(text)
+		return self.tokenize(text, with_feature)
 	
 	# --------------------
 	# Ngrams
@@ -92,7 +101,7 @@ class TextPreprocessor:
 	def add_ngrams_to_tokens(self, tokens: list[Token], min_n: int, max_n: int, field: str = "text", sep: str = "_"):
 		text_tokens = [getattr(token, field, token.text) for token in tokens]
 
-		all_tokens = tokens[:]
+		all_tokens = tokens.copy()
 		for n in range(min_n, max_n + 1):
 			ngrams = self._ngrams(text_tokens, n, sep=sep)
 			all_tokens.extend(Token(text=ngram) for ngram in ngrams)
@@ -103,12 +112,16 @@ class TextPreprocessor:
 	# --------------------
 	
 	def map_tokens(self, tokens: list[Token], fields: list[str], func: Callable[[str], str]):
+		valid_fields = [
+            field
+            for field in fields
+            if field in self.TOKEN_FIELDS
+        ]
+
 		for token in tokens:
-			for field in fields:
-				if hasattr(token, field):
-					current = getattr(token, field)
-					if isinstance(current, str):
-						setattr(token, field, func(current))
+			for field in valid_fields:
+				current = getattr(token, field)
+				setattr(token, field, func(current))
 		return tokens
 
 	def preprocess_tokens(self, tokens: list[Token], steps: list[TokenStep]):

@@ -4,7 +4,6 @@ version = "1.0.0"
 description = "A serious game to raise awareness about grooming, which uses different NLP techniques to simulate free choice."
 requires-python = ">=3.12"
 dependencies = [
-    "autocorrect>=2.6.1",
     "es-core-news-sm",
     "fastapi[standard]>=0.128.0",
     "gensim>=4.4.0",
@@ -19,6 +18,8 @@ dependencies = [
     "keras>=3.13.2",
     "tensorflow>=2.21.0",
     "faiss-cpu>=1.13.2",
+    "scikit-learn>=1.8.0",
+    "spylls>=0.1.7",
 ]
 
 [dependency-groups]
