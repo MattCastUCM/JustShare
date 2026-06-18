@@ -135,7 +135,7 @@ export default class Phone extends GameObjects.Container {
             //     "Closing": true,
             //     "Method": "PhoneReturnButton"
             // });
-            this.scene.trackerManager.sendItemInteraction("phone", {
+            this.phoneManager.trackerManager.sendItemInteraction("phone", {
                 "Closing": true,
                 "Method": "PhoneReturnButton"
             });

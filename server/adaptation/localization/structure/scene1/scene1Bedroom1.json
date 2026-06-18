@@ -1,7 +1,7 @@
 {
     "bed": {
         "root": {
-            "type": "condition", 
+            "type": "condition",
             "conditions": [
                 {
                     "next": "noInterruption",
@@ -57,7 +57,6 @@
             "character": "player"
         }
     },
-
     "computerPosts": {
         "toniPost1": {
             "root": {
@@ -104,7 +103,6 @@
             }
         }
     },
-
     "computerChats": {
         "ana": {
             "root": {
@@ -173,7 +171,6 @@
             }
         }
     },
-
     "computer1": {
         "root": {
             "type": "chatMessage",
@@ -200,47 +197,26 @@
             "next": "choices"
         },
         "choices": {
-            "type": "choice",
-            "choices":[
-                { "next": "niceResponse" },
-                { "next": "neutralResponse" }
-            ]
-        },
-        
-        "niceResponse": {
-            "type": "chatMessage",
+            "type": "similarity",
+            "method": "sbert",
             "character": "player",
-            "chat": "harasser",
-            "replyDelay": 0,
-            "phone": false,
-            "next": "niceResponse2"
+            "choices": [
+                {
+                    "next": "msg4"
+                },
+                {
+                    "next": "msg4"
+                }
+            ],
+            "default": {
+                "next": "default"
+            }
         },
-        "niceResponse2": {
-            "type": "chatMessage",
+        "default": {
+            "type": "text",
             "character": "player",
-            "chat": "harasser",
-            "replyDelay": 1000,
-            "phone": false,
-            "next": "msg4"
+            "next": "choices"
         },
-
-        "neutralResponse": {
-            "type": "chatMessage",
-            "character": "player",
-            "chat": "harasser",
-            "replyDelay": 0,
-            "phone": false,
-            "next": "neutralResponse2"
-        },
-        "neutralResponse2": {
-            "type": "chatMessage",
-            "character": "player",
-            "chat": "harasser",
-            "replyDelay": 1000,
-            "phone": false,
-            "next": "msg4"
-        },
-
         "msg4": {
             "type": "chatMessage",
             "character": "",
@@ -259,12 +235,15 @@
         },
         "choices2": {
             "type": "choice",
-            "choices":[
-                { "next": "doggo" },
-                { "next": "attitude" }
+            "choices": [
+                {
+                    "next": "doggo"
+                },
+                {
+                    "next": "attitude"
+                }
             ]
         },
-
         "doggo": {
             "type": "chatMessage",
             "character": "player",
@@ -281,7 +260,6 @@
             "phone": false,
             "next": "msg6"
         },
-
         "attitude": {
             "type": "chatMessage",
             "character": "player",
@@ -298,7 +276,6 @@
             "phone": false,
             "next": "msg6"
         },
-
         "msg6": {
             "type": "chatMessage",
             "character": "",
@@ -344,7 +321,6 @@
             ]
         }
     },
-
     "interruption": {
         "root": {
             "type": "text",
@@ -371,16 +347,15 @@
             "events": [
                 {
                     "setInterruption": {
-                        "variable": "interrupted", 
+                        "variable": "interrupted",
                         "global": false,
-                        "value": true, 
+                        "value": true,
                         "delay": 500
                     }
                 }
             ]
         }
     },
-
     "homework": {
         "root": {
             "type": "text",
@@ -392,22 +367,25 @@
             "events": [
                 {
                     "endHomework": {
-                        "variable": "homework", 
+                        "variable": "homework",
                         "global": false,
-                        "value": true, 
+                        "value": true,
                         "delay": 500
                     }
                 }
             ]
         }
     },
-
     "computer2": {
         "root": {
             "type": "choice",
-            "choices":[
-                { "next": "2years" },
-                { "next": "littleAgo" }
+            "choices": [
+                {
+                    "next": "2years"
+                },
+                {
+                    "next": "littleAgo"
+                }
             ]
         },
         "2years": {
@@ -450,14 +428,21 @@
             "phone": false,
             "next": "choices2"
         },
-
         "choices2": {
             "type": "choice",
-            "choices":[
-                { "next": "1" },
-                { "next": "2" },
-                { "next": "3" },
-                { "next": "4" }
+            "choices": [
+                {
+                    "next": "1"
+                },
+                {
+                    "next": "2"
+                },
+                {
+                    "next": "3"
+                },
+                {
+                    "next": "4"
+                }
             ]
         },
         "1": {
@@ -492,7 +477,6 @@
             "phone": false,
             "next": "msg4"
         },
-
         "msg4": {
             "type": "chatMessage",
             "character": "",
@@ -522,12 +506,15 @@
             "character": "dad",
             "next": "choices3"
         },
-
         "choices3": {
             "type": "choice",
-            "choices":[
-                { "next": "scold" },
-                { "next": "late" }
+            "choices": [
+                {
+                    "next": "scold"
+                },
+                {
+                    "next": "late"
+                }
             ]
         },
         "scold": {

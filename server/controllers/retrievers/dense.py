@@ -2,11 +2,12 @@ from controllers.retrievers.retriever import Retriever
 from controllers.encoders.encoder import Encoder
 from services.calibrator_factory import Calibrator
 from typing import Optional
+from adaptation.misc import NameAnonymizer
 import numpy as np
 
 class DenseRetriever(Retriever):
-    def __init__(self, encoder: Encoder, similarity_fn, calibrator: Optional[Calibrator] = None):
-        super().__init__(encoder, calibrator)
+    def __init__(self, encoder: Encoder, similarity_fn, name_anonymizer: NameAnonymizer, calibrator: Optional[Calibrator] = None):
+        super().__init__(encoder, name_anonymizer, calibrator)
         self.similarity_fn = similarity_fn
 
     def _fit(self, corpus: list[str]):

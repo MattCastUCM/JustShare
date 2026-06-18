@@ -1,15 +1,17 @@
 from controllers.retrievers.faiss import FaissRetriever
 from controllers.encoders.encoder import Encoder
-from loguru import logger
+from adaptation.misc import NameAnonymizer
 from .calibrator_factory import Calibrator
+from loguru import logger
 from typing import Optional
 import os
 
 class NodeEngine:
-	def __init__(self, encoder: Encoder, base_dir: str, language: str, calibrator: Optional[Calibrator]):
+	def __init__(self, encoder: Encoder, base_dir: str, language: str, name_anonymizer: NameAnonymizer, calibrator: Optional[Calibrator]):
 		self.model = encoder
 		self.base_dir = base_dir
 		self.language = language
+		self.name_anonymizer = name_anonymizer
 		self.calibrator = calibrator
 
 		self.retrievers: dict[str, FaissRetriever] = {}
@@ -18,6 +20,7 @@ class NodeEngine:
 	def build_node(self, node_key: str, corpus: list[str], index_type: str = "flat"):
 		retriever = FaissRetriever(
 			encoder=self.model,
+			name_anonymizer=self.name_anonymizer,
 			index_type=index_type,
 			calibrator=self.calibrator
 		)
@@ -59,6 +62,7 @@ class NodeEngine:
 		retriever = FaissRetriever.load(
 			encoder=self.model, 
 			dir=dir,
+			name_anonymizer=self.name_anonymizer,
 			calibrator=self.calibrator
 		)
 

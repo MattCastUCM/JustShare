@@ -125,7 +125,6 @@ export default class ComputerBaseScene extends BaseScene {
     }
 
     createButton(x, y, sprite, transId, onClick, style) {
-        console.log("hola:",transId)
         const translation = this.translate(transId);
 
         let button = new Button(this, x, y, onClick, sprite, this.colors.blue1.rgb, this.colors.blue2.rgb, this.colors.blue3.rgb, translation, style);

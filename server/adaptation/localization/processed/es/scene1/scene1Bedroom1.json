@@ -86,9 +86,6 @@
         "neutralResponse2": {
             "text": "Si, me parece muy entretenido"
         },
-        "default": {
-            "text": "(Mejor no decir eso)."
-        },
         "msg4": {
             "text": "Me alegro que te guste {{name}}. La verdad que la comunidad de ToniVlogs mola mucho"
         },
@@ -131,7 +128,7 @@
             "text": "¿Sí?"
         },
         "choices": {
-            "summary": "Alguien me ha escrito por redes.",
+            "summary": "Alguien me ha escrito por redes por un youtuber en común.",
             "responses": [
                 {
                     "text": [

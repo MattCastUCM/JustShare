@@ -27,32 +27,6 @@
                 "text": "... Ah, sí, hola."
             }
         ],
-        "thanks2": {
-            "summary": "Laura me ha saludado.",
-            "responses": [
-                {
-                    "text": [
-                        "Igualmente, <player, encantado, encantada> de conocerte *sonríes*.",
-                        "El gusto es mío, <player, amigo, amiga> *asientes con la cabeza*.",
-                        "Un placer conocerte también, <player, encantado, encantada> *sonríes levemente*."
-                    ]
-                },
-                {
-                    "text": [
-                        "Gracias, si necesito algo ya te iré diciendo.",
-                        "De acuerdo, ya te diré si necesito algo.",
-                        "Perfecto, muchas gracias por avisar."
-                    ]
-                },
-                {
-                    "text": [
-                        "... Ah, sí, hola.",
-                        "Eh... claro, sí.",
-                        "Ah, hola."
-                    ]
-                }
-            ]
-        },
         "default": {
             "text": "(Mejor no decir eso)."
         },

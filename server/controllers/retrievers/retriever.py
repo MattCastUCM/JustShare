@@ -3,22 +3,23 @@ from controllers.encoders.encoder import Encoder
 from typing import Optional
 from services.calibrator_factory import Calibrator
 import numpy as np
+from adaptation.misc import NameAnonymizer
 
 class Retriever(ABC):
-    def __init__(self, encoder: Encoder, calibrator: Optional[Calibrator] = None):
+    def __init__(self, encoder: Encoder, name_anonymizer: NameAnonymizer, calibrator: Optional[Calibrator] = None):
         self.encoder = encoder
         self.calibrator = calibrator
         self.fitted = False
+        self.name_anonymizer = name_anonymizer
 
-    def search(self, query: str, top_k: int = 3, replacement_token = "[UNK]") -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def search(self, query: str, top_k: int = 3) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         if not self.fitted:
             raise ValueError(f"{self.__class__.__name__} is not fitted.")
 
-        # Aplicar expresiones regulares para tratar de enmascarar nombres propios de personas
-        # processed_query = apply_name_patterns(query, replacement_token)
-        # print(processed_query)
+        # Enmascarar nombres propios de personas
+        processed_query = self.name_anonymizer.apply_name_patterns(query)
 
-        idx, scores, texts = self._search(query, top_k)
+        idx, scores, texts = self._search(processed_query, top_k)
 
         scores = self._postprocess_scores(scores)
         return idx, scores, texts

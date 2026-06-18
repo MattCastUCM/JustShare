@@ -13,6 +13,39 @@
             "Educada"
         ]
     },
+    "2": {
+        "file": "scene1/scene1Bedroom1.json",
+        "object": "computer1.choices",
+        "summary": "Alguien me ha escrito por redes por un youtuber en común.",
+        "choices": {
+            "Neutral, respondiendo de forma más distante o fría.": "msg4",
+            "Entusiasmado y amigable porque alguien con intereses similares te haya escrito.": "msg4"
+        },
+        "remove": [
+            "No hablo con desconocido",
+            "Dónde has visto que soy fan. Que miedo parece que te acosan jajajaj",
+            "Hola, nos conocemos?",
+            "Holaaaaa, soy , ¿me has estado stalkeando? XD",
+            "Ahh!! De dónde eres? Qué haces?",
+            "Contenra",
+            "y tu como sabes eso xd me stalkeaste??",
+            "Quien eres?"
+        ]
+    },
+    "3": {
+        "file": "scene1/scene1Classroom.json",
+        "object": "part2.thanks2",
+        "summary": "Laura me ha saludado.",
+        "choices": {
+            "Amigable y cordial.": "friendly",
+            "Neutral.": "neutral",
+            "Tímido y reservado.": "shy"
+        },
+        "remove": [
+            "Baseado en mi personalidad, si una persuna fueste cordial y amigable comigo, yo sería amigable y cordial con la persona.",
+            "Educada"
+        ]
+    },
     "4": {
         "choices": {},
         "remove": [

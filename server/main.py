@@ -8,6 +8,7 @@ from services.multilingual_manager import MultilingualManager
 from services.encoder_factory import EncoderFactory
 from services.calibrator_factory import CalibratorFactory
 from services.model_registry import ModelRegistry
+from adaptation.misc import NameAnonymizer
 from core.settings import Settings
 from fastapi.staticfiles import StaticFiles
 import uvicorn
@@ -15,15 +16,13 @@ import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-	base_dir = "./faiss_data"
-
 	settings = Settings()
 	languages = settings.languages
 
 	model_registry = ModelRegistry(languages)
 	# model_registry.build()
 	model_registry.build_spacy()
-	model_registry.build_tranformer("bert")
+	# model_registry.build_tranformer("bert")
 	model_registry.build_tranformer("sbert")
 	# model_registry.build_word2vec()
 	model_registry.build_lstm()
@@ -31,7 +30,26 @@ async def lifespan(app: FastAPI):
 
 	encoder_factory = EncoderFactory(model_registry)
 	calibrator_factory = CalibratorFactory(model_registry)
-	multilingual = MultilingualManager(encoder_factory, calibrator_factory, base_dir)
+
+	# TODO: mover a .env
+	base_dir = "./faiss_data"
+
+	data_dir = "./adaptation/data"
+	name_whitelist_path = os.path.join(data_dir, "name_whitelist.txt")
+	spanish_names_path = os.path.join(data_dir, "nombres-propios-es.txt")
+
+	name_anonymizer = NameAnonymizer(
+		names_path=spanish_names_path,
+		whitelist_path=name_whitelist_path,
+		replacement="[UNK]"
+	)
+	
+	multilingual = MultilingualManager(
+		encoder_factory=encoder_factory,
+		calibrator_factory=calibrator_factory, 
+		name_anonymizer=name_anonymizer,
+		base_dir=base_dir
+	)
 	# model_types = model_registry.active_model_types()
 
 	multilingual.load_all_node_engines(languages, ["sbert"])
@@ -54,6 +72,7 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
+# TODO: mover a .env
 LOCALIZATION_DIR = "./adaptation/localization"
 
 STRUCTURE_DIR = os.path.join(LOCALIZATION_DIR, "structure")

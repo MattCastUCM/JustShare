@@ -1,6 +1,7 @@
 from controllers.retrievers.retriever import Retriever
 from controllers.encoders.encoder import Encoder
 from services.calibrator_factory import Calibrator
+from adaptation.misc import NameAnonymizer
 from typing import Optional
 import numpy as np
 import json
@@ -22,6 +23,7 @@ class FaissRetriever(Retriever):
 
 	def __init__(self,
 		encoder: Encoder, 
+		name_anonymizer: NameAnonymizer,
 		calibrator: Optional[Calibrator] = None,
 		index_type: str = "flat",
 		nlist: int = 100,  # Number of clusters for IVF
@@ -39,7 +41,7 @@ class FaissRetriever(Retriever):
 			ef_construction: HNSW build parameter (higher = better quality, slower build)
 			ef_search: HNSW search parameter (higher = better recall, slower search)
 		"""
-		super().__init__(encoder, calibrator)
+		super().__init__(encoder, name_anonymizer, calibrator)
 		self.index_type = index_type
 		self.nlist = nlist
 		self.m = m
@@ -146,7 +148,7 @@ class FaissRetriever(Retriever):
 			json.dump(self.metadata, f, ensure_ascii=False, indent=4)
 			
 	@classmethod
-	def load(cls, encoder: Encoder, dir: str, calibrator=None):
+	def load(cls, encoder: Encoder, dir: str, name_anonymizer: NameAnonymizer, calibrator=None):
 		index_path = os.path.join(dir, "index.bin")
 		metadata_path = os.path.join(dir, "metadata.pkl")
 
@@ -163,6 +165,7 @@ class FaissRetriever(Retriever):
 
 		instance = cls(
 			encoder=encoder,
+			name_anonymizer=name_anonymizer,
 			calibrator=calibrator
 		)
 		

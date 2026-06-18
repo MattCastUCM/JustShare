@@ -114,7 +114,7 @@ export default class MessagesScreen extends BaseScreen {
                         // TRACKER EVENT
                         // console.log("Entrar al chat:", name);
                         // this.gameManager.sendEnterChat(name);
-                        this.scene.trackerManager.sendNotificationReceived(this.name);
+                        this.phone.phoneManager.trackerManager.sendNotificationReceived(this.name);
 
                         onClick();
                     }

@@ -142,7 +142,7 @@ export default class ChatScreen extends BaseScreen {
                 // TRACKER EVENT
                 // console.log("Pulsar boton de responder:", this.name);
                 // this.gameManager.sendItemInteraction("phoneAnswerButton");
-                this.scene.trackerManager.sendItemInteraction("phoneAnswerButton");
+                this.phone.phoneManager.trackerManager.sendItemInteraction("phoneAnswerButton");
 
                 if (this.boxClickable) {
                     this.disableInteractive();
@@ -169,7 +169,7 @@ export default class ChatScreen extends BaseScreen {
                             // TRACKER EVENT
                             // console.log("Responder mensaje respondible:", this.name);
                             // this.gameManager.sendAnsweredChat(this.currNode.fullId, this.name);
-                            this.scene.trackerManager.sendAnsweredChat(this.currNode.fullId, this.name);
+                            this.phone.phoneManager.trackerManager.sendAnsweredChat(this.currNode.fullId, this.name);
 
                             // Si es un mensaje de chat, lo procesa
                             if (this.currNode.type === "chatMessage") {
@@ -347,7 +347,7 @@ export default class ChatScreen extends BaseScreen {
                 // TRACKER EVENT
                 // console.log("Mensaje respondible en chat:", this.name);
                 // this.gameManager.sendCanAnswerChat(this.currNode.fullId, this.name);
-                this.scene.trackerManager.sendCanAnswerChat(this.currNode.fullId, this.name);
+                this.phone.phoneManager.trackerManager.sendCanAnswerChat(this.currNode.fullId, this.name);
             }
             else {
                 this.setInteractive();
@@ -355,7 +355,7 @@ export default class ChatScreen extends BaseScreen {
                 // TRACKER EVENT
                 // console.log("Mensaje respondible en chat:", this.name);
                 // this.gameManager.sendCanAnswerChat(this.currNode.fullId, this.name);
-                this.scene.trackerManager.sendCanAnswerChat(this.currNode.fullId, this.name);
+                this.phone.phoneManager.trackerManager.sendCanAnswerChat(this.currNode.fullId, this.name);
             }
         }
     }
@@ -405,7 +405,7 @@ export default class ChatScreen extends BaseScreen {
                 // TRACKER EVENT
                 // console.log("Limpiar notificaciones de:", this.name)
                 // this.gameManager.sendNotificationsCleared(this.name);
-                this.scene.trackerManager.sendNotificationsCleared(this.name);
+                this.phone.phoneManager.trackerManager.sendNotificationsCleared(this.name);
             }
 
             this.notifications.container.visible = false;
@@ -416,7 +416,7 @@ export default class ChatScreen extends BaseScreen {
                 // TRACKER EVENT
                 // console.log("Recibir notificacion de:", this.name)
                 // this.gameManager.sendNotificationReceived(this.name);
-                this.scene.trackerManager.sendNotificationReceived(this.name);
+                this.phone.phoneManager.trackerManager.sendNotificationReceived(this.name);
             }
 
             this.notifications.container.visible = true;
