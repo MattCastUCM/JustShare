@@ -229,10 +229,17 @@ cython_debug/
 dbt_packages/
 logs/
 
+# ML models
 server/models/
-server/adaptation/data/
-server/spelling_checker/data/
 server/spelling_checker/models/
+
+# Datasets
+server/adaptation/data/
+server/siamese_lstm/data/
+server/spelling_checker/data/
+
+# Vector stores
+server/faiss_data/
 
 .env*
 
