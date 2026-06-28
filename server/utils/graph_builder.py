@@ -1,29 +1,41 @@
 from services.multilingual_manager import MultilingualManager
 from services.model_registry import ModelRegistry
 from pyi18next.i18next import I18next
+from typing import Iterable
 import re
 import os
 import json
 
-class LocalizationGraphBuilder:
+def traverse_namespaces(base_dir: str, languages: Iterable[str]):
+	namespaces = set()
+
+	for lng in languages:
+		lng_path = os.path.join(base_dir, lng)
+
+		if os.path.isdir(lng_path):
+			for root, _, files in os.walk(lng_path):
+				for file in files:
+					if file.endswith(".json"):
+						full_path = os.path.join(root, file)
+						
+						rel_path = os.path.relpath(full_path, lng_path)
+
+						namespace = os.path.splitext(rel_path)[0]
+						namespace = namespace.replace(os.sep, "/")
+
+						namespaces.add(namespace)
+
+	return list(namespaces)
+
+class LocalizationGraphProcessor:
 	pattern = re.compile(r'<([^>]+)>')
 
-	def __init__(
-		self,
-		i18n: I18next,
-		languages: set[str],
-		multilingual: MultilingualManager,
-		model_registry: ModelRegistry,
-		base_dir: str,
-	):
+	def __init__(self, i18n: I18next, languages: set[str], base_dir: str):
 		self.i18n = i18n
 		self.languages = languages
-		self.multilingual = multilingual
-		self.model_registry = model_registry
 		self.base_dir = base_dir
 
 		self.visited = set()
-		self.model_types = model_registry.active_model_types()
 	
 	def expand_variants(self, text: str):
 		matches = self.pattern.findall(text)
@@ -73,41 +85,8 @@ class LocalizationGraphBuilder:
 	def build_localization_id(self, object_names: list[str], node_id: str):
 		return ".".join(object_names + [node_id])
 	
-	def process_similarity_node(self, loc_id: str, language: str, node_key: str, namespace: str):
-		key = f"{loc_id}.responses"
-
-		print(namespace)
-
-		responses = self.i18n.t(
-			key,
-			ns=namespace,
-			return_objects=True,
-			lng=language,
-			name="[UNK]"
-		)
-
-		corpus = []
-		metadata = []
-
-		idx = 0
-		for group_idx, group in enumerate(responses):
-			for sentence_idx, text in enumerate(group["text"]):
-				new_texts = self.process_data(text)
-
-				corpus.extend(new_texts)
-
-				for new_text in new_texts:
-					metadata.append({
-						"index": idx,
-						"text": new_text,
-						"group_index": group_idx,
-						"sentence_index": sentence_idx,
-						"node": node_key,
-					})
-
-				idx += 1
-
-		return corpus, metadata
+	def process_similarity(self, responses: list[dict], node_key: str, language: str):
+		raise NotImplementedError
 	
 	def extract_next_nodes(self, node: dict, loc_id: str, language: str, node_key: str, namespace: str):
 		next_nodes = []
@@ -123,14 +102,22 @@ class LocalizationGraphBuilder:
 
 		elif node_type == "similarity":
 			if "choices" in node:
-				corpus, metadata = self.process_similarity_node(loc_id, language, node_key, namespace)
+				key = f"{loc_id}.responses"
 
-				# Construir bases vectoriales
-				for model in self.model_types:
-					node_engine = self.multilingual.get_node_engine(language, model)
-					retriever = node_engine.build_node(node_key, corpus)
-					retriever.add_metadata(metadata)
+				responses = self.i18n.t(
+					key,
+					ns=namespace,
+					return_objects=True,
+					lng=language,
+					name="[UNK]"
+				)
 
+				self.process_similarity(
+					responses,
+					node_key,
+					language
+				)
+				
 				for choice in node["choices"]:
 					if "next" in choice:
 						next_nodes.append(choice["next"])
@@ -201,6 +188,46 @@ class LocalizationGraphBuilder:
 
 		print(f"Total visited nodes: {len(self.visited)}")
 
+class LocalizationGraphBuilder(LocalizationGraphProcessor):
+	pattern = re.compile(r'<([^>]+)>')
+
+	def __init__(self, i18n: I18next, languages: set[str], base_dir: str, multilingual: MultilingualManager, model_registry: ModelRegistry):
+		super().__init__(i18n, languages, base_dir)
+		self.multilingual = multilingual
+		self.model_registry = model_registry
+
+		self.model_types = model_registry.active_model_types()
+	
+	def process_similarity(self, responses: list[dict], node_key: str, language: str):
+		corpus = []
+		metadata = []
+
+		idx = 0
+		for group_idx, group in enumerate(responses):
+			for sentence_idx, text in enumerate(group["text"]):
+				new_texts = self.process_data(text)
+
+				corpus.extend(new_texts)
+
+				for new_text in new_texts:
+					metadata.append({
+						"index": idx,
+						"text": new_text,
+						"group_index": group_idx,
+						"sentence_index": sentence_idx,
+						"node": node_key,
+					})
+
+				idx += 1
+
+		# Construir bases vectoriales
+		for model in self.model_types:
+			node_engine = self.multilingual.get_node_engine(language, model)
+			retriever = node_engine.build_node(node_key, corpus)
+			retriever.add_metadata(metadata)
+	
+	def run(self):
+		super().run()
+
 		for engine in self.multilingual.iter_node_engines():
 			engine.save_all()
-		

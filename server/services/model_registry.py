@@ -50,8 +50,7 @@ class ModelRegistry:
 				_ = loader.model
 
 	def build(self):
-		self.build_tranformer("sbert")
-		self.build_tranformer("bert")
+		self.build_transformer("sbert")
 		self.build_word2vec()
 		self.build_lstm()
 		self.build_spacy()
@@ -77,7 +76,7 @@ class ModelRegistry:
 				lambda p=path: joblib.load(p)
 			)
 	
-	def build_tranformer(self, model_type: str):
+	def build_transformer(self, model_type: str):
 		config = getattr(self.settings, model_type)
 
 		for lang in self.languages:

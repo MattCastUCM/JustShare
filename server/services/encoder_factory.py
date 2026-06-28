@@ -15,6 +15,8 @@ class EncoderFactory:
 	@lru_cache(maxsize=32)
 	def get_preprocessor(self, language: str):
 		spacy = self.registry.get_spacy(language)
+		if spacy is None:
+			raise ValueError(f"No spaCy model loaded for language '{language}'. ")
 		return TextPreprocessor(language, spacy)
 
 	def preprocess_stems(self, text: str, language: str):
@@ -25,7 +27,6 @@ class EncoderFactory:
 			text_steps=[
 				pre.clean_text,
 				pre.remove_accents,
-				# pre.autocorrect,
 			],
 			token_steps=[
 				pre.remove_stopwords,
@@ -50,7 +51,6 @@ class EncoderFactory:
 			text=text,
 			text_steps=[
 				pre.clean_text,
-				# pre.autocorrect,
 			],
 			token_steps=[
 				pre.remove_stopwords,

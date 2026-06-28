@@ -12,13 +12,19 @@ class Settings(BaseSettings):
     siamese_lstm: dict[str, str] = Field(default_factory=dict)
 
     allow_origins: list[str] = Field(default_factory=list)
-    host: str = ""
-    port: int = 0
+
+    host: str = "0.0.0.0"
+    port: int = 8000
+
+    faiss_data_dir: str = "./faiss_data"
+    adaptation_data_dir: str = "./adaptation/data"
+    localization_dir: str = "./adaptation/localization"
 
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        case_sensitive=False
+        case_sensitive=False,
+        extra="ignore"
     )
 
 @lru_cache

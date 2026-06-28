@@ -1,7 +1,5 @@
 
 import re
-import os
-from typing import Iterable
 
 class NameAnonymizer:
 	def __init__(self, names_path: str, whitelist_path: str, replacement):
@@ -85,24 +83,3 @@ class NameAnonymizer:
         )
 
 		return out
-
-def traverse_namespaces(base_dir: str, languages: Iterable[str]):
-	namespaces = set()
-
-	for lng in languages:
-		lng_path = os.path.join(base_dir, lng)
-
-		if os.path.isdir(lng_path):
-			for root, _, files in os.walk(lng_path):
-				for file in files:
-					if file.endswith(".json"):
-						full_path = os.path.join(root, file)
-						
-						rel_path = os.path.relpath(full_path, lng_path)
-
-						namespace = os.path.splitext(rel_path)[0]
-						namespace = namespace.replace(os.sep, "/")
-
-						namespaces.add(namespace)
-
-	return list(namespaces)

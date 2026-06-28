@@ -20,23 +20,17 @@ async def lifespan(app: FastAPI):
 	languages = settings.languages
 
 	model_registry = ModelRegistry(languages)
-	# model_registry.build()
 	model_registry.build_spacy()
-	# model_registry.build_tranformer("bert")
-	model_registry.build_tranformer("sbert")
+	model_registry.build_transformer("sbert")
 	# model_registry.build_word2vec()
-	model_registry.build_lstm()
+	# model_registry.build_lstm()
 	model_registry.resolve_all()
 
 	encoder_factory = EncoderFactory(model_registry)
 	calibrator_factory = CalibratorFactory(model_registry)
 
-	# TODO: mover a .env
-	base_dir = "./faiss_data"
-
-	data_dir = "./adaptation/data"
-	name_whitelist_path = os.path.join(data_dir, "name_whitelist.txt")
-	spanish_names_path = os.path.join(data_dir, "nombres-propios-es.txt")
+	name_whitelist_path = os.path.join(settings.adaptation_data_dir, "name_whitelist.txt")
+	spanish_names_path = os.path.join(settings.adaptation_data_dir, "nombres-propios-es.txt")
 
 	name_anonymizer = NameAnonymizer(
 		names_path=spanish_names_path,
@@ -48,7 +42,7 @@ async def lifespan(app: FastAPI):
 		encoder_factory=encoder_factory,
 		calibrator_factory=calibrator_factory, 
 		name_anonymizer=name_anonymizer,
-		base_dir=base_dir
+		base_dir=settings.faiss_data_dir
 	)
 	# model_types = model_registry.active_model_types()
 
@@ -72,21 +66,18 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
-# TODO: mover a .env
-LOCALIZATION_DIR = "./adaptation/localization"
-
-STRUCTURE_DIR = os.path.join(LOCALIZATION_DIR, "structure")
-FINAL_DIR = os.path.join(LOCALIZATION_DIR, "final")
+structure_dir = os.path.join(settings.localization_dir, "structure")
+language_dir = os.path.join(settings.localization_dir, "final")
 
 app.mount(
     "/localization/structure",
-    StaticFiles(directory=STRUCTURE_DIR),
+    StaticFiles(directory=structure_dir),
     name="structure"
 )
 
 app.mount(
     "/localization",
-    StaticFiles(directory=FINAL_DIR),
+    StaticFiles(directory=language_dir),
     name="localization"
 )
 
@@ -97,5 +88,4 @@ if __name__ == "__main__":
 		"main:app",
 		host=settings.host,
 		port=settings.port,
-		# reload=True
 	)
