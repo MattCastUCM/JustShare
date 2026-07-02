@@ -1,0 +1,77 @@
+{
+    "root": {
+        "type": "text",
+        "character": "laura",
+        "next": "answer"
+    },
+    "answer": {
+        "type": "text",
+        "character": "player",
+        "next": "ask"
+    },
+    "ask": {
+        "type": "text",
+        "character": "laura",
+        "next": "choices"
+    },
+    "choices": {
+        "type": "choice",
+        "choices":[
+            { "next": "curious" },
+            { "next": "offended" }
+        ]
+    },
+
+    "curious": {
+        "type": "text",
+        "character": "player",
+        "next": "curiousAnswer"
+    },
+    "curiousAnswer": {
+        "type": "text",
+        "character": "laura",
+        "next": "support"
+    },
+    "offended": {
+        "type": "text",
+        "character": "player",
+        "next": "support"
+    },
+
+    "support": {
+        "type": "text",
+        "character": "player",
+        "next": "sure"
+    },
+    "sure": {
+        "type": "text",
+        "character": "laura",
+        "next": "dontWorry"
+    },
+    "dontWorry": {
+        "type": "text",
+        "character": "player",
+        "next": "goodbye"
+    },
+    "goodbye": {
+        "type": "text",
+        "character": "laura",
+        "next": "cya"
+    },
+    "cya": {
+        "type": "text",
+        "character": "player",
+        "next": "endConversation"
+    },
+
+    "endConversation": {
+        "type": "event",
+        "events": [
+            {
+                "endConversation": {
+                    "delay": 500
+                }
+            }
+        ]
+    }
+}

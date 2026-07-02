@@ -59,6 +59,8 @@ export default class BaseScene extends Scene {
         this.context = this.gameManager.getUserInfo().player;
         this.harasser = this.gameManager.getUserInfo().harasser;
 
+        this.thresholds = this.cache.json.get("similarityThresholds")
+
         // Se anaden funciones adicionales a las que se llamara al crear y reactivar
         // Se tiene que suscribir el onCreate al evento create porque la escena base
         // es la que se encarga de cambiar los portraits del DialogManager, por lo que
@@ -130,7 +132,7 @@ export default class BaseScene extends Scene {
         return root;
     }
 
-    createTextNode(character, textTranslation, getObjs, nextNode = null, centered = null) {
+    createTextNode(textTranslation, character, getObjs, nextNode = null, centered = null) {
         let node = new TextNode();
         // Obtiene la id del personaje y coge su nombre del archivo de nombres localizados
         node.character = character;
@@ -173,6 +175,56 @@ export default class BaseScene extends Scene {
             node.dialogs = node.dialogs.concat(dialogs);
         }
         node.currDialog = 0;
+
+        // Si hay un nodo despues de este, se crea de manera y se
+        // guarda la id de dicho nodo en el array de nodos siguientes
+        if (nextNode) {
+            node.next.push(nextNode.fullId);
+        }
+
+        return node;
+    }
+
+    createChatMessageNode(textTranslation, character, getObjs, chat, replyDelay = null, phone = null, nextNode = null) {
+        node = new ChatNode();
+
+        node.text = textTranslation;
+
+        if (phone != null) {
+            node.phone = phone
+        }
+
+        node.name = ""
+        node.character = character;
+
+        if (node.character != "") {
+            if (node.phone) {
+                if (character === "player") {
+                    node.name = this.gameManager.getUserInfo().name;
+                }
+                else {
+                    node.name = this.translatorManager.translate(character, "names");
+                }
+            }
+            else {
+                if (character === "player") {
+                    node.name = this.computer.getUsername()
+                }
+                else {
+                    node.name = this.translatorManager.translate(character, "computer/usernames");
+                }
+            }
+        }
+
+        node.chat = chat
+        // Guarda el chat en el que tiene que ir la respuesta y el retardo con el que se envia
+        if (node.phone) {
+            node.chat = this.translatorManager.translate("textMessages" + "." + chat, "deviceInfo");
+        }
+
+        if (replyDelay) {
+            node.replyDelay = replyDelay;
+        }
 
         // Si hay un nodo despues de este, se crea de manera y se
         // guarda la id de dicho nodo en el array de nodos siguientes
@@ -324,7 +376,7 @@ export default class BaseScene extends Scene {
                 nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
             }
 
-            node = this.createTextNode(fileObj[id].character, textTranslation, getObjs, nextNode, fileObj[id].centered)
+            node = this.createTextNode(textTranslation, fileObj[id].character, getObjs, nextNode, fileObj[id].centered)
         }
         // Si el nodo es de tipo opcion multiple
         else if (type === "choice") {
@@ -365,14 +417,23 @@ export default class BaseScene extends Scene {
         else if (type == "similarity") {
             node = new SimilarityNode();
 
-            node.method = fileObj[id].method;
+            const methods = fileObj[id].methods
+
+            node.methods = {}
+            for (let i = 0; i < methods.length; i++) {
+                const method = methods[i];
+
+                node.methods[method.name] = {
+                    weight: method.weight ?? 1.0,
+                    threshold: this.thresholds[method.name]
+                }
+            }
 
             const parts = namespace.split("/");
             const lastSegment = parts[parts.length - 1];
             const idSnakeCase = translationId.replace(/\./g, "_")
             node.nodeKey = `${lastSegment}_${idSnakeCase}`;
-            console.log(node.nodeKey);
-            
+
             node.character = fileObj[id].character;
 
             // Se obtienen las opciones del archivo de textos traducidos
@@ -383,17 +444,17 @@ export default class BaseScene extends Scene {
             });
             node.choices = texts;
 
-            const summary = this.translatorManager.translate(`${translationId}.summary`, namespace, {
+            const context = this.translatorManager.translate(`${translationId}.context`, namespace, {
                 name: this.playerName,
                 context: this.context,
                 returnObjects: getObjs
             });
-            node.summary = summary;
+            node.context = context;
 
             for (let i = 0; i < fileObj[id].choices.length; i++) {
-                // Si hay un nodo despues de este, se crea de manera y se
-                // guarda la id de dicho nodo en el array de nodos siguientes
+                // Nodo después de la transición
                 let nextNextNode = null;
+
                 if (fileObj[id].choices[i].next) {
                     nextNextNode = this.readAllNodes(fileObj[id].choices[i].next, file, namespace, objectName, getObjs, nodesMap);
                 }
@@ -404,7 +465,27 @@ export default class BaseScene extends Scene {
                 }
 
                 for (let j = 0; j < choices.length; j++) {
-                    const nextNode = this.createTextNode(node.character, choices[j], getObjs, nextNextNode);
+                    let nextNode = null;
+                    if (node.transition.type === "chatMessage") {
+                        nextNode = this.createChatMessageNode(
+                            choices[j],
+                            node.character,
+                            getObjs,
+                            node.transition.chat,
+                            node.transition.replyDelay,
+                            node.transition.phone,
+                            nextNextNode
+                        );
+                    }
+                    else {
+                        nextNode = this.createTextNode(
+                            choices[j],
+                            node.character,
+                            getObjs,
+                            nextNextNode
+                        );
+                    }
+
                     nextNode.id = `${fileObj[id].choices[i].next}.${j}`;
                     nextNode.fullId = `${translationId}.${nextNode.id}`;
 
@@ -463,7 +544,7 @@ export default class BaseScene extends Scene {
         }
         // Si el nodo es de tipo mensaje de texto
         else if (type === "chatMessage") {
-            node = new ChatNode();
+            // node = new ChatNode();
 
             // Obtiene el texto del archivo de textos traducidos y lo guarda
             let text = this.translatorManager.translate(translationId + ".text", namespace, {
@@ -472,55 +553,70 @@ export default class BaseScene extends Scene {
                 returnObjects: getObjs
             });
 
-            node.text = text;
-
-            // Obtiene el nombre del personaje del archivo de nombres localizados
-            // En el caso de que se trate del jugador, obtiene su nombre
-            let character = fileObj[id].character;
-
-            let phone = fileObj[id].phone
-            if (phone != null) {
-                node.phone = phone
-            }
-
-            node.name = ""
-            node.character = character;
-
-            if (node.character != "") {
-                if (node.phone) {
-                    if (character === "player") {
-                        node.name = this.gameManager.getUserInfo().name;
-                    }
-                    else {
-                        node.name = this.translatorManager.translate(fileObj[id].character, "names");
-                    }
-                }
-                else {
-                    if (character === "player") {
-                        node.name = this.computer.getUsername()
-                    }
-                    else {
-                        node.name = this.translatorManager.translate(character, "computer/usernames");
-                    }
-                }
-            }
-
-            node.chat = fileObj[id].chat
-            // Guarda el chat en el que tiene que ir la respuesta y el retardo con el que se envia
-            if (node.phone) {
-                node.chat = this.translatorManager.translate("textMessages" + "." + fileObj[id].chat, "deviceInfo");
-            }
-
-            if (fileObj[id].replyDelay) {
-                node.replyDelay = fileObj[id].replyDelay;
-            }
-
-            // Si hay un nodo despues de este, se crea de manera y se
-            // guarda la id de dicho nodo en el array de nodos siguientes
+            let nextNode = null;
             if (fileObj[id].next) {
-                let nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
-                node.next.push(nextNode.fullId);
+                nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
             }
+
+            node = this.createChatMessageNode(
+                text,
+                fileObj[id].character,
+                getObjs,
+                fileObj[id].chat,
+                fileObj[id].replyDelay,
+                fileObj[id].phone,
+                nextNode
+            )
+
+            // node.text = text;
+
+            // // Obtiene el nombre del personaje del archivo de nombres localizados
+            // // En el caso de que se trate del jugador, obtiene su nombre
+            // let character = fileObj[id].character;
+
+            // let phone = fileObj[id].phone
+            // if (phone != null) {
+            //     node.phone = phone
+            // }
+
+            // node.name = ""
+            // node.character = character;
+
+            // if (node.character != "") {
+            //     if (node.phone) {
+            //         if (character === "player") {
+            //             node.name = this.gameManager.getUserInfo().name;
+            //         }
+            //         else {
+            //             node.name = this.translatorManager.translate(fileObj[id].character, "names");
+            //         }
+            //     }
+            //     else {
+            //         if (character === "player") {
+            //             node.name = this.computer.getUsername()
+            //         }
+            //         else {
+            //             node.name = this.translatorManager.translate(character, "computer/usernames");
+            //         }
+            //     }
+            // }
+
+            // node.chat = fileObj[id].chat
+            // // Guarda el chat en el que tiene que ir la respuesta y el retardo con el que se envia
+            // if (node.phone) {
+            //     node.chat = this.translatorManager.translate("textMessages" + "." + fileObj[id].chat, "deviceInfo");
+            // }
+
+            // if (fileObj[id].replyDelay) {
+            //     node.replyDelay = fileObj[id].replyDelay;
+            // }
+
+            // // Si hay un nodo despues de este, se crea de manera y se
+            // // guarda la id de dicho nodo en el array de nodos siguientes
+            // if (fileObj[id].next) {
+            //     let nextNode = this.readAllNodes(fileObj[id].next, file, namespace, objectName, getObjs, nodesMap);
+            //     node.next.push(nextNode.fullId);
+            // }
         }
         // Si el nodo es de tipo comentario de la red social
         else if (type === "commentary") {

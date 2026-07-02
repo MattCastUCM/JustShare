@@ -17,10 +17,8 @@ class ModelRegistry:
 		self.spacy_loaders: dict[str, LazyLoader] = {}
 		self.dense_loaders: dict[str, dict[str, LazyLoader]] = {
 			"sbert": {},
-			"bert": {},
 			"word2vec": {},
 			"lstm": {},
-			"spacy": {}
 		}
 
 		self.calibrator_loaders: dict[str, dict[str, LazyLoader]] = {}
@@ -56,7 +54,7 @@ class ModelRegistry:
 		self.build_spacy()
 
 	def _create_loader(self, model_type: str, lang: str, loader: Callable):
-		logger.debug(f"Registering {model_type} loader for '{lang}'")
+		logger.debug(f"Registering {model_type} loader for '{lang}'.")
 		
 		return LazyLoader(
 			loader=loader,
@@ -69,7 +67,7 @@ class ModelRegistry:
 			self.calibrator_loaders[model_type] = {}
 
 		if not path or not os.path.exists(path):
-			logger.warning(f"{model_type}_calibrator missing for '{lang}'")
+			logger.warning(f"{model_type}_calibrator missing for '{lang}'.")
 		else:
 			self.calibrator_loaders[model_type][lang] = self._create_loader(
 				f"{model_type} calibrator", lang,
@@ -77,17 +75,19 @@ class ModelRegistry:
 			)
 	
 	def build_transformer(self, model_type: str):
+		# Se obtienen las rutas del modelo correspondiente
 		config = getattr(self.settings, model_type)
 
 		for lang in self.languages:
+			# Para cada idioma se obtiene el nombre del modelo que utilizar
 			name = config.get(lang)
 			if not name:
-				logger.warning(f"{model_type.upper()} missing for '{lang}'")
+				logger.warning(f"{model_type.upper()} missing for '{lang}'.")
 			else:
 				self.dense_loaders[model_type][lang] = self._create_loader(
 					model_type,
 					lang,
-					lambda m=model_type, n=name: Transformer(m, n)
+					lambda model_type=model_type, name=name: Transformer(model_type, name)
 				)
 
 	def build_word2vec(self):

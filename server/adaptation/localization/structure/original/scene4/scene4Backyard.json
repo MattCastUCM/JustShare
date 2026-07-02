@@ -1,0 +1,160 @@
+{
+    "mainConversation": {
+        "root": {
+            "type": "text",
+            "character": "laura",
+            "next": "explain"
+        },
+        "explain": {
+            "type": "text",
+            "character": "player",
+            "next": "priorities"
+        },
+        "priorities": {
+            "type": "text",
+            "character": "laura",
+            "next": "receiveMsg"
+        },
+        "receiveMsg": {
+            "type": "event",
+            "events": [
+                {
+                    "receiveMsg": { }
+                }
+            ],
+            "next": "msg1"
+        },
+
+        "msg1": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices":[
+                { "next": "good" },
+                { "next": "meh" }
+            ]
+        },
+
+        "good": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg3"
+        },
+        "meh": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg3"
+        },
+
+        "msg3": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg4"
+        },
+        "msg4": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg5"
+        },
+        "msg5": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg6"
+        },
+        "msg6": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "end"
+        },
+
+        "end": {
+            "type": "event",
+            "events": [
+                {
+                    "endConversation": { }
+                }
+            ]
+        }
+    },
+
+    "classmate1": {
+        "root": {
+            "type": "text",
+            "character": "classmate1",
+            "next": "checkAllClassmates"
+        },
+        "checkAllClassmates": {
+            "type": "event",
+            "events": [
+                {
+                    "checkAllClassmates": { }
+                }
+            ]
+        }
+    },
+
+    "classmate2": {
+        "root": {
+            "type": "text",
+            "character": "classmate2",
+            "next": "checkAllClassmates"
+        },
+        "checkAllClassmates": {
+            "type": "event",
+            "events": [
+                {
+                    "checkAllClassmates": { }
+                }
+            ]
+        }
+    },
+
+    "classmate3": {
+        "root": {
+            "type": "text",
+            "character": "classmate2",
+            "next": "checkAllClassmates"
+        },
+        "checkAllClassmates": {
+            "type": "event",
+            "events": [
+                {
+                    "checkAllClassmates": { }
+                }
+            ]
+        }
+    },
+
+    "classmate4": {
+        "root": {
+            "type": "text",
+            "character": "classmate1",
+            "next": "checkAllClassmates"
+        },
+        "checkAllClassmates": {
+            "type": "event",
+            "events": [
+                {
+                    "checkAllClassmates": { }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "main": {
+        "root": {
+            "type": "text",
+            "character": "mom",
+            "next": "reassure"
+        },
+        "reassure": {
+            "type": "text",
+            "character": "player",
+            "next": "sure"
+        },
+        "sure": {
+            "type": "text",
+            "character": "dad",
+            "next": "call"
+        },
+        "call": {
+            "type": "text",
+            "character": "mom",
+            "next": "getOut"
+        },
+        "getOut": {
+            "type": "text",
+            "character": "grandma",
+            "next": "bye"
+        },
+        "bye": {
+            "type": "text",
+            "character": "dad",
+            "next": "wave"
+        },
+        "wave": {
+            "type": "text",
+            "character": "player",
+            "next": "parentsLeave"
+        },
+        "parentsLeave": {
+            "type": "event",
+            "events": [
+                {
+                    "parentsLeave": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    },
+
+    "door": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    }
+}

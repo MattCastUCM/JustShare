@@ -1,0 +1,65 @@
+{
+    "part1": {
+        "root": {
+            "type": "text",
+            "character": "teacher",
+            "next": "sitClass"
+        },
+        "sitClass": {
+            "type": "event",
+            "events": [
+                {
+                    "appearLaura": {
+                        "delay": 1500
+                    }
+                }
+            ]
+        }
+    },
+    "part2": {
+        "root": {
+            "type": "text",
+            "character": "laura",
+            "next": "thanks"
+        },
+        "thanks": {
+            "type": "choice",
+            "choices": [
+                {
+                    "next": "friendly"
+                },
+                {
+                    "next": "neutral"
+                },
+                {
+                    "next": "shy"
+                }
+            ]
+        },
+        "friendly": {
+            "type": "text",
+            "character": "laura",
+            "next": "break"
+        },
+        "neutral": {
+            "type": "text",
+            "character": "laura",
+            "next": "break"
+        },
+        "shy": {
+            "type": "text",
+            "character": "laura",
+            "next": "break"
+        },
+        "break": {
+            "type": "event",
+            "events": [
+                {
+                    "startBreak": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}

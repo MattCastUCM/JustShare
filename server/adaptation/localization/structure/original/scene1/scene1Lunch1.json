@@ -1,0 +1,187 @@
+{
+    "main": {
+        "root": {
+            "type": "text",
+            "character": "dad",
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices": [
+                { "next": "tell" },
+                { "next": "noTell" }
+            ]
+        },
+    
+        "tell": {
+            "type": "text",
+            "character": "player",
+            "next": "glad"
+        },
+        "glad": {
+            "type": "text",
+            "character": "mom",
+            "next": "invite"
+        },
+        "invite": {
+            "type": "text",
+            "character": "dad",
+            "next": "yea"
+        },
+        "yea": {
+            "type": "text",
+            "character": "player",
+            "next": "announcement"
+        },
+    
+        "noTell": {
+            "type": "text",
+            "character": "player",
+            "next": "tomorrow"
+        },
+        "tomorrow": {
+            "type": "text",
+            "character": "dad",
+            "next": "stepByStep"
+        },
+        "stepByStep": {
+            "type": "text",
+            "character": "mom",
+            "next": "sure"
+        },
+        "sure": {
+            "type": "text",
+            "character": "player",
+            "next": "announcement"
+        },
+    
+    
+        "announcement": {
+            "type": "text",
+            "character": "mom",
+            "next": "alone"
+        },
+        "alone": {
+            "type": "text",
+            "character": "player",
+            "next": "bet"
+        },
+        "bet": {
+            "type": "text",
+            "character": "dad",
+            "next": "disappointed"
+        },
+        "disappointed": {
+            "type": "text",
+            "character": "player",
+            "next": "endLunch"
+        },
+        "endLunch": {
+            "type": "event",
+            "events": [
+                {
+                    "endLunch": {
+                        "delay": 1000
+                    }
+                }
+            ]
+        }
+    },
+
+    "endLunch": {
+        "root": {
+            "type": "text",
+            "character": "player",
+            "next": "receiveMsg"
+        },
+        "receiveMsg": {
+            "type": "event",
+            "events": [
+                {
+                    "receiveMsg": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    },
+
+    "door": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "phone": {
+        "root": {
+            "type": "chatMessage",
+            "character": "laura",
+            "chat": "chat1",
+            "replyDelay": 0,
+            "next": "spawnInteractions"
+        },
+        "spawnInteractions": {
+            "type": "event",
+            "events": [
+                {
+                    "spawnInteractions": {
+                        "delay": 500
+                    }
+                }
+            ],
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices":[
+                { "next": "photo" }
+            ]
+        },
+        "photo": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat1",
+            "replyDelay": 0,
+            "next": "msg3"
+        },
+        "photo2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat1",
+            "replyDelay": 0,
+            "next": "msg3"
+        },
+        "msg3": {
+            "type": "chatMessage",
+            "character": "laura",
+            "chat": "chat1",
+            "replyDelay": 2000,
+            "next": "msg4"
+        },
+        "msg4": {
+            "type": "chatMessage",
+            "character": "laura",
+            "chat": "chat1",
+            "replyDelay": 1000,
+            "next": "chatEnded"
+        },
+        "chatEnded": {
+            "type": "event",
+            "events": [
+                {
+                    "chatEnded": {
+                        "delay": 0
+                    }
+                }
+            ]
+        }
+    },
+
+    "unanswered": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    }
+}

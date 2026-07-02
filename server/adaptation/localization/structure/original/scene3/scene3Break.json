@@ -1,0 +1,350 @@
+{
+    "fill": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill2"
+        },
+        "fill2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill3"
+        },
+        "fill3": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill4"
+        },
+        "fill4": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill5"
+        },
+        "fill5": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0
+        }
+    },
+
+    "conversation1": {
+        "root": {
+            "type": "text",
+            "character": "laura",
+            "next": "sendMsg1"
+        },
+        "sendMsg1": {
+            "type": "event",
+            "events": [
+                {
+                    "sendMsg1": { }
+                }
+            ],
+            "nextDelay": 500,
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices":[
+                { "next": "answerPhone1" },
+                { "next": "listen" }
+            ]
+        },
+        "answerPhone1": {
+            "type": "event",
+            "events": [
+                {
+                    "answerPhone": {
+                        "variable": "answered",
+                        "global": false,
+                        "value": true
+                    }
+                },
+                {
+                    "msg1Sent": {
+                        "variable": "msg1Sent",
+                        "global": false,
+                        "value": true
+                    }
+                }
+            ],
+            "next": "listen"
+        },
+        "listen": {
+            "type": "text",
+            "character": "laura",
+            "next": "sendMsg2"
+        },
+        "sendMsg2": {
+            "type": "event",
+            "events": [
+                {
+                    "sendMsg2": {
+                        "variable": "msg2Sent",
+                        "global": false,
+                        "value": true
+                    }
+                }
+            ],
+            "nextDelay": 500,
+            "next": "checkAnswered"
+        },
+        "checkAnswered": {
+            "type": "condition", 
+                "conditions": [
+                    {
+                        "next": "choices2",
+                        "answered": {
+                            "value": false,
+                            "operator": "equal",
+                            "global": false,
+                            "default": false
+                        }
+                    },
+                    {
+                        "next": "listen2",
+                        "answered": {
+                            "value": true,
+                            "operator": "equal",
+                            "global": false,
+                            "default": false
+                        }
+                    }
+                ]
+        },
+        "choices2": {
+            "type": "choice",
+            "choices":[
+                { "next": "answerPhone2" },
+                { "next": "listen2" }
+            ]
+        },
+        "answerPhone2": {
+            "type": "event",
+            "events": [
+                {
+                    "answerPhone": {
+                        "variable": "answered",
+                        "global": false,
+                        "value": true
+                    }
+                },
+                {
+                    "msg2Sent": {
+                        "variable": "msg2Sent",
+                        "global": false,
+                        "value": true
+                    }
+                }
+            ],
+            "next": "listen2"
+        },
+        "listen2": {
+            "type": "text",
+            "character": "laura",
+            "next": "sendMsg3"
+        },
+        "sendMsg3": {
+            "type": "event",
+            "events": [
+                {
+                    "sendMsg3": { 
+                        "variable": "msg3Sent",
+                        "global": false,
+                        "value": true
+                    }
+                }
+            ],
+            "nextDelay": 500,
+            "next": "checkAnswered2"
+        },
+        "checkAnswered2": {
+            "type": "condition", 
+                "conditions": [
+                    {
+                        "next": "answerPhone3",
+                        "answered": {
+                            "value": false,
+                            "operator": "equal",
+                            "global": false,
+                            "default": false
+                        }
+                    },
+                    {
+                        "next": "msg4",
+                        "answered": {
+                            "value": true,
+                            "operator": "equal",
+                            "global": false,
+                            "default": false
+                        }
+                    }
+                ]
+        },
+        "answerPhone3": {
+            "type": "event",
+            "events": [
+                {
+                    "answerPhone": {
+                        "variable": "answered",
+                        "global": false,
+                        "value": true
+                    }
+                },
+                {
+                    "msg3Sent": {
+                        "variable": "msg3Sent",
+                        "global": false,
+                        "value": true
+                    }
+                }
+            ],
+            "next": "msg4"
+        },
+        "msg4": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg5"
+        },
+        "msg5": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg6"
+        },
+        "msg6": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg7"
+        },
+        "msg7": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg8"
+        },
+        "msg8": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg9"
+        },
+        "msg9": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "closePhone"
+        },
+        "closePhone": {
+            "type": "event",
+            "events": [
+                {
+                    "closePhone": {
+                        "delay": 2000
+                    }
+                }
+            ]
+        }
+    },
+
+    "phone1": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0
+        }
+    },
+
+    "phone2": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0
+        }
+    },
+
+    "phone3": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0
+        }
+    },
+
+    "conversation2": {
+        "root": {
+            "type": "text",
+            "character": "laura",
+            "next": "thoughts"
+        },
+        "thoughts": {
+            "type": "text",
+            "character": "player",
+            "next": "choices3"
+        },
+        "choices3": {
+            "type": "choice",
+            "choices":[
+                { "next": "teacher" },
+                { "next": "homework" }
+            ]
+        },
+
+        "teacher": {
+            "type": "text",
+            "character": "player",
+            "next": "notListening"
+        },
+        "homework": {
+            "type": "text",
+            "character": "player",
+            "next": "notListening"
+        },
+
+        "notListening": {
+            "type": "text",
+            "character": "laura",
+            "next": "sorry"
+        },
+        "sorry": {
+            "type": "text",
+            "character": "player",
+            "next": "whatever"
+        },
+        "whatever": {
+            "type": "text",
+            "character": "laura",
+            "next": "endBreak"
+        },
+        "endBreak": {
+            "type": "event",
+            "events": [
+                {
+                    "endBreak": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}

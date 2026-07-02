@@ -1,15 +1,25 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 from functools import lru_cache
+from enum import StrEnum
+
+class ModelType(StrEnum):
+    SPACY = "spacy"
+    SBERT = "sbert"
+    WORD2VEC = "word2vec"
+    SIAMESE_LSTM = "siamese_lstm"
 
 class Settings(BaseSettings):
     languages: set[str] = Field(default_factory=set)
 
-    bert: dict[str, str] = Field(default_factory=dict)
+    spacy: dict[str, str] = Field(default_factory=dict)
     sbert: dict[str, str] = Field(default_factory=dict)
     word2vec: dict[str, str] = Field(default_factory=dict)
-    spacy: dict[str, str] = Field(default_factory=dict)
     siamese_lstm: dict[str, str] = Field(default_factory=dict)
+
+    models: list[ModelType] = Field(
+        default_factory=lambda: [ModelType.SPACY, ModelType.SBERT]
+    )
 
     allow_origins: list[str] = Field(default_factory=list)
 

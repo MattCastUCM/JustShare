@@ -17,6 +17,9 @@ class WeightedWord2Vec(Encoder):
 
 	def weighted_vector(self, tokens: list[str], weights: np.ndarray):
 		vector_size = self.wv.vector_size
+
+		if len(tokens) == 0:
+			return np.zeros(vector_size)
 		
 		vectors = []
 		for token in tokens:

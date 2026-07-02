@@ -1,4 +1,4 @@
-import { Condition, Dialog, NodeType, Event, Choice } from "../../../types/dialogNode"
+import { Condition, Dialog, NodeType, Event, Choice, SimilarityTransition } from "../../../types/dialogNode"
 
 export class DialogNode {
     /**
@@ -86,9 +86,20 @@ export class SimilarityNode extends DialogNode {
     * Ejemplo:
         {
             "type": "similarity",
-            "threshold": 0.5,
-            "method": "tfidf",
+            "method": [
+                {
+                    "name": "tfidf",
+                    "weight": 0.5
+                },
+                {
+                    "name": "sbert",
+                    "weight": 0.5
+                }
+            ]
             "character": "player",
+            "transition": {
+                "type": "text"
+            }
             "choices": [
                 {
                     "next": "friendly"
@@ -105,21 +116,29 @@ export class SimilarityNode extends DialogNode {
             }
         }
     */
-    method: string
-    threshold: number
+    methods: Record<string, { weight?: number; threshold: number }>;
+
     character: string
+    context: string
+
     choices: string[]
-    summary: string
+
+    transition: SimilarityTransition;
+
+    node_key: string
 
     constructor() {
         super();
 
         this.type = "similarity";
-        this.method = "";
-        this.threshold = 0;
+        this.methods = {};
         this.character = "";
+        this.context = "";
         this.choices = [];
-        this.summary = "";
+        this.transition = {
+            type: "text"
+        };
+        this.node_key = ""
     }
 }
 

@@ -19,6 +19,12 @@ class Settings(BaseSettings):
 	augmented_data: bool = False
 	siamese_name: str = "siamese_lstm"
 
+	max_len: int = 26
+	augmented_max_len: int = 27
+
+	case: bool = True
+	strip_punctuation: bool = True
+
 	model_config = SettingsConfigDict(
 		env_file=".env.lstm",
 		env_file_encoding="utf-8",

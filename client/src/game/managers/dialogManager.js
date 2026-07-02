@@ -298,8 +298,15 @@ export default class DialogManager {
         }
     }
 
-    async checkSimilarity(corpus, text, method, nodeKey) {
+    async checkSimilarity(corpus, text, methods, nodeKey) {
         const language = this.translatorManager.getCurrentLanguage();
+
+        const methodNames = Object.keys(methods);
+
+        method = "hybrid"
+        if (methodNames.length <= 1) {
+            method = methodNames[0];
+        }
 
         const baseBody = {
             query: text,
@@ -308,17 +315,19 @@ export default class DialogManager {
         };
 
         let methodConfig = {}
-        if (method === "sbert") {
+        if (method === "sbert" || method == "lsmt") {
             methodConfig = {
                 node_key: nodeKey
             }
         }
         else if (method === "hybrid") {
+            const weights = methodNames.map(name => methods[name].weight);
+
             methodConfig = {
                 corpus: corpus,
                 node_key: nodeKey,
-                methods: ["tfidf", "sbert"],
-                weights: [0.5, 0.5]
+                methods: methodNames,
+                weights: weights
             }
         }
         else {
@@ -351,28 +360,28 @@ export default class DialogManager {
     }
 
     async processSimilarityNode(node, text) {
-        console.log(node);
-        console.log(node.id);
-
         try {
-            const { data } = await this.checkSimilarity(node.choices, text, node.method, node.nodeKey)
+            const { data } = await this.checkSimilarity(node.choices, text, node.methods, node.nodeKey)
 
             const match = data?.matches?.[0];
             if (!match) {
                 return node.choices.length
             }
 
-            const thresholds = this.scene.cache.json.get("similarityThresholds")
             const scores = match.scores;
             const choice = node.choices[match.index];
 
             let exceedThresholds = true
 
             for (const [method, score] of Object.entries(scores)) {
-                if (!exceedThresholds) break;
-                
-                if (score.value > 0 && method in thresholds) {
-                    const threshold = thresholds[method]
+                if (!exceedThresholds) {
+                    break;
+                }
+
+                const methodConfig = node.methods[method];
+
+                if (score.value > 0 && methodConfig) {
+                    const threshold = methodConfig.threshold
                     // TRACKER EVENT
                     this.trackerManager.sendWrittenResponse(node.fullId, text, method, thresholds, score, choice, data.processing_time)
 
@@ -438,7 +447,7 @@ export default class DialogManager {
                 this.activateOptions(true);
             }
             else if (this.currNode.type === "similarity") {
-                this.thoughtBox.setSummaryText(this.currNode.summary);
+                this.thoughtBox.setContexText(this.currNode.context);
                 if (this.portraits.get(this.lastCharacter)) {
                     this.portraits.get(this.lastCharacter).setTalking(false, this.PORTRAIT_ANIM_TIME);
                     this.lastCharacter = "";

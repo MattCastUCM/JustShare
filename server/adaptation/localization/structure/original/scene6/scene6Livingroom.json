@@ -1,0 +1,97 @@
+{
+    "phone": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill2"
+        },
+        "fill2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill3"
+        },
+        "fill3": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill4"
+        },
+        "fill4": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "fill5"
+        },
+        "fill5": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 0
+        }
+    },
+
+    "main": {
+        "root": {
+            "type": "text",
+            "character": "mom",
+            "next": "ask"
+        },
+        "ask": {
+            "type": "text",
+            "character": "dad",
+            "next": "answer"
+        },
+        "answer": {
+            "type": "text",
+            "character": "player",
+            "next": "msg"
+        },
+        "msg": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 500,
+            "next": "processMsg"
+        },
+        "processMsg": {
+            "type": "event",
+            "events": [
+                {
+                    "processMsg": {}
+                }
+            ],
+            "next": "worry"
+        },
+        "worry": {
+            "type": "text",
+            "character": "mom",
+            "next": "good"
+        },
+        "good": {
+            "type": "text",
+            "character": "player",
+            "next": "bye"
+        },
+        "bye": {
+            "type": "text",
+            "character": "grandma",
+            "next": "endConversation"
+        },
+        "endConversation": {
+            "type": "event",
+            "events": [
+                {
+                    "endConversation": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}

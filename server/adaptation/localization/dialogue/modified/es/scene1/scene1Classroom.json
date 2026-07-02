@@ -16,31 +16,8 @@
         "root": {
             "text": "Hey, soy Laura, encantada."
         },
-        "thanks": [
-            {
-                "text": "Igualmente, <player, encantado, encantada> de conocerte *sonríes*."
-            },
-            {
-                "text": "Gracias, si necesito algo ya te iré diciendo."
-            },
-            {
-                "text": "... Ah, sí, hola."
-            }
-        ],
-        "default": {
-            "text": "(Mejor no decir eso)."
-        },
-        "friendly": {
-            "text": "Pareces <player, majo, maja>. Si necesitas cualquier cosa, no dudes en preguntarme."
-        },
-        "neutral": {
-            "text": "Espero que nos llevemos bien. Tú no dudes en preguntarme."
-        },
-        "shy": {
-            "text": "Venga, no seas <player, tímido, tímida>. Si necesitas cualquier cosa, no dudes en preguntarme."
-        },
-        "thanks2": {
-            "summary": "Laura me ha saludado.",
+        "thanks_similarity": {
+            "context": "Laura me ha saludado.",
             "responses": [
                 {
                     "text": [
@@ -103,6 +80,32 @@
                     ]
                 }
             ]
+        },
+        "default": {
+            "text": "(Creo que no era la mejor respuesta...)."
+        },
+        "traditional_choices": {
+            "text": "(No sé cómo responder... voy a intentar expresarme de otra manera)."
+        },
+        "thanks": [
+            {
+                "text": "Igualmente, <player, encantado, encantada> de conocerte *sonríes*."
+            },
+            {
+                "text": "Gracias, si necesito algo ya te iré diciendo."
+            },
+            {
+                "text": "... Ah, sí, hola."
+            }
+        ],
+        "friendly": {
+            "text": "Pareces <player, majo, maja>. Si necesitas cualquier cosa, no dudes en preguntarme."
+        },
+        "neutral": {
+            "text": "Espero que nos llevemos bien. Tú no dudes en preguntarme."
+        },
+        "shy": {
+            "text": "Venga, no seas <player, tímido, tímida>. Si necesitas cualquier cosa, no dudes en preguntarme."
         }
     }
 }

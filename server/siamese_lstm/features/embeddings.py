@@ -10,7 +10,8 @@ def load_gensim_embeddings(wv: KeyedVectors, word2idx: dict, embed_dim: int):
 	# 2... -> Vocabulario real
 	embedding_matrix = np.zeros((vocab_size, embed_dim), dtype=np.float32)
 
-	found = 0
+	found_words = []
+	missing_words = []
 	for word, idx in word2idx.items():
 		# [PAD] -> Se utiliza para rellenar o truncar oraciones, de modo que todas tengan un tamaño máximo
 		if idx == 0:
@@ -24,24 +25,29 @@ def load_gensim_embeddings(wv: KeyedVectors, word2idx: dict, embed_dim: int):
 		# Si la palabra existen en el modelo preentrenado, se usa su vector correspondiente
 		if word in wv.key_to_index:
 			embedding_matrix[idx] = wv[word]
-			found += 1
+			found_words.append(word)
+		else:
+			missing_words.append(word)
 
-	print(f"Found {found}/{len(word2idx)} words")
+	total_words = len(word2idx) - 2
+
+	print(f"Encontradas: {len(found_words)}/{total_words} ({len(found_words)/total_words*100:.2f}%)")
+
+	print(f"No encontradas: {len(missing_words)}/{total_words} ({len(missing_words)/total_words*100:.2f}%)")
 
 	# Se toman los embeddings del vocabulario real
 	known_vectors = embedding_matrix[2:]
 
-	# Calcular la magnitud de un vector para filtrar los que tienen tamaño 0
+	# Calcular la magnitud de los vectores para filtrar los que tienen tamaño 0
 	valid = np.linalg.norm(known_vectors, axis=1) > 0
 
 	unk_vector = np.mean(known_vectors[valid], axis=0)
 
-	# El segundo vector corresopnde [UNK] que se utiliza para cualquier palabra desconocida
+	# El segundo vector corresponde al token [UNK], que se utiliza para cualquier palabra desconocida
 	embedding_matrix[1] = unk_vector
 
 	# Para las palabras que están presentes en el vocabulario del modelo, pero no en Word2Vec, se asigna el vector [UNK]
-	for word, idx in word2idx.items():
-		if idx > 1 and word not in wv.key_to_index:
-			embedding_matrix[idx + 2] = unk_vector
+	for word in missing_words:
+		embedding_matrix[word2idx[word]] = unk_vector
 
-	return embedding_matrix
+	return embedding_matrix, missing_words

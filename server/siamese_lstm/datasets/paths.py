@@ -19,9 +19,7 @@ class ProjectPaths:
         self._make_dirs([self.raw_dir, self.processed_dir, self.augmented_dir])
 
         self._make_dirs([self.models_dir])
-        self.word2vec_dir = os.path.join(self.models_dir, "spanish_word2vec")
-        self._make_dirs([self.word2vec_dir])
-        self.word2vec_path = os.path.join(self.word2vec_dir, "word2vec.bin")
+        self.word2vec_path = os.path.join(self.models_dir, "vectors.bin")
 
         if self.siamese_name:
             self._update_siamese_paths(self.siamese_name)
@@ -30,7 +28,7 @@ class ProjectPaths:
             self.test_dir = None
             self.calibration_dir = None
             self.embedding_path = None
-            self.vectorizer_path = None
+            self.vectorizer_dir = None
             self.siamese_path = None
             self.history_path = None
             self.metrics_path = None
@@ -41,10 +39,9 @@ class ProjectPaths:
         self.siamese_dir = os.path.join(self.models_dir, siamese_name)
         self.test_dir = os.path.join(self.siamese_dir, "test")
         self.calibration_dir = os.path.join(self.siamese_dir, "calibration")
-        self._make_dirs([self.siamese_dir, self.test_dir, self.calibration_dir])
-
         self.embedding_path = os.path.join(self.siamese_dir, "embedding_matrix.npy")
-        self.vectorizer_path = os.path.join(self.siamese_dir, "vectorizer.keras")
+        self.vectorizer_dir = os.path.join( self.siamese_dir, "vectorizer")
+        self._make_dirs([self.siamese_dir, self.test_dir, self.calibration_dir, self.vectorizer_dir])
         self.siamese_path = os.path.join(self.siamese_dir, "siamese_lstm.keras")
         self.history_path = os.path.join(self.siamese_dir, "history.npy")
         self.metrics_path = os.path.join(self.siamese_dir, "metrics.json")

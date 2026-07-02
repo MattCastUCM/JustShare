@@ -57,12 +57,12 @@ def similarity_jaccard(req: SimilarityRequest, engine: SimilarityEngine = Depend
 
 
 @router.post("/tfidf", response_model=SimilarityResponse)
-def similarity_tfidf(req: SimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_tfidf(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
 			query=req.query,
-			corpus=req.corpus,
+			node_key=req.node_key,
 			top_k=req.top_k,
 			language=req.language,
 			method=SearchMethod.TFIDF
@@ -74,12 +74,12 @@ def similarity_tfidf(req: SimilarityRequest, engine: SimilarityEngine = Depends(
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/word2vec", response_model=SimilarityResponse)
-def similarity_word2vec(req: SimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_word2vec(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
 			query=req.query,
-			corpus=req.corpus,
+			node_key=req.node_key,
 			top_k=req.top_k,
 			language=req.language,
 			method=SearchMethod.WORD2VEC
@@ -91,12 +91,12 @@ def similarity_word2vec(req: SimilarityRequest, engine: SimilarityEngine = Depen
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/lstm", response_model=SimilarityResponse)
-def similarity_lstm(req: SimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_lstm(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
 			query=req.query,
-			corpus=req.corpus,
+			node_key=req.node_key,
 			top_k=req.top_k,
 			language=req.language,
 			method=SearchMethod.LSTM
@@ -121,23 +121,6 @@ def similarity_sbert(req: FaissSimilarityRequest, engine: SimilarityEngine = Dep
 		elapsed = time.perf_counter() - start
 		logger.debug(f"sbert endpoint took {elapsed:.4f}s")
 		return build_similarity_response(top_indices, top_scores, top_texts, elapsed, SearchMethod.SBERT)
-	except ValueError as e:
-		raise HTTPException(status_code=404, detail=str(e))
-	
-@router.post("/bert", response_model=SimilarityResponse)
-def similarity_bert(req: SimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
-	start = time.perf_counter()
-	try:
-		top_indices, top_scores, top_texts = engine.search(
-			query=req.query,
-			corpus=req.corpus,
-			top_k=req.top_k,
-			language=req.language,
-			method=SearchMethod.BERT
-		)
-		elapsed = time.perf_counter() - start
-		logger.debug(f"sbert endpoint took {elapsed:.4f}s")
-		return build_similarity_response(top_indices, top_scores, top_texts, elapsed, SearchMethod.BERT)
 	except ValueError as e:
 		raise HTTPException(status_code=404, detail=str(e))
 

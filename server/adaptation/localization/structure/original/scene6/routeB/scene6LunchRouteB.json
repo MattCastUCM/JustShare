@@ -1,0 +1,217 @@
+{
+    "start": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+    
+    "phone": {
+        "root": {
+            "type": "choice",
+            "choices":[
+                { "next": "msg1" }
+            ]
+        },
+        "msg1": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg2"
+        },
+        "msg2": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg3"
+        },
+        "msg3": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices":[
+                { "next": "noDoubt" },
+                { "next": "early" }
+            ]
+        },
+
+        "noDoubt": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg5"
+        },
+        "early": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 0,
+            "next": "msg5"
+        },
+        
+        "msg5": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg6"
+        },
+        "msg6": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "msg7"
+        },
+        "msg7": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg8"
+        },
+        "msg8": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg9"
+        },
+        "msg9": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "chatEnded"
+        },
+        "chatEnded": {
+            "type": "event",
+            "events": [
+                {
+                    "chatEnded": {
+                        "delay": 2000
+                    }
+                }
+            ]
+        }
+    },
+
+    "interruption": {
+        "root": {
+            "type": "text",
+            "character": "mom",
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices":[
+                { "next": "truth" },
+                { "next": "lie" }
+            ]
+        },
+
+        "truth": {
+            "type": "text",
+            "character": "player",
+            "next": "ask"
+        },
+        "ask": {
+            "type": "text",
+            "character": "dad",
+            "next": "reveal"
+        },
+        "reveal": {
+            "type": "text",
+            "character": "player",
+            "next": "surprise"
+        },
+        "surprise": {
+            "type": "text",
+            "character": "mom",
+            "next": "problem"
+        },
+        "problem": {
+            "type": "text",
+            "character": "player",
+            "next": "scold"
+        },
+        "scold": {
+            "type": "text",
+            "character": "dad",
+            "next": "sorry"
+        },
+        "sorry": {
+            "type": "text",
+            "character": "player",
+            "next": "police"
+        },
+        "police": {
+            "type": "text",
+            "character": "mom",
+            "next": "setExplained"
+        },
+        "setExplained": {
+            "type": "event",
+            "events": [
+                {
+                    "setExplained": {
+                        "variable": "explained", 
+                        "global": true,
+                        "value": true, 
+                        "delay": 0
+                    }
+                }
+            ],
+            "next": "endInterruption"
+        },
+
+        "lie": {
+            "type": "text",
+            "character": "player",
+            "next": "reassure"
+        },
+        "reassure": {
+            "type": "text",
+            "character": "mom",
+            "next": "thanks"
+        },
+        "thanks": {
+            "type": "text",
+            "character": "player",
+            "next": "setNotExplained"
+        },
+        "setNotExplained": {
+            "type": "event",
+            "events": [
+                {
+                    "setExplained": {
+                        "variable": "explained", 
+                        "global": true,
+                        "value": false, 
+                        "delay": 0
+                    }
+                }
+            ],
+            "next": "endInterruption"
+        },
+
+        "endInterruption": {
+            "type": "event",
+            "events": [
+                {
+                    "endInterruption": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}

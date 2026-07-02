@@ -1,0 +1,24 @@
+{
+    "root": {
+        "type": "text",
+        "character": "officer",
+        "next": "thanks"
+    },
+    "thanks": {
+        "type": "text",
+        "character": "dad",
+        "next": "end"
+    },
+
+    "end": {
+        "type": "event",
+        "events": [
+            {
+                "end": {
+                    "delay": 0
+                }
+            }
+        ]
+    }
+
+}

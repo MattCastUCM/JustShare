@@ -88,7 +88,6 @@ class BaseNgramModel(LanguageModel, ABC):
 		pass
 
 	def perplexity(self, test_sentences: list[list[str]]) -> float:
-		"""Compute perplexity of the model on test sentences."""
 		log_sum = 0.0
 		total_words = 0
 		for sent in test_sentences:
@@ -156,7 +155,6 @@ class LaplaceNGramModel(BaseNgramModel):
 # https://www.kaggle.com/code/dhruvdeshmukh/spelling-corrector-using-n-gram-language-model/notebook
 # https://medium.com/@rybolos/5-weird-tricks-for-a-good-spell-checker-200617e041c1
 # https://mbrenndoerfer.com/writing/smoothing-techniques-ngram-language-models-laplace-kneser-ney
-
 class KNgramModel(BaseNgramModel):
 	def __init__(self, order: int = 3, unk_threshold: int = 2, discount: float = 0.75):
 		super().__init__(order, unk_threshold)

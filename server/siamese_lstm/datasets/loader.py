@@ -8,8 +8,8 @@ import os
 def load_splits(split_dirs: dict):
     dfs = {}
     for split, dir in split_dirs.items():
-        path = f"{dir}/stsb-es-{split}.csv"
-        dfs[split] = pd.read_csv(path)
+        path = os.path.join(dir, f"stsb-es-{split}.csv")
+        dfs[split] = pd.read_csv(path, encoding="utf-8")
 
     return dfs
 
@@ -18,7 +18,7 @@ def save_splits(dataframe: pd.DataFrame, output_dir: str):
 
     for split, data in dataframe.groupby("split"):
         path = os.path.join(output_dir, f"stsb-es-{split}.csv")
-        data.to_csv(path, index=False)
+        data.to_csv(path, encoding="utf-8", index=False)
 
 def load_files(root_dir: str, filename: str, loader: Callable):
     data_dict = {}

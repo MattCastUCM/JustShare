@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from controllers.encoders.encoder import Encoder
 from utils.vector_numpy import l2_normalize
-import siamese_lstm.features.vectorizer
+from siamese_lstm.features.vectorizer import TextVectorizerModel
 
 class SentenceLSTM(Encoder):
     name = "lstm"
@@ -39,9 +39,8 @@ class SentenceLSTM(Encoder):
         return np.load(path)
 
     def _load_vectorizer(self):
-        path = self._load_file("vectorizer.keras")
-        model = load_model(path)
-        return model.layers[0]
+        dir = os.path.join(self.model_dir, "vectorizer")
+        return TextVectorizerModel.load(dir)
 
     def _load_full_model(self):
         path = self._load_file("siamese_lstm.keras")

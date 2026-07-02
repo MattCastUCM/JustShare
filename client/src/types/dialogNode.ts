@@ -35,3 +35,10 @@ export interface Choice {
     text: string;
     repeat: boolean;
 }
+
+export interface SimilarityTransition {
+    type: "text" | "chatMessage";
+    chat?: string;
+    replyDelay?: number;
+    phone?: boolean;
+}

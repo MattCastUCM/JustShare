@@ -1,0 +1,92 @@
+{
+    "part1": {
+        "root": {
+            "type": "text",
+            "character": "laura",
+            "next": "noTalk"
+        },
+        "noTalk": {
+            "type": "text",
+            "character": "player",
+            "next": "glad"
+        },
+        "glad": {
+            "type": "text",
+            "character": "laura",
+            "next": "paulaArrive"
+        },
+        "paulaArrive": {
+            "type": "text",
+            "character": "???",
+            "next": "paulaAppear"
+        },
+        "paulaAppear": {
+            "type": "event",
+            "events": [
+                {
+                    "paulaAppear": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    },
+
+    "part2": {
+        "root": {
+            "type": "text",
+            "character": "laura",
+            "next": "invite"
+        },
+        "invite": {
+            "type": "text",
+            "character": "paula",
+            "next": "sure"
+        },
+        "sure": {
+            "type": "text",
+            "character": "laura",
+            "next": "choice"
+        },
+        "choice": {
+            "type": "choice",
+            "choices": [
+                { "next": "excited" },
+                { "next": "neutral" },
+                { "next": "unsure" }
+            ]
+        },
+
+        "excited": {
+            "type": "text",
+            "character": "laura",
+            "next": "bye"
+        },
+        "neutral": {
+            "type": "text",
+            "character": "laura",
+            "next": "bye"
+        },
+        "unsure": {
+            "type": "text",
+            "character": "laura",
+            "next": "bye"
+        },
+
+        "bye": {
+            "type": "text",
+            "character": "paula",
+            "next": "endBreak"
+        },
+        "endBreak": {
+            "type": "event",
+            "events": [
+                {
+                    "endBreak": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}

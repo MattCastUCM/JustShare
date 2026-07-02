@@ -10,7 +10,7 @@ export default class ThoughtBox extends AnimatedContainer {
     private textInput: TextInput
     private button: GameObjects.Image
     private enterKey: Input.Keyboard.Key
-    private summaryTextArea: TextArea
+    private context: TextArea
 
     public constructor(scene: Scene, cloudX: number, cloudY: number, headerText: string, headerTextStyle: Types.GameObjects.Text.TextStyle, summaryTextStyle: Types.GameObjects.Text.TextStyle, defaultText: string, defaultTextStyle: Types.GameObjects.Text.TextStyle, inputTextStyle: Types.GameObjects.Text.TextStyle, onClick: Function) {
         super(scene, 0, 0);
@@ -54,15 +54,15 @@ export default class ThoughtBox extends AnimatedContainer {
 
         const offsetX = -10;
 
-        this.summaryTextArea = new TextArea(scene, -width / 2, -height / 2, width, height, "", summaryTextStyle, 0, 0, 0, 0, offsetX, 0, 0.5, 0.5)
+        this.context = new TextArea(scene, -width / 2, -height / 2, width, height, "", summaryTextStyle, 0, 0, 0, 0, offsetX, 0, 0.5, 0.5)
         if (DEBUG) {
-            cloudContainer.add(this.summaryTextArea.debugRect)
+            cloudContainer.add(this.context.debugRect)
         }
-        cloudContainer.add(this.summaryTextArea);
+        cloudContainer.add(this.context);
 
-        const y = this.summaryTextArea.y + this.summaryTextArea.displayHeight + 30;
+        const y = this.context.y + this.context.displayHeight + 30;
 
-        const headerTextArea = new TextArea(scene, this.summaryTextArea.x, y, width, height, headerText, headerTextStyle, 0, 0, 0, 0, 0, 0, 0.5, 0.5)
+        const headerTextArea = new TextArea(scene, this.context.x, y, width, height, headerText, headerTextStyle, 0, 0, 0, 0, 0, 0, 0.5, 0.5)
         headerTextArea.adjustFontSize();
         if (DEBUG) {
             cloudContainer.add(headerTextArea.debugRect)
@@ -124,7 +124,8 @@ export default class ThoughtBox extends AnimatedContainer {
         this.textInput.clear();
     }
 
-    public setSummaryText(text: string) {
-        this.summaryTextArea.setText(text);
+    public setContexText(text: string) {
+        this.context.setText(text);
+        this.context.adjustFontSize();
     }
 }

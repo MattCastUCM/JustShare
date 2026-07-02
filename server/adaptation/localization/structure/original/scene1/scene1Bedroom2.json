@@ -1,0 +1,251 @@
+{
+    "bed": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "closet": {
+        "root": {
+            "type": "text",
+            "character": "player"
+        }
+    },
+
+    "toniPost2": {
+        "root": {
+            "type": "commentary",
+            "character": "mike",
+            "post": "toniPost2",
+            "replyDelay": 0,
+            "next": "comment2"
+        },
+        "comment2": {
+            "type": "commentary",
+            "character": "martina",
+            "post": "toniPost2",
+            "replyDelay": 0
+        }
+    },
+
+
+    "computer": {
+        "root": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices":[
+                { "next": "helloTell" },
+                { "next": "helloNoTell" }
+            ]
+        },
+        
+        "helloTell": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "helloTell2"
+        },
+        "helloTell2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
+            "next": "msg3"
+        },
+
+        "helloNoTell": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "helloNoTell2"
+        },
+        "helloNoTell2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
+            "next": "msg3"
+        },
+
+        "msg3": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
+            "next": "msg4"
+        },
+
+        "msg4": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg5"
+        },
+        "msg5": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 1500,
+            "phone": false,
+            "next": "choices2"
+        },
+        "choices2": {
+            "type": "choice",
+            "choices":[
+                { "next": "ask" },
+                { "next": "noAsk" }
+            ]
+        },
+
+        "ask": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "ask2"
+        },
+        "ask2": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
+            "next": "msg6"
+        },
+        "ask3": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg6"
+        },
+
+        "noAsk": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "noAsk2"
+        },
+        "noAsk2": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
+            "next": "msg6"
+        },
+
+        "msg6": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg7"
+        },
+        "msg7": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg8"
+        },
+        "msg8": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg9"
+        },
+        "msg9": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "choices3"
+        },
+        "choices3": {
+            "type": "choice",
+            "choices":[
+                { "next": "sleep" },
+                { "next": "video" }
+            ]
+        },
+
+        "sleep": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "msg10"
+        },
+        "video": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "msg10"
+        },
+
+        "msg10": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg11"
+        },
+        "msg11": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "msg12"
+        },
+        "msg12": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
+            "next": "endConversation"
+        },
+        "endConversation": {
+            "type": "event",
+            "events": [
+                {
+                    "endConversation": {
+                        "delay": 500
+                    }
+                }
+            ]
+        }
+    }
+}
