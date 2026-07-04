@@ -45,21 +45,30 @@
                 }
             ],
             "default": {
-                "next": "default"
+                "next": "increase_errors"
             }
         },
-        "default": {
-            "type": "text",
-            "character": "player",
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseThanksErrors": {
+                        "variable": "thanks_errors",
+                        "operation": "increment",
+                        "value": 1,
+                        "global": false
+                    }
+                }
+            ],
             "next": "retries"
         },
         "retries": {
             "type": "condition",
             "conditions": [
                 {
-                    "next": "thanks_similarity",
+                    "next": "default",
                     "thanks_errors": {
-                        "value": 3,
+                        "value": 2,
                         "operator": "lower",
                         "global": false,
                         "default": 0
@@ -75,6 +84,11 @@
                     }
                 }
             ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "thanks_similarity"
         },
         "traditional_choices": {
             "type": "text",

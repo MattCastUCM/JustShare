@@ -291,8 +291,22 @@ export default class DialogManager {
                     blackboard = evt.blackboard;
                 }
                 if (evt.variable && evt.value !== undefined) {
-                    blackboard.set(evt.variable, evt.value);
-                    // this.gameManager.setValue(evt.variable, evt.value, blackboard);
+                    const currentValue = blackboard.get(evt.variable) ?? 0;
+
+                    switch (evt.operation) {
+                        case "increment":
+                            blackboard.set(evt.variable, currentValue + evt.value);
+                            break;
+
+                        case "decrement":
+                            blackboard.set(evt.variable, currentValue - evt.value);
+                            break;
+
+                        case "set":
+                        default:
+                            blackboard.set(evt.variable, evt.value);
+                            break;
+                    }
                 }
             }, delay);
         }
@@ -303,7 +317,7 @@ export default class DialogManager {
 
         const methodNames = Object.keys(methods);
 
-        method = "hybrid"
+        let method = "hybrid"
         if (methodNames.length <= 1) {
             method = methodNames[0];
         }
@@ -383,7 +397,7 @@ export default class DialogManager {
                 if (score.value > 0 && methodConfig) {
                     const threshold = methodConfig.threshold
                     // TRACKER EVENT
-                    this.trackerManager.sendWrittenResponse(node.fullId, text, method, thresholds, score, choice, data.processing_time)
+                    this.trackerManager.sendWrittenResponse(node.fullId, text, method, threshold, score, choice, data.processing_time)
 
                     if (score.value < threshold * score.weight) {
                         exceedThresholds = false

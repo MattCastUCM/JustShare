@@ -13,22 +13,21 @@ export type Dialog = {
     name: string;
 };
 
-type Operator = "equal" | "greater" | "lower" | "different"
-
 export interface Condition<Type> {
     key: string;
-    value: Type,
-    operator: Operator
-    global: boolean
-    default: Type
+    value: Type;
+    operator: "equal" | "greater" | "lower" | "different";
+    global: boolean;
+    default: Type;
     blackboard: Map<any, any>;
 }
 
 export interface Event {
     name: string;
-    variable: string,
-    global: boolean,
-    value: any
+    variable: string;
+    global: boolean;
+    value: any;
+    operator: "set" | "increment" | "decrement";
 }
 
 export interface Choice {
@@ -38,7 +37,7 @@ export interface Choice {
 
 export interface SimilarityTransition {
     type: "text" | "chatMessage";
-    chat?: string;
+    chat: string;
     replyDelay?: number;
-    phone?: boolean;
+    phone: boolean;
 }

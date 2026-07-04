@@ -325,7 +325,7 @@ export default class BaseScene extends Scene {
                     // Guarda el valor por defecto del objeto. Si no tiene
                     // la propiedad en el json, se pone a false por defecto
                     let defaultValue = false;
-                    if (obj.default) {
+                    if (obj.default != null) {
                         defaultValue = obj.default;
                     }
 
@@ -517,6 +517,9 @@ export default class BaseScene extends Scene {
                 // Crea un objeto igual que obj, pero que tambien guarda su nombre
                 let evt = { ...obj };
                 evt.name = evtName[0];
+
+                // Operación por defecto
+                evt.operation ??= "set";
 
                 // Si se ha definido si la variable es global y si se ha definido que no lo
                 // es, se guarda en las propiedades del evento la blackboard de esta escena
