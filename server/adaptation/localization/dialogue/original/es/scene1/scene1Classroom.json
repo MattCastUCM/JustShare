@@ -27,9 +27,6 @@
                 "text": "... Ah, sí, hola."
             }
         ],
-        "default": {
-            "text": "(Mejor no decir eso)."
-        },
         "friendly": {
             "text": "Pareces <player, majo, maja>. Si necesitas cualquier cosa, no dudes en preguntarme."
         },

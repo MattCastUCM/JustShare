@@ -1,0 +1,94 @@
+{
+    "bed": {
+        "root": {
+            "text": "(Quiero hablar con <harasser, Pablo, Lucía> antes de irme a dormir)."
+        }
+    },
+    
+    "closet": {
+        "root": {
+            "text": "(Quiero hablar con <harasser, Pablo, Lucía> antes de ordenarlo)."
+        }
+    },
+
+    "phone": {
+        "root": {
+            "text": "Tengo una idea que puede que te guste"
+        },
+        "choices1": [
+            {
+                "text": "Cuéntame."
+            }
+        ],
+        "msg2": {
+            "text": "A ver dime"
+        },
+        "msg3": {
+            "text": "Habia pensado..."
+        },
+        "msg4": {
+            "text": "Que llevamos bastante tiempo hablando, y..."
+        },
+        "msg5": {
+            "text": "Dimeee"
+        },
+        "msg6": {
+            "text":  "Nada, que aprovechando que mañana es festivo podriamos quedar en persona y así nos vemosss"
+        },
+        "choices2": [
+            {
+                "text": "Aceptar."
+            },
+            {
+                "text": "Negarse."
+            }
+        ],
+        
+        "msg7A": {
+            "text": "Sii, asi puedo verte por fin"
+        },
+        "msg8A": {
+            "text": "Guayyy, te viene bien quedar en mi urba?"
+        },
+        "msg9A": {
+            "text": "Valee, asi me enseñas un poco tu zona :)"
+        },
+        "msg10A": {
+            "text": "Que ganass"
+        },
+        "msg11A": {
+            "text": "Pues te veo mañana entonces ;)"
+        },
+        "msg12A": {
+            "text": "Hasta mañanaa"
+        },
+
+        "msg7B": {
+            "text": "No creo que deba, a mis padres no les haria mucha gracia"
+        },
+        "msg8B": {
+            "text": "Bueno no tienen que saberlo, sera nuestro secreto, como las fotos ;)"
+        },
+        "msg9B": {
+            "text": "Prefiero dejarlo para otro momento de verdad, asi nos conocemos mejor"
+        },
+        "msg10B": {
+            "text": "Que pasa, que no me quieres tanto como dices?"
+        },
+        "msg11B": {
+            "text": "Mucho dices que soy de lo mejor que te ha pasado y ahora te niegas?"
+        },
+        "msg12B": {
+            "text": "No es eso, simplemente no estoy <player, comodo, comoda> del todo haciendolo"
+        },
+        "msg13B": {
+            "text": "Ya bueno, igual deberias replantearte tus prioridades"
+        },
+        "msg14B": {
+            "text": "Me voy a la cama"
+        },
+        "msg15B": {
+            "text": "Yo tambien me voy"
+        }
+    }
+}

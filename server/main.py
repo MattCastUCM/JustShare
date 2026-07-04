@@ -84,7 +84,7 @@ app.add_middleware(
 )
 
 structure_dir = os.path.join(settings.localization_dir, "structure", "modified")
-language_dir = os.path.join(settings.localization_dir, "dialogue", "modified")
+language_dir = os.path.join(settings.localization_dir, "dialogue", "active")
 
 app.mount(
     "/localization/structure",

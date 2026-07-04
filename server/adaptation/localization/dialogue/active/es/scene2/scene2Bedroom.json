@@ -1,0 +1,113 @@
+{
+    "bed": {
+        "root": {
+            "text": "(Antes de irme a dormir quiero hablar un rato más con <harasser, Pablo, Lucía>)."
+        }
+    },
+
+    "closet": {
+        "root": {
+            "text": "(Ya lo ordenaré otro día, ahora quiero hablar rato más con <harasser, Pablo, Lucía>)."
+        }
+    },
+
+    "bedUnanswered": {
+        "root": {
+            "text": "(Antes de irme a dormir tengo que ver que he recibido el mensaje de <harasser, Pablo, Lucía>)."
+        }
+    },
+
+    "computer": {
+        "root": {
+            "text" : "Has visto el nuevo video de toni?"
+        },
+        "msg2": {
+            "text" : "Siii! me meo que en los 10 menus le haya salido el mismo juguete"
+        },
+        "msg3": {
+            "text" : "No se puede tener mas mala suerte xd"
+        },
+        "reply": [
+            {
+                "text": "Responder."
+            }
+        ],
+        "msg4": {
+            "text" : "Y la gente poniendo en los comentarios edits de los moñecos jajaja"
+        },
+        "msg5": {
+            "text" : "Yo creo que eso me ha hecho mas gracia que el video xd"
+        },
+        "msg6": {
+            "text" : "Ay madre"
+        },
+        "msg7": {
+            "text" : "Que pasa?"
+        },
+        "msg8": {
+            "text" : "Se me ha hecho super tarde"
+        },
+        "msg9": {
+            "text" : "Tendria que irme a dormir"
+        },
+        "msg10": {
+            "text" : "No te puedes quedar un rato mas? :("
+        },
+        "msg11": {
+            "text" : "Tengo clase mañana no puedo quedarme mucho mas tiempo"
+        },
+        "msg12": {
+            "text" : "Al menos pasame tu numero y asi podremos hablar aunque no puedas estar con el ordena"
+        },
+        "msg13": {
+            "text" : "Es que no se"
+        },
+        "msg14": {
+            "text" : "No podemos seguir hablando por aqui?"
+        },
+        "msg15": {
+            "text" : "Es que por el movil es mas comodo y asi nos enteramos antes si nos escribimos :)"
+        },
+        "msg16": {
+            "text" : "Bueno..."
+        },
+        "msg17": {
+            "text" : "Esta bien"
+        },
+        "msg18": {
+            "text" : "XXX-XXX-XXX"
+        },
+        "msg19": {
+            "text" : "Ahora te mando 1 mensaje"
+        }
+    },
+
+    "phone": {
+        "root": {
+            "text": "Helloooo :)"
+        },
+        "choices": [
+            {
+                "text": "Jajaja."
+            },
+            {
+                "text": "Bueno, me voy a dormir."
+            }
+        ],
+        "reply1": {
+            "text": "Jajaja"
+        },
+        "reply2": {
+            "text": "Bueno, me voy a dormir"
+        },
+        "bye": {
+            "text": "Chau"
+        }
+    },
+
+    "computerUnanswered": {
+        "root": {
+            "text": "(Antes de acostarme tengo que ver si me ha llegado el mensaje de <harasser, Pablo, Lucía>)."
+        }
+    }
+}

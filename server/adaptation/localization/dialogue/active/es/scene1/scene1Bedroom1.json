@@ -86,6 +86,9 @@
         "neutralResponse2": {
             "text": "Si, me parece muy entretenido"
         },
+        "default": {
+            "text": "(Mejor no decir eso)."
+        },
         "msg4": {
             "text": "Me alegro que te guste {{name}}. La verdad que la comunidad de ToniVlogs mola mucho"
         },
@@ -126,101 +129,6 @@
         },
         "ask": {
             "text": "¿Sí?"
-        },
-        "choices": {
-            "summary": "Alguien me ha escrito por redes por un youtuber en común.",
-            "responses": [
-                {
-                    "text": [
-                        "Anda! Nunca habia coincidido con nadie que le gustase",
-                        "Holiiii síii le veo desde hace un tiempo, me entretiene jaja",
-                        "Hola!! Sí, le empecé a seguir hace un tiempo y me gustan mucho sus videos. Cuál es tu favorito?",
-                        "Ah djasdjashda guay",
-                        "Eso parece si",
-                        "Hey soy {{name}}, si me gustan muchos los videos de TheGref, ahora estoy emocionada por la velada",
-                        "Hey soy {{name}}, si me gustan muchos los videos de TheGref, ahora estoy emocionado por la velada.",
-                        "Si, ya ves",
-                        "Hola Lucía, si me gustan mucho sus vídeos, por?",
-                        "Hola Lucía, si me gustan mucho tus vídeos, ¿por qué?",
-                        "A si? Jajajs, es un grande Inserte nombre de Youtuber",
-                        "Buenas, eso está muy guay Pero no te conozco, ¿y como sabes que soy {{name}} fan de ese youtuber?",
-                        "Ohhh y cómo me encontraste? jajaj",
-                        "Ey, qué tal Lucía, soy {{name}}. Pues le sigo desde lo de , y tú?",
-                        "Ey, qué tal Lucía, soy {{name}}. Pues le sigo desde lo de , y tú?",
-                        "Bueno, como mucha otra gente",
-                        "Hey, si soy {{name}}, me gusta mucho jajajja",
-                        "Hola. En serio?",
-                        "Hola jaja. Supongo",
-                        "Holaa, pues bien",
-                        "Bien y tú? Si, me gustan sus vídeos la verdad.",
-                        "Hola, si, ¿Cómo lo sabes?",
-                        "Holaaa que tal",
-                        "Holaaaaa, sí me encanta <nombre de youtuber>",
-                        "ay sí? q casualidad jajaj",
-                        "Hola, Pablo, yo soy {{name}}. Me alegra conocer a otro fan de [nombre del youtuber]",
-                        "Hola, Pablo, yo soy {{name}}. Me alegra conocer a otra fan de [nombre del youtuber]",
-                        "Hola! Qué coincidencia!",
-                        "Hola, cual?",
-                        "Holaa, Todo Bien? Si me encantaa, es un genio. Desde hace cuanto lo conoces?",
-                        "Holaa, encantada!! Que guay que nos guste el mismo. ¿Viste el video de ayer?",
-                        "Hola, encantado!! Qué guay que nos guste el mismo. ¿Viste el video de ayer?",
-                        "En serio? Que guay. Llevo viendo a ese youtuber desde hace muchisimo tiempo.",
-                        "Si a mí también me gusta mucho ese youtuber. Ojalá algun día ser como él!!!",
-                        "Si a mí también me gusta mucho esa youtubera. Ojalá algún día sea como ella!!!",
-                        "¡Hola! Siiiii, ¡me encantan sus vídeos!",
-                        "Holaa, ey que bueno! ¿como lo conociste? ¿cual es tu video fav?",
-                        "Andaaa, la verdad que soy {{name}} fan, desde cuando lo conoces?",
-                        "Hola! Si la verdad tengo poco que lo descubrí pero ya estoy obsesionado",
-                        "Hola Lucía! ¿Qué tal todo? ¿A ti tambien te gusta?",
-                        "Hola Lucía! ¿Qué tal todo? A mí también me gusta."
-                    ]
-                },
-                {
-                    "text": [
-                        "Anda! Nunca habia coincidido con nadie que le gustase",
-                        "Holiiii síii le veo desde hace un tiempo, me entretiene jaja",
-                        "Hola!! Sí, le empecé a seguir hace un tiempo y me gustan mucho sus videos. Cuál es tu favorito?",
-                        "Ah djasdjashda guay",
-                        "Eso parece si",
-                        "Hey soy {{name}}, si me gustan muchos los videos de TheGref, ahora estoy emocionada por la velada",
-                        "Hey soy {{name}}, si me gustan muchos los videos de TheGref, ahora estoy emocionado por la velada.",
-                        "Si, ya ves",
-                        "Hola Lucía, si me gustan mucho sus vídeos, por?",
-                        "Hola Lucía, si me gustan mucho tus vídeos, ¿por qué?",
-                        "A si? Jajajs, es un grande Inserte nombre de Youtuber",
-                        "Buenas, eso está muy guay Pero no te conozco, ¿y como sabes que soy {{name}} fan de ese youtuber?",
-                        "Ohhh y cómo me encontraste? jajaj",
-                        "Ey, qué tal Lucía, soy {{name}}. Pues le sigo desde lo de , y tú?",
-                        "Ey, qué tal Lucía, soy {{name}}. Pues le sigo desde lo de , y tú?",
-                        "Bueno, como mucha otra gente",
-                        "Hey, si soy {{name}}, me gusta mucho jajajja",
-                        "Hola. En serio?",
-                        "Hola jaja. Supongo",
-                        "Holaa, pues bien",
-                        "Bien y tú? Si, me gustan sus vídeos la verdad.",
-                        "Hola, si, ¿Cómo lo sabes?",
-                        "Holaaa que tal",
-                        "Holaaaaa, sí me encanta <nombre de youtuber>",
-                        "ay sí? q casualidad jajaj",
-                        "Hola, Pablo, yo soy {{name}}. Me alegra conocer a otro fan de [nombre del youtuber]",
-                        "Hola, Pablo, yo soy {{name}}. Me alegra conocer a otra fan de [nombre del youtuber]",
-                        "Hola! Qué coincidencia!",
-                        "Hola, cual?",
-                        "Holaa, Todo Bien? Si me encantaa, es un genio. Desde hace cuanto lo conoces?",
-                        "Holaa, encantada!! Que guay que nos guste el mismo. ¿Viste el video de ayer?",
-                        "Hola, encantado!! Qué guay que nos guste el mismo. ¿Viste el video de ayer?",
-                        "En serio? Que guay. Llevo viendo a ese youtuber desde hace muchisimo tiempo.",
-                        "Si a mí también me gusta mucho ese youtuber. Ojalá algun día ser como él!!!",
-                        "Si a mí también me gusta mucho esa youtubera. Ojalá algún día sea como ella!!!",
-                        "¡Hola! Siiiii, ¡me encantan sus vídeos!",
-                        "Holaa, ey que bueno! ¿como lo conociste? ¿cual es tu video fav?",
-                        "Andaaa, la verdad que soy {{name}} fan, desde cuando lo conoces?",
-                        "Hola! Si la verdad tengo poco que lo descubrí pero ya estoy obsesionado",
-                        "Hola Lucía! ¿Qué tal todo? ¿A ti tambien te gusta?",
-                        "Hola Lucía! ¿Qué tal todo? A mí también me gusta."
-                    ]
-                }
-            ]
         }
     },
     "interruption": {

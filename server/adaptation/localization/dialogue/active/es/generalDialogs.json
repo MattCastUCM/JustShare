@@ -1,0 +1,57 @@
+{
+    "door": {
+        "root": {
+            "text": "(Ahora mismo no tengo nada que hacer fuera)."
+        }
+    },
+
+    "closet": {
+        "root": {
+            "text": "(Debería ordenar esto en algún momento)."
+        }
+    },
+    
+    "closetNight": {
+        "root": {
+            "text": "(Ya es muy tarde, ya lo ordenaré otro día)."
+        }
+    },
+    
+    "bed": {
+        "root": {
+            "text": "(¿Debería irme ya a dormir?)."
+        },
+        "goToSleep": [
+            { 
+                "text": "Sí." 
+            },
+            {
+                "text": "No."
+            }
+        ]
+    },
+
+    "computerNight": {
+        "root": {
+            "text": "Mejor no, ya es hora de dormir."
+        }
+    },
+
+    "noComment": {
+        "root": {
+            "text": "(No tengo nada que comentar)."
+        }
+    },
+
+    "noReply": {
+        "root": {
+            "text": "(No tengo nada que responder)."
+        }
+    },
+
+    "post": {
+        "root": {
+            "text": "(No tengo nada que subir)."
+        }
+    }
+}
