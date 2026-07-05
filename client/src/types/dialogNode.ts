@@ -37,7 +37,7 @@ export interface Choice {
 
 export interface SimilarityTransition {
     type: "text" | "chatMessage";
-    chat: string;
+    chat?: string;
     replyDelay?: number;
-    phone: boolean;
+    phone?: boolean;
 }

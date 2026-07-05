@@ -55,8 +55,8 @@
                     "increaseThanksErrors": {
                         "variable": "thanks_errors",
                         "operation": "increment",
-                        "value": 1,
-                        "global": false
+                        "global": false,
+                        "value": 1
                     }
                 }
             ],

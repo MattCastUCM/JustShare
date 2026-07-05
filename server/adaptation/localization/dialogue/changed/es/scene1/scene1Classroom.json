@@ -17,7 +17,7 @@
             "text": "Hey, soy Laura, encantada."
         },
         "thanks_similarity": {
-            "context": "Laura me ha saludado.",
+            "context": "Laura me ha saludado. Ahora me toca responder.",
             "responses": [
                 {
                     "text": [
@@ -82,9 +82,7 @@
             ]
         },
         "default": {
-            "text": [
-                "(Creo que no era la mejor respuesta...)."
-            ]
+            "text": "(Creo que no era la mejor respuesta...)."
         },
         "traditional_choices": {
             "text": "(No sé cómo responder... voy a intentar expresarme de otra manera)."
@@ -94,7 +92,7 @@
                 "text": "Igualmente, <player, encantado, encantada> de conocerte *sonríes*."
             },
             {
-                "text": "Gracias, si necesito algo ya te iré diciendo."
+                "text": "Un placer. Yo soy {{name}}."
             },
             {
                 "text": "... Ah, sí, hola."

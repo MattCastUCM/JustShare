@@ -186,7 +186,7 @@ export default class BaseScene extends Scene {
     }
 
     createChatMessageNode(textTranslation, character, getObjs, chat, replyDelay = null, phone = null, nextNode = null) {
-        node = new ChatNode();
+        let node = new ChatNode();
 
         node.text = textTranslation;
 
@@ -436,6 +436,8 @@ export default class BaseScene extends Scene {
 
             node.character = fileObj[id].character;
 
+            node.transition = fileObj[id].transition
+
             // Se obtienen las opciones del archivo de textos traducidos
             const texts = this.translatorManager.translate(`${translationId}.responses`, namespace, {
                 name: this.playerName,
@@ -517,9 +519,6 @@ export default class BaseScene extends Scene {
                 // Crea un objeto igual que obj, pero que tambien guarda su nombre
                 let evt = { ...obj };
                 evt.name = evtName[0];
-
-                // Operación por defecto
-                evt.operation ??= "set";
 
                 // Si se ha definido si la variable es global y si se ha definido que no lo
                 // es, se guarda en las propiedades del evento la blackboard de esta escena

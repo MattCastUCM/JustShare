@@ -119,6 +119,7 @@
                 {
                     "routeB": {
                         "variable": "routeA", 
+                        "operation": "set",
                         "global": true,
                         "value": false, 
                         "delay": 0
@@ -127,6 +128,7 @@
                 {
                     "routeB": {
                         "variable": "routeB",
+                        "operation": "set",
                         "global": true,
                         "value": true,
                         "delay": 0

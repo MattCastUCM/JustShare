@@ -74,6 +74,14 @@
         "msg3": {
             "text": "Te escribia porque he visto que eres muy fan de ToniVlogs"
         },
+        "choices": [
+            {
+                "text": "Contestar amablemente."
+            },
+            {
+                "text": "Contestar más friamente."
+            }
+        ],
         "niceResponse": {
             "text": "Holaa <harasser, Pablo, Lucia> yo soy {{name}}"
         },
@@ -85,9 +93,6 @@
         },
         "neutralResponse2": {
             "text": "Si, me parece muy entretenido"
-        },
-        "default": {
-            "text": "(Mejor no decir eso)."
         },
         "msg4": {
             "text": "Me alegro que te guste {{name}}. La verdad que la comunidad de ToniVlogs mola mucho"
@@ -168,7 +173,7 @@
         ]
     },
     "computer2": {
-        "root": [
+        "root_bis": [
             {
                 "text": "Un par de años."
             },
@@ -179,8 +184,14 @@
         "2years": {
             "text": "Lo sigo desde hace ya un par de años y sin duda es el mejor"
         },
+        "2yearsResponse": {
+            "text": "¡Qué guay! Entonces llevas viéndolo desde hace bastante"
+        },
         "littleAgo": {
             "text": "Lo sigo desde hace poco, pero es el mejor"
+        },
+        "littleAgoResponse": {
+            "text": "Jajaja, pues te quedan un montón de vídeos buenos por ver"
         },
         "sorry": {
             "text": "Por cierto, sorry por tardar en contestar. Tenia que acabar unos ejercicios para clase"

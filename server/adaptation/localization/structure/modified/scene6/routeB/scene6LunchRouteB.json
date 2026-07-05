@@ -164,6 +164,7 @@
                 {
                     "setExplained": {
                         "variable": "explained", 
+                        "operation": "set",
                         "global": true,
                         "value": true, 
                         "delay": 0
@@ -194,6 +195,7 @@
                 {
                     "setExplained": {
                         "variable": "explained", 
+                        "operation": "set",
                         "global": true,
                         "value": false, 
                         "delay": 0

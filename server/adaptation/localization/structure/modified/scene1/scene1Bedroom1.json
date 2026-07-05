@@ -194,6 +194,119 @@
             "chat": "harasser",
             "replyDelay": 0,
             "phone": false,
+            "next": "choices_similarity"
+        },
+        "choices_similarity": {
+            "type": "similarity",
+            "methods": [
+                {
+                    "name": "sbert"
+                }
+            ],
+            "character": "player",
+            "transition": {
+                "type": "chatMessage",
+                "chat": "harasser",
+                "replyDelay": 0,
+                "phone": false
+            },
+            "choices": [
+                {
+                    "next": "msg4"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseChoicesErrors": {
+                        "variable": "choices_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "choices_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "traditional_choices",
+                    "choices_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
+            ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "choices_similarity"
+        },
+        "traditional_choices": {
+            "type": "text",
+            "character": "player",
+            "next": "choices"
+        },
+        "choices": {
+            "type": "choice",
+            "choices": [
+                {
+                    "next": "niceResponse"
+                },
+                {
+                    "next": "neutralResponse"
+                }
+            ]
+        },
+        "niceResponse": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "niceResponse2"
+        },
+        "niceResponse2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
+            "next": "msg4"
+        },
+        "neutralResponse": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 0,
+            "phone": false,
+            "next": "neutralResponse2"
+        },
+        "neutralResponse2": {
+            "type": "chatMessage",
+            "character": "player",
+            "chat": "harasser",
+            "replyDelay": 1000,
+            "phone": false,
             "next": "msg4"
         },
         "msg4": {
@@ -327,6 +440,7 @@
                 {
                     "setInterruption": {
                         "variable": "interrupted",
+                        "operation": "set",
                         "global": false,
                         "value": true,
                         "delay": 500
@@ -347,6 +461,7 @@
                 {
                     "endHomework": {
                         "variable": "homework",
+                        "operation": "set",
                         "global": false,
                         "value": true,
                         "delay": 500
@@ -357,6 +472,79 @@
     },
     "computer2": {
         "root": {
+            "type": "similarity",
+            "methods": [
+                {
+                    "name": "sbert"
+                }
+            ],
+            "character": "player",
+            "transition": {
+                "type": "chatMessage",
+                "chat": "harasser",
+                "replyDelay": 0,
+                "phone": false
+            },
+            "choices": [
+                {
+                    "next": "2yearsResponse"
+                },
+                {
+                    "next": "littleAgoResponse"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseRootErrors": {
+                        "variable": "root_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "root_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "traditional_choices",
+                    "root_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
+            ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "root"
+        },
+        "traditional_choices": {
+            "type": "text",
+            "character": "player",
+            "next": "root_bis"
+        },
+        "root_bis": {
             "type": "choice",
             "choices": [
                 {
@@ -373,6 +561,14 @@
             "chat": "harasser",
             "replyDelay": 0,
             "phone": false,
+            "next": "2yearsResponse"
+        },
+        "2yearsResponse": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
+            "phone": false,
             "next": "sorry"
         },
         "littleAgo": {
@@ -380,6 +576,14 @@
             "character": "player",
             "chat": "harasser",
             "replyDelay": 0,
+            "phone": false,
+            "next": "littleAgoResponse"
+        },
+        "littleAgoResponse": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "harasser",
+            "replyDelay": 2000,
             "phone": false,
             "next": "sorry"
         },

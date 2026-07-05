@@ -1,7 +1,7 @@
 {
     "bed": {
         "noInterruption": {
-            "text": "(Antes de tumbarme quiero echarle un ojo al ordenador)."
+            "text": "(Antes de tumbarme quiero echarle un ojo al ordenador)." 
         },
         "noHomework": {
             "text": "(Antes de tumbarme tengo que hacer los deberes)."
@@ -10,37 +10,39 @@
             "text": "(Antes de tumbarme voy a contestar a <harasser, Pablo, Lucía>)."
         }
     },
+
     "computerPosts": {
         "toniPost1": {
             "root": {
-                "text": "Juegazooo seguro"
+                "text": "Juegazooo seguro" 
             },
             "comment2": {
-                "text": "Para cuando nuevo videoo???"
+                "text": "Para cuando nuevo videoo???" 
             },
             "comment3": {
-                "text": "De donde es el juego?"
+                "text": "De donde es el juego?" 
             }
         },
         "rndPost3": {
             "root": {
-                "text": "Que chulo!!"
+                "text": "Que chulo!!" 
             },
             "comment2": {
-                "text": "Que programa has usado para hacerlo?"
+                "text": "Que programa has usado para hacerlo?" 
             },
             "comment3": {
-                "text": "Es original tuyo??"
+                "text": "Es original tuyo??" 
             }
         }
     },
+
     "computerChats": {
         "ana": {
             "root": {
-                "text": "El ultimo vídeo de Toni me ha parecido bastante corto para lo que es el"
+                "text": "El ultimo vídeo de Toni me ha parecido bastante corto para lo que es el" 
             },
             "msg2": {
-                "text": "Seguramente sea porque ha subido muchos ultimamente y no le da para mas"
+                "text": "Seguramente sea porque ha subido muchos ultimamente y no le da para mas" 
             },
             "msg3": {
                 "text": "Puede ser puede ser a ver que tal el siguiente"
@@ -51,10 +53,10 @@
         },
         "mike": {
             "root": {
-                "text": "Yo creo que puedo ser facilmente el fan numero 1 de Toni, veo todos sus videos"
+                "text": "Yo creo que puedo ser facilmente el fan numero 1 de Toni, veo todos sus videos" 
             },
             "msg2": {
-                "text": "Yo tambien los veo pero seguramente hay gente mas fan que yo"
+                "text": "Yo tambien los veo pero seguramente hay gente mas fan que yo" 
             },
             "msg3": {
                 "text": "Yaaa, pero creeme el es el number 1"
@@ -64,51 +66,62 @@
             }
         }
     },
+
     "computer1": {
         "root": {
-            "text": "Hey, que tal?"
+            "text": "Hey, que tal?" 
         },
         "msg2": {
-            "text": "Soy <harasser, Pablo, Lucia>"
+            "text": "Soy <harasser, Pablo, Lucia>" 
         },
         "msg3": {
             "text": "Te escribia porque he visto que eres muy fan de ToniVlogs"
         },
+        "choices": [
+            {
+                "text": "Contestar amablemente." 
+            },
+            {
+                "text": "Contestar más friamente."
+            }
+        ],
+        
         "niceResponse": {
-            "text": "Holaa <harasser, Pablo, Lucia> yo soy {{name}}"
+            "text": "Holaa <harasser, Pablo, Lucia> yo soy {{name}}" 
         },
         "niceResponse2": {
             "text": "Siii, soy muy muy fan de Toni, me encanta"
         },
+
         "neutralResponse": {
-            "text": "Hey <harasser, Pablo, Lucia> yo soy {{name}}"
+            "text": "Hey <harasser, Pablo, Lucia> yo soy {{name}}" 
         },
         "neutralResponse2": {
             "text": "Si, me parece muy entretenido"
         },
-        "default": {
-            "text": "(Mejor no decir eso)."
-        },
+
         "msg4": {
-            "text": "Me alegro que te guste {{name}}. La verdad que la comunidad de ToniVlogs mola mucho"
+            "text": "Me alegro que te guste {{name}}. La verdad que la comunidad de ToniVlogs mola mucho" 
         },
         "msg5": {
-            "text": "Que dirias que es lo que mas te gusta de Toni? A mi por ejemplo me encanta su perrita Mila, me parece adorable"
+            "text": "Que dirias que es lo que mas te gusta de Toni? A mi por ejemplo me encanta su perrita Mila, me parece adorable" 
         },
         "choices2": [
             {
-                "text": "Su perrita."
+                "text": "Su perrita." 
             },
             {
-                "text": "Su cercanía."
+                "text": "Su cercanía." 
             }
         ],
+
         "doggo": {
             "text": "Mila es la mejor. Nunca he visto un perro tan bueno y obediente"
         },
         "doggo2": {
             "text": "En su ultimo video sale super graciosa cuando se pone a perseguir las sombras de los pajaros"
         },
+
         "attitude": {
             "text": "Me encanta como es Toni, se siente como si estuviera viendo el video de un amigo de toda la vida. Es super cercano cuando se dirige a sus fans"
         },
@@ -116,13 +129,13 @@
             "text": "En su ultimo video cuando se puso a contar anécdotas no podía parar de reir"
         },
         "msg6": {
-            "text": "La verdad que me encanto ese video. Siempre que sube algo nuevo no puedo esperar a verlo cuanto antes"
+            "text": "La verdad que me encanto ese video. Siempre que sube algo nuevo no puedo esperar a verlo cuanto antes" 
         },
         "msg7": {
             "text": "Sin duda es el mejor influencer del mundo"
         },
         "msg8": {
-            "text": "Tu desde cuando eres fan?"
+            "text": "Tu desde cuando eres fan?" 
         },
         "knock": {
             "text": "*toc* *toc*"
@@ -131,20 +144,25 @@
             "text": "¿Sí?"
         }
     },
+    
     "interruption": {
         "root": {
             "text": "{{name}}, deberías ponerte a hacer los deberes antes de que sea tarde."
+
         },
         "lazy": {
             "text": "Pero me da mucha pereza..."
+
         },
         "start": {
             "text": "Cuanto antes te pongas, antes terminarás y podrás seguir a lo tuyo."
+
         },
         "ok": {
             "text": "Vale..."
         }
     },
+
     "homework": {
         "root": [
             {
@@ -167,6 +185,7 @@
             }
         ]
     },
+    
     "computer2": {
         "root": [
             {
@@ -191,6 +210,7 @@
         "msg3": {
             "text": "En que curso estás tu?"
         },
+
         "choices2": [
             {
                 "text": "1º de la ESO"
@@ -217,6 +237,7 @@
         "4": {
             "text": "Voy a 4º de la eso, y tu?"
         },
+
         "msg4": {
             "text": "Estamos en el mismo curso que fuerte"
         },
@@ -229,6 +250,7 @@
         "tellOff": {
             "text": "{{name}} apaga ya, que es muy tarde."
         },
+
         "choices3": [
             {
                 "text": "Me voy ya, que me van a echar la bronca"

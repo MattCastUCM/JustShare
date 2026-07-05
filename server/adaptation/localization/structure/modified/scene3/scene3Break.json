@@ -65,6 +65,7 @@
                 {
                     "answerPhone": {
                         "variable": "answered",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }
@@ -72,6 +73,7 @@
                 {
                     "msg1Sent": {
                         "variable": "msg1Sent",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }
@@ -90,6 +92,7 @@
                 {
                     "sendMsg2": {
                         "variable": "msg2Sent",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }
@@ -134,6 +137,7 @@
                 {
                     "answerPhone": {
                         "variable": "answered",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }
@@ -141,6 +145,7 @@
                 {
                     "msg2Sent": {
                         "variable": "msg2Sent",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }
@@ -159,6 +164,7 @@
                 {
                     "sendMsg3": { 
                         "variable": "msg3Sent",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }
@@ -196,6 +202,7 @@
                 {
                     "answerPhone": {
                         "variable": "answered",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }
@@ -203,6 +210,7 @@
                 {
                     "msg3Sent": {
                         "variable": "msg3Sent",
+                        "operation": "set",
                         "global": false,
                         "value": true
                     }

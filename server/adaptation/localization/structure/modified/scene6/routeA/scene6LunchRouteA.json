@@ -26,6 +26,7 @@
                 {
                     "endLunchVar1": {
                         "variable": "endedLunch",
+                        "operation": "set",
                         "global": true,
                         "value": true,
                         "delay": 0
@@ -34,6 +35,7 @@
                 {
                     "endLunchVar2": {
                         "variable": "prepared",
+                        "operation": "set",
                         "global": true,
                         "value": false,
                         "delay": 0

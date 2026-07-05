@@ -90,7 +90,7 @@ export default class GameManager {
         // };
         // this.sceneManager.changeScene("TextOnlyScene", params)
 
-        this.sceneManager.changeScene("Scene1Classroom");
+        this.sceneManager.changeScene("Scene1Bedroom2");
 
         // TRACKER EVENT
         // console.log("Inicio del dia 1");
@@ -108,10 +108,11 @@ export default class GameManager {
         this.sceneManager.changeScene("Computer", params, true)
     }
 
-    public leaveComputer() {
+    public leaveComputer(onComplete?: () => void) {
         let params = {
             onWake: () => {
                 this.UIManager.phoneManager?.activatePhoneIcon(true);
+                onComplete?.();
             }
         };
         this.sceneManager.changeScene(this.sceneBeforeComputer, params, true);

@@ -5,14 +5,12 @@
             "character": "player"
         }
     },
-
     "closet": {
         "root": {
             "type": "text",
             "character": "player"
         }
     },
-
     "toniPost2": {
         "root": {
             "type": "commentary",
@@ -28,8 +26,6 @@
             "replyDelay": 0
         }
     },
-
-
     "computer": {
         "root": {
             "type": "chatMessage",
@@ -41,12 +37,15 @@
         },
         "choices": {
             "type": "choice",
-            "choices":[
-                { "next": "helloTell" },
-                { "next": "helloNoTell" }
+            "choices": [
+                {
+                    "next": "helloTell"
+                },
+                {
+                    "next": "helloNoTell"
+                }
             ]
         },
-        
         "helloTell": {
             "type": "chatMessage",
             "character": "player",
@@ -63,7 +62,6 @@
             "phone": false,
             "next": "msg3"
         },
-
         "helloNoTell": {
             "type": "chatMessage",
             "character": "player",
@@ -80,7 +78,6 @@
             "phone": false,
             "next": "msg3"
         },
-
         "msg3": {
             "type": "chatMessage",
             "character": "player",
@@ -89,7 +86,6 @@
             "phone": false,
             "next": "msg4"
         },
-
         "msg4": {
             "type": "chatMessage",
             "character": "",
@@ -104,16 +100,92 @@
             "chat": "harasser",
             "replyDelay": 1500,
             "phone": false,
+            "next": "choices2_similarity"
+        },
+        "choices2_similarity": {
+            "type": "similarity",
+            "methods": [
+                {
+                    "name": "sbert"
+                }
+            ],
+            "character": "player",
+            "transition": {
+                "type": "chatMessage",
+                "chat": "harasser",
+                "replyDelay": 0,
+                "phone": false
+            },
+            "choices": [
+                {
+                    "next": "ask2"
+                },
+                {
+                    "next": "noAsk2"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseChoices2Errors": {
+                        "variable": "choices2_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "choices2_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "traditional_choices",
+                    "choices2_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
+            ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "choices2_similarity"
+        },
+        "traditional_choices": {
+            "type": "text",
+            "character": "player",
             "next": "choices2"
         },
         "choices2": {
             "type": "choice",
-            "choices":[
-                { "next": "ask" },
-                { "next": "noAsk" }
+            "choices": [
+                {
+                    "next": "ask"
+                },
+                {
+                    "next": "noAsk"
+                }
             ]
         },
-
         "ask": {
             "type": "chatMessage",
             "character": "player",
@@ -138,7 +210,6 @@
             "phone": false,
             "next": "msg6"
         },
-
         "noAsk": {
             "type": "chatMessage",
             "character": "player",
@@ -155,7 +226,6 @@
             "phone": false,
             "next": "msg6"
         },
-
         "msg6": {
             "type": "chatMessage",
             "character": "player",
@@ -190,12 +260,15 @@
         },
         "choices3": {
             "type": "choice",
-            "choices":[
-                { "next": "sleep" },
-                { "next": "video" }
+            "choices": [
+                {
+                    "next": "sleep"
+                },
+                {
+                    "next": "video"
+                }
             ]
         },
-
         "sleep": {
             "type": "chatMessage",
             "character": "player",
@@ -212,7 +285,6 @@
             "phone": false,
             "next": "msg10"
         },
-
         "msg10": {
             "type": "chatMessage",
             "character": "",
