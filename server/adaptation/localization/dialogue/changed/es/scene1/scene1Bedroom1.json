@@ -143,7 +143,7 @@
             "text": "Si, me parece muy entretenido"
         },
         "msg4": {
-            "text": "Me alegro de que te guste. La verdad es que la comunidad de ToniVlogs mola mucho"
+            "text": "Me alegro que te guste {{name}}. La verdad que la comunidad de ToniVlogs mola mucho"
         },
         "msg5": {
             "text": "Que dirias que es lo que mas te gusta de Toni? A mi por ejemplo me encanta su perrita Mila, me parece adorable"
