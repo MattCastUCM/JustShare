@@ -124,8 +124,8 @@ export default class ThoughtBox extends AnimatedContainer {
         this.textInput.clear();
     }
 
-    public setContexText(text: string) {
+    public setContexText(text: string, reduction: number = 1) {
         this.context.setText(text);
-        this.context.adjustFontSize();
+        this.context.adjustFontSize(text, reduction)
     }
 }

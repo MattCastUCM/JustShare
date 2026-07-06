@@ -51,7 +51,7 @@
             "text": "Yo hoy no he ido a clase porque me dolía un poco la cabeza, pero creo que ya se me está pasando"
         },
         "choices2_similarity": {
-            "context": "<harasser, Pablo, Lucía> me dice que hoy ha estado enfermo.",
+            "context": "<harasser, Pablo, Lucía> me ha dicho que hoy ha estado <harasser, enfermo, enferma>.",
             "responses": [
                 {
                     "text": [

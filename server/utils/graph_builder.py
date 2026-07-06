@@ -60,7 +60,7 @@ class LocalizationGraphProcessor:
 
 	def process_data(self, data):
 		if isinstance(data, str):
-			data = data.encode("latin1").decode("utf-8")
+			data = data.encode("cp1252").decode("utf-8")
 			return self.expand_variants(data)
 
 		elif isinstance(data, list):

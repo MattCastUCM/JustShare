@@ -27,18 +27,12 @@
             "text": "Que tal han ido los regalos? Le han gustado a Paula?"
         },
         "thoughts": {
-            "text": "(<harasser, Pablo, Lucía> me está escribiendo..)."
+            "text": "(<harasser, Pablo, Lucía> me está escribiendo...)."
         }
     },
-    
     "phone1": {
-        "root": [
-            {
-                "text": "Sí, son increíbles."
-            }
-        ],
         "amazing": {
-            "text": "Sii, la verdad que son increibles"
+            "text": "Sii, la verdad es que son increibles"
         },
         "msg2": {
             "text": "Mmmm... Ahora me has dejado con la intriga xd"
@@ -53,7 +47,6 @@
             "text": "Okay, dame un segundo"
         }
     },
-
     "photo": {
         "root": {
             "text": "{{name}}, ¿qué vas a hacer con esa foto de mis regalos?"
@@ -64,7 +57,6 @@
         "question": {
             "text": "¿<harasser, Lo, La> conozco?"
         },
-
         "choices": [
             {
                 "text": "Decir la verdad."
@@ -74,25 +66,34 @@
             }
         ],
         "truth": {
-            "text": "No creo, es <harasser, un amigo, una amiga> que hice online."
+            "text": "No, es <harasser, un amigo, una amiga> que conocí por internet."
         },
-        "lie": {
-            "text": "Seguramente, pero no sé."
-        },
-
-        "dont": [
+        "truth2": [
             {
-                "text": "Preferiría que no le envies una foto de mis regalos a una persona desconocida, que encima salimos mis amigos y yo."
+                "text": "Gracias por decirme la verdad."
+            },
+            {
+                "text": "De todas formas, preferiría que no le envies una foto de mis regalos a una persona que no conozco, y menos si salimos mis amigos y yo."
+            },
+            {
+                "text": "No me siento cómoda con ello."
+            }
+        ],
+        "lie": {
+            "text": "No estoy <player, seguro, segura>... puede ser, pero no lo sé."
+        },
+        "lie2": [
+            {
+                "text": "¿De verdad? Preferiría que no le envies una foto de mis regalos a una persona que no conozco, y menos si salimos mis amigos y yo."
             },
             {
                 "text": "No me siento cómoda con ello."
             }
         ],
         "ok": {
-            "text": "Bueno, supongo que no lo haré entonces."
+            "text": "Vale... supongo que no lo haré entonces."
         }
     },
-
     "phone2": {
         "root": {
             "text": "Al final has podido sacarle foto a los regalos?"
@@ -105,7 +106,6 @@
         "yes": {
             "text": "Si, pero Paula me ha dicho que no se siente comoda si te la envio"
         },
-
         "msg3": {
             "text": "Veo que no soy tan importante para ti como pensaba"
         },
@@ -119,7 +119,6 @@
             "text": "Te la envio, pero espero que no se entere nadie"
         }
     },
-
     "interruption": {
         "root": [
             {
@@ -137,21 +136,18 @@
                 "text": "No te incumbe."
             }
         ],
-
         "nobodysGonnaKnow": {
             "text": "No es para tanto, nadie tiene que saberlo."
         },
         "disrespectful": {
             "text": "¡Si es para tanto! Tu amiga te ha pedido que no compartas esa foto y lo has hecho igualmente."
         },
-
         "notYourProblem": {
             "text": "No es para tanto, no tiene que ver contigo."
         },
         "dontCare": {
             "text": "¡Da igual si tiene que ver conmigo o no! No puedes hacer lo que te dé la gana."
         },
-
         "sorry": {
             "text": "Tienes razón, lo siento."
         },
@@ -166,7 +162,7 @@
         "youDontUnderstand": {
             "text": "Sí que nos conocemos. El problema es que tú no lo entiendes."
         },
-        "thinkAboutIt":  [
+        "thinkAboutIt": [
             {
                 "text": "Claro, el problema es de cualquiera menos tuyo."
             },
@@ -175,7 +171,4 @@
             }
         ]
     }
-
-
-    
 }

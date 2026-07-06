@@ -4,24 +4,18 @@
             "text": "(Voy a escribir a <harasser, Pablo, Lucía> antes de dormir)."
         }
     },
-
     "phone": {
-        "root": [
-            {
-                "text": "Ya he vuelto."
-            }
-        ],
         "arrived": {
-            "text": "Ya he llegado a casa"
+            "text": "Holaa, ya estoy en casa :)"
         },
         "msg3": {
-            "text": "Olee, que tal?"
+            "text": "Hey, que tal la fiesta?"
         },
         "msg4": {
-            "text": "No se, Laura se ha enfadado conmigo"
+            "text": "No se, creo que Laura se ha enfadado conmigo"
         },
         "msg5": {
-            "text": "y eso? que ha pasado?"
+            "text": "Y eso? que ha pasado?"
         },
         "choices": [
             {
@@ -34,7 +28,6 @@
                 "text": "Prefiero no hablar de ello."
             }
         ],
-
         "photo": {
             "text": "No le ha gustado que te haya enviado la foto despues de que Paula me dijera que no"
         },
@@ -44,7 +37,6 @@
         "noTell": {
             "text": "No se, prefiero no hablar de eso"
         },
-
         "msg7": {
             "text": "Sinceramente pienso que esta celosa de lo bien que nos llevamos nosotros, y eso hace que salte a la minima y que este en contra de nuestra amistad"
         },
@@ -89,6 +81,5 @@
         "msg17": {
             "text": "Buenas noches"
         }
-
     }
 }

@@ -28,7 +28,6 @@
             "replyDelay": 0
         }
     },
-    
     "main": {
         "root": {
             "type": "chatMessage",
@@ -70,32 +69,135 @@
             "character": "player",
             "chat": "chat2",
             "replyDelay": 2000,
+            "next": "msg7"
+        },
+        "msg7": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 1000,
+            "next": "choices_similarity"
+        },
+        "choices_similarity": {
+            "type": "similarity",
+            "methods": [
+                {
+                    "name": "sbert"
+                }
+            ],
+            "character": "player",
+            "transition": {
+                "type": "chatMessage",
+                "chat": "chat2",
+                "replyDelay": 0,
+                "phone": true
+            },
+            "choices": [
+                {
+                    "next": "liked2"
+                },
+                {
+                    "next": "disliked2"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseChoicesErrors": {
+                        "variable": "choices_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "choices_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "traditional_choices",
+                    "choices_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
+            ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "choices_similarity"
+        },
+        "traditional_choices": {
+            "type": "text",
+            "character": "player",
             "next": "choices"
         },
         "choices": {
             "type": "choice",
             "choices": [
-                { "next": "liked" },
-                { "next": "disliked" }
+                {
+                    "next": "liked"
+                },
+                {
+                    "next": "disliked"
+                }
             ]
         },
-    
         "liked": {
             "type": "chatMessage",
             "character": "player",
             "chat": "chat2",
             "replyDelay": 0,
-            "next": "msg8"
+            "next": "liked2"
         },
-    
+        "liked2": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "liked3"
+        },
+        "liked3": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "msg9"
+        },
         "disliked": {
             "type": "chatMessage",
             "character": "player",
             "chat": "chat2",
             "replyDelay": 0,
-            "next": "msg8"
+            "next": "disliked2"
         },
-        "msg8": {
+        "disliked2": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
+            "next": "disliked3"
+        },
+        "disliked3": {
             "type": "chatMessage",
             "character": "",
             "chat": "chat2",
@@ -154,11 +256,14 @@
         "choices2": {
             "type": "choice",
             "choices": [
-                { "next": "smiling" },
-                { "next": "tongueOut" }
+                {
+                    "next": "smiling"
+                },
+                {
+                    "next": "tongueOut"
+                }
             ]
         },
-    
         "smiling": {
             "type": "chatMessage",
             "character": "player",
@@ -208,7 +313,6 @@
             "replyDelay": 2000,
             "next": "endConversation"
         },
-    
         "endConversation": {
             "type": "event",
             "events": [

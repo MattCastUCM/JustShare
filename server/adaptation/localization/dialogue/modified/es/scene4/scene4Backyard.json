@@ -10,7 +10,6 @@
         ],
         "explain": {
             "text": "Sí, sí. Me entretuve un poco hablando con <harasser, Pablo, Lucía>."
-
         },
         "priorities": [
             {
@@ -34,14 +33,20 @@
         "good": {
             "text": "Bien, esta toda la clase aqui"
         },
+        "good2": {
+            "text": "Jajaja, me alegro"
+        },
         "meh": {
-            "text": "No esta mal supongo, estan todos mis compañeros aqui"
+            "text": "Bueno... ahi vamos jajaj, esta toda la clase aqui"
+        },
+        "meh2": {
+            "text": "Bueno, a ver si luego te lo pasas mejor jajaja"
         },
         "msg3": {
             "text": "Aunque creo que Laura se ha molestado porque he llegado tarde"
         },
         "msg4": {
-            "text": "Bueno no te preocupes seguro que no es nada"
+            "text": "Bah, seguro que no es para tanto"
         },
         "msg5": {
             "text": "Ahora que hareis?"
@@ -50,25 +55,21 @@
             "text": "Vamos a darle los regalos a Paula"
         }
     },
-
     "classmate1": {
         "root": {
             "text": "Hola {{name}}, ¿qué tal?"
         }
     },
-
     "classmate2": {
         "root": {
             "text": "Buenas."
         }
     },
-
     "classmate3": {
         "root": {
             "text": "¿Cómo andas, {{name}}?"
         }
     },
-
     "classmate4": {
         "root": {
             "text": "Hey, creo que he visto a Laura por ahí, por si la estabas buscando."

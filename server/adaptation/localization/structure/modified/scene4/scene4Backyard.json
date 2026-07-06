@@ -19,32 +19,114 @@
             "type": "event",
             "events": [
                 {
-                    "receiveMsg": { }
+                    "receiveMsg": {}
                 }
             ],
             "next": "msg1"
         },
-
         "msg1": {
             "type": "chatMessage",
             "character": "",
             "chat": "chat2",
             "replyDelay": 0,
+            "next": "choices_similarity"
+        },
+        "choices_similarity": {
+            "type": "similarity",
+            "methods": [
+                {
+                    "name": "sbert"
+                }
+            ],
+            "character": "player",
+            "transition": {
+                "type": "chatMessage",
+                "chat": "chat2",
+                "replyDelay": 0,
+                "phone": true
+            },
+            "choices": [
+                {
+                    "next": "good2"
+                },
+                {
+                    "next": "meh2"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseChoicesErrors": {
+                        "variable": "choices_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "choices_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "traditional_choices",
+                    "choices_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
+            ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "choices_similarity"
+        },
+        "traditional_choices": {
+            "type": "text",
+            "character": "player",
             "next": "choices"
         },
         "choices": {
             "type": "choice",
-            "choices":[
-                { "next": "good" },
-                { "next": "meh" }
+            "choices": [
+                {
+                    "next": "good"
+                },
+                {
+                    "next": "meh"
+                }
             ]
         },
-
         "good": {
             "type": "chatMessage",
             "character": "player",
             "chat": "chat2",
             "replyDelay": 0,
+            "next": "good2"
+        },
+        "good2": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
             "next": "msg3"
         },
         "meh": {
@@ -52,9 +134,15 @@
             "character": "player",
             "chat": "chat2",
             "replyDelay": 0,
+            "next": "meh2"
+        },
+        "meh2": {
+            "type": "chatMessage",
+            "character": "",
+            "chat": "chat2",
+            "replyDelay": 2000,
             "next": "msg3"
         },
-
         "msg3": {
             "type": "chatMessage",
             "character": "player",
@@ -83,17 +171,15 @@
             "replyDelay": 2000,
             "next": "end"
         },
-
         "end": {
             "type": "event",
             "events": [
                 {
-                    "endConversation": { }
+                    "endConversation": {}
                 }
             ]
         }
     },
-
     "classmate1": {
         "root": {
             "type": "text",
@@ -104,12 +190,11 @@
             "type": "event",
             "events": [
                 {
-                    "checkAllClassmates": { }
+                    "checkAllClassmates": {}
                 }
             ]
         }
     },
-
     "classmate2": {
         "root": {
             "type": "text",
@@ -120,12 +205,11 @@
             "type": "event",
             "events": [
                 {
-                    "checkAllClassmates": { }
+                    "checkAllClassmates": {}
                 }
             ]
         }
     },
-
     "classmate3": {
         "root": {
             "type": "text",
@@ -136,12 +220,11 @@
             "type": "event",
             "events": [
                 {
-                    "checkAllClassmates": { }
+                    "checkAllClassmates": {}
                 }
             ]
         }
     },
-
     "classmate4": {
         "root": {
             "type": "text",
@@ -152,7 +235,7 @@
             "type": "event",
             "events": [
                 {
-                    "checkAllClassmates": { }
+                    "checkAllClassmates": {}
                 }
             ]
         }

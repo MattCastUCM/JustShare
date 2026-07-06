@@ -13,7 +13,6 @@
             "text": "¡Hola Laura, hola {{name}}! Os estaba buscando."
         }
     },
-
     "part2": {
         "root": {
             "text": "¿Qué tal, Paula? ¿Por qué nos buscabas?"
@@ -22,7 +21,7 @@
             "text": "Es que el finde que viene celebro mi cumple en mi casa y me han dicho mis padres que puedo invitaros a todos. ¿Qué os parece?"
         },
         "sure": {
-            "text": "¡Guay! ¡Yo me apunto! ¿Y tú qué, {{name}}? Puedes aprovechar y hablar con la gente de clase."
+            "text": "¡Guay! ¡Yo me apunto! ¿Y tú, {{name}}?"
         },
         "choice": [
             {
@@ -32,22 +31,20 @@
                 "text": "Suena divertido."
             },
             {
-                "text": "Bueno... Pero solo porque tú también vas."
+                "text": "Bueno... pero solo porque tú también vas."
             }
         ],
-
         "excited": {
-            "text": "¡Pues ya está decidido! Allí nos vemos."
+            "text": "¡Genial! Allí nos vemos entonces."
         },
         "neutral": {
-            "text": "Además puedes aprovechar y conocer más a los compañeros de clase."
+            "text": "Seguro que lo pasamos bien."
         },
         "unsure": {
-            "text": "No pienses así, <player, hombre, mujer>, si seguro que te haces <player, amigo, amiga> de alguien."
+            "text": "¡Anímate! Seguro que al final nos divertimos."
         },
-
         "bye": {
-            "text": "¡Genial! Os veo en clase. ¡Bye!"
+            "text": "¡Perfecto! Nos vemos en clase. ¡Bye!"
         }
     }
 }

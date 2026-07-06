@@ -31,7 +31,6 @@
             ]
         }
     },
-
     "part2": {
         "root": {
             "type": "text",
@@ -46,17 +45,95 @@
         "sure": {
             "type": "text",
             "character": "laura",
+            "next": "choice_similarity"
+        },
+        "choice_similarity": {
+            "type": "similarity",
+            "methods": [
+                {
+                    "name": "sbert"
+                }
+            ],
+            "character": "player",
+            "transition": {
+                "type": "text"
+            },
+            "choices": [
+                {
+                    "next": "excited"
+                },
+                {
+                    "next": "neutral"
+                },
+                {
+                    "next": "unsure"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseChoiceErrors": {
+                        "variable": "choice_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "choice_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "traditional_choices",
+                    "choice_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
+            ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "choice_similarity"
+        },
+        "traditional_choices": {
+            "type": "text",
+            "character": "player",
             "next": "choice"
         },
         "choice": {
             "type": "choice",
             "choices": [
-                { "next": "excited" },
-                { "next": "neutral" },
-                { "next": "unsure" }
+                {
+                    "next": "excited"
+                },
+                {
+                    "next": "neutral"
+                },
+                {
+                    "next": "unsure"
+                }
             ]
         },
-
         "excited": {
             "type": "text",
             "character": "laura",
@@ -72,7 +149,6 @@
             "character": "laura",
             "next": "bye"
         },
-
         "bye": {
             "type": "text",
             "character": "paula",

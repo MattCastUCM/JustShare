@@ -90,7 +90,7 @@ export default class GameManager {
         // };
         // this.sceneManager.changeScene("TextOnlyScene", params)
 
-        this.sceneManager.changeScene("Scene1Bedroom2");
+        this.sceneManager.changeScene("Scene3Break");
 
         // TRACKER EVENT
         // console.log("Inicio del dia 1");

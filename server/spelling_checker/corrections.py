@@ -20,11 +20,11 @@ class SpellCorrector:
 		self.max_distance = max_distance
 		self.tokenizer = ToktokTokenizer()
 
-	def _score_candidates(self, candidates: list[tuple[str, int]], left_context: list[str], right_context: list[str], alpha: float, beta: float):
+	def _score_candidates(self, candidates: list[tuple[str, int]], left_context: list[str], right_context: list[str], unigram_weight: float):
 		results = []
 		total_cont = self.forward_lm.total_cont_sum
 
-		for cand, dist in candidates:
+		for cand, _ in candidates:
 			cand = cand.lower()
 
 			fwd = self.forward_lm.logscore(cand, left_context)
@@ -34,17 +34,17 @@ class SpellCorrector:
 			unigram_log = math.log10(cont / total_cont) if cont > 0 else math.log10(1e-12)			
 
 			# log10 -> cuanto más baja es la probabilidad, menor es el número [-infinito, 0]
-			score = fwd + bwd + beta * unigram_log - alpha * dist
+			score = fwd + bwd + unigram_weight * unigram_log
 
 			results.append((cand, score))
 
 		return results
 
-	def correct_sentence(self, sentence: list[str], max_candidates: int = 200, alpha: float = 1.0, beta: float = 0.5, enhanced: bool = False) -> list[str]:
+	def correct_sentence(self, sentence: list[str], max_candidates: int = 200, unigram_weight: float = 0.5, enhanced: bool = False) -> list[str]:
 		corrected = sentence.copy()
 
 		for i in range(len(sentence)):
-			corrected[i] = self.correct_word(sentence, i, max_candidates, alpha, beta, enhanced)
+			corrected[i] = self.correct_word(sentence, i, max_candidates, unigram_weight, enhanced)
 
 		return corrected
 	
@@ -65,7 +65,7 @@ class SpellCorrector:
 
 		return corrected
 	
-	def correct_word(self, sentence: list[str], position: int, max_candidates: int = 200, alpha: float = 1.0, beta: float = 0.5, enhanced: bool = False) -> str:
+	def correct_word(self, sentence: list[str], position: int, max_candidates: int = 200, unigram_weight: float = 0.5, enhanced: bool = False) -> str:
 		original = sentence[position]
 
 		if enhanced and not self._WORD_RE.search(original):
@@ -112,8 +112,7 @@ class SpellCorrector:
 			candidates=candidates,
 			left_context=left_context,
 			right_context=right_context,
-			alpha=alpha,
-			beta=beta
+			unigram_weight=unigram_weight,
 		)
 
 		best_word = max(scored, key=lambda x: x[1])[0]
@@ -132,9 +131,9 @@ class SpellCorrector:
 
 		return text
 	
-	def correct_text(self, text: str, max_candidates: int = 200, alpha: float = 1.0, beta: float = 0.5) -> str:
+	def correct_text(self, text: str, max_candidates: int = 200, unigram_weight: float = 0.5) -> str:
 		tokens = self.tokenizer.tokenize(text)
 		if isinstance(tokens, str):
 			tokens = [tokens]
-		corrected = self.correct_sentence(tokens, max_candidates, alpha, beta, enhanced=True)
+		corrected = self.correct_sentence(tokens, max_candidates, unigram_weight enhanced=True)
 		return self._toktok_detokenize(corrected)
