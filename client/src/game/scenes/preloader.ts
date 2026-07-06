@@ -184,6 +184,7 @@ export default class Preloader extends Scene {
         this.load.setPath('config');
         this.load.json('profilePictures', 'profilePictures.json');
         this.load.json('similarityThresholds', 'similarityThresholds.json');
+        this.load.json('similarityMethods', 'similarityMethods.json')
     }
 
     init() {

@@ -13,15 +13,10 @@
 
     "phone": {
         "root": {
-            "text": "Tengo una idea que puede que te guste"
+            "text": "Oye, se me ha ocurrido una cosa?"
         },
-        "choices1": [
-            {
-                "text": "Cuéntame."
-            }
-        ],
         "msg2": {
-            "text": "A ver dime"
+            "text": "A ver, cuéntame"
         },
         "msg3": {
             "text": "Habia pensado..."

@@ -300,4 +300,8 @@ export default class TextBox extends DialogObject {
             this.currText.setOrigin(0.5);
         }
     }
+
+    public isActive(): boolean {
+        return this.box.alpha === 1;
+    }
 }

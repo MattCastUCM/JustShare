@@ -1,8 +1,8 @@
 {
-    "jaccard": 0.35,
-    "tfidf": 0.75,
+    "jaccard": 0.50,
+    "tfidf": 0.50,
     "sbert": 0.55,
-    "bert": 0.85,
-    "word2vec": 0.70,
-    "lstm": 0.70
+    "bert": 0.50,
+    "word2vec": 0.50,
+    "lstm": 0.55
 }

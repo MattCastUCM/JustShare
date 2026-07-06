@@ -1,0 +1,7 @@
+{
+    "similarityMethods": [
+        {
+            "name": "sbert"
+        }
+    ]
+}

@@ -95,11 +95,11 @@ export class SimilarityNode extends DialogNode {
                     "name": "sbert",
                     "weight": 0.5
                 }
-            ]
+            ],
             "character": "player",
             "transition": {
                 "type": "text"
-            }
+            },
             "choices": [
                 {
                     "next": "friendly"

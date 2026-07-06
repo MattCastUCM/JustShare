@@ -60,6 +60,7 @@ export default class BaseScene extends Scene {
         this.harasser = this.gameManager.getUserInfo().harasser;
 
         this.thresholds = this.cache.json.get("similarityThresholds")
+        this.methods = this.cache.json.get("similarityMethods")
 
         // Se anaden funciones adicionales a las que se llamara al crear y reactivar
         // Se tiene que suscribir el onCreate al evento create porque la escena base
@@ -417,7 +418,7 @@ export default class BaseScene extends Scene {
         else if (type == "similarity") {
             node = new SimilarityNode();
 
-            const methods = fileObj[id].methods
+            const methods = fileObj[id].methods ?? this.methods.similarityMethods
 
             node.methods = {}
             for (let i = 0; i < methods.length; i++) {
@@ -425,7 +426,7 @@ export default class BaseScene extends Scene {
 
                 node.methods[method.name] = {
                     weight: method.weight ?? 1.0,
-                    threshold: this.thresholds[method.name]
+                    threshold: method.threshold ?? this.thresholds[method.name]
                 }
             }
 

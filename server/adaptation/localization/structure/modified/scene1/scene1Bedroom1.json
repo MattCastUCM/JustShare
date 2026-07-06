@@ -198,11 +198,6 @@
         },
         "choices_similarity": {
             "type": "similarity",
-            "methods": [
-                {
-                    "name": "sbert"
-                }
-            ],
             "character": "player",
             "transition": {
                 "type": "chatMessage",
@@ -473,11 +468,6 @@
     "computer2": {
         "root": {
             "type": "similarity",
-            "methods": [
-                {
-                    "name": "sbert"
-                }
-            ],
             "character": "player",
             "transition": {
                 "type": "chatMessage",

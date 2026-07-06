@@ -5,13 +5,71 @@
             "character": "player"
         }
     },
-    
     "phone": {
         "root": {
-            "type": "choice",
-            "choices":[
-                { "next": "msg1" }
+            "type": "similarity",
+            "character": "player",
+            "transition": {
+                "type": "chatMessage",
+                "chat": "chat2",
+                "replyDelay": 0,
+                "phone": true
+            },
+            "choices": [
+                {
+                    "next": "msg2"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseRootErrors": {
+                        "variable": "root_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "root_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "traditional_choices",
+                    "root_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
             ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "root"
+        },
+        "traditional_choices": {
+            "type": "text",
+            "character": "player",
+            "next": "msg1"
         },
         "msg1": {
             "type": "chatMessage",
@@ -36,12 +94,15 @@
         },
         "choices": {
             "type": "choice",
-            "choices":[
-                { "next": "noDoubt" },
-                { "next": "early" }
+            "choices": [
+                {
+                    "next": "noDoubt"
+                },
+                {
+                    "next": "early"
+                }
             ]
         },
-
         "noDoubt": {
             "type": "chatMessage",
             "character": "player",
@@ -56,7 +117,6 @@
             "replyDelay": 0,
             "next": "msg5"
         },
-        
         "msg5": {
             "type": "chatMessage",
             "character": "",
@@ -103,7 +163,6 @@
             ]
         }
     },
-
     "interruption": {
         "root": {
             "type": "text",
@@ -112,12 +171,15 @@
         },
         "choices": {
             "type": "choice",
-            "choices":[
-                { "next": "truth" },
-                { "next": "lie" }
+            "choices": [
+                {
+                    "next": "truth"
+                },
+                {
+                    "next": "lie"
+                }
             ]
         },
-
         "truth": {
             "type": "text",
             "character": "player",
@@ -163,17 +225,16 @@
             "events": [
                 {
                     "setExplained": {
-                        "variable": "explained", 
+                        "variable": "explained",
                         "operation": "set",
                         "global": true,
-                        "value": true, 
+                        "value": true,
                         "delay": 0
                     }
                 }
             ],
             "next": "endInterruption"
         },
-
         "lie": {
             "type": "text",
             "character": "player",
@@ -194,17 +255,16 @@
             "events": [
                 {
                     "setExplained": {
-                        "variable": "explained", 
+                        "variable": "explained",
                         "operation": "set",
                         "global": true,
-                        "value": false, 
+                        "value": false,
                         "delay": 0
                     }
                 }
             ],
             "next": "endInterruption"
         },
-
         "endInterruption": {
             "type": "event",
             "events": [

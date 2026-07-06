@@ -5,27 +5,79 @@
             "character": "player"
         }
     },
-    
     "closet": {
         "root": {
             "type": "text",
             "character": "player"
         }
     },
-
     "phone": {
         "root": {
             "type": "chatMessage",
             "character": "",
             "chat": "chat2",
             "replyDelay": 1000,
-            "next": "choices1"
+            "next": "choices1_similarity"
         },
-        "choices1": {
-            "type": "choice",
-            "choices":[
-                { "next": "msg2" }
+        "choices1_similarity": {
+            "type": "similarity",
+            "character": "player",
+            "transition": {
+                "type": "chatMessage",
+                "chat": "chat2",
+                "replyDelay": 0,
+                "phone": true
+            },
+            "choices": [
+                {
+                    "next": "msg3"
+                }
+            ],
+            "default": {
+                "next": "increase_errors"
+            }
+        },
+        "increase_errors": {
+            "type": "event",
+            "events": [
+                {
+                    "increaseChoices1Errors": {
+                        "variable": "choices1_errors",
+                        "operation": "increment",
+                        "global": false,
+                        "value": 1
+                    }
+                }
+            ],
+            "next": "retries"
+        },
+        "retries": {
+            "type": "condition",
+            "conditions": [
+                {
+                    "next": "default",
+                    "choices1_errors": {
+                        "value": 2,
+                        "operator": "lower",
+                        "global": false,
+                        "default": 0
+                    }
+                },
+                {
+                    "next": "msg2",
+                    "choices1_errors": {
+                        "value": 3,
+                        "operator": "equal",
+                        "global": false,
+                        "default": 0
+                    }
+                }
             ]
+        },
+        "default": {
+            "type": "text",
+            "character": "player",
+            "next": "choices1_similarity"
         },
         "msg2": {
             "type": "chatMessage",
@@ -64,12 +116,15 @@
         },
         "choices2": {
             "type": "choice",
-            "choices":[
-                { "next": "msg7A" },
-                { "next": "reject" }
+            "choices": [
+                {
+                    "next": "msg7A"
+                },
+                {
+                    "next": "reject"
+                }
             ]
         },
-        
         "msg7A": {
             "type": "chatMessage",
             "character": "player",
@@ -112,16 +167,15 @@
             "replyDelay": 2000,
             "next": "chatEnded"
         },
-
         "reject": {
             "type": "event",
             "events": [
                 {
                     "routeB": {
-                        "variable": "routeA", 
+                        "variable": "routeA",
                         "operation": "set",
                         "global": true,
-                        "value": false, 
+                        "value": false,
                         "delay": 0
                     }
                 },
@@ -200,7 +254,6 @@
             "replyDelay": 2000,
             "next": "chatEnded"
         },
-
         "chatEnded": {
             "type": "event",
             "events": [

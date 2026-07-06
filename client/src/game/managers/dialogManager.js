@@ -526,13 +526,23 @@ export default class DialogManager {
                 this.processNextNode(delay);
             }
             else if (this.currNode.type === "chatMessage") {
-                this.textbox.activate(false, () => {
-                    if (this.currNode.phone) {
-                        this.scene.phoneManager.phone.setChatNode(this.currNode.chat, this.currNode);
-                    } else {
-                        this.gameManager.computer.socialMediaScreen.setChatNode(this.currNode.chat, this.currNode);
+                const node = this.currNode;
+
+                const openChat = () => {
+                    if (node.phone) {
+                        this.scene.phoneManager.phone.setChatNode(node.chat, node);
                     }
-                });
+                    else {
+                        this.gameManager.computer.socialMediaScreen.setChatNode(node.chat, node);
+                    }
+                };
+
+                if (this.textbox.isActive()) {
+                    this.textbox.activate(false, openChat);
+                }
+                else {
+                    openChat();
+                }
 
                 this.bgBlock.disableInteractive();
             }

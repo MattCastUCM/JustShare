@@ -63,11 +63,6 @@
     "phone1": {
         "root": {
             "type": "similarity",
-            "methods": [
-                {
-                    "name": "sbert"
-                }
-            ],
             "character": "player",
             "transition": {
                 "type": "chatMessage",

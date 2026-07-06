@@ -1,23 +1,18 @@
 {
     "start": {
         "root": {
-            "text": "(¿Seguirá <harasser, Pablo enfadado, Lucía endadada> conmigo...?)"
+            "text": "(¿Seguirá <harasser, Pablo enfadado, Lucía enfadada> conmigo...?)"
         }
     },
     "phone": {
-        "root": [
-            {
-                "text": "Estas <harasser, enfadado, endadada>?"
-            }
-        ],
         "msg1": {
-            "text": "Hey, estas <harasser, enfadado, endadada>?"
+            "text": "Hey, estas <harasser, enfadado, enfadada>?"
         },
         "msg2": {
-            "text": "Depende de ti"
+           "text": "No se, que quieres?"
         },
         "msg3": {
-            "text": "Vas a empezar a tomarte en serio lo nuestro? O vas a seguir desconfiando?"
+            "text": "Solo dime una cosa, vas a empezar a tomarte en serio lo nuestro o vas a seguir desconfiando de mi?"
         },
         "choices": [
             {
