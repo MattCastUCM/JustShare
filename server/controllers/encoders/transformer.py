@@ -49,10 +49,7 @@ class Transformer(Encoder):
 	# se utiliza para tareas como:
 	#   - Next Sentence Prediction
 	# Sin embargo, el embedding [CLS] no fue entrenado para específicamente para tareas de similitud semántica.
-	# Por esto, en muchos casos el mean pooling produce mejores embeddings para comparaciones de oraciones.
-	
-	# Some weights of BertModel were not initialized from the model checkpoint at dccuchile/bert-base-spanish-wwm-cased and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight'].
-	# You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+	# Por esto, en muchos casos el mean pooling produce mejores embeddings para comparaciones de oraciones.	
 	def cls_pooling(self, model_output):
 		# Algunos modelos, como BERT, incluyen "pooler_output", que corresponde 
 		# al embedding del token [CLS] después de pasar por una capa lineal y una activación tanh.

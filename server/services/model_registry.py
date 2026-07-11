@@ -125,10 +125,7 @@ class ModelRegistry:
 					"spaCy", lang,
 					lambda n=name: spacy.load(n, disable=[
 						"parser",
-						"ner",
-						"textcat",
-						"senter",
-						"attribute_ruler"
+						"ner"
 					])
 				)
 	

@@ -57,7 +57,8 @@ def damerau_levenshtein(word1: str, word2: str, max_dist: Optional[int] = None):
 
 	len1, len2 = len(word1), len(word2)
 
-	# If max_dist is given, we can prune immediately when length difference is too large
+	# Salida anticipada para SymSpell. Si la diferencia entre las longitudes de las cadenas es mayor que la distancia máxima, no será posible convertir una en otra con esa distancia dada.
+	# No se puede utilizar con el BKTree porque necesita la distancia exacta para explorar el árbol
 	if max_dist is not None and abs(len1 - len2) > max_dist:
 		return max_dist + 1
 
@@ -100,8 +101,6 @@ def damerau_levenshtein(word1: str, word2: str, max_dist: Optional[int] = None):
 			
 			min_in_row = min(min_in_row, curr[j])
 
-		# # Salida anticipada para SymSpell. Si la diferencia entre las longitudes de las cadenas es mayor que la distancia máxima, no será posible convertir una en otra con esa distancia dada.
-		# No se puede utilizar con el BKTree porque necesita la distancia exacta para explorar el árbol
 		if max_dist is not None and min_in_row > max_dist:
 			return max_dist + 1
 

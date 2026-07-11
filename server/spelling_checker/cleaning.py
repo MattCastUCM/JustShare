@@ -204,6 +204,7 @@ def build_sentences(path: str, max_lines: Optional[int] = None, num_token: str =
 	discarded_cast_credit = 0
 	discarded_clean_empty = 0
 	discarded_min_words = 0
+	total_tokens = 0
 
 	with load_file(path, "utf-8") as f:
 		total_lines = sum(1 for _ in f)
@@ -249,6 +250,7 @@ def build_sentences(path: str, max_lines: Optional[int] = None, num_token: str =
 				continue
 			
 			sentences.append(words)
+			total_tokens += len(words)
 
 	total_discarded = total_lines_processed - len(sentences)
 
@@ -258,6 +260,8 @@ def build_sentences(path: str, max_lines: Optional[int] = None, num_token: str =
 	print(f"  - Descartadas por tokenización vacía:\t{discarded_clean_empty:,}")
 	print(f"  - Descartadas por < {min_words} palabras:\t{discarded_min_words:,}")
 	print(f"Total líneas descartadas final:\t{total_discarded:,}")
+	print(f"Tokens totales:\t{total_tokens:,}")
+	print(f"Media de tokens por oración:\t{total_tokens / len(sentences):.2f}")
 	print(f"Oraciones finales guardadas:\t{len(sentences):,}")
 
 	return sentences

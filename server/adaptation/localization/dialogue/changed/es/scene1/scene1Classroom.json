@@ -53,9 +53,9 @@
                         "Hola, soy {{name}}! Encantado de conocerte.",
                         "Holaaa buenas, soy {{name}}, acabo de llegar y estoy todavía un poco perdido, y tú?",
                         "Hola Laura yo soy {{name}} encantado.",
-                        "Holaaa, soy {{name}} que estoy.",
+                        "Holaaa, soy {{name}} que está.",
                         "Hola Laura, ¿qué tal? soy {{name}}, encantado.",
-                        "Hola Laura! Encantado de conocerte yo soy {{name}}.",
+                        "Hola Laura! Encantado de conocerte yo soy {{name}}. (No hay cambios en este caso, ya que la variable \"yo\" no tiene género gramatical específico)",
                         "¡Hola! Yo soy {{name}}, encantado.",
                         "Hola, yo soy {{name}}, estoy nervioso por mi primer día.",
                         "Mucho gusto Laura! Soy {{name}}, ¿cómo estás?"

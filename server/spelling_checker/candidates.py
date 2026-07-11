@@ -3,6 +3,7 @@ import pickle
 from abc import ABC, abstractmethod
 from distances import damerau_levenshtein
 from collections import defaultdict
+from array import array
 
 class CandidateGenerator(ABC):
 	def __init__(self, max_dist: int):
@@ -26,7 +27,8 @@ class CandidateGenerator(ABC):
 			return pickle.load(f)
 
 class BKNode:
-	# Python almacena los atributos de una clase en un __dict__, lo que permite guardar más elementos posteriormente. Se puede usar __slots__ para evitar este comportamiento y fijar los atributos desde el principio
+	# Python almacena los atributos de una clase en un __dict__, lo que permite guardar más elementos posteriormente
+	# Se puede usar __slots__ para evitar este comportamiento y fijar los atributos desde el principio
 	__slots__ = ("word", "length", "children")
 	def __init__(self, word: str):
 		self.word = word
@@ -145,19 +147,25 @@ class BKTree(CandidateGenerator):
 			high = dist + max_dist
 
 			for edge, child in node.children.items():
-				# quick length filter
 				if low <= edge <= high:
 					stack.append(child)
 
 		return results
+	
+# unsigned int para utilizar menos memoria
+# https://docs.python.org/3/library/array.html
+def uint_array():
+    return array("I")
 
 # https://ieeexplore.ieee.org/document/9678171
 class SymSpell(CandidateGenerator):
 	def __init__(self, max_dist: int = 2, prefix_length: int = 7):
 		self.max_dist = max_dist
 		self.prefix_length = prefix_length
-		# # Asigna cada palabra con caracteres borrado un número de veces a la lista de palabras del diccionario original
-		self.deletes = defaultdict(set)
+
+		# Asigna cada palabra con caracteres borrado un número de veces a la lista de palabras del diccionario original
+		self.deletes = defaultdict(uint_array)
+
 		# Se utiliza un diccionario de texto a identificador para reducir el consumo de memoria, ya que habrá muchas palabras repetidas
 		self.word_list = []
 		self.word_to_id = {}
@@ -167,26 +175,25 @@ class SymSpell(CandidateGenerator):
 			idx = len(self.word_list)
 			self.word_list.append(word)
 			self.word_to_id[word] = idx
-		else:
-			idx = self.word_to_id[word]
 
-		delete_keys = self._generate_deletes(word, self.max_dist)
-		for key in delete_keys:
-			self.deletes[key].add(idx)
+			# Dejar de eliminar después de una longitud determinada, para optimizar
+			prefix = word[:self.prefix_length]
+
+			delete_keys = self._generate_deletes(prefix, self.max_dist)
+			for key in delete_keys:
+				self.deletes[key].append(idx)
 
 	def _generate_deletes(self, word: str, dist: int) -> set[str]:
 		# Genera recursivamente todas las cadenas formadas eliminando 0..dist caracteres
-		keys = set()
 		# La propia palabra tiene una distancia de 0
-		keys.add(word)
-		if dist == 0:
+		keys = {word}
+
+		if dist == 0 or not word:
 			return keys
 
 		for i in range(len(word)):
-			# Dejar de eliminar después de una longitud determinada, para optimizar
-			if i > self.prefix_length:
-				break
 			shorter = word[:i] + word[i+1:]
+
 			if shorter not in keys:
 				keys.add(shorter)
 				delete_keys = self._generate_deletes(shorter, dist - 1)
@@ -203,8 +210,10 @@ class SymSpell(CandidateGenerator):
 		if query in self.word_to_id:
 			candidate_ids.add(self.word_to_id[query])
 
+		prefix = query[:self.prefix_length]
+
 		# Generar las eliminaciones a cierta distancia y encontrar las listas correspondientes
-		query_keys = self._generate_deletes(query, max_dist)
+		query_keys = self._generate_deletes(prefix, max_dist)
 		for key in query_keys:
 			candidate_ids.update(self.deletes.get(key, []))
 
