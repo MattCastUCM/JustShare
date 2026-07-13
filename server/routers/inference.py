@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from schemas.similarity import (
 	SimilarityRequest,
+	BaseSimilarityRequest,
 	SimilarityResponse,
 	SimilarityMatch,
 	FaissSimilarityRequest,
@@ -12,11 +13,23 @@ from services.similarity_engine import SimilarityEngine
 import numpy as np
 import time
 from loguru import logger
+from core.settings import get_settings
 
 router = APIRouter(
 	prefix="/similarity",
 	tags=["similarity"],
 )
+
+def validate_language(req: BaseSimilarityRequest):
+    settings = get_settings()
+
+    if req.language not in settings.languages:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported language '{req.language}'. Supported languages: {sorted(settings.languages)}",
+        )
+
+    return req
 
 def get_similarity_engine(request: Request):
 	return request.state.similarity_engine
@@ -39,7 +52,7 @@ def build_similarity_response(indices: np.ndarray, scores: np.ndarray, texts: np
 	)
 
 @router.post("/jaccard", response_model=SimilarityResponse)
-def similarity_jaccard(req: SimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_jaccard(req: SimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -57,7 +70,7 @@ def similarity_jaccard(req: SimilarityRequest, engine: SimilarityEngine = Depend
 
 
 @router.post("/tfidf", response_model=SimilarityResponse)
-def similarity_tfidf(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_tfidf(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -74,7 +87,7 @@ def similarity_tfidf(req: FaissSimilarityRequest, engine: SimilarityEngine = Dep
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/word2vec", response_model=SimilarityResponse)
-def similarity_word2vec(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_word2vec(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -91,7 +104,7 @@ def similarity_word2vec(req: FaissSimilarityRequest, engine: SimilarityEngine = 
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/lstm", response_model=SimilarityResponse)
-def similarity_lstm(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_lstm(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -108,7 +121,7 @@ def similarity_lstm(req: FaissSimilarityRequest, engine: SimilarityEngine = Depe
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/sbert", response_model=SimilarityResponse)
-def similarity_sbert(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_sbert(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -125,7 +138,7 @@ def similarity_sbert(req: FaissSimilarityRequest, engine: SimilarityEngine = Dep
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/hybrid", response_model=SimilarityResponse)
-def similarity_hybrid(req: HybridSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_hybrid(req: HybridSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
 	start = time.perf_counter()
 	try:
 		results = engine.search_hybrid(

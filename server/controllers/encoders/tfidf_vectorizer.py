@@ -3,12 +3,11 @@ import numpy as np
 from controllers.encoders.encoder import Encoder
 from typing import Callable
 from utils.vector_numpy import l2_normalize
+from schemas.similarity import SearchMethod
 
 class TfIdfVectorizer(Encoder):
-	name = "tfidf"
-
 	def __init__(self, preprocessor_fn: Callable[[str], list[str]], use_idf: bool = True, sublinear_tf: bool = True, smooth_idf: bool = True):
-		super().__init__()
+		super().__init__(SearchMethod.TFIDF)
 		self.preprocessor = preprocessor_fn
 		self.fitted = False
 		self.use_idf = use_idf

@@ -1,5 +1,6 @@
 from services.multilingual_manager import MultilingualManager
 from services.model_registry import ModelRegistry
+from schemas.similarity import SearchMethod
 from pyi18next.i18next import I18next
 from typing import Iterable
 import re
@@ -191,12 +192,11 @@ class LocalizationGraphProcessor:
 class LocalizationGraphBuilder(LocalizationGraphProcessor):
 	pattern = re.compile(r'<([^>]+)>')
 
-	def __init__(self, i18n: I18next, languages: set[str], base_dir: str, multilingual: MultilingualManager, model_registry: ModelRegistry):
+	def __init__(self, i18n: I18next, languages: set[str], base_dir: str, multilingual: MultilingualManager, model_registry: ModelRegistry, model_types: list[SearchMethod]):
 		super().__init__(i18n, languages, base_dir)
 		self.multilingual = multilingual
 		self.model_registry = model_registry
-
-		self.model_types = model_registry.active_model_types()
+		self.model_types = model_types
 	
 	def process_similarity(self, responses: list[dict], node_key: str, language: str):
 		corpus = []

@@ -10,12 +10,11 @@ import torch
 from controllers.encoders.encoder import Encoder
 from utils.vector_numpy import l2_normalize
 from siamese_lstm.features.vectorizer import TextVectorizerModel
+from schemas.similarity import SearchMethod
 
 class SentenceLSTM(Encoder):
-    name = "lstm"
-
     def __init__(self, model_dir: str, device: Optional[str] = None):
-        super().__init__()
+        super().__init__(SearchMethod.LSTM)
         self.model_dir = model_dir
 
         self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")

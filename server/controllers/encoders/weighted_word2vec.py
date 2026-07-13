@@ -6,12 +6,11 @@ from collections import Counter
 from typing import Callable
 from abc import abstractmethod
 from utils.vector_numpy import l2_normalize
+from schemas.similarity import SearchMethod
 
 class WeightedWord2Vec(Encoder):
-	name = "word2vec"
-
-	def __init__(self, wv: KeyedVectors, tokenizer_fn: Callable[[str], list[str]]):
-		super().__init__()
+	def __init__(self, name: SearchMethod, wv: KeyedVectors, tokenizer_fn: Callable[[str], list[str]]):
+		super().__init__(name)
 		self.wv = wv
 		self.tokenizer = tokenizer_fn
 
@@ -42,7 +41,7 @@ class WeightedWord2Vec(Encoder):
 	
 class IdfWeightedWord2Vec(WeightedWord2Vec):
 	def __init__(self, wv: KeyedVectors, tokenizer_fn: Callable[[str], list[str]]):
-		super().__init__(wv, tokenizer_fn)
+		super().__init__(SearchMethod.WORD2VEC_IDF, wv, tokenizer_fn)
 
 	def _idf_weights(self, tokens: list[str]):
 		weights = [self.idf_dict.get(token, np.log(self.n_docs)) for token in tokens]
@@ -74,7 +73,7 @@ class IdfWeightedWord2Vec(WeightedWord2Vec):
 
 class CenterWeightedWord2Vec(WeightedWord2Vec):
 	def __init__(self, wv: KeyedVectors, preprocess_fn):
-		super().__init__(wv, preprocess_fn)
+		super().__init__(SearchMethod.WORD2VEC_CENTER, wv, preprocess_fn)
 		
 	def _idf_weights(self, tokens: list[str]):
 		weights = [self.idf_dict.get(token, np.log(self.n_docs)) for token in tokens]
@@ -144,7 +143,7 @@ class POSWeightedWord2Vec(WeightedWord2Vec):
 	DEFAULT_POS_WEIGHT = 0.2
 
 	def __init__(self, wv: KeyedVectors, tokenizer_fn: Callable[[str], list[str]], pos_fn: Callable[[str], list[str]]):
-		super().__init__(wv, tokenizer_fn)
+		super().__init__(SearchMethod.WORD2VEC_POS, wv, tokenizer_fn)
 		self.pos_tagger = pos_fn
 
 	def _pos_weights(self, pos_tags: list[str]):

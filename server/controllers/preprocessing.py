@@ -5,6 +5,9 @@ from typing import Callable
 from spacy.language import Language
 from nltk import SnowballStemmer
 from dataclasses import dataclass
+from typing import Literal
+
+TokenField = Literal["text", "lemma", "stem", "pos"]
 
 @dataclass(slots=True)
 class Token:
@@ -22,10 +25,6 @@ class TextPreprocessor:
 	DIGIT_RE = re.compile(r"\d+")
 	SPACE_RE = re.compile(r"\s+")
 	ACCENT_RE = re.compile(r"[\u0300-\u036f]")
-
-	TOKEN_FIELDS = frozenset({"text", "lemma", "stem", "pos"})
-
-	MIN_NGRAM_SIZE = 2
 
 	def __init__(self, language: str, nlp: Language):
 		self.stopwords = nlp.Defaults.stop_words
@@ -55,13 +54,13 @@ class TextPreprocessor:
 	
 	def remove_accents(self, text: str):
 		text = unicodedata.normalize("NFD", text)
-		return self.ACCENT_RE.sub(text, "")
+		return self.ACCENT_RE.sub("", text)
 	
 	def remove_stopwords(self, tokens: list[Token]):
 		tokens = [token for token in tokens if not token.text.lower() in self.stopwords]
 		return tokens
 	
-	def stem(self, tokens: list[Token]):
+	def compute_stems(self, tokens: list[Token]):
 		for token in tokens:
 			token.stem = self.stemmer.stem(token.text)
 		return tokens
@@ -81,11 +80,6 @@ class TextPreprocessor:
 			)
 			for t in doc
 		]
-
-	def pipeline_tokenize(self, text: str, steps: list[TextStep], with_feature: bool = True):
-		for step in steps:
-			text = step(text)
-		return self.tokenize(text, with_feature)
 	
 	# --------------------
 	# Ngrams
@@ -98,10 +92,10 @@ class TextPreprocessor:
 			result.append(sep.join(tokens[i:i + n]))
 		return result
 	
-	def add_ngrams_to_tokens(self, tokens: list[Token], min_n: int, max_n: int, field: str = "text", sep: str = "_"):
-		text_tokens = [getattr(token, field, token.text) for token in tokens]
+	def generate_ngrams(self, tokens: list[Token], min_n: int, max_n: int, field: TokenField = "text", sep: str = "_") -> list[Token]:
+		text_tokens = [getattr(token, field) for token in tokens]
 
-		all_tokens = tokens.copy()
+		all_tokens = []
 		for n in range(min_n, max_n + 1):
 			ngrams = self._ngrams(text_tokens, n, sep=sep)
 			all_tokens.extend(Token(text=ngram) for ngram in ngrams)
@@ -111,31 +105,24 @@ class TextPreprocessor:
 	# Utilidades de tokens genéricos
 	# --------------------
 	
-	def map_tokens(self, tokens: list[Token], fields: list[str], func: Callable[[str], str]):
-		valid_fields = [
-            field
-            for field in fields
-            if field in self.TOKEN_FIELDS
-        ]
-
+	def map_tokens(self, tokens: list[Token], fields: list[TokenField], func: Callable[[str], str]):
 		for token in tokens:
-			for field in valid_fields:
+			for field in fields:
 				current = getattr(token, field)
 				setattr(token, field, func(current))
 		return tokens
 
-	def preprocess_tokens(self, tokens: list[Token], steps: list[TokenStep]):
+	def transform_tokens(self, tokens: list[Token], steps: list[TokenStep]):
 		for step in steps:
 			tokens = step(tokens)
 		return tokens
-
-	def run_pipeline(self, text: str, text_steps: list[TextStep], token_steps: list[TokenStep]):
-		for step in text_steps:
+	
+	def preprocess_text(self, text: str, steps: list[TextStep]):
+		for step in steps:
 			text = step(text)
-
-		tokens = self.tokenize(text)
-
-		for step in token_steps:
-			tokens = step(tokens)
-
-		return tokens
+		return text
+	
+	def preprocess(self, text: str, text_steps: list[TextStep], token_steps: list[TokenStep], with_features: bool = True):
+		text = self.preprocess_text(text, text_steps)
+		tokens = self.tokenize(text, with_features)
+		return self.transform_tokens(tokens, token_steps)

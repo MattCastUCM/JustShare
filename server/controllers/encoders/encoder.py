@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from schemas.similarity import SearchMethod
 
 class Encoder(ABC):
-	name = "encoder"
-
-	def __init__(self, name: Optional[str] = None):
-		self.name = name or self.__class__.name
+	def __init__(self, name: SearchMethod):
+		self.name = name
 
 	@abstractmethod
 	def fit(self, texts: list[str]):

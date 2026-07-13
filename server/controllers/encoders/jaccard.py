@@ -1,12 +1,11 @@
 from controllers.encoders.encoder import Encoder
+from schemas.similarity import SearchMethod
 from typing import Callable
 import numpy as np
 
 class JaccardEncoder(Encoder):
-    name = "jaccard"
-
     def __init__(self, preprocessor_fn: Callable[[str], list[str]]):
-        super().__init__()
+        super().__init__(SearchMethod.JACCARD)
         self.preprocess = preprocessor_fn
 
     @staticmethod

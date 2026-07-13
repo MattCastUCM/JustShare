@@ -4,6 +4,7 @@ from typing import Optional
 from controllers.encoders.encoder import Encoder
 from enum import StrEnum
 from utils.vector_numpy import l2_normalize
+from schemas.similarity import SearchMethod
 
 class PoolingMethod(StrEnum):
 	MEAN = "mean"
@@ -11,9 +12,7 @@ class PoolingMethod(StrEnum):
 	CLS = "cls"
 
 class Transformer(Encoder):
-	name = "transformer"
-
-	def __init__(self, name: str, model_name: str, device: Optional[str] = None, pooling_method: PoolingMethod = PoolingMethod.MEAN):
+	def __init__(self, name: SearchMethod, model_name: str, device: Optional[str] = None, pooling_method: PoolingMethod = PoolingMethod.MEAN):
 		super().__init__(name)
 		self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
 		print("Using device:", self.device)

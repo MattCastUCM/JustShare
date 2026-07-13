@@ -1,18 +1,33 @@
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, model_validator
 from typing import Annotated
 from enum import StrEnum
-from core.settings import get_settings
 from math import isclose
 
-settings = get_settings()
+class ModelType(StrEnum):
+    SBERT = "sbert"
+    WORD2VEC = "word2vec"
+    LSTM = "lstm"
 
 class SearchMethod(StrEnum):
-    WORD2VEC = "word2vec"
-    TFIDF = "tfidf"
     JACCARD = "jaccard"
+    TFIDF = "tfidf"
+    WORD2VEC_IDF = "word2vec_idf"
+    WORD2VEC_POS = "word2vec_pos"
+    WORD2VEC_CENTER = "word2vec_center"
     LSTM = "lstm"
-    BERT = "bert"
     SBERT = "sbert"
+
+    @property
+    def model_type(self) -> ModelType | None:
+        return SEARCH_TO_MODEL.get(self)
+
+SEARCH_TO_MODEL: dict[SearchMethod, ModelType] = {
+    SearchMethod.WORD2VEC_IDF: ModelType.WORD2VEC,
+    SearchMethod.WORD2VEC_POS: ModelType.WORD2VEC,
+    SearchMethod.WORD2VEC_CENTER: ModelType.WORD2VEC,
+    SearchMethod.LSTM: ModelType.LSTM,
+    SearchMethod.SBERT: ModelType.SBERT,
+}
 
 NonEmptyStr = Annotated[str, Field(min_length=1)]
 
@@ -20,15 +35,6 @@ class BaseSimilarityRequest(BaseModel):
     query: NonEmptyStr
     language: str
     top_k: int = Field(1, ge=1)
-
-    @field_validator("language")
-    @classmethod
-    def validate_language(cls, value: str):
-        if value not in settings.languages:
-            raise ValueError(
-                f"Unsupported language '{value}'. Supported languages: {settings.languages}"
-            )
-        return value
 
 class CorpusRequest(BaseModel):
     corpus: list[NonEmptyStr]

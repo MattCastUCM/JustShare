@@ -1,13 +1,14 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from routers.inference import router
-from core.settings import get_settings, ModelType
+from core.settings import get_settings
+from schemas.similarity import SearchMethod
 from fastapi.middleware.cors import CORSMiddleware
 from services.similarity_engine import SimilarityEngine
 from services.multilingual_manager import MultilingualManager
 from services.encoder_factory import EncoderFactory
 from services.calibrator_factory import CalibratorFactory
-from services.model_registry import ModelRegistry
+from services.model_registry import ModelRegistry, ModelType
 from adaptation.misc import NameAnonymizer
 from core.settings import Settings
 from fastapi.staticfiles import StaticFiles
@@ -22,18 +23,31 @@ async def lifespan(app: FastAPI):
 	# Se el cargador de modelos
 	model_registry = ModelRegistry(languages)
 
-	# Se cargan los modelos deseados con el LazyLoader 
-	if ModelType.SPACY in settings.models:
+	enabled_models = set(settings.models)
+
+	# Se cargan los modelos deseados con el LazyLoader
+	if enabled_models & {
+		SearchMethod.JACCARD,
+		SearchMethod.TFIDF,
+		SearchMethod.WORD2VEC_IDF,
+		SearchMethod.WORD2VEC_POS
+	}:
 		model_registry.build_spacy()
 
-	if ModelType.SBERT in settings.models:
-		model_registry.build_transformer("sbert")
+	model_builders = {
+		SearchMethod.SBERT: lambda: model_registry.build_transformer(ModelType.SBERT),
+		SearchMethod.LSTM: model_registry.build_lstm,
+	}
 
-	if ModelType.WORD2VEC in settings.models:
+	if enabled_models & {
+		SearchMethod.WORD2VEC_IDF,
+		SearchMethod.WORD2VEC_POS,
+	}:
 		model_registry.build_word2vec()
 
-	if ModelType.SIAMESE_LSTM in settings.models:
-		model_registry.build_lstm()
+	for method, builder in model_builders.items():
+		if method in enabled_models:
+			builder()
 	
 	# Se construyen todos los modelos porque en principio no hay inicialización vaga
 	model_registry.resolve_all()
@@ -59,10 +73,17 @@ async def lifespan(app: FastAPI):
 		name_anonymizer=name_anonymizer,
 		base_dir=settings.faiss_data_dir
 	)
-	model_types = model_registry.active_model_types()
+
+	indexed_models = enabled_models & {
+		SearchMethod.TFIDF,
+		SearchMethod.WORD2VEC_IDF,
+		SearchMethod.WORD2VEC_POS,
+		SearchMethod.SBERT,
+		SearchMethod.LSTM,
+	}
 
 	# Se cargan todos los nodos para los tipos de modelos activos
-	multilingual.load_all_node_engines(languages, model_types)
+	multilingual.load_all_node_engines(languages, indexed_models)
 
 	# Se crea el gestor de similitudes de alto nivel
 	similarity_engine = SimilarityEngine(multilingual)
@@ -87,15 +108,15 @@ structure_dir = os.path.join(settings.localization_dir, "structure", "modified")
 language_dir = os.path.join(settings.localization_dir, "dialogue", "active")
 
 app.mount(
-    "/localization/structure",
-    StaticFiles(directory=structure_dir),
-    name="structure"
+	"/localization/structure",
+	StaticFiles(directory=structure_dir),
+	name="structure"
 )
 
 app.mount(
-    "/localization",
-    StaticFiles(directory=language_dir),
-    name="localization"
+	"/localization",
+	StaticFiles(directory=language_dir),
+	name="localization"
 )
 
 app.include_router(router)

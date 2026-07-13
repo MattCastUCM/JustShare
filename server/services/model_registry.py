@@ -1,5 +1,7 @@
 from gensim.models import KeyedVectors
 from core.settings import get_settings
+from schemas.similarity import ModelType
+from controllers.encoders.encoder import Encoder
 from controllers.encoders.transformer import Transformer
 from controllers.encoders.sentence_lstm import SentenceLSTM
 from services.lazy_loader import LazyLoader
@@ -15,23 +17,23 @@ class ModelRegistry:
 		self.languages = languages
 
 		self.spacy_loaders: dict[str, LazyLoader] = {}
-		self.dense_loaders: dict[str, dict[str, LazyLoader]] = {
-			"sbert": {},
-			"word2vec": {},
-			"lstm": {},
+		self.dense_loaders: dict[ModelType, dict[str, LazyLoader]] = {
+			ModelType.SBERT: {},
+			ModelType.WORD2VEC: {},
+			ModelType.LSTM: {},
 		}
 
-		self.calibrator_loaders: dict[str, dict[str, LazyLoader]] = {}
+		self.calibrator_loaders: dict[ModelType, dict[str, LazyLoader]] = {}
 	
-	def get_dense(self, model_type: str, language: str):
-		loader = self.dense_loaders.get(model_type, {}).get(language)
-		return loader.model if loader else None
+	def get_dense(self, model_type: ModelType, language: str):
+		loader = self.dense_loaders[model_type][language]
+		return loader.model
 
 	def get_spacy(self, language: str):
-		loader = self.spacy_loaders.get(language)
-		return loader.model if loader else None
+		loader = self.spacy_loaders[language]
+		return loader.model
 
-	def get_calibrator(self, model_type: str, language: str):
+	def get_calibrator(self, model_type: ModelType, language: str):
 		loader = self.calibrator_loaders.get(model_type, {}).get(language)
 		return loader.model if loader else None
 
@@ -48,7 +50,7 @@ class ModelRegistry:
 				_ = loader.model
 
 	def build(self):
-		self.build_transformer("sbert")
+		self.build_transformer(ModelType.SBERT)
 		self.build_word2vec()
 		self.build_lstm()
 		self.build_spacy()
@@ -62,7 +64,7 @@ class ModelRegistry:
 			model_type=model_type
 		)
 	
-	def _build_calibrator(self, model_type: str, lang: str, path: str):
+	def _build_calibrator(self, model_type: ModelType, lang: str, path: str):
 		if model_type not in self.calibrator_loaders:
 			self.calibrator_loaders[model_type] = {}
 
@@ -74,7 +76,7 @@ class ModelRegistry:
 				lambda p=path: joblib.load(p)
 			)
 	
-	def build_transformer(self, model_type: str):
+	def build_transformer(self, model_type: ModelType):
 		# Se obtienen las rutas del modelo correspondiente
 		config = getattr(self.settings, model_type)
 
@@ -82,7 +84,7 @@ class ModelRegistry:
 			# Para cada idioma se obtiene el nombre del modelo que utilizar
 			name = config.get(lang)
 			if not name:
-				logger.warning(f"{model_type.upper()} missing for '{lang}'.")
+				logger.warning(f"{model_type} missing for '{lang}'.")
 			else:
 				self.dense_loaders[model_type][lang] = self._create_loader(
 					model_type,
@@ -96,8 +98,10 @@ class ModelRegistry:
 			if not path or not os.path.exists(path):
 				logger.warning(f"Word2Vec missing for '{lang}'")
 			else:
-				self.dense_loaders["word2vec"][lang] = self._create_loader(
-					"word2vec", lang,
+				method = ModelType.WORD2VEC
+
+				self.dense_loaders[method][lang] = self._create_loader(
+					method, lang,
 					lambda: KeyedVectors.load_word2vec_format(path, binary=True)
 				)
 
@@ -107,13 +111,13 @@ class ModelRegistry:
 			if not path or not os.path.exists(path):
 				logger.warning(f"LSTM missing config for '{lang}'")
 			else:
-				model_type = "lstm"
-				self.dense_loaders[model_type][lang] = self._create_loader(
-					"siamese_lstm", lang,
+				method = ModelType.LSTM
+				self.dense_loaders[method][lang] = self._create_loader(
+					method, lang,
 					lambda p=path: SentenceLSTM(p)
 				)
 				calibrator_path = os.path.join(path, "iso.joblib")
-				self._build_calibrator(model_type, lang, calibrator_path)
+				self._build_calibrator(method, lang, calibrator_path)
 
 	def build_spacy(self):
 		for lang in self.languages:
@@ -128,10 +132,4 @@ class ModelRegistry:
 						"ner"
 					])
 				)
-	
-	def active_model_types(self):
-		return [
-			model_type
-			for model_type, langs in self.dense_loaders.items()
-			if len(langs) > 0
-		]
+		
