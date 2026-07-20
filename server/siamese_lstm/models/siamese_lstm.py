@@ -6,7 +6,7 @@ from keras import ops
 from utils.vector_keras import manhattan_similarity, cosine_similarity
 
 class SiameseLSTM(Model):
-	def __init__(self, vocab_size: int, embedding_dim: int, hidden_dim: int, mlp_dropout: float, lstm_dropout: float, embedding_matrix: Optional[np.ndarray] = None, pooling: Literal["last", "mean"] = "mean", similarity: Literal["manhattan", "cosine", "mlp"] = "cosine", mlp_layers: list[int] = [], bidirectional: bool = False, concat_features: list[Literal["vec1", "vec2", "diff", "prod"]] = ["diff", "prod"], name="siamese_lstm", **kwargs):
+	def __init__(self, vocab_size: int, embedding_dim: int, hidden_dim: int, mlp_dropout: float, lstm_dropout: float, embedding_matrix: Optional[np.ndarray] = None, embedding_trainable: bool = True, pooling: Literal["last", "mean"] = "mean", similarity: Literal["manhattan", "cosine", "mlp"] = "cosine", mlp_layers: list[int] = [], bidirectional: bool = False, concat_features: list[Literal["vec1", "vec2", "diff", "prod"]] = ["diff", "prod"], name="siamese_lstm", **kwargs):
 		super().__init__(name=name, **kwargs)
 
 		self.vocab_size = vocab_size
@@ -19,13 +19,12 @@ class SiameseLSTM(Model):
 		self.concat_features = concat_features
 		self.mlp_dropout = mlp_dropout
 		self.lstm_dropout = lstm_dropout
+		self.embedding_trainable = embedding_trainable
 
 		if embedding_matrix is not None:
 			initializer = keras.initializers.Constant(embedding_matrix)
-			trainable = False
 		else:
 			initializer = "uniform"
-			trainable = True	
 
 		# Cuando se usa mask_zero=True, queda así:
 		# 0 -> [PAD]
@@ -35,7 +34,7 @@ class SiameseLSTM(Model):
 			input_dim=vocab_size,
 			output_dim=embedding_dim,
 			embeddings_initializer=initializer,
-			trainable=trainable,
+			trainable=embedding_trainable,
 			mask_zero=True,
 			name="embedding"
 		)
@@ -51,6 +50,24 @@ class SiameseLSTM(Model):
 			self.lstm = layers.Bidirectional(lstm_layer, name="bilstm")
 		else:
 			self.lstm = lstm_layer
+
+		if pooling == "attention":
+			output_dim = hidden_dim * (2 if bidirectional else 1)
+
+			# ui = tanh(W hi + b)
+			self.attention_dense = layers.Dense(
+				output_dim,
+				activation="tanh",
+				name="attention_dense"
+			)
+
+			# uw (vector de contexto)
+			self.context_vector = self.add_weight(
+				name="context_vector",
+				shape=(output_dim,),
+				initializer="glorot_uniform",
+				trainable=True
+			)
 
 		if similarity == "mlp":
 			mlp_seq = []
@@ -72,7 +89,52 @@ class SiameseLSTM(Model):
 		else:
 			self.mlp = None
 
-	def masked_mean_pool(self, hidden_states, mask):
+	# Si hay padding, se copia el estado anterior, pero para la bidireccional no funciona
+	def last_pool(self, hidden_states, mask):
+		# Contar el número de tokens que no son padding en una secuencia
+		# Ejemplo:
+		# mask = [[1, 1, 1, 0, 0],
+		# 		 [1, 1, 1, 1, 0]]
+		# lengths = [2, 3]
+		# Se elimina 1 porque la indexación comienza en 0
+		lengths = ops.sum(ops.cast(mask, "int32"), axis=1) - 1
+
+		# Pasar de (batch,) a (batch, 1, 1) para que se pueda usar en el siguiente método
+		lengths = ops.reshape(lengths, (-1, 1, 1))
+
+		# Obtener el estado oculto correspondiente al último token
+		# Tamaño resultante: (batch, 1, hidden_dim)
+		last = ops.take_along_axis(hidden_states, lengths, axis=1)
+
+		# Eliminar el tamaño de la secuencia de 1
+		# Tamaño final: (batch, hidden_dim)
+		return ops.squeeze(last, axis=1)
+	
+	def attention_pool(self, hiddent_states, mask):
+		# ui = tanh(W hi + b)
+		u = self.attention_dense(hiddent_states)
+
+		# ui^T uw
+		scores = ops.sum(u * self.context_vector, axis=-1)
+
+		# Ignorar padding antes del softmax
+		# Crear un tensor del mismo que scores con números muy pequeños
+		minus_inf = ops.full_like(scores, -1e9)
+		# Lleanar las tokens de padding con los números pequeños
+		scores = ops.where(mask, scores, minus_inf)
+
+		# αi
+		# Cuando se calcula la softmax para los tokens de padding, como tienen números muy pequeños, su valor es 0
+		# exp(-10^9) es aproximadamente 0
+		weights = ops.softmax(scores, axis=1)
+
+		# (batch, seq_len, 1)
+		weights = ops.expand_dims(weights, axis=-1)
+
+		# s = Σ αi hi
+		return ops.sum(hiddent_states * weights, axis=1)
+
+	def mean_pool(self, hidden_states, mask):
 		# mask (batch, seq_len)
 		mask = ops.cast(mask, hidden_states.dtype)
 
@@ -90,12 +152,15 @@ class SiameseLSTM(Model):
 
 		return sum_hidden / (token_count + 1e-8)
 
-	def pool(self, x, mask):
+	def pool(self, outputs, mask):
 		if self.pooling == "last":
-			# Si hay padding, se copia el estado anterior
-			return x[:, -1, :]
+			return self.last_pool(outputs, mask)
+		
 		elif self.pooling == "mean":
-			return self.masked_mean_pool(x, mask)
+			return self.mean_pool(outputs, mask)
+
+		elif self.pooling == "attention":
+			return self.attention_pool(outputs, mask)
 	
 	def compute_similarity(self, x, y):
 		if self.similarity == "manhattan":
@@ -148,6 +213,7 @@ class SiameseLSTM(Model):
 			"concat_features": self.concat_features,
 			"mlp_dropout": self.mlp_dropout,
 			"lstm_dropout": self.lstm_dropout,
+			"embedding_trainable": self.embedding_trainable
 		})
 		return settings
 	

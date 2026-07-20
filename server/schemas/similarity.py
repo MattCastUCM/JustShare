@@ -13,7 +13,8 @@ class SearchMethod(StrEnum):
     TFIDF = "tfidf"
     WORD2VEC_IDF = "word2vec_idf"
     WORD2VEC_POS = "word2vec_pos"
-    WORD2VEC_CENTER = "word2vec_center"
+    WORD2VEC_IDF_POS = "word2vec_idf_pos"
+    # WORD2VEC_CENTER = "word2vec_center"
     LSTM = "lstm"
     SBERT = "sbert"
 
@@ -24,7 +25,8 @@ class SearchMethod(StrEnum):
 SEARCH_TO_MODEL: dict[SearchMethod, ModelType] = {
     SearchMethod.WORD2VEC_IDF: ModelType.WORD2VEC,
     SearchMethod.WORD2VEC_POS: ModelType.WORD2VEC,
-    SearchMethod.WORD2VEC_CENTER: ModelType.WORD2VEC,
+    SearchMethod.WORD2VEC_IDF_POS: ModelType.WORD2VEC,
+    # SearchMethod.WORD2VEC_CENTER: ModelType.WORD2VEC,
     SearchMethod.LSTM: ModelType.LSTM,
     SearchMethod.SBERT: ModelType.SBERT,
 }

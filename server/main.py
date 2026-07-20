@@ -30,7 +30,8 @@ async def lifespan(app: FastAPI):
 		SearchMethod.JACCARD,
 		SearchMethod.TFIDF,
 		SearchMethod.WORD2VEC_IDF,
-		SearchMethod.WORD2VEC_POS
+		SearchMethod.WORD2VEC_POS,
+		SearchMethod.WORD2VEC_IDF_POS
 	}:
 		model_registry.build_spacy()
 
@@ -42,6 +43,7 @@ async def lifespan(app: FastAPI):
 	if enabled_models & {
 		SearchMethod.WORD2VEC_IDF,
 		SearchMethod.WORD2VEC_POS,
+		SearchMethod.WORD2VEC_IDF_POS
 	}:
 		model_registry.build_word2vec()
 

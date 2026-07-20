@@ -1,6 +1,6 @@
 from services.model_registry import ModelRegistry
 from controllers.preprocessing import TextPreprocessor
-from controllers.encoders.weighted_word2vec import POSWeightedWord2Vec, IdfWeightedWord2Vec
+from controllers.encoders.weighted_word2vec import POSdWord2Vec, IdfdWord2Vec, IdfPosWord2Vec
 from controllers.encoders.tfidf_vectorizer import TfIdfVectorizer
 from controllers.encoders.jaccard import JaccardEncoder
 from functools import lru_cache, partial
@@ -53,7 +53,6 @@ class EncoderFactory:
 				pre.clean_text,
 			],
 			token_steps=[
-				# pre.remove_stopwords,
 			],
 		)
 
@@ -78,16 +77,23 @@ class EncoderFactory:
 			model = self.registry.get_dense(method.model_type, language)
 
 			if method == SearchMethod.WORD2VEC_POS:
-				return POSWeightedWord2Vec(
+				return POSdWord2Vec(
 					model,
 					tokenizer_fn=self._bind_preprocessor(self.tokenize_lemmas, language),
 					pos_fn=self._bind_preprocessor(self.pos_tags, language),
 				)
 
 			if method == SearchMethod.WORD2VEC_IDF:
-				return IdfWeightedWord2Vec(
+				return IdfdWord2Vec(
 					model,
 					tokenizer_fn=self._bind_preprocessor(self.tokenize_lemmas, language)
+				)
+			
+			if method == SearchMethod.WORD2VEC_IDF_POS:
+				return IdfPosWord2Vec(
+					model,
+					tokenizer_fn=self._bind_preprocessor(self.tokenize_lemmas, language),
+					pos_fn=self._bind_preprocessor(self.pos_tags, language)
 				)
 
 		if method == SearchMethod.TFIDF:

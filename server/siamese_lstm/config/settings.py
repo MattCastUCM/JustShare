@@ -15,6 +15,8 @@ class Settings(BaseSettings):
 	mlp_layers: list[int] = [16]
 	concat_features: list[str] = ["diff"]
 
+	embedding_trainable: bool = False
+
 	epochs: int = 20
 	augmented_data: bool = False
 	siamese_name: str = "siamese_lstm"

@@ -7,48 +7,48 @@ import os
 def plot_history(history_dict, save_dir: str):
     plt.figure(figsize=(18, 5))
 
-    # ---- Loss plot ----
+    # Loss plot
     plt.subplot(1, 3, 1)
     plt.plot(history_dict["loss"], label="train")
     plt.plot(history_dict["val_loss"], label="validation")
 
-    best_val_loss = np.min(history_dict["val_loss"])
+    # best_val_loss = np.min(history_dict["val_loss"])
     best_epoch_loss = np.argmin(history_dict["val_loss"])
 
-    plt.scatter(best_epoch_loss, best_val_loss, color='red', s=100,
-                label=f"best val_loss: {best_val_loss:.6f}")
+    # plt.scatter(best_epoch_loss, best_val_loss, color='red', s=100,
+                # label=f"best val_loss: {best_val_loss:.6f}")
 
     plt.title("Loss")
     plt.xlabel("Epoch")
     plt.ylabel("MSE Loss")
     plt.legend()
 
-    # ---- MAE plot ----
+    # MAE plot
     plt.subplot(1, 3, 2)
     plt.plot(history_dict["mae"], label="train")
     plt.plot(history_dict["val_mae"], label="validation")
 
-    best_val_mae = np.min(history_dict["val_mae"])
-    best_epoch_mae = np.argmin(history_dict["val_mae"])
+    # best_val_mae = np.min(history_dict["val_mae"])
+    # best_epoch_mae = np.argmin(history_dict["val_mae"])
 
-    plt.scatter(best_epoch_mae, best_val_mae, color='red', s=100,
-                label=f"best val_mae: {best_val_mae:.6f}")
+    # plt.scatter(best_epoch_mae, best_val_mae, color='red', s=100,
+                # label=f"best val_mae: {best_val_mae:.6f}")
 
     plt.title("MAE")
     plt.xlabel("Epoch")
     plt.ylabel("Mean Absolute Error")
     plt.legend()
 
-    # ---- RMSE plot ----
+    # RMSE plot
     plt.subplot(1, 3, 3)
     plt.plot(history_dict["rmse"], label="train")
     plt.plot(history_dict["val_rmse"], label="validation")
 
-    best_val_rmse = np.min(history_dict["val_rmse"])
-    best_epoch_rmse = np.argmin(history_dict["val_rmse"])
+    # best_val_rmse = np.min(history_dict["val_rmse"])
+    # best_epoch_rmse = np.argmin(history_dict["val_rmse"])
 
-    plt.scatter(best_epoch_rmse, best_val_rmse, color='red', s=100,
-                label=f"best val_rmse: {best_val_rmse:.6f}")
+    # plt.scatter(best_epoch_rmse, best_val_rmse, color='red', s=100,
+                # label=f"best val_rmse: {best_val_rmse:.6f}")
 
     plt.title("RMSE")
     plt.xlabel("Epoch")

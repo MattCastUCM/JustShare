@@ -76,31 +76,39 @@ def save_metrics(model: SiameseLSTM, config_path: str, metrics_path: str, histor
         "name",
         "hidden_dim",
         "embedding_dim",
+        "embedding_trainable",
         "pooling",
         "similarity",
         "bidirectional",
         "mlp_layers",
         "concat_features",
         "mlp_dropout",
-        "lstm_dropout",
+        "lstm_dropout"
     ]
 
     history_keys = ["train_loss", "train_mae", "val_loss", "val_mae"]
     eval_keys = ["pearson", "spearman", "mse", "mae", "rmse", "bias", "r2"]
 
     metrics = {
+        # Configuración del modelo
         **_extract_model_attrs(model, model_attrs),
+        "trainable_params": model.count_params(),
 
-        "sequence_length": config.get("sequence_length"),
-        "data_augmentation": config.get("data_augmentation"),
-        "train_time_s": config.get("train_time_s"),
+        # Configuración de la ejecución
+        **config,
 
-        **{k: history_metrics.get(k) for k in history_keys},
+        # Historial de entrenamiento
+        **{
+            key: history_metrics.get(key)
+            for key in history_keys
+        },
 
+        # Evaluación
         **_extract_metrics("test", test_metrics, eval_keys),
-
-        **_extract_metrics("calibration", calibration_metrics, eval_keys)
+        **_extract_metrics("calibration", calibration_metrics, eval_keys),
     }
+
+    save_json(metrics, metrics_path)
 
     save_json(metrics, metrics_path)
 
