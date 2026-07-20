@@ -61,13 +61,13 @@ export default class GameManager {
     public startTitleScene() {
         this.resetGame()
 
-        // this.sceneManager.changeScene("TitleScene");
-        this.startGame({
-            name: "Pedro",
-            player: "male",
-            sexuality: "heterosexual",
-            harasser: "female"
-        })
+        this.sceneManager.changeScene("TitleScene");
+        // this.startGame({
+        //     name: "Pedro",
+        //     player: "male",
+        //     sexuality: "heterosexual",
+        //     harasser: "female"
+        // })
     }
 
     public startGame(userInfo: UserInfo) {
@@ -81,16 +81,16 @@ export default class GameManager {
         this.computer = this.sceneManager.getScene(computerSceneName) as Computer;
 
         // Pasa a la escena inicial con los parametros text y onComplete
-        // let params: Record<string, any> = {
-        //     text: this.translatorManager.translate("scene1.classroom", "transitions"),
-        //     onComplete: () => {
-        //         this.UIManager.phoneManager?.activatePhoneIcon(false);
-        //         this.sceneManager.changeScene("Scene1Classroom");
-        //     },
-        // };
-        // this.sceneManager.changeScene("TextOnlyScene", params)
+        let params: Record<string, any> = {
+            text: this.translatorManager.translate("scene1.classroom", "transitions"),
+            onComplete: () => {
+                this.UIManager.phoneManager?.activatePhoneIcon(false);
+                this.sceneManager.changeScene("Scene1Classroom");
+            },
+        };
+        this.sceneManager.changeScene("TextOnlyScene", params)
 
-        this.sceneManager.changeScene("Scene1Classroom");
+        // this.sceneManager.changeScene("Scene1Classroom");
 
         // TRACKER EVENT
         // console.log("Inicio del dia 1");

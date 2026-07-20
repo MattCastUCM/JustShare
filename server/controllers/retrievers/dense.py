@@ -3,11 +3,12 @@ from controllers.encoders.encoder import Encoder
 from services.calibrator_factory import Calibrator
 from typing import Optional
 from adaptation.misc import NameAnonymizer
+from spelling_checker.corrections import SpellCorrector
 import numpy as np
 
 class DenseRetriever(Retriever):
-    def __init__(self, encoder: Encoder, similarity_fn, name_anonymizer: NameAnonymizer, calibrator: Optional[Calibrator] = None):
-        super().__init__(encoder, name_anonymizer, calibrator)
+    def __init__(self, encoder: Encoder, similarity_fn, name_anonymizer: Optional[NameAnonymizer] = None, spell_corrector: Optional[SpellCorrector] = None, calibrator: Optional[Calibrator] = None):
+        super().__init__(encoder, name_anonymizer, spell_corrector, calibrator)
         self.similarity_fn = similarity_fn
 
     def _fit(self, corpus: list[str]):

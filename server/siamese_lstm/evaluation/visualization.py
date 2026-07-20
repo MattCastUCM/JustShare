@@ -106,7 +106,7 @@ def plot_histories(histories: dict, save_dir: str):
     plt.savefig(save_path)
     plt.show()
 
-def plot_heatmap_kde(y_true: np.ndarray, y_pred: np.ndarray, save_dir: str, levels: int=50, cmap: str="viridis", bw_adjust: float=0.8):
+def plot_heatmap_kde(y_true: np.ndarray, y_pred: np.ndarray, save_dir: str, cmap: str="viridis", bw_adjust: float=0.8):
     plt.figure(figsize=(6, 6))
 
     min_true = y_true.min()
@@ -118,15 +118,28 @@ def plot_heatmap_kde(y_true: np.ndarray, y_pred: np.ndarray, save_dir: str, leve
     min_val = min(min_true, min_pred)
     max_val = max(max_true, max_pred)
 
+    # KDE relleno
     sns.kdeplot(
         x=y_true,
         y=y_pred,
         fill=True,
         cmap=cmap,
-        levels=levels,
+        levels=50,
         bw_adjust=bw_adjust,
         thresh=0,
-        cbar=True
+        cbar=True,
+    )
+
+    # Contornos negros
+    sns.kdeplot(
+        x=y_true,
+        y=y_pred,
+        fill=False,
+        levels=6,
+        bw_adjust=bw_adjust,
+        color="black",
+        linewidths=0.5,
+        thresh=0,
     )
 
     plt.plot(

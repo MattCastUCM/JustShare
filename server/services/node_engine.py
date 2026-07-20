@@ -1,5 +1,6 @@
 from controllers.retrievers.faiss import FaissRetriever
 from controllers.encoders.encoder import Encoder
+from spelling_checker.corrections import SpellCorrector
 from services.encoder_factory import EncoderFactory
 from schemas.similarity import SearchMethod
 from adaptation.misc import NameAnonymizer
@@ -9,12 +10,13 @@ from typing import Optional
 import os
 
 class NodeEngine:
-	def __init__(self, encoder_factory: EncoderFactory, method: SearchMethod, base_dir: str, language: str, name_anonymizer: NameAnonymizer, calibrator: Optional[Calibrator]):
+	def __init__(self, encoder_factory: EncoderFactory, method: SearchMethod, base_dir: str, language: str, name_anonymizer: Optional[NameAnonymizer] = None, spell_corrector: Optional[SpellCorrector] = None, calibrator: Optional[Calibrator] = None):
 		self.encoder_factory = encoder_factory
 		self.method = method
 		self.base_dir = base_dir
 		self.language = language
 		self.name_anonymizer = name_anonymizer
+		self.spell_corrector = spell_corrector
 		self.calibrator = calibrator
 
 		self.retrievers: dict[str, FaissRetriever] = {}
@@ -33,6 +35,7 @@ class NodeEngine:
 			encoder=encoder,
 			name_anonymizer=self.name_anonymizer,
 			index_type=index_type,
+			spell_corrector=self.spell_corrector,
 			calibrator=self.calibrator
 		)
 		retriever.fit(corpus)
@@ -76,6 +79,7 @@ class NodeEngine:
 			encoder=encoder, 
 			dir=dir,
 			name_anonymizer=self.name_anonymizer,
+			spell_corrector=self.spell_corrector,
 			calibrator=self.calibrator
 		)
 

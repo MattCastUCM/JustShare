@@ -1,7 +1,7 @@
 {
     "similarityMethods": [
         {
-            "name": "sbert"
+            "name": "word2vec"
         }
     ]
 }

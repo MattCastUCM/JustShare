@@ -1,5 +1,5 @@
-from candidates import CandidateGenerator
-from ngram_model import KNgramModel
+from spelling_checker.candidates import CandidateGenerator
+from spelling_checker.ngram_model import KNgramModel
 from spylls.hunspell import Dictionary
 from nltk.tokenize.toktok import ToktokTokenizer
 from typing import Optional, Sequence
@@ -8,19 +8,23 @@ import math
 import re
 
 class SpellCorrector:
-	_WORD_RE = re.compile(r"\w", re.UNICODE)
-	_REPETITIONS_RE = re.compile(r"(.)\1{2,}")
-	_SPACE_BEFORE_PUNCT_RE = re.compile(r"\s+([.,;:!?%])")
-	_SPACE_AFTER_OPEN_RE = re.compile(r"([¿¡(\[\{])\s+")
-	_SPACE_BEFORE_CLOSE_RE = re.compile(r"\s+([)\]\}])")
-
-	def __init__(self, lexicon: Dictionary, candidate_gen: CandidateGenerator, forward_lm: KNgramModel, backward_lm: KNgramModel, max_distance: int = 2):
+	WORD_RE = re.compile(r"\w", re.UNICODE)
+	REPETITIONS_RE = re.compile(r"(.)\1{2,}")
+	SPACE_BEFORE_PUNCT_RE = re.compile(r"\s+([.,;:!?%])")
+	SPACE_AFTER_OPEN_RE = re.compile(r"([¿¡(\[\{])\s+")
+	SPACE_BEFORE_CLOSE_RE = re.compile(r"\s+([)\]\}])")
+	
+	def __init__(self, lexicon: Dictionary, candidate_gen: CandidateGenerator, forward_lm: KNgramModel, backward_lm: KNgramModel, max_distance: int = 2, ignored_tokens: Optional[set[str]] = None):
 		self.lexicon = lexicon
 		self.candidate_gen = candidate_gen
 		self.forward_lm = forward_lm
 		self.backward_lm = backward_lm
 		self.max_distance = max_distance
 		self.tokenizer = ToktokTokenizer()
+		self.ignored_tokens = {
+			token.strip("[](){}.,;:!?").lower()
+			for token in (ignored_tokens or set())
+		}
 
 	def rank_candidates(self, candidates: list[tuple[str, int]], left_context: Sequence[str], right_context: Sequence[str], unigram_weight: float):
 		total_cont = self.forward_lm.total_cont_sum
@@ -51,8 +55,9 @@ class SpellCorrector:
 		corrected = sentence.copy()
 		lower_sentence = [word.lower() for word in sentence]
 
-		for i in range(len(sentence)):
-			corrected[i] = self.correct_word(sentence, i, max_candidates, unigram_weight, enhanced, lower_sentence)
+		for i, word in enumerate(lower_sentence):
+			if word not in self.ignored_tokens:
+				corrected[i] = self.correct_word(sentence, i, max_candidates, unigram_weight, enhanced, lower_sentence)
 
 		return corrected
 	
@@ -62,7 +67,7 @@ class SpellCorrector:
 		Buenoooos -> Buenos
 		Siiii     -> Si
 		"""
-		return self._REPETITIONS_RE.sub(r"\1", word)
+		return self.REPETITIONS_RE.sub(r"\1", word)
 	
 	def _restore_case(self, original: str, corrected: str) -> str:
 		if original[:1].isupper():
@@ -115,7 +120,7 @@ class SpellCorrector:
 		
 		original = sentence[position]
 
-		if enhanced and not self._WORD_RE.search(original):
+		if enhanced and not self.WORD_RE.search(original):
 			return original
 		
 		lookup_word = lower_sentence[position]
@@ -152,9 +157,9 @@ class SpellCorrector:
 	def _toktok_detokenize(self, tokens: list[str]):
 		text = " ".join(tokens)
 
-		text = self._SPACE_BEFORE_PUNCT_RE.sub(r"\1", text)
-		text = self._SPACE_AFTER_OPEN_RE.sub(r"\1", text)
-		text = self._SPACE_BEFORE_CLOSE_RE.sub(r"\1", text)
+		text = self.SPACE_BEFORE_PUNCT_RE.sub(r"\1", text)
+		text = self.SPACE_AFTER_OPEN_RE.sub(r"\1", text)
+		text = self.SPACE_BEFORE_CLOSE_RE.sub(r"\1", text)
 
 		return text
 	

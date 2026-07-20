@@ -12,8 +12,11 @@ from services.model_registry import ModelRegistry, ModelType
 from adaptation.misc import NameAnonymizer
 from core.settings import Settings
 from fastapi.staticfiles import StaticFiles
+from spelling_checker.candidates import SymSpell
+from spelling_checker.ngram_model import KNgramModel
+from spelling_checker.corrections import SpellCorrector
+from spylls.hunspell import Dictionary
 import uvicorn
-import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -59,13 +62,26 @@ async def lifespan(app: FastAPI):
 	calibrator_factory = CalibratorFactory(model_registry)
 
 	# Se carga el anonimizador de nombres
-	name_whitelist_path = os.path.join(settings.adaptation_data_dir, "name_whitelist.txt")
-	spanish_names_path = os.path.join(settings.adaptation_data_dir, "nombres-propios-es.txt")
-
 	name_anonymizer = NameAnonymizer(
-		names_path=spanish_names_path,
-		whitelist_path=name_whitelist_path,
+		names_path=settings.spanish_names_path,
+		whitelist_path=settings.name_whitelist_path,
 		replacement="[UNK]"
+	)
+
+	ignored_tokens = {name_anonymizer.replacement, *name_anonymizer.whitelist}
+
+	lexicon = Dictionary.from_files(settings.hunspell_dict_dir)
+	sym_spell = SymSpell.load(settings.sym_spell_path)
+	forward_lm = KNgramModel.load(settings.forward_lm_path)
+	backward_lm = KNgramModel.load(settings.backward_lm_path)
+
+	spell_corrector = SpellCorrector(
+		lexicon=lexicon,
+		candidate_gen=sym_spell,
+		forward_lm=forward_lm,
+		backward_lm=backward_lm,
+		max_distance=settings.spell_max_distance,
+		ignored_tokens=ignored_tokens
 	)
 	
 	# Se construye el gestor plurilingue que permite cargar los diferentes retrievers 
@@ -73,6 +89,7 @@ async def lifespan(app: FastAPI):
 		encoder_factory=encoder_factory,
 		calibrator_factory=calibrator_factory, 
 		name_anonymizer=name_anonymizer,
+		spell_corrector=spell_corrector,
 		base_dir=settings.faiss_data_dir
 	)
 
@@ -106,18 +123,15 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
-structure_dir = os.path.join(settings.localization_dir, "structure", "modified")
-language_dir = os.path.join(settings.localization_dir, "dialogue", "active")
-
 app.mount(
 	"/localization/structure",
-	StaticFiles(directory=structure_dir),
+	StaticFiles(directory=settings.structure_dir),
 	name="structure"
 )
 
 app.mount(
 	"/localization",
-	StaticFiles(directory=language_dir),
+	StaticFiles(directory=settings.language_dir),
 	name="localization"
 )
 

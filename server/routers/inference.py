@@ -20,16 +20,14 @@ router = APIRouter(
 	tags=["similarity"],
 )
 
-def validate_language(req: BaseSimilarityRequest):
+def validate_language(language: str):
     settings = get_settings()
 
-    if req.language not in settings.languages:
+    if language not in settings.languages:
         raise HTTPException(
             status_code=400,
-            detail=f"Unsupported language '{req.language}'. Supported languages: {sorted(settings.languages)}",
+            detail=f"Unsupported language '{language}'. Supported languages: {sorted(settings.languages)}",
         )
-
-    return req
 
 def get_similarity_engine(request: Request):
 	return request.state.similarity_engine
@@ -52,7 +50,9 @@ def build_similarity_response(indices: np.ndarray, scores: np.ndarray, texts: np
 	)
 
 @router.post("/jaccard", response_model=SimilarityResponse)
-def similarity_jaccard(req: SimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_jaccard(req: SimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+	validate_language(req.language)
+
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -70,7 +70,9 @@ def similarity_jaccard(req: SimilarityRequest = Depends(validate_language), engi
 
 
 @router.post("/tfidf", response_model=SimilarityResponse)
-def similarity_tfidf(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_tfidf(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+	validate_language(req.language)
+
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -87,7 +89,9 @@ def similarity_tfidf(req: FaissSimilarityRequest = Depends(validate_language), e
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/word2vec", response_model=SimilarityResponse)
-def similarity_word2vec(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_word2vec(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+	validate_language(req.language)
+
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -95,16 +99,18 @@ def similarity_word2vec(req: FaissSimilarityRequest = Depends(validate_language)
 			node_key=req.node_key,
 			top_k=req.top_k,
 			language=req.language,
-			method=SearchMethod.WORD2VEC
+			method=SearchMethod.WORD2VEC_IDF
 		)
 		elapsed = time.perf_counter() - start
 		logger.debug(f"word2vec endpoint took {elapsed:.4f}s")
-		return build_similarity_response(top_indices, top_scores, top_texts, elapsed, SearchMethod.WORD2VEC)
+		return build_similarity_response(top_indices, top_scores, top_texts, elapsed, SearchMethod.WORD2VEC_IDF)
 	except ValueError as e:
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/lstm", response_model=SimilarityResponse)
-def similarity_lstm(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_lstm(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+	validate_language(req.language)
+
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -121,7 +127,9 @@ def similarity_lstm(req: FaissSimilarityRequest = Depends(validate_language), en
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/sbert", response_model=SimilarityResponse)
-def similarity_sbert(req: FaissSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_sbert(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+	validate_language(req.language)
+
 	start = time.perf_counter()
 	try:
 		top_indices, top_scores, top_texts = engine.search(
@@ -138,7 +146,9 @@ def similarity_sbert(req: FaissSimilarityRequest = Depends(validate_language), e
 		raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/hybrid", response_model=SimilarityResponse)
-def similarity_hybrid(req: HybridSimilarityRequest = Depends(validate_language), engine: SimilarityEngine = Depends(get_similarity_engine)):
+def similarity_hybrid(req: HybridSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
+	validate_language(req.language)
+
 	start = time.perf_counter()
 	try:
 		results = engine.search_hybrid(

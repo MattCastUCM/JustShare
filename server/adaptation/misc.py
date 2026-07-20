@@ -3,7 +3,7 @@ import re
 
 class NameAnonymizer:
 	def __init__(self, names_path: str, whitelist_path: str, replacement):
-		self.replacement = replacement
+		self.replacement: str = replacement
 
 		self.names = self._load_file(names_path)
 		self.whitelist = self._load_file(whitelist_path)

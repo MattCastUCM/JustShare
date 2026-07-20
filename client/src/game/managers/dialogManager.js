@@ -329,7 +329,7 @@ export default class DialogManager {
         };
 
         let methodConfig = {}
-        if (method === "sbert" || method == "lsmt") {
+        if (method !== "jaccard") {
             methodConfig = {
                 node_key: nodeKey
             }

@@ -99,7 +99,7 @@ export default class BaseScene extends Scene {
     // Metodo que se encarga de limpiar los eventos del dispatcher y de eliminar los retratos del UIManager
     // IMPORTANTE: Hay que llamar a este metodo antes de llamar al stop de la escena para evitar problemas al eliminar los retratos
     shutdown() {
-        this.UIManager.dialogManager.clearScene();
+        this.dialogManager.clearScene();
 
         if (this.dispatcher) {
             this.dispatcher.removeAll();

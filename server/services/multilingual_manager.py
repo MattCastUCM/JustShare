@@ -3,14 +3,17 @@ from services.calibrator_factory import CalibratorFactory
 from services.node_engine import NodeEngine
 from controllers.retrievers.dense import DenseRetriever
 from adaptation.misc import NameAnonymizer
+from spelling_checker.corrections import SpellCorrector
 from schemas.similarity import SearchMethod
 from collections.abc import Iterable
+from typing import Optional
 
 class MultilingualManager:
-	def __init__(self, encoder_factory: EncoderFactory, calibrator_factory: CalibratorFactory, name_anonymizer: NameAnonymizer, base_dir: str):
+	def __init__(self, encoder_factory: EncoderFactory, calibrator_factory: CalibratorFactory, base_dir: str, name_anonymizer: Optional[NameAnonymizer] = None, spell_corrector: Optional[SpellCorrector] = None):
 		self.encoder_factory = encoder_factory
 		self.calibrator_factory = calibrator_factory
 		self.name_anonymizer = name_anonymizer
+		self.spell_corrector = spell_corrector
 		self.base_dir = base_dir
 
 		self.node_cache: dict[tuple[str, str], NodeEngine] = {}
@@ -23,6 +26,7 @@ class MultilingualManager:
 			encoder=encoder,
 			similarity_fn=similarity_fn,
 			name_anonymizer=self.name_anonymizer,
+			spell_corrector=self.spell_corrector,
 			calibrator=calibrator
 		)
 	
@@ -38,7 +42,8 @@ class MultilingualManager:
 				base_dir=self.base_dir,
 				language=language,
 				calibrator=calibrator,
-				name_anonymizer=self.name_anonymizer
+				name_anonymizer=self.name_anonymizer,
+				spell_corrector=self.spell_corrector
 			)
 
 			self.node_cache[key] = node_engine
@@ -59,7 +64,8 @@ class MultilingualManager:
 						base_dir=self.base_dir,
 						language=language,
 						calibrator=calibrator,
-						name_anonymizer=self.name_anonymizer
+						name_anonymizer=self.name_anonymizer,
+						spell_corrector=self.spell_corrector
 					)
 
 					node_engine.load_all()

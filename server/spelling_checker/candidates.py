@@ -1,7 +1,7 @@
 from typing import Optional
 import pickle
 from abc import ABC, abstractmethod
-from distances import damerau_levenshtein
+from spelling_checker.distances import damerau_levenshtein
 from collections import defaultdict
 from array import array
 

@@ -205,14 +205,14 @@ class LocalizationGraphBuilder(LocalizationGraphProcessor):
 		idx = 0
 		for group_idx, group in enumerate(responses):
 			for sentence_idx, text in enumerate(group["text"]):
-				new_texts = self.process_data(text)
+				processed_texts = self.process_data(text)
 
-				corpus.extend(new_texts)
+				corpus.extend(processed_texts)
 
-				for new_text in new_texts:
+				for processed_text in processed_texts:
 					metadata.append({
 						"index": idx,
-						"text": new_text,
+						"text": processed_text,
 						"group_index": group_idx,
 						"sentence_index": sentence_idx,
 						"node": node_key,
