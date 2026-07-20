@@ -42,7 +42,7 @@ export default class Scene6BedroomRouteA2 extends BaseScene {
         this.dispatcher.add("spawnInteractions", this, () => {
             // Armario
             super.createInteractiveElement(240, 400, "pointer", 0.3, () => {
-                if (this.gameManager.blackboard.has("endedLunch")) {
+                if (this.gameManager.blackboard.get("endedLunch")) {
                     this.gameManager.blackboard.set("prepared", true)
                 }
                 this.dialogManager.setNode(closetNode, []);

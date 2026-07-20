@@ -119,9 +119,6 @@ class FaissRetriever(Retriever):
 		"""Search for similar documents."""
 		query_embedding = self.encoder.transform([query])
 		query_embedding = np.asarray(query_embedding, dtype=np.float32)
-
-		print(query_embedding.shape[1])
-		print(self.index.d)
 		
 		faiss_scores, faiss_indices = self.index.search(query_embedding, top_k)
 

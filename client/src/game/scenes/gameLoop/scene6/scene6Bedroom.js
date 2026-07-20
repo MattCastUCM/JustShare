@@ -12,6 +12,10 @@ export default class Scene6Bedroom extends BaseScene {
     create(params) {
         super.create(params)
 
+        // this.phoneManager.activatePhoneIcon(true);
+        // let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
+        // this.phoneManager.phone.addChat(chatName, "harasserPfp");
+
         // Pone la imagen de fondo con las dimensiones del canvas
         let bg = this.add.image(0, 0, 'bedroomNightBg').setOrigin(0, 0);
         this.scale = this.CANVAS_HEIGHT / bg.height;
@@ -55,7 +59,7 @@ export default class Scene6Bedroom extends BaseScene {
                     let params = {};
 
                     // Si se va por la ruta A (seguir enviando fotos)
-                    if (this.gameManager.blackboard.has("routeA")) {
+                    if (this.gameManager.blackboard.get("routeA")) {
                         params = {
                             text: this.translatorManager.translate("scene6.routeAStart", "transitions"),
                             onComplete: () => {

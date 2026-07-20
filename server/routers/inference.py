@@ -88,7 +88,7 @@ def similarity_tfidf(req: FaissSimilarityRequest, engine: SimilarityEngine = Dep
 	except ValueError as e:
 		raise HTTPException(status_code=404, detail=str(e))
 
-@router.post("/word2vec", response_model=SimilarityResponse)
+@router.post("/word2vec_idf", response_model=SimilarityResponse)
 def similarity_word2vec(req: FaissSimilarityRequest, engine: SimilarityEngine = Depends(get_similarity_engine)):
 	validate_language(req.language)
 

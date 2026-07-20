@@ -118,7 +118,7 @@ export default class Scene6BedroomRouteB extends BaseScene {
                 this.portraits.set("mom", momPortrait);
 
                 let node = null;
-                if (this.gameManager.blackboard.has("explained")) {
+                if (this.gameManager.blackboard.get("explained")) {
                     node = super.readNodes(nodes, "scene6/routeB/scene6BedroomRouteB", "interruptionExplained", true);
                 }
                 else {

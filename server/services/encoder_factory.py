@@ -53,7 +53,8 @@ class EncoderFactory:
 				pre.clean_text,
 			],
 			token_steps=[
-			],
+				pre.remove_stopwords,
+			]
 		)
 
 		lemmas = [token.lemma for token in tokens]

@@ -141,7 +141,7 @@ export default class TrackerManager {
 
             this.gameCompleted = true;
 
-            let ending = this.gameManager.blackboard.has("routeA") ? "routeA" : "routeB";
+            let ending = this.gameManager.blackboard.get("routeA") ? "routeA" : "routeB";
             // let explained = this.getValue("explained")
             let explained = this.gameManager.blackboard.get("explained")
 

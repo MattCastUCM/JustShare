@@ -387,6 +387,8 @@ export default class DialogManager {
 
             let exceedThresholds = true
 
+            console.log(scores)
+
             for (const [method, score] of Object.entries(scores)) {
                 if (!exceedThresholds) {
                     break;

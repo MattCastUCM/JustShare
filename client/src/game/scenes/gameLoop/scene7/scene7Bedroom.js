@@ -57,7 +57,7 @@ export default class Scene7Bedroom extends BaseScene {
         });
 
 
-        this.dispatcher.add("chatEnded", this, () => {
+        this.dispatcher.addOnce("chatEnded", this, () => {
             this.dialogManager.textbox.activate(false);
             let chatName = this.translatorManager.translate("textMessages.chat2", "deviceInfo");
             this.phoneManager.phone.chats.get(chatName).returnButton.setInteractive();
@@ -66,6 +66,7 @@ export default class Scene7Bedroom extends BaseScene {
             this.phoneManager.phone.addChat(chatName, "dadPfp");
 
             let phoneNode = super.readNodes(nodes, "scene7/scene7Bedroom", "callButton", true);
+            // this.dialogManager.setNode(phoneNode, []);
             this.phoneManager.phone.setChatNode(chatName, phoneNode);
         });
 

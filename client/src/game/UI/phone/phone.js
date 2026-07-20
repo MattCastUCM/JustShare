@@ -147,7 +147,7 @@ export default class Phone extends GameObjects.Container {
             // TRACKER EVENT
             // console.log("Salir del chat:", this.name);
             // this.scene.gameManager.sendExitChat(fromChatButton);
-            this.scene.trackerManager.sendExitChat(fromChatButton);
+            this.phoneManager.trackerManager.sendExitChat(fromChatButton);
         }
     }
 

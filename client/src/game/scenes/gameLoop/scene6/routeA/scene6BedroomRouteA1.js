@@ -53,7 +53,7 @@ export default class Scene6BedroomRouteA1 extends BaseScene {
                 // se cambia a la escena de transicion y luego a la escena de la comida del dia siguiente
                 setTimeout(() => {
                     // Si se va por la ruta A (quedar con el acosador)
-                    if (this.gameManager.blackboard.has("routeA")) {
+                    if (this.gameManager.blackboard.get("routeA")) {
                         this.sceneManager.changeScene("Scene6BedroomRouteA2");
                     }
                     // Si se va por la ruta B (no quedar con el)
