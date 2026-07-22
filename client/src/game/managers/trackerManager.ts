@@ -183,7 +183,6 @@ export default class TrackerManager {
         }
     }
 
-
     sendDialogStarted(nodeId: string, dialogText: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let scene = this.sceneManager.getCurrentScene().scene.key;
@@ -208,7 +207,9 @@ export default class TrackerManager {
 
     sendWrittenResponse(nodeId: string, response: string, method: string, threshold: number, score: number, matchingText: string, duration: number) {
         if (this.trackerInitialized && !this.gameCompleted) {
-            const evt = this.alternative.selected(this.alternative.types.dialogTree, nodeId, response);
+            let scene = this.sceneManager.getCurrentScene().scene.key;
+
+            const evt = this.alternative.selected(this.alternative.types.dialogTree, scene + "." + nodeId, response);
 
             evt.result.setScaledScore(score);
             evt.result.setRawScore(score);
@@ -226,11 +227,30 @@ export default class TrackerManager {
         }
     }
 
+    sendThoughtBoxStarted(nodeId: string) {
+        if (this.trackerInitialized && !this.gameCompleted) {
+            let scene = this.sceneManager.getCurrentScene().scene.key;
+
+            let evt = this.completable.initialized(this.completable.types.storyNode, "ThoughtBoxStart");
+            evt.result.setExtension("Node", scene + "." + nodeId);
+            this.tracker.addEvent(evt);
+        }
+    }
+
+    sendThoughtBoxEnded(nodeId: string) {
+        if (this.trackerInitialized && !this.gameCompleted) {
+            let scene = this.sceneManager.getCurrentScene().scene.key;
+
+            let evt = this.completable.completed(this.completable.types.storyNode, "ThoughtBoxEnd", 1, true, true);
+            evt.result.setExtension("Node", scene + "." + nodeId);
+            this.tracker.addEvent(evt);
+        }
+    }
+
     sendChoiceSelected(nodeId: string, choiceText: string) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let scene = this.sceneManager.getCurrentScene().scene.key;
 
-            // TODO: cambiar a choice
             let evt = this.alternative.selected(this.alternative.types.dialogTree, nodeId, " ");
             evt.result.setExtension("Node", scene + "." + nodeId);
             evt.result.setExtension("Response", choiceText);

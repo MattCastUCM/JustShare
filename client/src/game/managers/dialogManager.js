@@ -399,7 +399,7 @@ export default class DialogManager {
                 if (score.value > 0 && methodConfig) {
                     const threshold = methodConfig.threshold
                     // TRACKER EVENT
-                    this.trackerManager.sendWrittenResponse(node.fullId, text, method, threshold, score, choice, data.processing_time)
+                    this.trackerManager.sendWrittenResponse(node.fullId, text, method, threshold, score.value, choice, data.processing_time)
 
                     if (score.value < threshold * score.weight) {
                         exceedThresholds = false
@@ -428,6 +428,9 @@ export default class DialogManager {
         this.processSimilarityNode(this.currNode, text)
             .then(index => {
                 this.thoughtBox.activate(false, () => {
+                    // TRACKER EVENT
+                    this.trackerManager.sendThoughtBoxEnded(this.currNode.fullId);
+
                     this.currNode = this.currNode.next[index];
                     this.processNextNode(delay);
                 });
@@ -471,6 +474,8 @@ export default class DialogManager {
                 this.textbox.activate(false, () => {
                     this.thoughtBox.clearText();
                     this.thoughtBox.activate(true, () => {
+                        // TRACKR EVENT
+                        this.trackerManager.sendThoughtBoxStarted(this.currNode.fullId);
                         this.thoughtBox.activateInput(true);
                     });
                 })

@@ -66,6 +66,8 @@ export function generateTrackerFromURL() {
         }
     }
 
+    console.log(resultUri, authConfig, backupUri, actorHomepage, actorUsername)
+
     return new Tracker(
         new LRS({
             baseUrl: resultUri,
