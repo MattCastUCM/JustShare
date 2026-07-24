@@ -99,8 +99,8 @@ export default class Scene7Bedroom extends BaseScene {
                     // TRACKER EVENT
                     // console.log("Fin de partida");
                     // this.gameManager.sendEndGame();
-                    this.trackerManager.sendGameProgress();
-
+                    this.trackerManager.sendEndGame();
+                    
                     this.gameManager.startTitleScene();
                 },
             };
