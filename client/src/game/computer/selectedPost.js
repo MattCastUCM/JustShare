@@ -53,7 +53,8 @@ export default class SelectedPost extends Post {
         let sendCommentBottomY = sendComment.y + sendComment.displayHeight
         let noCommentsY = sendCommentBottomY + (height - SEND_OFFSET_Y - sendComment.displayHeight) / 2
 
-        let translate = this.scene.translate("noCommentsText")
+        // TODO: ver
+        let translate = this.scene.translateWithNamespace("noCommentsText", "computer/socialMediaScreen")
         let noComments = this.scene.add.text(x + width / 2, noCommentsY, translate, style);
         noComments.setOrigin(0.5, 0.5)
         this.add(noComments)

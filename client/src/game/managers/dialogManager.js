@@ -70,22 +70,26 @@ export default class DialogManager {
     }
 
     createThoughtBox(scene) {
-        const style = { ...TEXT_CONFIG }
-        style.fontFamily = "roboto-regular"
-        style.color = '#2e2e2e'
-        style.fontSize = 35;
+        const inputTextStyle = { ...TEXT_CONFIG }
+        inputTextStyle.fontFamily = "roboto-regular"
+        inputTextStyle.color = '#2e2e2e'
+        inputTextStyle.fontSize = 32;
 
-        const summaryStyle = { ...style }
-        summaryStyle.fontStyle = "bold";
-
-        const defaultStyle = { ...style }
+        const defaultStyle = { ...inputTextStyle }
         defaultStyle.color = '#6e6e6e'
         defaultStyle.fontStyle = "italic";
+
+        const headerTextStyle = { ...inputTextStyle }
+        headerTextStyle.fontSize = 33;
+
+        const contextStyle = { ...inputTextStyle }
+        contextStyle.fontStyle = "bold";
+        contextStyle.fontSize = 28
 
         const headerText = this.translatorManager.translate("thoughtBoxHeader", "dialogManager");
         const defaultText = this.translatorManager.translate("thoughtBoxInput", "dialogManager");
 
-        const thoughtBox = new ThoughtBox(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT - 15, headerText, style, summaryStyle, defaultText, defaultStyle, style, () => {
+        const thoughtBox = new ThoughtBox(scene, scene.CANVAS_WIDTH / 2, scene.CANVAS_HEIGHT - 15, headerText, headerTextStyle, contextStyle, defaultText, defaultStyle, inputTextStyle, () => {
             this.processThought();
         })
 

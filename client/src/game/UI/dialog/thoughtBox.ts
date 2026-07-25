@@ -12,7 +12,7 @@ export default class ThoughtBox extends AnimatedContainer {
     private enterKey: Input.Keyboard.Key
     private context: TextArea
 
-    public constructor(scene: Scene, cloudX: number, cloudY: number, headerText: string, headerTextStyle: Types.GameObjects.Text.TextStyle, summaryTextStyle: Types.GameObjects.Text.TextStyle, defaultText: string, defaultTextStyle: Types.GameObjects.Text.TextStyle, inputTextStyle: Types.GameObjects.Text.TextStyle, onClick: Function) {
+    public constructor(scene: Scene, cloudX: number, cloudY: number, headerText: string, headerTextStyle: Types.GameObjects.Text.TextStyle, contextTextStyle: Types.GameObjects.Text.TextStyle, defaultText: string, defaultTextStyle: Types.GameObjects.Text.TextStyle, inputTextStyle: Types.GameObjects.Text.TextStyle, onClick: Function) {
         super(scene, 0, 0);
 
         const canvasHeight = scene.sys.game.canvas.height;
@@ -41,7 +41,7 @@ export default class ThoughtBox extends AnimatedContainer {
         });
 
         const width = cloud.displayWidth - 455
-        const height = cloud.displayHeight - 220
+        const height = cloud.displayHeight - 230
 
         const defaultObj = {
             wordWrap: {
@@ -54,13 +54,18 @@ export default class ThoughtBox extends AnimatedContainer {
 
         const offsetX = -10;
 
-        this.context = new TextArea(scene, -width / 2, -height / 2, width, height, "", summaryTextStyle, 0, 0, 0, 0, offsetX, 0, 0.5, 0.5)
+        contextTextStyle.wordWrap = {
+            width: width,
+            useAdvancedWrap: true
+        }
+
+        this.context = new TextArea(scene, -width / 2, -height / 2, width, height, "", contextTextStyle, 0, 0, 0, 0, offsetX, 0, 0.5, 0.5)
         if (DEBUG) {
             cloudContainer.add(this.context.debugRect)
         }
         cloudContainer.add(this.context);
 
-        const y = this.context.y + this.context.displayHeight + 30;
+        const y = this.context.y + this.context.displayHeight + 45;
 
         const headerTextArea = new TextArea(scene, this.context.x, y, width, height, headerText, headerTextStyle, 0, 0, 0, 0, 0, 0, 0.5, 0.5)
         headerTextArea.adjustFontSize();
@@ -69,7 +74,7 @@ export default class ThoughtBox extends AnimatedContainer {
         }
         cloudContainer.add(headerTextArea);
 
-        this.textInput = new TextInput(scene, offsetX, -height / 2 - y + 63, width, 110, defaultText, defaultTextStyle, fixedInputTextStyle, false, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        this.textInput = new TextInput(scene, offsetX, -height / 2 - y + 76, width, 105, defaultText, defaultTextStyle, fixedInputTextStyle, false, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         cloudContainer.add(this.textInput);
 
         this.button = scene.add.image(173, this.textInput.y + this.textInput.displayHeight + 40, 'introIcon');
