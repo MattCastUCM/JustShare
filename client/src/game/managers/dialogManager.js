@@ -470,7 +470,7 @@ export default class DialogManager {
                 this.activateOptions(true);
             }
             else if (this.currNode.type === "similarity") {
-                this.thoughtBox.setContexText(this.currNode.context);
+                this.thoughtBox.setContextText(this.currNode.context);
                 if (this.portraits.get(this.lastCharacter)) {
                     this.portraits.get(this.lastCharacter).setTalking(false, this.PORTRAIT_ANIM_TIME);
                     this.lastCharacter = "";

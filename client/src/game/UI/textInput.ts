@@ -1,5 +1,5 @@
 import InteractiveContainer from "./interactiveContainer.js";
-import { Scene, GameObjects, Tweens } from "phaser";
+import { Scene, GameObjects } from "phaser";
 import TextArea from "./textArea.js";
 import { blinkAnimation, fadeAnimation } from "../utils/graphics.js";
 import { isTouchInput } from "../../inputDetection.js";
@@ -21,23 +21,24 @@ export default class TextInput extends InteractiveContainer {
     * @param {Phaser.Types.GameObjects.Text.TextStyle} style - configuracion del texto
     */
 
-    textArea: TextArea
+    private textArea: TextArea
 
-    defaultText: string
-    defaultStyle: Phaser.Types.GameObjects.Text.TextStyle
+    private defaultText: string
+    private defaultStyle: Phaser.Types.GameObjects.Text.TextStyle
 
-    style: Phaser.Types.GameObjects.Text.TextStyle
-    text: string
+    private style: Phaser.Types.GameObjects.Text.TextStyle
+    private text: string
 
-    cursor: GameObjects.Text
-    blinkAnim: Tweens.Tween
+    private cursor: GameObjects.Text
 
-    isTyping: boolean
-    isTextCut: boolean
+    private isTyping: boolean
+    private isTextCut: boolean
 
-    inputElement?: HTMLInputElement
+    private inputElement?: HTMLInputElement
 
-    regex: RegExp
+    private regex: RegExp
+
+    private rect: GameObjects.Rectangle;
 
     constructor(scene: Scene, x: number, y: number, width: number, height: number, defaultText: string, defaultStyle: Phaser.Types.GameObjects.Text.TextStyle, style: Phaser.Types.GameObjects.Text.TextStyle, isTextCut: boolean = true, originX: number = 0.5, originY: number = 0.5, textOriginX: number = 0, textOriginY: number = 0.5, textPaddingX: number = 0, textPaddingY: number = 0, textOffsetX: number = 0, textOffsetY: number = 0, textAligX: number = 0.5, textAlignY: number = 0.5, regex: RegExp = /[\p{L}\p{M}\p{P}\p{Zs}]/u) {
         super(scene, x, y);
@@ -67,15 +68,15 @@ export default class TextInput extends InteractiveContainer {
         this.cursor = this.scene.add.text(0, 0, "▌", style);
         this.add(this.cursor);
 
-        const rect = this.scene.add.rectangle(0, 0, width + this.cursor.displayWidth, height);
+        this.rect = this.scene.add.rectangle(0, 0, width + this.cursor.displayWidth, height);
         if (DEBUG) {
-            rect.setStrokeStyle(2, 0xff0000)
+            this.rect.setStrokeStyle(2, 0xff0000)
         }
-        rect.setOrigin(originX, originY)
-        this.add(rect);
+        this.rect.setOrigin(originX, originY)
+        this.add(this.rect);
 
-        const textX = rect.x + rect.displayWidth * (0.5 - originX);
-        const textY = rect.y + rect.displayHeight * (0.5 - originY);
+        const textX = this.rect.x + this.rect.displayWidth * (0.5 - originX);
+        const textY = this.rect.y + this.rect.displayHeight * (0.5 - originY);
         this.textArea.setPosition(textX, textY);
 
         // Crear el cursor visual que parpadea mientras se escribe
@@ -87,7 +88,7 @@ export default class TextInput extends InteractiveContainer {
 
         const animation = this.activateCursor(false);
         animation.on("complete", () => {
-            this.blinkAnim = blinkAnimation(this.cursor, 300, 600);
+            blinkAnimation(this.cursor, 300, 600);
             this.cursor.setVisible(false);
         })
 
@@ -204,7 +205,7 @@ export default class TextInput extends InteractiveContainer {
         const lines = this.textArea.getLines();
         const width = this.textArea.getDisplayWidth(lines[textSize.lines - 1])
         this.cursor.x = this.textArea.x + width;
-        const totalHeight = (textSize.lineHeight + (this.style.lineSpacing ?? 0)) * (textSize.lines - 1);
+        const totalHeight = textSize.lineHeight * (textSize.lines - 1);
         this.cursor.y = this.textArea.y + totalHeight * (1 - this.textArea.originY);
     }
 
@@ -306,4 +307,21 @@ export default class TextInput extends InteractiveContainer {
             this.inputElement = undefined;
         }
     }
+
+    public resize(width: number, height: number) {
+        this.textArea.setAreaSize(width, height);
+
+        this.rect.setSize(width + this.cursor.displayWidth, height);
+
+        const textX = this.rect.x + this.rect.displayWidth * (0.5 - this.rect.originX);
+        const textY = this.rect.y + this.rect.displayHeight * (0.5 - this.rect.originY);
+        this.textArea.setPosition(textX, textY);
+
+        this.setText(this.text);
+
+        this.textArea.adjustFontSize();
+
+        this.calculateRectangleSize();
+    }
+
 }
