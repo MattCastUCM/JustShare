@@ -241,6 +241,9 @@ server/spelling_checker/data/
 # Vector stores
 server/faiss_data/
 
+# Analysis
+server/analysis/data/
+
 .env*
 
 # ==================================================
