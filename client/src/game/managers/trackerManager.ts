@@ -205,7 +205,7 @@ export default class TrackerManager {
         }
     }
 
-    sendWrittenResponse(nodeId: string, response: string, method: string, threshold: number, score: number, matchingText: string, duration: number) {
+    sendWrittenResponse(nodeId: string, response: string, method: string, threshold: number, score: number, matchingText: string, branch: string, duration: number) {
         if (this.trackerInitialized && !this.gameCompleted) {
             let scene = this.sceneManager.getCurrentScene().scene.key;
 
@@ -223,6 +223,7 @@ export default class TrackerManager {
             evt.result.setExtension("Method", method);
             evt.result.setExtension("Threshold", threshold);
             evt.result.setExtension("MatchingText", matchingText);
+            evt.result.setExtension("Branch", branch);
             this.tracker.addEvent(evt);
         }
     }

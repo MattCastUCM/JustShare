@@ -393,6 +393,9 @@ export default class DialogManager {
 
             console.log(scores)
 
+            const matchId = node.next[match.index].id;
+            const branch = matchId.split(".")[0];
+
             for (const [method, score] of Object.entries(scores)) {
                 if (!exceedThresholds) {
                     break;
@@ -402,8 +405,10 @@ export default class DialogManager {
 
                 if (score.value > 0 && methodConfig) {
                     const threshold = methodConfig.threshold
+
+
                     // TRACKER EVENT
-                    this.trackerManager.sendWrittenResponse(node.fullId, text, method, threshold, score.value, choice, data.processing_time)
+                    this.trackerManager.sendWrittenResponse(node.fullId, text, method, threshold, score.value, choice, branch, data.processing_time)
 
                     if (score.value < threshold * score.weight) {
                         exceedThresholds = false

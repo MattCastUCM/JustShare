@@ -31,8 +31,9 @@ def load_node_choices():
 
 node_choices = load_node_choices()
 
-input_path = "./failed_cases.csv"
-output_path = "./annotations.csv"
+data_dir = "./data"
+input_path = os.path.join(data_dir, "failed_cases.csv")
+output_path = os.path.join(data_dir, "annotations.csv")
 
 df = pd.read_csv(input_path)
 

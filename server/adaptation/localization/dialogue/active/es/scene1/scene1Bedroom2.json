@@ -51,7 +51,7 @@
             "text": "Yo hoy no he ido a clase porque me dolía un poco la cabeza, pero creo que ya se me está pasando"
         },
         "choices2_similarity": {
-            "context": "<harasser, Pablo, Lucía> me ha dicho que hoy ha estado <harasser, enfermo, enferma>.",
+            "context": "<harasser, Pablo, Lucía> me ha dicho que hoy ha estado <harasser, enfermo, enferma>. Me pregunto cómo se encontrará.",
             "responses": [
                 {
                     "text": [
@@ -95,7 +95,7 @@
             ]
         },
         "default": {
-            "text": "(Mmm... quizá debería decirle algo sobre que ya está mejor)."
+            "text": "(Mmm... quizá debería preguntarle si ya está mejor)."
         },
         "traditional_choices": {
             "text": "(Mmm... no sé muy bien qué decir...)."
