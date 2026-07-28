@@ -66,7 +66,7 @@ class SentenceLSTM(Encoder):
     def transform(self, sentences: list[str], normalize: bool = True):
         with torch.no_grad():
             sentence_tensor = self.vectorizer(sentences).to(self.device)
-            embeddings = self.head_model(sentence_tensor)
+            embeddings = self.head_model(sentence_tensor, training=False)
 
             vec = embeddings.detach().cpu().numpy()
             if normalize:
@@ -78,7 +78,7 @@ class SentenceLSTM(Encoder):
             tensor1 = self.vectorizer(sentences_1).to(self.device)
             tensor2 = self.vectorizer(sentences_2).to(self.device)
 
-            similarity = self.model([tensor1, tensor2])
+            similarity = self.model([tensor1, tensor2], training=False)
             return similarity.detach().cpu().numpy()    
     
     def print_device(self):

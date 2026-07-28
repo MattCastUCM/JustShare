@@ -1,0 +1,90 @@
+{
+    "object": {
+        "id": "https://w3id.org/xapi/seriousgames/activity-types/dialog-tree/Computer.computer.choices2_similarity",
+        "definition": {
+            "name": {
+                "en-US": "dialog-tree"
+            },
+            "description": {
+                "en-US": "An alternative presented during a conversation with an non-playable character. Dialog trees are a common mechanic in video games, where players can answer questions to NPC. This activity represents that type of alternative."
+            },
+            "type": "https://w3id.org/xapi/seriousgames/activity-types/dialog-tree"
+        }
+    },
+    "authority": {
+        "account": {
+            "homePage": "https://simva-beta.e-ucm.es",
+            "name": "mylrsmanager"
+        },
+        "objectType": "Agent"
+    },
+    "verb": {
+        "id": "https://w3id.org/xapi/adb/verbs/selected"
+    },
+    "id": "bd03eac2-f664-44a6-a32d-7c923a988056",
+    "timestamp": "2026-07-23T22:34:54.631Z",
+    "context": {
+        "registration": "66046da4-7446-4381-a58a-c01e439188ed",
+        "contextActivities": {
+            "category": [
+                {
+                    "id": "https://w3id.org/xapi/seriousgame"
+                }
+            ],
+            "parent": [
+                {
+                    "id": "https://simva-beta.e-ucm.es/activities/33",
+                    "definition": {
+                        "type": "https://simva-beta.e-ucm.es/about#activity"
+                    }
+                }
+            ],
+            "grouping": [
+                {
+                    "id": "https://simva-beta.e-ucm.es/simlets/22/sessions/22/activities/33",
+                    "definition": {
+                        "type": "https://simva-beta.e-ucm.es/about#activity"
+                    }
+                },
+                {
+                    "id": "https://simva-beta.e-ucm.es/simlets/22/sessions/22",
+                    "definition": {
+                        "type": "https://simva-beta.e-ucm.es/about#session"
+                    }
+                },
+                {
+                    "id": "https://simva-beta.e-ucm.es/simlets/22",
+                    "definition": {
+                        "type": "https://simva-beta.e-ucm.es/about#simlet"
+                    }
+                }
+            ]
+        },
+        "platform": "https://simva-beta.e-ucm.es"
+    },
+    "version": "1.0.3",
+    "stored": "2026-07-23T22:34:54.915000000Z",
+    "actor": {
+        "objectType": "Agent",
+        "account": {
+            "homePage": "https://simva-beta.e-ucm.es",
+            "name": "vezs"
+        }
+    },
+    "result": {
+        "success": false,
+        "response": "recuperate",
+        "score": {
+            "scaled": 0.5153499841690063,
+            "raw": 0.5153499841690063,
+            "max": 1
+        },
+        "duration": "P0DT0H0M0.1712209999998322S",
+        "extensions": {
+            "https://w3id.org/xapi/seriousgame/extensions/Method": "lstm",
+            "https://w3id.org/xapi/seriousgame/extensions/Threshold": 0.52,
+            "https://w3id.org/xapi/seriousgame/extensions/MatchingText": "Ay pobre, dormiste mal o algo?",
+            "https://w3id.org/xapi/seriousgame/extensions/Branch": "ask2"
+        }
+    }
+}

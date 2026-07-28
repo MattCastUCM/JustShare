@@ -1,0 +1,16 @@
+node,method,predicted_intent,response,valid,annotated_intent,has_multiple_intents
+Scene1Classroom.part2,lstm,friendly,burnos dias ,existing_intent,neutral,True
+Scene1Bedroom2.computer,lstm,ask2,cuidate,existing_intent,noAsk2,True
+Scene1Bedroom2.computer,lstm,ask2,recuperate,existing_intent,noAsk2,True
+Scene1Bedroom2.computer,lstm,ask2,me alegro que estes bien ,existing_intent,noAsk2,True
+Scene1Bedroom2.computer,lstm,ask2,mejorate,existing_intent,noAsk2,True
+Scene1Bedroom2.computer,lstm,noAsk2,que bien,existing_intent,noAsk2,True
+Scene3Bedroom.main,lstm,liked2,a medias,new_intent,,False
+Scene3Bedroom.main,lstm,liked2,siiiiiiiiiiii,invalid,,False
+Scene3Bedroom.main,lstm,liked2,"no, la verdad era un poco malo",existing_intent,disliked2,True
+Scene4Garage.photo,lstm,truth2,sii,new_intent,,False
+Scene4Bedroom.phone,lstm,msg3,descansa hasta mapana,invalid,,False
+Scene4Bedroom.phone,lstm,msg3,nuwnas noches,existing_intent,msg3,False
+Scene6LunchRouteB.phone,lstm,msg2,como estas,existing_intent,msg2,False
+Scene6LunchRouteB.phone,lstm,msg2,estas enfadada,existing_intent,msg2,False
+Scene6LunchRouteB.phone,lstm,msg2,sigues enfadada,existing_intent,msg2,False

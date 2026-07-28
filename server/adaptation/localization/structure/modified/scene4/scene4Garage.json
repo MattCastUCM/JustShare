@@ -183,11 +183,6 @@
         },
         "choices_similarity": {
             "type": "similarity",
-            "methods": [
-                {
-                    "name": "sbert"
-                }
-            ],
             "character": "player",
             "transition": {
                 "type": "text"

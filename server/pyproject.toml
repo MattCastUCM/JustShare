@@ -36,6 +36,7 @@ dev = [
     "matplotlib>=3.10.8",
     "seaborn>=0.13.2",
     "pyi18next>=0.0.2",
+    "streamlit>=1.60.0",
 ]
 
 [tool.uv.sources]
