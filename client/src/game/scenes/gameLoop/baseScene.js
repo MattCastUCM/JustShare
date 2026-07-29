@@ -336,6 +336,7 @@ export default class BaseScene extends Scene {
                         if (!this.gameManager.blackboard.has(varName)) {
                             this.gameManager.blackboard.set(varName, defaultValue);
                         }
+                        condition.blackboard = this.gameManager.blackboard;
                     }
                     // Si no, la guarda en la blackboard de la escena con su valor por defecto
                     // (si no se ha guardado antes) e indica que la blackboard en la que comprobar

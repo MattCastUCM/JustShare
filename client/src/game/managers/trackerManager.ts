@@ -234,6 +234,9 @@ export default class TrackerManager {
 
             let evt = this.completable.initialized(this.completable.types.storyNode, "ThoughtBoxStart");
             evt.result.setExtension("Node", scene + "." + nodeId);
+            evt.result.setExtension("Timestamp", evt.timestamp);
+
+            console.log(evt.timestamp);
             this.tracker.addEvent(evt);
         }
     }
@@ -244,6 +247,9 @@ export default class TrackerManager {
 
             let evt = this.completable.completed(this.completable.types.storyNode, "ThoughtBoxEnd", 1, true, true);
             evt.result.setExtension("Node", scene + "." + nodeId);
+            evt.result.setExtension("Timestamp", evt.timestamp);
+
+            console.log(evt.timestamp);
             this.tracker.addEvent(evt);
         }
     }
