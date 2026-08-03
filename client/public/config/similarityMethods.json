@@ -1,7 +1,7 @@
 {
     "similarityMethods": [
         {
-            "name": "sbert"
+            "name": "lstm"
         }
     ]
 }
