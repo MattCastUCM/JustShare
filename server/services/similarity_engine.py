@@ -51,12 +51,18 @@ class SimilarityEngine:
 
     def search_hybrid(self, query: str, methods: list[SearchMethod], top_k: int, language: str, corpus: list[str], node_key: Optional[str], weights: list[float]):
         if not methods:
-            raise ValueError("method list cannot be empty.")
+            raise ValueError("methods cannot be empty.")
         
         retrievers: list[Retriever] = []
         
         for method in methods:
-            if method == SearchMethod.SBERT:
+            if method == SearchMethod.JACCARD:
+                retriever = self.get_dense_retriever(
+                    method=method,
+                    language=language,
+                )
+                retriever.fit(corpus)
+            else:
                 if node_key is None:
                     raise ValueError("node_key is required for SBERT.")
 
@@ -65,12 +71,6 @@ class SimilarityEngine:
                     language=language,
                     node_key=node_key,
                 )
-            else:
-                retriever = self.get_dense_retriever(
-                    method=method,
-                    language=language,
-                )
-                retriever.fit(corpus)
 
             retrievers.append(retriever)
 

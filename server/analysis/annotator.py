@@ -45,6 +45,8 @@ else:
         "method",
         "predicted_intent",
         "response",
+        "score",
+        "threshold",
         "valid",
         "annotated_intent",
         "has_multiple_intents"
@@ -147,6 +149,8 @@ if st.button("Guardar"):
         "method": case["method"],
         "predicted_intent": case["branch"],
         "response": case["response"],
+        "score": case["score"],
+        "threshold": case["threshold"],
         "valid": valid,
         "annotated_intent": intent,
         "has_multiple_intents": has_multiple_intents

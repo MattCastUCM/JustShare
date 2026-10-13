@@ -114,13 +114,13 @@ class SiameseLSTM(Model):
 		# ui = tanh(W hi + b)
 		u = self.attention_dense(hiddent_states)
 
-		# ui^T uw
+		# scores = ui^T uw (producto escalar)
 		scores = ops.sum(u * self.context_vector, axis=-1)
 
 		# Ignorar padding antes del softmax
 		# Crear un tensor del mismo que scores con números muy pequeños
 		minus_inf = ops.full_like(scores, -1e9)
-		# Lleanar las tokens de padding con los números pequeños
+		# Llenar las tokens de padding con los números pequeños
 		scores = ops.where(mask, scores, minus_inf)
 
 		# αi
